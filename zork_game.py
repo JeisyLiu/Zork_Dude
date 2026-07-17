@@ -92,6 +92,10 @@ class Item:
 
     def __str__(self): return self.name
 
+    @property
+    def stackable(self) -> bool:
+        return self.item_type in (ItemType.FOOD, ItemType.TREASURE, ItemType.MATERIAL)
+
     def on_use(self, game) -> str:
         if self.heal > 0:
             game.player_hp = min(game.player_max_hp, game.player_hp + self.heal)
@@ -162,7 +166,7 @@ class NPC:
             self.met_before = True
             lines.append(f"\n{self.name}：「{d.get('greet','你好。')}」")
             if self.give_item and self.give_item in game.items and self.give_item not in game.inventory:
-                game.inventory.append(self.give_item)
+                game._inv_add(self.give_item)
                 lines.append(f"\n{self.name} 给了你 {game.items[self.give_item].name}！")
                 game.score += 5
         else:
@@ -171,9 +175,9 @@ class NPC:
         # 任务
         if self.quest_item and not self.quest_done:
             if self.quest_item in game.inventory:
-                game.inventory.remove(self.quest_item)
+                game._inv_remove(self.quest_item)
                 if self.quest_reward:
-                    game.inventory.append(self.quest_reward)
+                    game._inv_add(self.quest_reward)
                     lines.append(f"\n✨ 提交任务！获得 {game.items[self.quest_reward].name}！")
                 else:
                     lines.append(f"\n✨ {self.name} 感谢你！")
@@ -195,31 +199,57 @@ class NPC:
         if self.npc_type != NpcType.MERCHANT or not self.trade_items:
             return f"{self.name} 没有商品。"
         lines = [f"\n🛒 {self.name} 的商品："]
-        for iid, price in self.trade_items:
+        for idx, (iid, price) in enumerate(self.trade_items, 1):
             it = game.items.get(iid)
-            if it: lines.append(f"  {it.name} —— {price} 金币")
+            if it: lines.append(f"  ({idx}) {it.name} —— {price} 金币")
         lines.append(f"💰 你有 {game.gold} 金币")
         return "\n".join(lines)
 
     def on_buy(self, game, name: str) -> str:
         if self.npc_type != NpcType.MERCHANT: return f"{self.name} 不是商人。"
+        # 支持数字序号
+        try:
+            idx = int(name)
+            if 1 <= idx <= len(self.trade_items):
+                iid, price = self.trade_items[idx - 1]
+                it = game.items.get(iid)
+                if game.gold >= price:
+                    game.gold -= price; game._inv_add(iid)
+                    return f"购买了 {it.name}！花费 {price} 金币。"
+                return f"需要 {price} 金币，你只有 {game.gold}。"
+        except ValueError:
+            pass
         for iid, price in self.trade_items:
             it = game.items.get(iid)
             if it and (name == it.name.lower() or name == it.id.lower()):
                 if game.gold >= price:
-                    game.gold -= price; game.inventory.append(iid)
+                    game.gold -= price; game._inv_add(iid)
                     return f"购买了 {it.name}！花费 {price} 金币。"
                 return f"需要 {price} 金币，你只有 {game.gold}。"
         return f"没有 '{name}'。"
 
     def on_sell(self, game, name: str) -> str:
         if self.npc_type != NpcType.MERCHANT: return f"{self.name} 不是商人。"
+        # 支持数字序号（引用背包物品）
+        try:
+            idx = int(name)
+            inv_list = list(game.inventory)
+            if 1 <= idx <= len(inv_list):
+                iid = inv_list[idx - 1]
+                it = game.items.get(iid)
+                if it and it.item_type in self.buys_types:
+                    price = max(2, it.value // 2)
+                    game._inv_remove(iid); game.gold += price
+                    return f"卖了 {it.name}，获得 {price} 金币。"
+                return "不收这种物品。"
+        except ValueError:
+            pass
         for iid in list(game.inventory):
             it = game.items.get(iid)
             if it and (name == it.name.lower() or name == it.id.lower()):
                 if it.item_type in self.buys_types:
                     price = max(2, it.value // 2)
-                    game.inventory.remove(iid); game.gold += price
+                    game._inv_remove(iid); game.gold += price
                     return f"卖了 {it.name}，获得 {price} 金币。"
                 return f"不收这种物品。"
         return f"没有 '{name}'。"
@@ -305,9 +335,11 @@ class Room:
         text = f"[{self.name}]\n"
         text += self.desc if not self.visited else self.desc.split("\n")[0]
 
-        # 物品
+        # 物品（加数字序号）
         its = [game.items[i] for i in self.items if i in game.items]
-        if its: text += f"\n\n可见物品：{'、'.join(i.name for i in its)}"
+        if its:
+            numbered = ', '.join(f"({i}) {it.name}" for i, it in enumerate(its, 1))
+            text += f"\n\n可见物品：{numbered}"
 
         # NPC
         if self.npc_id and self.npc_id in game.npcs:
@@ -336,7 +368,7 @@ class Game:
         self.npcs: dict[str, NPC] = {}
         self.monsters: dict[str, Monster] = {}
         self.companions: dict[str, Companion] = {}
-        self.inventory: list[str] = []
+        self.inventory: dict[str, int] = {}  # item_id → 数量（可叠加物品>1）
         self.companion_list: list[str] = []
         self.current_room_id = ""
         self.turns = 0; self.score = 0; self.gold = 30
@@ -345,6 +377,38 @@ class Game:
         self.game_over = False; self.won = False
         self.flags: dict = {}
         self.in_combat = False; self.current_enemy = ""
+
+    # ── 背包辅助方法（叠加支持）──
+
+    def _inv_add(self, iid: str, count: int = 1):
+        """向背包添加物品，可叠加物品自动合并"""
+        it = self.items.get(iid)
+        if it and it.stackable:
+            new = self.inventory.get(iid, 0) + count
+            self.inventory[iid] = min(new, 999)  # 上限999
+        else:
+            # 非叠加物品：已有则不重复添加，没有则置1
+            if iid not in self.inventory:
+                self.inventory[iid] = count
+
+    def _inv_remove(self, iid: str, count: int = 1):
+        """从背包移除物品，可叠加物品支持部分移除"""
+        it = self.items.get(iid)
+        cur = self.inventory.get(iid, 0)
+        if cur <= 0:
+            return
+        if it and it.stackable:
+            if cur <= count:
+                del self.inventory[iid]
+            else:
+                self.inventory[iid] -= count
+        else:
+            if iid in self.inventory:
+                del self.inventory[iid]
+
+    def _inv_count(self, iid: str) -> int:
+        """获取物品数量（非叠加物品返回0或1）"""
+        return self.inventory.get(iid, 0)
 
     @property
     def total_atk(self) -> int:
@@ -382,7 +446,16 @@ class Game:
         return iid in self.inventory
 
     def _total_weight(self) -> int:
-        return sum(self.items[i].weight for i in self.inventory if i in self.items)
+        """总负重：可叠加物品只算一次重量，非叠加物品每个都算"""
+        total = 0
+        for iid, cnt in self.inventory.items():
+            it = self.items.get(iid)
+            if it:
+                if it.stackable:
+                    total += it.weight  # 叠加物品只算一次
+                else:
+                    total += it.weight * cnt
+        return total
 
     # ── 移动 ──
 
@@ -427,12 +500,40 @@ class Game:
 
     # ── 物品 ──
 
+    def _resolve_item_ref(self, ref: str, candidates) -> str:
+        """
+        通用物品引用解析：支持 数字序号 / 物品名 / 物品id
+        candidates: item_id 的可迭代对象（list 或 dict keys）
+        返回匹配的 item_id，未找到返回 None
+        """
+        # 尝试数字序号（1-based）
+        try:
+            idx = int(ref)
+            cand_list = list(candidates)
+            if 1 <= idx <= len(cand_list):
+                return cand_list[idx - 1]
+        except ValueError:
+            pass
+        # 按名称或 id 模糊匹配
+        t = ref.lower().strip()
+        for iid in candidates:
+            it = self.items.get(iid)
+            if it and (t == it.name.lower() or t == it.id.lower() or t in it.name.lower()):
+                return iid
+        return None
+
     def do_inventory(self, args) -> str:
-        lines = [f"🎒 背包 ({self._total_weight()}/12)"]
+        total_items = sum(self.inventory.values())  # 实际物品总件数
+        lines = [f"🎒 背包 (重量 {self._total_weight()}/{12} · 共 {total_items} 件)"]
         if self.inventory:
-            for iid in self.inventory:
+            for idx, (iid, cnt) in enumerate(self.inventory.items(), 1):
                 it = self.items.get(iid)
-                if it: lines.append(f"  · {it.name} ({it.item_type.value})")
+                if it:
+                    label = f"  ({idx}) {it.name}"
+                    if it.stackable and cnt > 1:
+                        label += f" x{cnt}"
+                    label += f" ({it.item_type.value})"
+                    lines.append(label)
         else: lines.append("  (空)")
         lines.append(f"\n❤️ HP: {self.player_hp}/{self.player_max_hp}")
         lines.append(f"💰 金币: {self.gold} | 🏆 得分: {self.score}")
@@ -444,50 +545,65 @@ class Game:
         return "\n".join(lines)
 
     def do_take(self, args) -> str:
-        if not args: return "拿什么？"
+        if not args: return "拿什么？ 用 take all 拿全部，或用序号 take 1"
         t = " ".join(args)
         if self.in_combat: return "战斗中不能拾取！"
         rm = self.rooms[self.current_room_id]
-        found = None
-        for iid in rm.items:
-            it = self.items.get(iid)
-            if it and (t == it.name.lower() or t == it.id.lower()): found = iid; break
-        if not found:
-            for iid in rm.items:
+
+        # take all → 拾取全部
+        if t == "all":
+            taken = []
+            for iid in list(rm.items):
                 it = self.items.get(iid)
-                if it and t in it.name.lower(): found = iid; break
+                if it and it.takeable:
+                    already_had = iid in self.inventory
+                    if not already_had and self._total_weight() + it.weight > 12:
+                        continue  # 放不下了
+                    rm.items.remove(iid)
+                    self._inv_add(iid)
+                    self.score += 5
+                    taken.append(it.name)
+            if not taken:
+                return "这里没有能拿的东西。"
+            return f"拾取了：{'、'.join(taken)}。"
+
+        # 按序号/名称/id 拾取
+        found = self._resolve_item_ref(t, rm.items)
         if not found: return f"没有 {t}。"
         it = self.items[found]
         if not it.takeable: return f"拿不起 {it.name}。"
-        if self._total_weight() + it.weight > 12: return "负重满了（12）。"
-        rm.items.remove(found); self.inventory.append(found); self.score += 5
+        # 重量检查：非叠加物品首次拿取、叠加物品首次拿取时需要检查
+        already_had = found in self.inventory
+        if not already_had and self._total_weight() + it.weight > 12:
+            return "负重满了（12）。"
+        rm.items.remove(found)
+        self._inv_add(found)
+        self.score += 5
         return f"拾起了 {it.name}。"
 
     def do_drop(self, args) -> str:
-        if not args: return "丢什么？"
+        if not args: return "丢什么？ 用序号 drop 1"
         t = " ".join(args)
         if self.in_combat: return "战斗中不能丢弃！"
-        for iid in list(self.inventory):
-            it = self.items.get(iid)
-            if it and (t == it.name.lower() or t == it.id.lower()):
-                self.inventory.remove(iid)
-                self.rooms[self.current_room_id].items.append(iid)
-                return f"丢下了 {it.name}。"
-        return f"没有 {t}。"
+        found = self._resolve_item_ref(t, self.inventory)
+        if not found: return f"没有 {t}。"
+        self._inv_remove(found)
+        self.rooms[self.current_room_id].items.append(found)
+        it = self.items[found]
+        return f"丢下了 {it.name}。"
 
     def do_use(self, args) -> str:
-        if not args: return "用什么？"
+        if not args: return "用什么？ 用序号 use 1"
         t = " ".join(args)
-        for iid in list(self.inventory):
-            it = self.items.get(iid)
-            if it and (t == it.name.lower() or t == it.id.lower()):
-                if not it.usable: return f"{it.name} 不能用。"
-                msg = it.on_use(self)
-                if it.item_type in (ItemType.POTION, ItemType.FOOD):
-                    self.inventory.remove(iid)
-                self.score += 2
-                return msg or f"使用了 {it.name}。"
-        return f"没有 {t}。"
+        found = self._resolve_item_ref(t, self.inventory)
+        if not found: return f"没有 {t}。"
+        it = self.items[found]
+        if not it.usable: return f"{it.name} 不能用。"
+        msg = it.on_use(self)
+        if it.item_type in (ItemType.POTION, ItemType.FOOD):
+            self._inv_remove(found)  # 消耗一个
+        self.score += 2
+        return msg or f"使用了 {it.name}。"
 
     # ── NPC ──
 
@@ -531,7 +647,7 @@ class Game:
             lines.append(f"\n🎉 击败了 {m.name}！")
             for li in m.loot:
                 if li in self.items:
-                    self.inventory.append(li)
+                    self._inv_add(li)
                     lines.append(f"🏆 战利品：{self.items[li].name}")
             self.gold += m.gold; self.score += m.exp
             lines.append(f"💰 +{m.gold}金币 +{m.exp}经验")
@@ -594,7 +710,7 @@ class Game:
             return f"招募 {c.name} 需要 {needed.name if needed else c.recruit_item}。"
 
         if c.recruit_item and c.recruit_item in self.inventory:
-            self.inventory.remove(c.recruit_item)
+            self._inv_remove(c.recruit_item)
 
         c.recruited = True
         self.companion_list.append(cid)
@@ -800,7 +916,8 @@ def build_world() -> Game:
     # ── 特殊房间行为（on_enter lambdas — 代码逻辑，不能放在 JSON 中）──
     # 远古遗迹：用生锈钥匙开门
     g.rooms["ancient_ruins"].on_enter = lambda g: (
-        (g.rooms["ancient_ruins"].exits.__setitem__("north","hidden_passage"), "你用生锈钥匙打开了石门！")[1]
+        (g.rooms["ancient_ruins"].exits.__setitem__(Direction.NORTH, "hidden_passage"),
+         "你用生锈钥匙打开了石门！")[1]
         if g.has_item("rusty_key") and "ruins_open" not in g.flags
         else (g.flags.__setitem__("ruins_open",True), None)[1]
         if "ruins_open" in g.flags else "石门紧锁，需要钥匙。" if not g.has_item("rusty_key") else None
@@ -809,7 +926,8 @@ def build_world() -> Game:
 
     # 高塔底部：银钥匙解锁
     g.rooms["tower_base"].on_enter = lambda g: (
-        (g.rooms["tower_base"].exits.__setitem__("up","tower_middle"), "银钥匙打开了塔门！")[1]
+        (g.rooms["tower_base"].exits.__setitem__(Direction.UP, "tower_middle"),
+         "银钥匙打开了塔门！")[1]
         if g.has_item("silver_key") and "tower_unlocked" not in g.flags
         else (g.flags.__setitem__("tower_unlocked",True), "门已经开了。")[1]
         if "tower_unlocked" in g.flags else None
@@ -823,7 +941,8 @@ def build_world() -> Game:
 
     # 湖边：乘船到湖心岛
     g.rooms["lake_shore"].on_enter = lambda g: (
-        (g.rooms["lake_shore"].exits.__setitem__("east","lake_island"), "你登上小船划向湖心岛……")[1]
+        (g.rooms["lake_shore"].exits.__setitem__(Direction.EAST, "lake_island"),
+         "你登上小船划向湖心岛……")[1]
         if "boat_taken" not in g.flags
         else (g.flags.__setitem__("boat_taken",True), "船已经在对岸了。")[1]
         if "boat_taken" in g.flags else None
@@ -849,9 +968,9 @@ def build_world() -> Game:
     # ── 设置起始位置 ──
     g.current_room_id = "forest_entrance"
     g.rooms["forest_entrance"].visited = True
-    # 给玩家初始物品
-    g.inventory.append("lesser_potion")
-    g.inventory.append("bread")
+    # 给玩家初始物品（叠加物品直接使用 _inv_add）
+    g._inv_add("lesser_potion")
+    g._inv_add("bread")
     return g
 
 
@@ -870,9 +989,11 @@ WELCOME_TEXT = r"""
 
 特色：
   🗺️ 25+ 场景 · 👾 20 种怪物 · 👥 12 位 NPC
-  🤝 7 位可招募队友 · 🎒 50+ 种道具
+  🤝 7 位可招募队友 · 🎒 50+ 种道具（可叠加）
   ⚔️ 战斗系统 · 💬 对话系统 · 🛒 交易系统
   🎯 任务系统 · 🏆 得分系统
+
+💡 食物/宝藏/材料可以叠加存放，上限 999 个。
 
 输入 help 查看命令列表。
 """
@@ -884,9 +1005,12 @@ HELP_TEXT = """
     n/s/e/w/u/d —— 方向移动
 
   👀  探索
-    look / l    —— 查看  take / get —— 拾取
-    drop        —— 丢弃  use       —— 使用
-    inventory/i —— 背包
+    look / l       —— 查看当前场景
+    take / get <名/序号>  —— 拾取物品
+    take all / get all    —— 拾取全部物品
+    drop <名/序号>  —— 丢弃物品
+    use <名/序号>   —— 使用物品
+    inventory / i   —— 查看背包（带序号）
 
   💬  社交
     talk / say  —— 对话
@@ -907,10 +1031,12 @@ HELP_TEXT = """
     score/status—— 状态
     quit / exit —— 退出
 
-  💡 提示：仔细阅读描述，线索就在其中。
-     有些地方需要光源，有些需要特定钥匙。
-     和 NPC 对话可能获得任务或物品。
-═══════════════════════════════════════
+💡 提示：场景物品和背包物品都带有数字序号 (1)(2)...
+   可以直接用序号操作，如 take 1、use 2、drop 3
+   也可以用名称，如 take sword
+
+   🥪 食物/宝藏/材料类物品可叠加存放（上限 999）
+     背包中显示为「面包 x5」「金币 x20」
 """
 
 # ══════════════════════════════════════════════

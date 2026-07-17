@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>🌫 迷雾之塔 - 文字冒险</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a12;color:#c8d6e5;font-family:'Segoe UI','Microsoft YaHei',sans-serif;min-height:100vh}
+#app{max-width:920px;width:100%;margin:0 auto;padding:10px 15px;display:flex;flex-direction:column;min-height:100vh;position:relative;z-index:1}
+#status{background:linear-gradient(135deg,#1a1a2e,#16213e);border:1px solid #2a2a4a;border-radius:8px;padding:8px 14px;display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center;font-size:13px;margin-bottom:10px;flex-shrink:0;box-shadow:0 0 20px rgba(84,160,255,.06)}
+.st{display:flex;align-items:center;gap:4px}
+.sl{color:#7f8fa6}.sv{color:#fff;font-weight:bold}
+.hpbar{display:inline-block;width:80px;height:10px;background:#2d2d3a;border-radius:5px;overflow:hidden;vertical-align:middle}
+.hpfill{height:100%;background:linear-gradient(90deg,#e74c3c,#2ecc71);border-radius:5px;transition:width .3s}
+#story{flex:1;overflow-y:auto;background:#0f0f1a;border:1px solid #1e1e32;border-radius:8px;padding:14px 16px;margin-bottom:10px;min-height:280px;max-height:52vh;line-height:1.7;font-size:14px;white-space:pre-wrap;word-break:break-word}
+#story .cmd{color:#54a0ff;margin-top:8px}
+#story .sep{border-top:1px dashed #1e1e32;margin:6px 0}
+#targets{display:none;flex-wrap:wrap;gap:6px;padding:8px 10px;background:#12121e;border:1px solid #2a2a4a;border-radius:8px;margin-bottom:10px;flex-shrink:0}
+#targets .tl{width:100%;color:#7f8fa6;font-size:12px}
+#targets button{background:#1e1e32;color:#c8d6e5;border:1px solid #3a3a5a;border-radius:4px;padding:5px 12px;font-size:12px;cursor:pointer}
+#targets button:hover{background:#2e2e4e;border-color:#54a0ff}
+#targets .bc{background:#2a1a1a;border-color:#5a2a2a;color:#e74c3c}
+#cmds{display:flex;flex-wrap:wrap;gap:4px;padding:8px 10px;background:#12121e;border:1px solid #1e1e32;border-radius:8px;flex-shrink:0;margin-bottom:8px}
+.cg{display:flex;flex-direction:column;gap:2px;margin-right:8px}
+.cgl{font-size:10px;color:#576574;letter-spacing:1px}
+.cb{display:flex;flex-wrap:wrap;gap:3px}
+#cmds button{background:#1a1a2e;color:#c8d6e5;border:1px solid #2a2a4a;border-radius:4px;padding:6px 11px;font-size:12px;cursor:pointer;font-family:inherit}
+#cmds button:hover{background:#2e2e4e;border-color:#54a0ff}
+#cmds button:active{transform:scale(.96)}
+#targets button .hint,
+#cmds button .hint{display:block;font-size:9px;color:#576574;font-weight:normal;margin-top:1px;letter-spacing:0}
+.bm{min-width:42px;text-align:center;font-weight:bold}
+.bi{border-color:#54a0ff;color:#54a0ff}
+.br{border-color:#c0392b;color:#e74c3c}
+.bg{border-color:#27ae60;color:#2ecc71}
+.by{border-color:#d68910;color:#f1c40f}
+#cmds button:disabled,#targets button:disabled{opacity:.4;cursor:not-allowed}
+#story::-webkit-scrollbar{width:6px}
+#story::-webkit-scrollbar-track{background:#0f0f1a}
+#story::-webkit-scrollbar-thumb{background:#2a2a4a;border-radius:3px}
+@media(max-width:600px){#status{font-size:11px;gap:4px 8px}#story{font-size:13px;padding:10px 12px;max-height:42vh}#cmds button{font-size:11px;padding:5px 7px}#input-box{font-size:13px;padding:6px 10px}}
+#input-row{display:flex;gap:6px;padding:6px 10px;background:#12121e;border:1px solid #2a2a4a;border-radius:8px;flex-shrink:0;margin-bottom:10px;align-items:center}
+#input-row span{color:#7f8fa6;font-size:13px;flex-shrink:0}
+#input-box{flex:1;background:#0f0f1a;color:#c8d6e5;border:1px solid #2a2a4a;border-radius:4px;padding:6px 10px;font-size:13px;font-family:inherit;outline:none}
+#input-box:focus{border-color:#54a0ff}
+#input-btn{background:#1e1e32;color:#54a0ff;border:1px solid #3a3a5a;border-radius:4px;padding:6px 12px;font-size:12px;cursor:pointer;font-family:inherit}
+#input-btn:hover{background:#2e2e4e;border-color:#54a0ff}
+
+/* ── 顶部英雄区 ── */
+#hero{position:relative;overflow:hidden;background:linear-gradient(145deg,#0d0d1a 0%,#1a0a2e 30%,#0f1a2e 70%,#0a0a12 100%);border:1px solid #2a2a4a;border-radius:12px;padding:22px 20px 18px;margin-bottom:10px;flex-shrink:0;text-align:center}
+#hero .hero-mist{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;opacity:.15;background:radial-gradient(ellipse at 20% 50%,#4a6fa5 0%,transparent 50%),radial-gradient(ellipse at 80% 30%,#6a4fa5 0%,transparent 50%),radial-gradient(ellipse at 50% 80%,#2a6f6a 0%,transparent 50%);animation:mistDrift 8s ease-in-out infinite alternate}
+#hero #mist2{opacity:.1;background:radial-gradient(ellipse at 30% 70%,#8a6fcf 0%,transparent 40%),radial-gradient(ellipse at 70% 60%,#4f8acf 0%,transparent 40%);animation:mistDrift2 12s ease-in-out infinite alternate}
+@keyframes mistDrift{0%{transform:translateX(-5%) scale(1)}100%{transform:translateX(5%) scale(1.1)}}
+@keyframes mistDrift2{0%{transform:translateX(5%) scale(1.1)}100%{transform:translateX(-5%) scale(0.95)}}
+#hero .hero-title{position:relative;z-index:1}
+#hero .tower-icon{font-size:42px;display:block;margin-bottom:6px;animation:towerFloat 3s ease-in-out infinite;filter:drop-shadow(0 0 12px rgba(84,160,255,.4))}
+@keyframes towerFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+#hero h1{font-size:42px;font-weight:800;letter-spacing:6px;background:linear-gradient(135deg,#c8d6e5 0%,#54a0ff 40%,#a855f7 60%,#54a0ff 80%,#c8d6e5 100%);background-size:200% 200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:titleShine 4s ease-in-out infinite;margin-bottom:4px;text-shadow:none;filter:drop-shadow(0 0 30px rgba(84,160,255,.15))}
+@keyframes titleShine{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+#hero .subtitle{font-size:13px;color:#576574;letter-spacing:4px;margin-bottom:8px}
+#hero .title-line{width:80px;height:2px;margin:0 auto 8px;background:linear-gradient(90deg,transparent,#54a0ff,#a855f7,transparent);border-radius:2px;animation:linePulse 3s ease-in-out infinite}
+@keyframes linePulse{0%,100%{opacity:.4;transform:scaleX(.8)}50%{opacity:1;transform:scaleX(1)}}
+#hero .tagline{font-size:14px;color:#7f8fa6;letter-spacing:2px;opacity:.8}
+
+/* ── 浮动粒子 ── */
+#particles{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:hidden;z-index:0}
+.p{position:absolute;width:4px;height:4px;background:#54a0ff;border-radius:50%;opacity:0;animation:particleFloat linear infinite}
+@keyframes particleFloat{0%{transform:translateY(100vh) scale(0);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translateY(-10vh) scale(1);opacity:0}}
+#particles .p:nth-child(1){left:12%;width:3px;height:3px;animation-duration:18s;animation-delay:0s;background:#54a0ff}
+#particles .p:nth-child(2){left:25%;width:5px;height:5px;animation-duration:22s;animation-delay:2s;background:#a855f7}
+#particles .p:nth-child(3){left:38%;width:2px;height:2px;animation-duration:15s;animation-delay:4s;background:#2ecc71}
+#particles .p:nth-child(4){left:50%;width:4px;height:4px;animation-duration:20s;animation-delay:1s;background:#f1c40f}
+#particles .p:nth-child(5){left:62%;width:3px;height:3px;animation-duration:17s;animation-delay:5s;background:#54a0ff}
+#particles .p:nth-child(6){left:75%;width:5px;height:5px;animation-duration:25s;animation-delay:3s;background:#a855f7}
+#particles .p:nth-child(7){left:88%;width:2px;height:2px;animation-duration:14s;animation-delay:6s;background:#2ecc71}
+#particles .p:nth-child(8){left:5%;width:4px;height:4px;animation-duration:21s;animation-delay:7s;background:#f1c40f}
+#particles .p:nth-child(9){left:45%;width:3px;height:3px;animation-duration:19s;animation-delay:2.5s;background:#54a0ff}
+#particles .p:nth-child(10){left:95%;width:4px;height:4px;animation-duration:23s;animation-delay:1.5s;background:#a855f7}
+
+@media(max-width:600px){#hero{padding:18px 14px 14px}#hero h1{font-size:28px;letter-spacing:4px}#hero .tower-icon{font-size:30px}#hero .subtitle{font-size:11px;letter-spacing:2px}#hero .tagline{font-size:12px}}
+</style>
+</head>
+<body>
+<div id="particles"><div class="p"></div><div class="p"></div><div class="p"></div><div class="p"></div><div class="p"></div><div class="p"></div><div class="p"></div><div class="p"></div><div class="p"></div><div class="p"></div></div>
+<div id="app">
+<div id="hero">
+  <div class="hero-mist" id="mist1"></div>
+  <div class="hero-mist" id="mist2"></div>
+  <div class="hero-title">
+    <span class="tower-icon">🏰</span>
+    <h1>迷雾之塔</h1>
+    <p class="subtitle">—— 文字冒险 · 探索 · 解谜 ——</p>
+    <div class="title-line"></div>
+    <p class="tagline">从迷雾中醒来，找回失落的记忆</p>
+  </div>
+</div>
+<div id="status">
+<span class="st"><span class="sl">❤️</span><span class="hpbar"><span class="hpfill" id="hpf" style="width:100%"></span></span><span class="sv" id="hpt">60/60</span></span>
+<span class="st"><span class="sl">💰</span><span class="sv" id="gdt">30</span></span>
+<span class="st"><span class="sl">🏆</span><span class="sv" id="sct">0</span></span>
+<span class="st"><span class="sl">🎒</span><span class="sv" id="wgt">0/12</span></span>
+<span class="st"><span class="sl">👥</span><span class="sv" id="cpt">无</span></span>
+</div>
+<div id="story"></div>
+<div id="input-row">
+  <span>&gt;</span>
+  <input type="text" id="input-box" placeholder="输入指令后按回车…" autocomplete="off" spellcheck="false">
+  <button id="input-btn">执行</button>
+</div>
+<div id="targets"></div>
+<div id="cmds"></div>
+</div>
+<script>
+// ═══ DATA ═══
+// ═══ ENUMS & HELPERS ═══
+const Direction={NORTH:"north",SOUTH:"south",EAST:"east",WEST:"west",UP:"up",DOWN:"down"};
+const ItemType={KEY:"key",WEAPON:"weapon",ARMOR:"armor",POTION:"potion",TREASURE:"treasure",TOOL:"tool",LIGHT:"light",SCROLL:"scroll",FOOD:"food",QUEST:"quest",MATERIAL:"material",BOOK:"book",RING:"ring",AMULET:"amulet",MINERAL:"mineral"};
+const MonsterRank={NORMAL:"普通",ELITE:"精英",BOSS:"BOSS"};
+const STACK_TYPES=[ItemType.FOOD,ItemType.TREASURE,ItemType.MATERIAL];
+function isStackable(it){return STACK_TYPES.includes(it.type)}
+function roll(s,t){t=t||1;let r=0;for(let i=0;i<t;i++)r+=Math.floor(Math.random()*s)+1;return r}
+// ═══ ITEMS ═══
+const _ITEMS=[{id:"rusty_key",name:"生锈钥匙",desc:"古老的铁钥匙，还能用。",type:"KEY",usable:true,value:5},
+{id:"silver_key",name:"银钥匙",desc:"精致的银色钥匙。",type:"KEY",usable:true,value:10},
+{id:"crystal_key",name:"水晶钥匙",desc:"透明的水晶钥匙。",type:"KEY",usable:true,value:15},
+{id:"old_sword",name:"生锈铁剑",desc:"布满铁锈，但勉强能用。",type:"WEAPON",dmg_bonus:1,value:5},
+{id:"iron_sword",name:"铁剑",desc:"普通但可靠的铁剑。",type:"WEAPON",dmg_bonus:2,value:15},
+{id:"elven_bow",name:"精灵短弓",desc:"精灵打造的短弓，轻便精准。",type:"WEAPON",dmg_bonus:3,value:25},
+{id:"magic_staff",name:"魔法杖",desc:"杖头镶嵌蓝色宝石。",type:"WEAPON",dmg_bonus:4,value:35},
+{id:"shadow_blade",name:"影刃",desc:"漆黑的匕首，几乎不反光。",type:"WEAPON",dmg_bonus:3,value:30},
+{id:"war_hammer",name:"战锤",desc:"沉重的双手战锤。",type:"WEAPON",dmg_bonus:5,weight:3,value:40},
+{id:"spear",name:"长矛",desc:"矛尖泛着寒光。",type:"WEAPON",dmg_bonus:3,value:22},
+{id:"rune_sword",name:"符文剑",desc:"剑身刻着发光符文。",type:"WEAPON",dmg_bonus:4,value:45},
+{id:"crossbow",name:"十字弩",desc:"上弦的机械弩。",type:"WEAPON",dmg_bonus:4,weight:2,value:35},
+{id:"assassin_dagger",name:"刺客匕首",desc:"涂了剧毒的匕首。",type:"WEAPON",dmg_bonus:3,value:28},
+{id:"thunder_hammer",name:"雷神之锤",desc:"锤身缠绕着跳动的电弧。",type:"WEAPON",dmg_bonus:6,weight:4,value:60},
+{id:"leather_armor",name:"皮甲",desc:"鞣制过的硬皮甲。",type:"ARMOR",def_bonus:2,value:12},
+{id:"chain_armor",name:"锁子甲",desc:"铁环编织的锁甲。",type:"ARMOR",def_bonus:4,value:30},
+{id:"scale_armor",name:"鳞甲",desc:"用龙鳞和铁片编成。",type:"ARMOR",def_bonus:5,weight:3,value:45},
+{id:"mage_robe",name:"法师长袍",desc:"附魔的长袍。",type:"ARMOR",def_bonus:2,value:20},
+{id:"shield",name:"铁盾",desc:"圆形的铁盾。",type:"ARMOR",def_bonus:3,weight:2,value:18},
+{id:"helmet",name:"铁头盔",desc:"保护头部的铁盔。",type:"ARMOR",def_bonus:1,value:10},
+{id:"lesser_potion",name:"小治疗药水",desc:"恢复15点HP。",type:"POTION",usable:true,heal:15,value:8},
+{id:"greater_potion",name:"大治疗药水",desc:"恢复35点HP。",type:"POTION",usable:true,heal:35,value:20},
+{id:"mana_potion",name:"魔力药水",desc:"恢复20点HP。",type:"POTION",usable:true,heal:20,value:12},
+{id:"fire_potion",name:"火焰药剂",desc:"瓶中的液体像熔岩一样翻滚。",type:"POTION",usable:true,heal:10,value:16},
+{id:"invis_potion",name:"隐形药水",desc:"喝下后变得透明。",type:"POTION",usable:true,heal:5,value:25},
+{id:"stamina_potion",name:"体力药水",desc:"恢复25点HP。",type:"POTION",usable:true,heal:25,value:15},
+{id:"moonlight_elixir",name:"月光精华",desc:"银色瓶中的液体如月光般流动。",type:"POTION",usable:true,heal:50,value:40},
+{id:"lantern",name:"提灯",desc:"旧提灯，里面还有油。",type:"LIGHT",usable:true,weight:2,value:8},
+{id:"torch",name:"火把",desc:"松脂火把。",type:"LIGHT",usable:true,value:3},
+{id:"bread",name:"硬面包",desc:"干硬的黑面包。",type:"FOOD",usable:true,heal:5,value:2},
+{id:"dried_meat",name:"肉干",desc:"咸味的熏肉干。",type:"FOOD",usable:true,heal:8,value:4},
+{id:"mushroom",name:"荧光蘑菇",desc:"发着微光的蘑菇。",type:"FOOD",usable:true,heal:3,value:1},
+{id:"fish",name:"烤鱼",desc:"香喷喷的烤鱼。",type:"FOOD",usable:true,heal:7,value:3},
+{id:"magic_herb",name:"魔法草药",desc:"散发七彩光芒的草药。",type:"FOOD",usable:true,heal:12,value:6},
+{id:"honey",name:"蜂蜜",desc:"金黄色的野蜜。",type:"FOOD",usable:true,heal:6,value:4},
+{id:"golden_cup",name:"金杯",desc:"纯金打造的高脚杯。",type:"TREASURE",value:40,weight:2},
+{id:"silver_ring",name:"银戒指",desc:"刻着古老花纹的银戒指。",type:"TREASURE",value:20},
+{id:"emerald",name:"祖母绿宝石",desc:"拇指大小的绿色宝石。",type:"TREASURE",value:50},
+{id:"diamond",name:"钻石",desc:"切割完美的钻石。",type:"TREASURE",value:80},
+{id:"ruby",name:"红宝石",desc:"血红剔透的红宝石。",type:"TREASURE",value:60},
+{id:"sapphire",name:"蓝宝石",desc:"深蓝色的宝石。",type:"TREASURE",value:55},
+{id:"ancient_crown",name:"古老皇冠",desc:"镶满了宝石的皇冠。",type:"TREASURE",value:120,weight:2},
+{id:"old_coin",name:"古金币",desc:"一枚古金币。",type:"TREASURE",value:15},
+{id:"gold_ingot",name:"金锭",desc:"纯金铸成的金锭。",type:"MINERAL",value:35,weight:2},
+{id:"silver_ingot",name:"银锭",desc:"纯银铸成的银锭。",type:"MINERAL",value:18,weight:2},
+{id:"wolf_tooth",name:"狼牙",desc:"巨狼的尖牙。",type:"MATERIAL",value:5},
+{id:"spider_silk",name:"蜘蛛丝",desc:"晶莹剔透的蛛丝。",type:"MATERIAL",value:8},
+{id:"dragon_scale",name:"龙鳞",desc:"幼龙身上掉落的鳞片。",type:"MATERIAL",value:50},
+{id:"fairy_dust",name:"妖精之尘",desc:"闪闪发光的粉末。",type:"MATERIAL",value:20},
+{id:"mandrake_root",name:"曼德拉草根",desc:"形如人形的草根。",type:"MATERIAL",value:15},
+{id:"goblin_ear",name:"哥布林耳朵",desc:"哥布林身上割下来的耳朵。",type:"MATERIAL",value:3},
+{id:"snake_skin",name:"蛇皮",desc:"巨蟒蜕下的皮。",type:"MATERIAL",value:12},
+{id:"bandit_badge",name:"强盗徽章",desc:"强盗头目的身份徽章。",type:"MATERIAL",value:10},
+{id:"ancient_scroll",name:"古老卷轴",desc:"看不懂的古代文字。",type:"SCROLL",usable:true,value:5},
+{id:"magic_scroll",name:"传送卷轴",desc:"记载传送咒语。",type:"SCROLL",usable:true,value:15},
+{id:"rope",name:"麻绳",desc:"10米长的结实麻绳。",type:"TOOL",usable:true,value:3},
+{id:"compass",name:"古老指南针",desc:"指针指向特殊方向。",type:"TOOL",usable:true,value:8},
+{id:"lockpick",name:"开锁器",desc:"一套精巧的开锁工具。",type:"TOOL",usable:true,value:12},
+{id:"fishing_rod",name:"鱼竿",desc:"一根细长的鱼竿。",type:"TOOL",usable:true,value:5},
+{id:"magnifying_glass",name:"放大镜",desc:"可以观察细微之物。",type:"TOOL",usable:true,value:8},
+{id:"journal",name:"冒险者日志",desc:"某位冒险者留下的日记。",type:"BOOK",usable:true,value:5},
+{id:"magic_book",name:"魔法入门",desc:"基础魔法理论。",type:"BOOK",usable:true,value:10},
+{id:"magic_gem",name:"魔法宝石",desc:"散发紫光的宝石。",type:"QUEST",usable:true,value:0,weight:1},
+{id:"sacred_water",name:"圣水",desc:"受过祝福的圣水。",type:"QUEST",usable:true,value:0},
+{id:"phoenix_feather",name:"凤凰羽毛",desc:"火红色的凤凰尾羽。",type:"QUEST",usable:true,value:0},
+{id:"ice_crystal",name:"冰晶",desc:"极寒之地凝结的永恒冰晶。",type:"QUEST",value:0,weight:1},
+{id:"ancient_key",name:"古代钥匙",desc:"一把巨大的石钥匙。",type:"KEY",usable:true,weight:5,value:0},
+{id:"health_ring",name:"生命戒指",desc:"戴着它感觉精力充沛。",type:"RING",usable:true,heal:10,value:30},
+{id:"protection_ring",name:"守护之戒",desc:"佩戴者会获得隐形护盾。",type:"RING",def_bonus:2,value:35},
+{id:"strength_ring",name:"力量戒指",desc:"提升佩戴者的力量。",type:"RING",dmg_bonus:2,value:32},
+{id:"mystic_amulet",name:"神秘护符",desc:"刻着古老符文的护符。",type:"AMULET",usable:true,def_bonus:1,value:25}
+];
+// ═══ MONSTERS ═══
+const _MONSTERS=[{id:"giant_rat",name:"巨鼠",desc:"体型如狗的大老鼠。",hp:8,atk:2,exp:5,gold:3,loot:["mushroom"]},
+{id:"wolf",name:"巨狼",desc:"皮毛灰黑的巨狼。",hp:14,atk:4,defense:1,exp:12,gold:8,loot:["wolf_tooth","dried_meat"]},
+{id:"giant_spider",name:"巨蜘蛛",desc:"毛茸茸的洞穴蜘蛛。",hp:18,atk:5,defense:1,exp:15,gold:10,loot:["spider_silk"]},
+{id:"stone_golem",name:"石像鬼",desc:"由岩石构成的石像鬼。",hp:30,atk:7,defense:3,rank:"ELITE",exp:30,gold:20,loot:["emerald","chain_armor"]},
+{id:"ghost",name:"幽灵",desc:"半透明的灵体，散发着寒气。",hp:12,atk:6,exp:15,gold:5,loot:["old_coin"]},
+{id:"shadow_beast",name:"影兽",desc:"由黑暗凝聚而成的野兽。",hp:22,atk:6,defense:1,exp:20,gold:12,loot:["shadow_blade"]},
+{id:"forest_troll",name:"森林巨魔",desc:"三米高的巨魔，皮肤如树皮。",hp:35,atk:8,defense:2,rank:"ELITE",exp:35,gold:25,loot:["iron_sword","dried_meat"]},
+{id:"dragon_whelp",name:"幼龙",desc:"沉睡多年的幼龙，鳞片如黑曜石般闪光。",hp:60,atk:12,defense:5,rank:"BOSS",exp:100,gold:100,loot:["diamond","magic_gem","magic_staff"]},
+{id:"goblin",name:"哥布林",desc:"绿皮肤的小个子，握着破刀。",hp:10,atk:3,exp:8,gold:5,loot:["goblin_ear","old_coin"]},
+{id:"goblin_shaman",name:"哥布林萨满",desc:"戴着骨制面具的哥布林。",hp:18,atk:5,defense:1,exp:18,gold:15,loot:["goblin_ear","mana_potion","mandrake_root"]},
+{id:"giant_snake",name:"巨蟒",desc:"水桶粗的巨蟒。",hp:25,atk:6,defense:1,exp:20,gold:12,loot:["snake_skin"]},
+{id:"bandit_leader",name:"强盗头目",desc:"满脸横肉的独眼大汉。",hp:28,atk:7,defense:2,rank:"ELITE",exp:25,gold:30,loot:["bandit_badge","iron_sword","old_coin"]},
+{id:"ice_elemental",name:"冰元素",desc:"由冰晶构成的人形生物。",hp:20,atk:7,defense:3,exp:22,gold:15,loot:["ice_crystal","mana_potion"]},
+{id:"mimic",name:"宝箱怪",desc:"看起来是个华丽宝箱……但它有牙齿！",hp:25,atk:6,defense:2,exp:20,gold:25,loot:["golden_cup","ruby","lockpick"]},
+{id:"treant",name:"树精",desc:"古老的树木活了过来。",hp:35,atk:6,defense:4,rank:"ELITE",exp:30,gold:20,loot:["magic_herb","mandrake_root"]},
+{id:"giant_eagle",name:"巨鹰",desc:"翼展五米的巨鹰。",hp:22,atk:8,defense:1,exp:20,gold:10,loot:["phoenix_feather"]},
+{id:"goblin_king",name:"哥布林王",desc:"体型三倍的哥布林，头戴骨冠！",hp:50,atk:10,defense:3,rank:"BOSS",exp:80,gold:80,loot:["ancient_crown","war_hammer","rune_sword","strength_ring"]},
+{id:"wraith",name:"怨灵",desc:"半透明的人形怨灵。",hp:28,atk:9,defense:1,rank:"ELITE",exp:35,gold:18,loot:["moonlight_elixir","ancient_scroll"]},
+{id:"basilisk",name:"石化蜥蜴",desc:"巨大的蜥蜴，背上长着红色的冠。",hp:40,atk:10,defense:4,rank:"ELITE",exp:50,gold:40,loot:["thunder_hammer","dragon_scale","gold_ingot"]}
+];
+// ═══ NPCS ═══
+const _NPCS=[{id:"old_hermit",name:"老隐士",title:"迷雾森林的守护者",desc:"一位白发苍苍的老人。",type:"WISEMAN",dialogs:{greet:"你终于醒了……我等了你很久。",extra:"记住，高塔封印着一切答案。"},give_item:"journal",quest_item:"magic_gem",quest_reward:"greater_potion",quest_score:40},
+{id:"wandering_merchant",name:"流浪商人",title:"穿梭各地的行商",desc:"一个矮胖的中年人，身上挂满了各种货物。",type:"MERCHANT",dialogs:{greet:"嘿嘿，来得正好！",extra:"都是好货，童叟无欺！"},trade_items:[["lesser_potion",8],["torch",3],["bread",2],["dried_meat",4],["rope",3],["iron_sword",15],["leather_armor",12],["elven_bow",25]],buys_types:["TREASURE","MATERIAL","MINERAL"]},
+{id:"village_elder",name:"村长",title:"湖边村的村长",desc:"一位慈祥的老者，手里拄着拐杖。",type:"QUEST",dialogs:{greet:"陌生人，欢迎来到湖边村。",quest:"最近湖心岛出现异象……",extra:"小心湖中的生物。"},quest_item:"sacred_water",quest_reward:"silver_key",quest_score:25},
+{id:"healer_lily",name:"莉莉",title:"游方医师",desc:"一位背着药箱的年轻女子。",type:"HEALER",dialogs:{greet:"你受伤了？我可以帮你。",extra:"注意安全，冒险者。"}},
+{id:"wandering_rogue",name:"影",title:"神秘的流浪者",desc:"一个披着斗篷的人影。",type:"WANDERER",dialogs:{greet:"……你也在这迷雾中迷失了吗？",extra:"这个世界比你以为的要复杂。"},give_item:"shadow_blade"},
+{id:"tower_guardian",name:"塔灵",title:"高塔的魔法守卫",desc:"一个由光芒凝聚成的人形。",type:"GUARDIAN",dialogs:{greet:"进入高塔者，需证明自己的价值。",quest:"收集三件圣物：银钥匙、水晶钥匙、圣水。",extra:"只有纯净者才能通过。"},quest_item:"crystal_key",quest_reward:"magic_scroll",quest_score:30},
+{id:"innkeeper",name:"老汤姆",title:"迷雾酒馆的老板",desc:"一个圆滚滚的大胖子，脸上永远挂着笑容。",type:"INNKEEPER",dialogs:{greet:"欢迎光临迷雾酒馆！",extra:"听说最近森林里不太平。"},give_item:"fish"},
+{id:"blacksmith",name:"铁砧",title:"铁匠铺的主人",desc:"浑身肌肉的壮汉，穿着皮围裙。",type:"BLACKSMITH",dialogs:{greet:"需要武器或防具？",extra:"有好材料可以帮你打造装备。"},trade_items:[["iron_sword",12],["war_hammer",35],["spear",18],["scale_armor",40],["shield",15],["helmet",8],["crossbow",30]],buys_types:["MATERIAL","MINERAL"]},
+{id:"hunter",name:"猎人格雷",title:"经验丰富的老猎人",desc:"穿着兽皮大衣的老人，背着一把长弓。",type:"HUNTER",dialogs:{greet:"嗯？你不是本地人吧。",quest:"森林里的哥布林越来越多了……",extra:"我可以教你一些狩猎技巧。"},quest_item:"goblin_ear",quest_reward:"elven_bow",quest_score:25},
+{id:"priestess",name:"塞拉",title:"光之神殿的祭司",desc:"身穿白色长袍的美丽女子。",type:"PRIESTESS",dialogs:{greet:"愿光明指引你的道路。",extra:"如果你有圣水，我可以帮你净化它。"},give_item:"lesser_potion",quest_item:"phoenix_feather",quest_reward:"health_ring",quest_score:35},
+{id:"mad_alchemist",name:"疯修士",title:"隐居的炼金术士",desc:"一个穿着破旧长袍的怪人。",type:"WISEMAN",dialogs:{greet:"实验品！不，我是说……客人！",extra:"龙鳞粉加上月光草可以炼制最强的药剂！"},give_item:"mana_potion",quest_item:"dragon_scale",quest_reward:"protection_ring",quest_score:30},
+{id:"gravedigger",name:"老掘墓人",title:"守墓的老人",desc:"一个驼背的老人，手里拿着铁锹。",type:"WANDERER",dialogs:{greet:"你来墓地做什么？",extra:"听说地下埋着好东西。"},give_item:"old_coin"},
+{id:"bounty_hunter",name:"血鸦",title:"冷酷的赏金猎人",desc:"黑甲独行佣兵，脸上有刀疤。",type:"HUNTER",dialogs:{greet:"哼，你不是来抢我生意的吧。",quest:"我在追一只石化蜥蜴，带回它的鳞片。",extra:"那畜生已经石化了三个冒险者。"},quest_item:"dragon_scale",quest_reward:"strength_ring",quest_score:35}
+];
+// ═══ COMPANIONS ═══
+const _COMPANIONS=[{id:"companion_warrior",name:"铁锤",role:"WARRIOR",hp:60,atk:10,defense:4,ability_desc:"近战猛攻，攻击+3 防御+2",recruit_item:"iron_sword",recruit_msg:"铁锤拍了拍你的肩膀：『好剑！我跟你走！』"},
+{id:"companion_rogue",name:"夜莺",role:"ROGUE",hp:40,atk:8,defense:1,ability_desc:"偷袭技巧，攻击+2，40%概率额外伤害",recruit_item:"shadow_blade",recruit_msg:"夜莺在阴影中现身：『你有点意思。』"},
+{id:"companion_mage",name:"艾琳",role:"MAGE",hp:35,atk:12,defense:0,ability_desc:"魔法攻击，攻击+5，提供光源",recruit_item:"magic_book",recruit_msg:"艾琳兴奋地说：『终于有人懂魔法了！』"},
+{id:"companion_healer",name:"沐光",role:"HEALER",hp:50,atk:5,defense:3,ability_desc:"治疗支援，每回合恢复HP，防御+1，最大HP+15",recruit_item:"sacred_water",recruit_msg:"沐光双手合十：『你的旅途需要治愈之光。』"},
+{id:"companion_scout",name:"风灵",role:"SCOUT",hp:40,atk:7,defense:1,ability_desc:"侦察敏捷，攻击+1，发现敌人弱点",recruit_item:"fairy_dust",recruit_msg:"风灵轻快地跳到你面前：『你看起来需要个向导！』"},
+{id:"companion_archer",name:"追风",role:"SCOUT",hp:45,atk:9,defense:1,ability_desc:"远程狙击，攻击+2，概率双倍伤害",recruit_item:"elven_bow",recruit_msg:"追风点了点头：『你的弓术不错。』"},
+{id:"companion_monk",name:"无尘",role:"WARRIOR",hp:55,atk:8,defense:5,ability_desc:"钢铁之躯，攻击+2 防御+3，暴击率提升",recruit_item:"protection_ring",recruit_msg:"无尘双手合十：『施主，贫僧愿助你一臂之力。』"}
+];
+// ═══ ROOMS ═══
+const _ROOMS=[{id:"forest_entrance",name:"迷雾森林入口",desc:"浓雾笼罩的森林边缘。古木参天，灰雾流动。\n小路通向森林深处（north），西边有废弃小屋（west）。\n一个老人在墓碑旁驻着铁锹，似乎在等什么。",exits:{north:"dark_forest",west:"abandoned_hut"},npc_id:"gravedigger"},
+{id:"abandoned_hut",name:"废弃小屋",desc:"破败的木屋，屋顶塌了一半。墙角有铁箱，桌上有提灯。\n角落里好像有什么东西在动……",exits:{east:"forest_entrance"},items:["rusty_key","lantern","old_coin"],monster_id:"giant_rat"},
+{id:"dark_forest",name:"黑暗森林",desc:"越来越暗。古树扭曲，雾中有影。远处有狼嚎。\n向西似乎有一座废弃的墓地，北通洞穴，东达十字路口。",exits:{south:"forest_entrance",north:"cave_entrance",east:"crossroads",west:"haunted_graveyard"},items:["old_sword","bread"],monster_id:"wolf"},
+{id:"cave_entrance",name:"洞穴入口",desc:"漆黑的洞口，阴风阵阵。洞壁有刻痕。向下有通道。",exits:{south:"dark_forest",down:"cave_middle"},dark:true,items:["torch","mushroom"]},
+{id:"cave_middle",name:"洞穴中层",desc:"天然洞穴大厅，上方裂缝透光。洞壁发光苔藓。\n多条通道通向不同方向。",exits:{up:"cave_entrance",down:"cave_depths",east:"ancient_ruins",north:"goblin_cave",south:"underground_river"},dark:true,items:["silver_key","lesser_potion"]},
+{id:"cave_depths",name:"洞穴深处",desc:"洞穴最深处，气味刺鼻。地上有白骨。\n巨大的蜘蛛在角落织网……",exits:{up:"cave_middle"},dark:true,items:["golden_cup","spider_silk"],monster_id:"giant_spider"},
+{id:"ancient_ruins",name:"远古遗迹",desc:"石室，墙上刻满浮雕。中央石台有天鹅绒垫。\n东墙有石门。",exits:{west:"cave_middle",north:"hidden_passage"},items:["magic_scroll","ancient_scroll"]},
+{id:"hidden_passage",name:"秘密通道",desc:"狭窄的通道，仅容一人通过。墙壁上有发光符文。\n通道尽头有向上的楼梯。",exits:{south:"ancient_ruins",up:"tower_base"},dark:true,monster_id:"ghost"},
+{id:"crossroads",name:"十字路口",desc:"森林空地，五条路交汇。路牌：←湖 | 北：塔 | 南：森林 | 东：←",exits:{west:"dark_forest",north:"tower_base",east:"lake_shore",south:"forest_entrance"},npc_id:"old_hermit"},
+{id:"tower_base",name:"高塔底部",desc:"古老石塔，爬满藤蔓。塔门紧闭，有特殊锁孔。",exits:{south:"crossroads",up:"tower_middle"},items:["journal","lesser_potion"]},
+{id:"tower_middle",name:"高塔中层",desc:"塔内环形大厅，墙上挂满古老挂毯。\n螺旋楼梯继续向上。",exits:{down:"tower_base",up:"tower_top"},npc_id:"tower_guardian",items:["crystal_key","magic_book"]},
+{id:"tower_top",name:"高塔顶层",desc:"塔顶房间！堆满书籍和魔法器具。窗外是无尽迷雾。\n中央书桌上有一颗闪烁的魔法宝石。但一条幼龙盘踞在宝石旁边！",exits:{down:"tower_middle"},monster_id:"dragon_whelp"},
+{id:"lake_shore",name:"湖边",desc:"宁静的湖泊，湖水清澈。小木船漂在湖面。\n南边有一个小村落。一个背着弓的老人在湖边钓鱼。",exits:{west:"crossroads",south:"lake_village"},npc_id:"hunter",items:["compass","fishing_rod"]},
+{id:"lake_village",name:"湖边村",desc:"宁静的小渔村。几间木屋，炊烟袅袅。\n村口公告栏贴着告示。村中有酒馆、铁匠铺和神殿。",exits:{north:"lake_shore",south:"lake_village_inn",west:"lake_village_smithy",east:"lake_village_temple"},npc_id:"healer_lily",items:["dried_meat","bread"]},
+{id:"lake_island",name:"湖心岛",desc:"岛上有神殿废墟。祭坛上的宝石被魔法屏障保护。\n水中有阴影游动……",exits:{west:"lake_shore"},monster_id:"shadow_beast",items:["sacred_water","emerald"]},
+{id:"goblin_cave",name:"哥布林巢穴",desc:"股鼻的气味扑面而来！洞穴里堆满了偷来的杂物和骨头。\n一群哥布林正在分赃，看到你后尖叫着冲了过来！",exits:{south:"cave_middle"},dark:true,items:["golden_cup","old_coin","lockpick","goblin_ear"],monster_id:"goblin"},
+{id:"goblin_throne",name:"哥布林王座",desc:"洞穴最深处的一座天然石殿。一个巨大的哥布林坐在骨堆上。\n它头戴骨冠，手中巨棒上还沾着血迹——这就是哥布林王！",exits:{north:"goblin_cave"},dark:true,items:["ancient_crown","rune_sword"],monster_id:"goblin_king"},
+{id:"underground_river",name:"地下河",desc:"洞穴在这里豁然开朗，一条漆黑的地下河缓缓流过。\n河岸上有萤火虫般的发光苔藓，水中有东西在游动……",exits:{north:"cave_middle",east:"frozen_cave",west:"hidden_grove"},dark:true,items:["magic_herb","silver_ingot"],monster_id:"giant_snake"},
+{id:"frozen_cave",name:"冰封洞穴",desc:"洞穴的墙壁覆盖着厚厚的冰霜，温度骤降。\n呼出的气瞬间凝成白雾，地面结冰非常滑。\n一个由冰晶构成的生物在角落里静止不动……直到看见你。",exits:{west:"underground_river"},dark:true,items:["ice_crystal","scale_armor","mana_potion"],monster_id:"ice_elemental"},
+{id:"hidden_grove",name:"隐藏树丛",desc:"一个被古老树木环绕的隐秘空地。阳光透过树叶洒下斑驳光影。\n空地中央有一座石头祭坛，周围长满了发光的草药。",exits:{east:"underground_river"},npc_id:"wandering_rogue",items:["fairy_dust","magic_herb","mushroom","health_ring"]},
+{id:"bandit_camp",name:"强盗营地",desc:"森林深处的一片空地，搭着几个简陋的帐篷。篝火还在燃烧。\n几个面目狰狞的强盗正在分赃，看到你后纷纷拔出了武器！",exits:{north:"bandit_hideout",west:"forest_tower_ruins"},items:["old_coin","dried_meat","leather_armor"],monster_id:"bandit_leader"},
+{id:"bandit_hideout",name:"强盗藏宝室",desc:"强盗们的秘密藏宝室！堆满了抢来的财物。\n角落里有一个巨大的宝箱……它在呼吸？！",exits:{south:"bandit_camp"},items:["gold_ingot","silver_ingot","ruby","sapphire","diamond"],monster_id:"mimic"},
+{id:"lake_village_inn",name:"迷雾酒馆",desc:"温暖的酒馆里弥漫着麦酒和烤肉的味道。壁炉里的火烧得正旺。",exits:{south:"lake_village"},npc_id:"innkeeper",items:["fish","bread","honey"]},
+{id:"lake_village_smithy",name:"铁匠铺",desc:"炙热的熔炉和叮当的锤声。墙上挂满了各种武器和防具。",exits:{east:"lake_village"},npc_id:"blacksmith",items:["iron_sword","helmet","shield"]},
+{id:"lake_village_temple",name:"光之神殿",desc:"一座小巧而庄严的神殿。彩色玻璃窗透入柔和的光芒。",exits:{west:"lake_village"},npc_id:"priestess",items:["lesser_potion","sacred_water"]},
+{id:"alchemist_lab",name:"炼金术士的实验室",desc:"一个堆满奇怪仪器和瓶瓶罐罐的洞穴实验室。\n五颜六色的液体在烧瓶中沸腾。",exits:{west:"hidden_grove"},npc_id:"mad_alchemist",items:["mana_potion","fairy_dust","mandrake_root"]},
+{id:"forest_tower_ruins",name:"森林塔废墟",desc:"一座倒塌了一半的古老石塔，被藤蔓和苔藓覆盖。\n塔内的螺旋楼梯已经断裂，但地下似乎还有空间。\n一只巨鹰在塔顶筑了巢。",exits:{south:"forest_entrance",west:"bandit_camp"},items:["phoenix_feather","ancient_scroll","mystic_amulet"],monster_id:"giant_eagle"},
+{id:"haunted_graveyard",name:"被诅咒的墓地",desc:"一片荒凉的墓地，墓碑歪歪斜斜地插在土中。\n阴冷的风穿过枯树发出呜咽声。地面下有东西在动……\n一个黑甲佣兵正在墓地中搜寻着什么。",exits:{west:"dark_forest"},npc_id:"bounty_hunter",items:["old_coin","silver_ring","mystic_amulet"],monster_id:"ghost"}
+];
+// ═══ GAME LOGIC ═══
+class Game{
+  constructor(){
+    this.rooms={};this.items={};this.npcs={};this.monsters={};this.companions={};
+    this.inventory={};this.companion_list=[];
+    this.current_room_id="";this.turns=0;this.score=0;this.gold=30;
+    this.player_hp=60;this.player_max_hp=60;
+    this.player_atk_bonus=0;this.player_def_bonus=0;
+    this.game_over=false;this.won=false;this.flags={};
+    this.in_combat=false;this.current_enemy="";
+    this._buildWorld();
+  }
+  _buildWorld(){
+    for(const d of _ITEMS){const it={...d};it.takeable=d.takeable!==false;it.damage_bonus=d.dmg_bonus||0;it.defense_bonus=d.def_bonus||0;it.weight=d.weight||1;it.heal=d.heal||0;it.value=d.value||0;it.stackable=isStackable(it);it.use_msg=d.use_msg||"";this.items[d.id]=it}
+    for(const d of _MONSTERS){const m={...d};m.max_hp=d.hp;m.hp=d.hp;m.attack=d.atk;m.defense=d.defense||0;m.alive=true;m.loot=d.loot||[];m.rank=d.rank||"NORMAL";this.monsters[d.id]=m}
+    for(const d of _NPCS){const n={...d};n.met_before=false;n.quest_done=false;n.trade_items=d.trade_items||[];n.buys_types=d.buys_types||[];this.npcs[d.id]=n}
+    for(const d of _COMPANIONS){const c={...d};c.recruited=false;c.max_hp=d.hp;c.role=d.role;c.attack=d.atk;c.recruit_item=d.recruit_item;c.recruit_msg=d.recruit_msg||"加入！";c.get_bonus=function(){return{WARRIOR:{dmg:3,def:2,hp:10},ROGUE:{dmg:2,def:0,hp:5},MAGE:{dmg:5,def:-1,hp:0},HEALER:{dmg:0,def:1,hp:15},SCOUT:{dmg:1,def:0,hp:5}}[this.role]||{dmg:0,def:0,hp:0}};c.banter=function(){const m={WARRIOR:"哼，这点小伤不算什么。",ROGUE:"嘿，前面可能有陷阱。",MAGE:"我能感觉到魔法的波动……",HEALER:"大家注意安全。",SCOUT:"我去前面探探路。"};return`[${this.name}] ${m[this.role]||"…"}`};c.combat_assist=function(g){if(this.role==="MAGE")return`${this.name} 释放魔法箭！`;if(this.role==="HEALER"){const h=roll(6,2);g.player_hp=Math.min(g.player_max_hp,g.player_hp+h);return`${this.name} 为你恢复 ${h} 点HP！`}if(this.role==="ROGUE"&&Math.random()<0.4)return`${this.name} 偷袭！`;return`${this.name} 正在奋战！`};this.companions[d.id]=c}
+    const dm={north:Direction.NORTH,south:Direction.SOUTH,east:Direction.EAST,west:Direction.WEST,up:Direction.UP,down:Direction.DOWN};
+    for(const d of _ROOMS){const ex={};for(const[k,v]of Object.entries(d.exits||{})){const dir=dm[k];if(dir)ex[dir]=v}const r={...d};r.exits=ex;r.items=[...(d.items||[])];r.dark=d.dark||false;r.visited=false;this.rooms[d.id]=r}
+    this._applyBehaviors();this.current_room_id="forest_entrance";this.rooms["forest_entrance"].visited=true;this._invAdd("lesser_potion");this._invAdd("bread")
+  }
+  _applyBehaviors(){
+    const g=this;
+    g.rooms["ancient_ruins"].on_enter=function(g){if(g.hasItem("rusty_key")&&!("ruins_open"in g.flags)){g.rooms["ancient_ruins"].exits[Direction.NORTH]="hidden_passage";return"你用生锈钥匙打开了石门！"}if("ruins_open"in g.flags)return null;if(!g.hasItem("rusty_key"))return"石门紧锁，需要钥匙。";return null};
+    g.rooms["tower_base"].on_enter=function(g){if(g.hasItem("silver_key")&&!("tower_unlocked"in g.flags)){g.rooms["tower_base"].exits[Direction.UP]="tower_middle";return"银钥匙打开了塔门！"}if("tower_unlocked"in g.flags){g.flags["tower_unlocked"]=true;return"门已经开了。"}return null};
+    g.rooms["tower_top"].on_enter=function(g){return g.monsters["dragon_whelp"].alive?"一股强大的龙威扑面而来……":"幼龙已经被击败，宝石唾手可得。"};
+    g.rooms["lake_shore"].on_enter=function(g){if(!("boat_taken"in g.flags)){g.rooms["lake_shore"].exits[Direction.EAST]="lake_island";return"你登上小船划向湖心岛……"}if("boat_taken"in g.flags){g.flags["boat_taken"]=true;return"船已经在对岸了。"}return null};
+    g.rooms["goblin_throne"].on_enter=function(){return"哥布林王咆哮着站起来！地面都在震动！"};
+    const orig=g.items["magic_gem"].on_use;g.items["magic_gem"].on_use=function(g){if(g.current_room_id==="tower_top"&&!g.monsters["dragon_whelp"].alive){g.won=true;return"宝石嵌入书桌凹槽！书籍爆发出耀眼的光芒——\n所有记忆涌回你的脑海！你是被封印的守护者，\n迷雾是高塔的结界。现在，你自由了！"}if(g.current_room_id==="tower_top"&&g.monsters["dragon_whelp"].alive)return"幼龙还在！必须先击败它！";return orig(g)||"宝石爆发耀眼光芒！"}
+  }
+  _invAdd(iid,c){c=c||1;const it=this.items[iid];if(it&&it.stackable){const n=(this.inventory[iid]||0)+c;this.inventory[iid]=Math.min(n,999)}else if(!(iid in this.inventory))this.inventory[iid]=c}
+  _invRemove(iid,c){c=c||1;const it=this.items[iid];const cur=this.inventory[iid]||0;if(cur<=0)return;if(it&&it.stackable){if(cur<=c)delete this.inventory[iid];else this.inventory[iid]-=c}else delete this.inventory[iid]}
+  hasItem(iid){return iid in this.inventory}
+  _totalWeight(){let t=0;for(const[iid,c]of Object.entries(this.inventory)){const it=this.items[iid];if(it)t+=it.stackable?it.weight:it.weight*c}return t}
+  hasLight(){if(this.current_room_id==="tower_top")return true;for(const iid in this.inventory)if(this.items[iid]?.item_type==="LIGHT")return true;for(const cid of this.companion_list)if(this.companions[cid]?.role==="MAGE")return true;return false}
+  roomDesc(id){
+    const rm=this.rooms[id];if(!rm)return"未知地点。";if(rm.dark&&!this.hasLight())return"🌑 一片漆黑！你需要光源。";
+    let t=`[${rm.name}]\n${rm.visited?rm.desc.split("\n")[0]:rm.desc}`;
+    const its=rm.items.map(i=>this.items[i]).filter(Boolean);if(its.length)t+="\n\n可见物品："+its.map((it,i)=>`(${i+1}) ${it.name}`).join(", ");
+    if(rm.npc_id&&this.npcs[rm.npc_id]){const n=this.npcs[rm.npc_id];t+=`\n👤 ${n.name}（${n.title||""}）`}
+    if(rm.monster_id&&this.monsters[rm.monster_id]){const m=this.monsters[rm.monster_id];if(m.alive){const tag=m.rank!=="NORMAL"?`[${MonsterRank[m.rank]}]`:"";t+=`\n⚠️ ${tag} ${m.name}`}}
+    t+=`\n出口：${Object.keys(rm.exits).join(", ")}`;return t
+  }
+  doGo(ds){
+    if(this.in_combat)return"战斗中！(attack/flee)";
+    const map={n:Direction.NORTH,s:Direction.SOUTH,e:Direction.EAST,w:Direction.WEST,u:Direction.UP,d:Direction.DOWN,north:Direction.NORTH,south:Direction.SOUTH,east:Direction.EAST,west:Direction.WEST,up:Direction.UP,down:Direction.DOWN};
+    const d=map[ds];if(!d)return`不能往 ${ds}。`;const rm=this.rooms[this.current_room_id];if(!rm.exits[d])return`不能往 ${d}。`;if(rm.dark&&!this.hasLight())return"🌑 太黑了不敢走。";
+    this.current_room_id=rm.exits[d];const nr=this.rooms[this.current_room_id];let extra="";
+    if(nr.on_enter){const r=nr.on_enter(this);if(r)extra=`\n\n${r}`}if(!nr.visited){nr.visited=true;this.score+=10}
+    const cb=this._checkCombat();if(cb)extra+=`\n\n${cb}`;return`${this.roomDesc(this.current_room_id)}${extra}`
+  }
+  _checkCombat(){const rm=this.rooms[this.current_room_id];if(rm.monster_id&&this.monsters[rm.monster_id]){const m=this.monsters[rm.monster_id];if(m.alive&&m.hostile!==false&&!this.in_combat){this.in_combat=true;this.current_enemy=m.id;return`⚔️ ${m.name} 出现了！`}}}
+  doLook(){const rm=this.rooms[this.current_room_id];rm.visited=false;return this.roomDesc(this.current_room_id)}
+  doInventory(){const total=Object.values(this.inventory).reduce((a,b)=>a+b,0);const lines=[`🎒 背包 (重量 ${this._totalWeight()}/12 · 共 ${total} 件)`];if(Object.keys(this.inventory).length){let i=1;for(const[iid,c]of Object.entries(this.inventory)){const it=this.items[iid];if(it){let l=`  (${i}) ${it.name}`;if(it.stackable&&c>1)l+=` x${c}`;l+=` (${it.item_type})`;lines.push(l);i++}}}else lines.push("  (空)");lines.push(`\n❤️ HP: ${this.player_hp}/${this.player_max_hp}\n💰 金币: ${this.gold} | 🏆 得分: ${this.score}`);if(this.companion_list.length){lines.push("👥 队友：");for(const cid of this.companion_list){const c=this.companions[cid];if(c)lines.push(`  · ${c.name} [${c.role}] HP:${c.hp}/${c.max_hp}`)}}return lines.join("\n")}
+  doTake(args){
+    if(!args||!args.length)return"拿什么？";const t=args.join(" ");if(this.in_combat)return"战斗中不能拾取！";const rm=this.rooms[this.current_room_id];
+    if(t==="all"){const tk=[];for(const iid of[...rm.items]){const it=this.items[iid];if(it&&it.takeable){const had=iid in this.inventory;if(!had&&this._totalWeight()+it.weight>12)continue;rm.items=rm.items.filter(x=>x!==iid);this._invAdd(iid);this.score+=5;tk.push(it.name)}}return tk.length?`拾取了：${tk.join("、")}。`:"这里没有能拿的东西。"}
+    let found=null;const n=parseInt(t);if(!isNaN(n)&&n>=1&&n<=rm.items.length)found=rm.items[n-1];if(!found){const tl=t.toLowerCase();for(const iid of rm.items){const it=this.items[iid];if(it&&(tl===it.name.toLowerCase()||tl===it.id||it.name.toLowerCase().includes(tl))){found=iid;break}}}
+    if(!found)return`没有 ${t}。`;const it=this.items[found];if(!it.takeable)return`拿不起 ${it.name}。`;const had=found in this.inventory;if(!had&&this._totalWeight()+it.weight>12)return"负重满了（12）。";rm.items=rm.items.filter(x=>x!==found);this._invAdd(found);this.score+=5;return`拾起了 ${it.name}。`
+  }
+  doDrop(args){if(!args||!args.length)return"丢什么？";const t=args.join(" ");if(this.in_combat)return"战斗中不能丢弃！";const ik=Object.keys(this.inventory);let found=null;const n=parseInt(t);if(!isNaN(n)&&n>=1&&n<=ik.length)found=ik[n-1];if(!found){const tl=t.toLowerCase();for(const iid of ik){const it=this.items[iid];if(it&&(tl===it.name.toLowerCase()||tl===it.id||it.name.toLowerCase().includes(tl))){found=iid;break}}}if(!found)return`没有 ${t}。`;this._invRemove(found);this.rooms[this.current_room_id].items.push(found);return`丢下了 ${this.items[found].name}。`}
+  doUse(args){if(!args||!args.length)return"用什么？";const t=args.join(" ");const ik=Object.keys(this.inventory);let found=null;const n=parseInt(t);if(!isNaN(n)&&n>=1&&n<=ik.length)found=ik[n-1];if(!found){const tl=t.toLowerCase();for(const iid of ik){const it=this.items[iid];if(it&&(tl===it.name.toLowerCase()||tl===it.id||it.name.toLowerCase().includes(tl))){found=iid;break}}}if(!found)return`没有 ${t}。`;const it=this.items[found];if(!it.usable)return`${it.name} 不能用。`;let msg="";if(typeof it.on_use==="function")msg=it.on_use(this)||`使用了 ${it.name}。`;else if(it.heal>0){this.player_hp=Math.min(this.player_max_hp,this.player_hp+it.heal);msg=`恢复了 ${it.heal} 点生命值！`}else msg=it.use_msg||`使用了 ${it.name}。`;if(it.item_type==="POTION"||it.item_type==="FOOD")this._invRemove(found);this.score+=2;return msg}
+  doTalk(){const rm=this.rooms[this.current_room_id];if(!rm.npc_id||!this.npcs[rm.npc_id])return"这里没有可对话的人。";const npc=this.npcs[rm.npc_id];const d=npc.dialogs||{};const lines=[`[${npc.name} · ${npc.title||""}]`,npc.desc];if(!npc.met_before){npc.met_before=true;lines.push(`\n${npc.name}：「${d.greet||"你好。"}」`);if(npc.give_item&&this.items[npc.give_item]&&!(npc.give_item in this.inventory)){this._invAdd(npc.give_item);lines.push(`\n${npc.name} 给了你 ${this.items[npc.give_item].name}！`);this.score+=5}}else lines.push(`\n${npc.name}：「${d.extra||d.farewell||"还有什么事？"}」`);if(npc.quest_item&&!npc.quest_done){if(npc.quest_item in this.inventory){this._invRemove(npc.quest_item);if(npc.quest_reward){this._invAdd(npc.quest_reward);lines.push(`\n✨ 提交任务！获得 ${this.items[npc.quest_reward].name}！`)}else lines.push(`\n✨ ${npc.name} 感谢你！`);this.score+=npc.quest_score||30;npc.quest_done=true}else{const qi=this.items[npc.quest_item];if(qi)lines.push(`\n💬 ${npc.name}：${d.quest||`帮我找 ${qi.name} 好吗？`}`)}}if(npc.npc_type==="MERCHANT")lines.push("\n🛒 输入 buy <物品> / sell <物品>");if(npc.npc_type==="HEALER")lines.push("\n💚 我可以为你治疗 (输入 heal)");return lines.join("\n")}
+  doTrade(){const rm=this.rooms[this.current_room_id];if(!rm.npc_id||!this.npcs[rm.npc_id])return"没有商人。";const npc=this.npcs[rm.npc_id];if(npc.npc_type!=="MERCHANT"||!npc.trade_items.length)return`${npc.name} 没有商品。`;const lines=[`\n🛒 ${npc.name} 的商品：`];for(let i=0;i<npc.trade_items.length;i++){const[iid,price]=npc.trade_items[i];const it=this.items[iid];if(it)lines.push(`  (${i+1}) ${it.name} —— ${price} 金币`)}lines.push(`💰 你有 ${this.gold} 金币`);return lines.join("\n")}
+  doBuy(args){if(!args||!args.length)return"买什么？";const rm=this.rooms[this.current_room_id];if(!rm.npc_id||!this.npcs[rm.npc_id])return"没有商人。";const npc=this.npcs[rm.npc_id];if(npc.npc_type!=="MERCHANT")return`${npc.name} 不是商人。`;const name=args.join(" ");const n=parseInt(name);if(!isNaN(n)&&n>=1&&n<=npc.trade_items.length){const[iid,price]=npc.trade_items[n-1];const it=this.items[iid];if(this.gold>=price){this.gold-=price;this._invAdd(iid);return`购买了 ${it.name}！花费 ${price} 金币。`}return`需要 ${price} 金币，你只有 ${this.gold}。`}for(const[iid,price]of npc.trade_items){const it=this.items[iid];if(it&&(name===it.name||name===it.id)){if(this.gold>=price){this.gold-=price;this._invAdd(iid);return`购买了 ${it.name}！花费 ${price} 金币。`}return`需要 ${price} 金币，你只有 ${this.gold}。`}}return`没有 '${name}'。`}
+  doSell(args){if(!args||!args.length)return"卖什么？";const rm=this.rooms[this.current_room_id];if(!rm.npc_id||!this.npcs[rm.npc_id])return"没有商人。";const npc=this.npcs[rm.npc_id];if(npc.npc_type!=="MERCHANT")return`${npc.name} 不是商人。`;const name=args.join(" ");const ik=Object.keys(this.inventory);const n=parseInt(name);if(!isNaN(n)&&n>=1&&n<=ik.length){const iid=ik[n-1];const it=this.items[iid];if(it&&(npc.buys_types||[]).includes(it.item_type)){const p=Math.max(2,Math.floor((it.value||0)/2));this._invRemove(iid);this.gold+=p;return`卖了 ${it.name}，获得 ${p} 金币。`}return"不收这种物品。"}for(const iid of ik){const it=this.items[iid];if(it&&(name===it.name||name===it.id)){if((npc.buys_types||[]).includes(it.item_type)){const p=Math.max(2,Math.floor((it.value||0)/2));this._invRemove(iid);this.gold+=p;return`卖了 ${it.name}，获得 ${p} 金币。`}return"不收这种物品。"}}return`没有 '${name}'。`}
+  doHeal(){const rm=this.rooms[this.current_room_id];if(!rm.npc_id||!this.npcs[rm.npc_id])return"没有治疗者。";const npc=this.npcs[rm.npc_id];if(npc.npc_type!=="HEALER")return`${npc.name} 不会治疗。`;const cost=10;if(this.gold<cost)return`治疗需要 ${cost} 金币。`;this.gold-=cost;const h=roll(6,3);this.player_hp=Math.min(this.player_max_hp,this.player_hp+h);return`${npc.name} 为你治疗，恢复了 ${h} 点HP！花费 ${cost} 金币。`}
+  doAttack(){if(!this.in_combat)return"没有敌人。";const m=this.monsters[this.current_enemy];if(!m||!m.alive){this.in_combat=false;return"敌人已死。"}const dmg=roll(6)+this.totalAtk;const a=Math.max(0,dmg-(m.defense||0));m.hp=Math.max(0,m.hp-a);const l=[`你攻击 ${m.name}！造成 ${a} 点伤害。`];if(m.hp<=0){m.alive=false;l.push(`\n🎉 击败了 ${m.name}！`);for(const li of m.loot||[]){if(this.items[li]){this._invAdd(li);l.push(`🏆 战利品：${this.items[li].name}`)}}this.gold+=m.gold||0;this.score+=m.exp||0;l.push(`💰 +${m.gold||0}金币 +${m.exp||0}经验`);this.in_combat=false;this.current_enemy="";if(m.rank==="BOSS")l.push(`\n💀 BOSS【${m.name}】被击败！`);if(this.companion_list.length){const c=this.companions[this.companion_list[0]];if(c)l.push(`\n${c.banter()}`)}return l.join("\n")}const ma=Math.max(1,m.attack+roll(4)-3);const rd=Math.max(0,ma-this.totalDef);this.player_hp-=rd;l.push(`${m.name} 反击！造成 ${rd} 点伤害。`);if(this.companion_list.length){const c=this.companions[this.companion_list[0]];if(c)l.push(`\n${c.combat_assist(this)}`)}if(this.player_hp<=0){l.push(`\n💀 你被 ${m.name} 击败了……`);this.game_over=true;return l.join("\n")}l.push(`\n${m.name}: ${m.hp}/${m.max_hp} | 你的HP: ${this.player_hp}/${this.player_max_hp}`);return l.join("\n")}
+  doFlee(){if(!this.in_combat)return"没有战斗。";if(Math.random()<0.5){this.in_combat=false;this.current_enemy="";return"你逃跑了！"}const m=this.monsters[this.current_enemy];return`逃跑失败！${m?m.name:"敌人"} 挡住了路。`}
+  doRecruit(){const rm=this.rooms[this.current_room_id];if(!rm.npc_id)return"这里没有可招募的人。";const npc=this.npcs[rm.npc_id];const cm={old_hermit:"companion_warrior",wandering_rogue:"companion_rogue",priestess:"companion_healer",hunter:"companion_scout",bounty_hunter:"companion_archer"};const cid=cm[rm.npc_id];if(!cid||!this.companions[cid])return`${npc.name} 看起来不想加入你。`;const c=this.companions[cid];if(c.recruited)return`${c.name} 已经是你的队友了。`;if(c.recruit_item&&!(c.recruit_item in this.inventory)){const n=this.items[c.recruit_item];return`招募 ${c.name} 需要 ${n?n.name:c.recruit_item}。`}if(c.recruit_item&&c.recruit_item in this.inventory)this._invRemove(c.recruit_item);c.recruited=true;this.companion_list.push(cid);rm.npc_id=null;this.score+=20;return`✨ ${c.name} ${c.recruit_msg}`}
+  doParty(){if(!this.companion_list.length)return"你目前没有队友。";const l=["👥 你的队友："];for(const cid of this.companion_list){const c=this.companions[cid];if(c){l.push(`  ${c.name} [${c.role}] HP:${c.hp}/${c.max_hp}`);const b=c.get_bonus();l.push(`  攻击+${b.dmg} 防御+${b.def}`);l.push(`  能力：${c.ability_desc||""}`)}}return l.join("\n")}
+  doHelp(){return"╔══════════ 命令列表 ══════════╗\n\n🚶 移动：n/s/e/w/u/d\n👁️ 查看(look) 背包(inv) 帮助(help) 得分(score)\n🎒 拿(take) 丢(drop) 用(use)\n💬 对话(talk) 购买(buy) 出售(sell) 治疗(heal)\n⚔️ 攻击(attack) 逃跑(flee)\n🤝 招募(recruit) 队伍(party)\n\n💡 食物/宝藏/材料可叠加存放(上限999)"}
+  doScore(){return`🏆 得分: ${this.score}  |  📖 回合: ${this.turns}`}
+  get totalAtk(){let b=this.player_atk_bonus;for(const iid in this.inventory){const it=this.items[iid];if(it)b+=it.damage_bonus||0}for(const cid of this.companion_list){const c=this.companions[cid];if(c){const bb=c.get_bonus();b+=bb.dmg}}return b}
+  get totalDef(){let b=this.player_def_bonus;for(const iid in this.inventory){const it=this.items[iid];if(it)b+=it.defense_bonus||0}for(const cid of this.companion_list){const c=this.companions[cid];if(c){const bb=c.get_bonus();b+=bb.def}}return b}
+}
+// ═══ UI LOGIC ═══
+const story=document.getElementById("story");const target=document.getElementById("targets");const cmds=document.getElementById("cmds");
+let game=null;let pending=null;
+function log(t,c){if(!t||t==="None"||t===null||t===undefined)return;if(c)story.innerHTML+=`<div class="cmd">&gt; ${t}</div>`;else{story.innerHTML+=`<div class="sep"></div><div>${t.replace(/\n/g,"<br>")}</div>`}story.scrollTop=story.scrollHeight}
+function upd(){document.getElementById("hpt").textContent=`${game.player_hp}/${game.player_max_hp}`;document.getElementById("hpf").style.width=`${(game.player_hp/game.player_max_hp)*100}%`;document.getElementById("gdt").textContent=game.gold;document.getElementById("sct").textContent=game.score;document.getElementById("wgt").textContent=`${game._totalWeight()}/12`;const cn=game.companion_list.map(c=>{const c2=game.companions[c];return c2?c2.name:""}).filter(Boolean);document.getElementById("cpt").textContent=cn.length?cn.join(", "):"无"}
+function showTargets(label,buttons){target.style.display="flex";target.innerHTML=`<div class="tl">${label}</div>`;for(const{text,hint,cls,action}of buttons){const b=document.createElement("button");b.innerHTML=hint?`${text}<span class="hint">/${hint}</span>`:text;if(cls)b.className=cls;b.onclick=()=>{target.style.display="none";target.innerHTML="";action()};target.appendChild(b)}}
+function clearTargets(){target.style.display="none";target.innerHTML="";pending=null}
+function exec(fn,name){if(game.game_over){log(game.won?"🎉 你已经通关了！刷新页面重玩。":"💀 游戏已结束。刷新页面重玩。");return}if(pending)clearTargets();log(name,true);const r=fn();log(r);if(game.won){log("\n🎉 你找回了所有记忆，打破了迷雾诅咒！通关！");log(`得分：${game.score}`)}if(game.player_hp<=0){log("\n💀 你死了……");game.game_over=true}game.turns++;upd()}
+function addGroup(lbl,buttons){const g=document.createElement("div");g.className="cg";g.innerHTML=`<div class="cgl">${lbl}</div><div class="cb"></div>`;const btns=g.querySelector(".cb");for(const{text,hint,cls,action}of buttons){const b=document.createElement("button");b.innerHTML=hint?`${text}<span class="hint">/${hint}</span>`:text;if(cls)b.className=cls;b.onclick=action;btns.appendChild(b)}cmds.appendChild(g)}
+function buildCommands(){
+  addGroup("移动",[{text:"北",hint:"north",cls:"bm",action:()=>exec(()=>game.doGo("north"),"north")},{text:"南",hint:"south",cls:"bm",action:()=>exec(()=>game.doGo("south"),"south")},{text:"东",hint:"east",cls:"bm",action:()=>exec(()=>game.doGo("east"),"east")},{text:"西",hint:"west",cls:"bm",action:()=>exec(()=>game.doGo("west"),"west")},{text:"上",hint:"up",cls:"bm",action:()=>exec(()=>game.doGo("up"),"up")},{text:"下",hint:"down",cls:"bm",action:()=>exec(()=>game.doGo("down"),"down")}]);
+  addGroup("探索",[{text:"👁️ 查看",hint:"look / l",action:()=>exec(()=>game.doLook(),"look")},{text:"🎒 背包",hint:"inv / i",cls:"bi",action:()=>exec(()=>game.doInventory(),"inventory")},{text:"📖 帮助",hint:"help / h",action:()=>exec(()=>game.doHelp(),"help")},{text:"🏆 得分",hint:"score",action:()=>exec(()=>game.doScore(),"score")}]);
+  addGroup("物品",[{text:"拿起",hint:"take 序号",action:()=>{const rm=game.rooms[game.current_room_id];if(!rm.items.length){exec(()=>"这里没有可拿的物品。","take");return}showTargets("选择物品：",[...rm.items.map((iid,idx)=>({text:`(${idx+1}) ${game.items[iid]?.name||iid}`,action:()=>exec(()=>game.doTake([String(idx+1)]),`take ${idx+1}`)})),{text:"拿全部",hint:"take all",cls:"bg",action:()=>exec(()=>game.doTake(["all"]),"take all")},{text:"取消",hint:"esc",cls:"bc",action:clearTargets}])}},{text:"丢弃",hint:"drop 序号",action:()=>{const ik=Object.keys(game.inventory);if(!ik.length){exec(()=>"背包是空的。","drop");return}showTargets("丢弃物品：",[...ik.map((iid,idx)=>{const it=game.items[iid];return{text:`(${idx+1}) ${it?it.name:iid}${it&&it.stackable&&game.inventory[iid]>1?" x"+game.inventory[iid]:""}`,action:()=>exec(()=>game.doDrop([String(idx+1)]),`drop ${idx+1}`)}}),{text:"取消",hint:"esc",cls:"bc",action:clearTargets}])}},{text:"使用",hint:"use 序号",action:()=>{const ik=Object.keys(game.inventory);const u=ik.filter(i=>game.items[i]?.usable);if(!u.length){exec(()=>"没有可用物品。","use");return}showTargets("使用物品：",[...u.map(iid=>{const idx=ik.indexOf(iid)+1;const it=game.items[iid];return{text:`(${idx}) ${it.name}${it.stackable&&game.inventory[iid]>1?" x"+game.inventory[iid]:""}`,action:()=>exec(()=>game.doUse([String(idx)]),`use ${idx}`)}}),{text:"取消",hint:"esc",cls:"bc",action:clearTargets}])}}]);
+  addGroup("社交",[{text:"💬 对话",hint:"talk",action:()=>exec(()=>game.doTalk(),"talk")},{text:"🛒 商品",hint:"trade",action:()=>exec(()=>game.doTrade(),"trade")},{text:"购买",hint:"buy 序号",action:()=>{const rm=game.rooms[game.current_room_id];if(!rm.npc_id||!game.npcs[rm.npc_id]){exec(()=>"没有商人。","buy");return}const npc=game.npcs[rm.npc_id];if(npc.npc_type!=="MERCHANT"||!npc.trade_items.length){exec(()=>"没有商品。","buy");return}showTargets("购买：",[...npc.trade_items.map(([iid,price],idx)=>({text:`(${idx+1}) ${game.items[iid]?.name||iid} ${price}💰`,action:()=>exec(()=>game.doBuy([String(idx+1)]),`buy ${idx+1}`)})),{text:"取消",hint:"esc",cls:"bc",action:clearTargets}])}},{text:"出售",hint:"sell 序号",action:()=>{const rm=game.rooms[game.current_room_id];if(!rm.npc_id||!game.npcs[rm.npc_id]){exec(()=>"没有商人。","sell");return}const npc=game.npcs[rm.npc_id];if(npc.npc_type!=="MERCHANT"){exec(()=>"不是商人。","sell");return}const ik=Object.keys(game.inventory);const s=ik.filter(i=>{const it=game.items[i];return it&&(npc.buys_types||[]).includes(it.item_type)});if(!s.length){exec(()=>"没有可卖的。","sell");return}showTargets("出售：",[...s.map(iid=>{const idx=ik.indexOf(iid)+1;const it=game.items[iid];const p=Math.max(2,Math.floor((it.value||0)/2));return{text:`(${idx}) ${it.name} → ${p}💰`,action:()=>exec(()=>game.doSell([String(idx)]),`sell ${idx}`)}}),{text:"取消",hint:"esc",cls:"bc",action:clearTargets}])}},{text:"💚 治疗",hint:"heal",action:()=>exec(()=>game.doHeal(),"heal")}]);
+  addGroup("战斗",[{text:"⚔️ 攻击",hint:"attack",cls:"br",action:()=>exec(()=>game.doAttack(),"attack")},{text:"🏃 逃跑",hint:"flee",cls:"by",action:()=>exec(()=>game.doFlee(),"flee")}]);
+  addGroup("队友",[{text:"🤝 招募",hint:"recruit",action:()=>exec(()=>game.doRecruit(),"recruit")},{text:"👥 队伍",hint:"party",action:()=>exec(()=>game.doParty(),"party")}]);
+}
+function init(){cmds.innerHTML="";game=new Game();buildCommands();log("迷雾笼罩着古老的森林。你从古树下醒来——\n什么都不记得了。远处的高塔在迷雾中若隐若现……\n\n💡 点击按钮或输入指令后按回车开始冒险！");upd()}
+
+// ── 文本输入处理 ──
+const inputBox=document.getElementById("input-box");
+const inputBtn=document.getElementById("input-btn");
+
+// Python 风格的指令映射：主键 → {type, func, hint}
+const COMMANDS={
+  look:{type:"探索",func:(g,a)=>g.doLook(),hint:"look / l"},
+  l:{type:"",func:(g,a)=>g.doLook(),hint:""},
+  north:{type:"移动",func:(g,a)=>g.doGo("north"),hint:"north / n"},
+  n:{type:"",func:(g,a)=>g.doGo("north"),hint:""},
+  south:{type:"移动",func:(g,a)=>g.doGo("south"),hint:"south / s"},
+  s:{type:"",func:(g,a)=>g.doGo("south"),hint:""},
+  east:{type:"移动",func:(g,a)=>g.doGo("east"),hint:"east / e"},
+  e:{type:"",func:(g,a)=>g.doGo("east"),hint:""},
+  west:{type:"移动",func:(g,a)=>g.doGo("west"),hint:"west / w"},
+  w:{type:"",func:(g,a)=>g.doGo("west"),hint:""},
+  up:{type:"移动",func:(g,a)=>g.doGo("up"),hint:"up / u"},
+  u:{type:"",func:(g,a)=>g.doGo("up"),hint:""},
+  down:{type:"移动",func:(g,a)=>g.doGo("down"),hint:"down / d"},
+  d:{type:"",func:(g,a)=>g.doGo("down"),hint:""},
+  take:{type:"物品",func:(g,a)=>{if(a.length){const s=a.join(" ");return g.doTake(s==="all"?["all"]:a)}return"拿什么？"},hint:"take"},
+  get:{type:"",func:(g,a)=>{if(a.length){const s=a.join(" ");return g.doTake(s==="all"?["all"]:a)}return"拿什么？"},hint:""},
+  drop:{type:"物品",func:(g,a)=>a.length?g.doDrop(a):"丢什么？",hint:"drop"},
+  use:{type:"物品",func:(g,a)=>a.length?g.doUse(a):"用什么？",hint:"use"},
+  inventory:{type:"物品",func:(g,a)=>g.doInventory(),hint:"inv / i"},
+  i:{type:"",func:(g,a)=>g.doInventory(),hint:""},
+  attack:{type:"战斗",func:(g,a)=>g.doAttack(),hint:"attack"},
+  flee:{type:"战斗",func:(g,a)=>g.doFlee(),hint:"flee"},
+  talk:{type:"社交",func:(g,a)=>g.doTalk(),hint:"talk"},
+  say:{type:"",func:(g,a)=>g.doTalk(),hint:""},
+  trade:{type:"社交",func:(g,a)=>g.doTrade(),hint:"trade"},
+  buy:{type:"社交",func:(g,a)=>a.length?g.doBuy(a):"买什么？",hint:"buy"},
+  sell:{type:"社交",func:(g,a)=>a.length?g.doSell(a):"卖什么？",hint:"sell"},
+  heal:{type:"社交",func:(g,a)=>g.doHeal(),hint:"heal"},
+  recruit:{type:"队友",func:(g,a)=>g.doRecruit(),hint:"recruit"},
+  party:{type:"队友",func:(g,a)=>g.doParty(),hint:"party"},
+  companions:{type:"",func:(g,a)=>g.doParty(),hint:""},
+  help:{type:"系统",func:(g,a)=>g.doHelp(),hint:"help / h"},
+  h:{type:"",func:(g,a)=>g.doHelp(),hint:""},
+  score:{type:"系统",func:(g,a)=>g.doScore(),hint:"score"},
+  status:{type:"",func:(g,a)=>g.doScore(),hint:""},
+};
+
+function processTextInput(raw){
+  const t=raw.trim().toLowerCase();
+  if(!t)return;
+  clearTargets();
+  const parts=t.split(/\s+/);
+  const cmd=parts[0];
+  const args=parts.slice(1);
+
+  // 1) 精确匹配
+  if(cmd in COMMANDS){
+    const entry=COMMANDS[cmd];
+    exec(()=>entry.func(game,args),cmd);
+    return;
+  }
+
+  // 2) 前缀匹配：att→attack, inv→inventory, figh→fight(未定义则不匹配)
+  const matched=Object.keys(COMMANDS).filter(k=>k.startsWith(cmd));
+  if(matched.length===1){
+    // 只匹配唯一结果
+    const entry=COMMANDS[matched[0]];
+    exec(()=>entry.func(game,args),cmd);
+    return;
+  }
+  if(matched.length>1){
+    log(`「${cmd}」匹配到多个指令：${matched.join(", ")}，请输准确些。`);
+    return;
+  }
+
+  log(`未知指令：${cmd}。输入 help 查看帮助。`);
+}
+
+// 回车提交
+inputBox.addEventListener("keydown",e=>{if(e.key==="Enter"){processTextInput(inputBox.value);inputBox.value="";inputBox.focus()}});
+// 点击按钮提交
+inputBtn.addEventListener("click",()=>{processTextInput(inputBox.value);inputBox.value="";inputBox.focus()});
+// 点击故事区自动聚焦输入框
+document.getElementById("story").addEventListener("click",()=>inputBox.focus());
+
+init();
+</script>
+</body>
+</html>

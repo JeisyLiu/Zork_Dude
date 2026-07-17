@@ -46,6 +46,8 @@ def roll_dice(sides: int = 6, times: int = 1) -> int:
 #  枚举
 # ══════════════════════════════════════════════
 
+MAX_WEIGHT = 15
+
 class Direction(Enum):
     NORTH = "north"; SOUTH = "south"; EAST = "east"
     WEST = "west"; UP = "up"; DOWN = "down"
@@ -539,18 +541,26 @@ class Game:
 
     def do_inventory(self, args) -> str:
         total_items = sum(self.inventory.values())  # 实际物品总件数
-        lines = [f"🎒 背包 (重量 {self._total_weight()}/{12} · 共 {total_items} 件)"]
+        lines = [f"🎒 背包 (重量 {self._total_weight()}/{MAX_WEIGHT} · 共 {total_items} 件)"]
         if self.inventory:
             for idx, (iid, cnt) in enumerate(self.inventory.items(), 1):
                 it = self.items.get(iid)
                 if it:
-                    label = f"  ({idx}) {it.name}"
+                    label = f"  ({idx}) {it}"
                     if it.stackable and cnt > 1:
                         label += f" x{cnt}"
+                    bonus = []
+                    if it.damage_bonus:
+                        bonus.append(f"攻+{it.damage_bonus}")
+                    if it.defense_bonus:
+                        bonus.append(f"防+{it.defense_bonus}")
+                    if bonus:
+                        label += f" [{' '.join(bonus)}]"
                     label += f" ({it.item_type.value})"
                     lines.append(label)
         else: lines.append("  (空)")
         lines.append(f"\n❤️ HP: {self.player_hp}/{self.player_max_hp}")
+        lines.append(f"⚔️ 攻击: {self.total_atk}  |  🛡️ 防御: {self.total_def}")
         lines.append(f"💰 金币: {self.gold} | 🏆 得分: {self.score}")
         if self.companion_list:
             lines.append("👥 队友：")
@@ -572,7 +582,7 @@ class Game:
                 it = self.items.get(iid)
                 if it and it.takeable:
                     already_had = iid in self.inventory
-                    if not already_had and self._total_weight() + it.weight > 12:
+                    if not already_had and self._total_weight() + it.weight > MAX_WEIGHT:
                         continue  # 放不下了
                     rm.items.remove(iid)
                     self._inv_add(iid)
@@ -589,8 +599,8 @@ class Game:
         if not it.takeable: return f"拿不起 {it.name}。"
         # 重量检查：非叠加物品首次拿取、叠加物品首次拿取时需要检查
         already_had = found in self.inventory
-        if not already_had and self._total_weight() + it.weight > 12:
-            return "负重满了（12）。"
+        if not already_had and self._total_weight() + it.weight > MAX_WEIGHT:
+            return f"负重满了（{MAX_WEIGHT}）。"
         rm.items.remove(found)
         self._inv_add(found)
         self.score += 5
@@ -749,7 +759,19 @@ class Game:
 
     def do_help(self, args) -> str: return HELP_TEXT
     def do_score(self, args) -> str:
-        return f"🏆 {self.score}分 | 💰 {self.gold}金币 | 🎯 {self.turns}回合 | ❤️ {self.player_hp}/{self.player_max_hp}HP"
+        return (
+            f"🏆 {self.score}分 | 💰 {self.gold}金币 | 🎯 {self.turns}回合\n"
+            f"❤️ HP: {self.player_hp}/{self.player_max_hp}  |  "
+            f"⚔️ 攻击: {self.total_atk}  |  🛡️ 防御: {self.total_def}"
+        )
+    def status_bar(self) -> str:
+        """每回合提示前的简要状态行"""
+        return (
+            f"❤️ {self.player_hp}/{self.player_max_hp}  "
+            f"⚔️{self.total_atk}  🛡️{self.total_def}  "
+            f"💰{self.gold}  🏆{self.score}  "
+            f"🎒{self._total_weight()}/{MAX_WEIGHT}"
+        )
     def do_quit(self, args) -> str: self.game_over = True; return "再见！"
 
     COMMANDS = {
@@ -802,6 +824,7 @@ class Game:
             else:
                 print(f"\n{rm.description(self)}")
                 if self.in_combat: print("⚔️ 战斗中！")
+            print(f"\n[{self.status_bar()}]")
             cmd = input_prompt()
             result = self.process_command(cmd)
             print_slow(f"\n{result}", 0.02)

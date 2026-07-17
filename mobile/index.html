@@ -2,220 +2,200 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>🌫 迷雾之塔 - 文字冒险</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0a0a12">
+<title>🌫 迷雾之塔 · 移动版</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:#0a0a12;color:#c8d6e5;font-family:'Segoe UI','Microsoft YaHei',sans-serif;min-height:100vh}
-#app{max-width:1100px;width:100%;margin:0 auto;padding:10px 15px;display:flex;flex-direction:column;min-height:100vh;position:relative;z-index:1}
-#play-row{display:flex;gap:10px;align-items:stretch;flex:1;min-height:0;margin-bottom:10px}
-#main-col{flex:1;min-width:0;display:flex;flex-direction:column}
-#status{background:linear-gradient(135deg,#1a1a2e,#16213e);border:1px solid #2a2a4a;border-radius:8px;padding:8px 14px;display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center;font-size:13px;margin-bottom:10px;flex-shrink:0;box-shadow:0 0 20px rgba(84,160,255,.06)}
-.st{display:flex;align-items:center;gap:4px}
-.sl{color:#7f8fa6}.sv{color:#fff;font-weight:bold}
-.hpbar{display:inline-block;width:80px;height:10px;background:#2d2d3a;border-radius:5px;overflow:hidden;vertical-align:middle}
-.hpfill{height:100%;background:linear-gradient(90deg,#e74c3c,#2ecc71);border-radius:5px;transition:width .3s}
-#story{flex:1;overflow-y:auto;background:#0f0f1a;border:1px solid #1e1e32;border-radius:8px;padding:14px 16px;margin-bottom:10px;min-height:220px;max-height:48vh;line-height:1.7;font-size:14px;white-space:pre-wrap;word-break:break-word}
-#story .cmd{color:#54a0ff;margin-top:8px}
-#story .sep{border-top:1px dashed #1e1e32;margin:6px 0}
-#targets{display:none;flex-wrap:wrap;gap:6px;padding:8px 10px;background:#12121e;border:1px solid #2a2a4a;border-radius:8px;margin-bottom:10px;flex-shrink:0}
-#targets .tl{width:100%;color:#7f8fa6;font-size:12px}
-#targets button{background:#1e1e32;color:#c8d6e5;border:1px solid #3a3a5a;border-radius:4px;padding:5px 12px;font-size:12px;cursor:pointer}
-#targets button:hover{background:#2e2e4e;border-color:#54a0ff}
-#targets .bc{background:#2a1a1a;border-color:#5a2a2a;color:#e74c3c}
-#cmds{display:flex;flex-wrap:wrap;gap:4px;padding:8px 10px;background:#12121e;border:1px solid #1e1e32;border-radius:8px;flex-shrink:0;margin-bottom:8px}
-.cg{display:flex;flex-direction:column;gap:2px;margin-right:8px}
-.cgl{font-size:10px;color:#576574;letter-spacing:1px}
-.cb{display:flex;flex-wrap:wrap;gap:3px}
-.cg-move{margin-right:12px}
-.cg-move .move-wrap{display:flex;align-items:flex-end;gap:8px}
-.cg-move .pad-compass{display:grid;grid-template-columns:repeat(3,44px);grid-template-rows:repeat(3,36px);gap:3px}
-.cg-move .pad-compass .bm{width:44px;height:36px;padding:4px 0;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.1}
-.cg-move .pad-n{grid-column:2;grid-row:1}
-.cg-move .pad-w{grid-column:1;grid-row:2}
-.cg-move .pad-e{grid-column:3;grid-row:2}
-.cg-move .pad-s{grid-column:2;grid-row:3}
-.cg-move .pad-vert{display:flex;flex-direction:column;gap:3px}
-.cg-move .pad-vert .bm{width:44px;height:36px;padding:4px 0;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.1}
-@media(max-width:600px){
-  .cg-move .pad-compass{grid-template-columns:repeat(3,38px);grid-template-rows:repeat(3,32px)}
-  .cg-move .pad-compass .bm,.cg-move .pad-vert .bm{width:38px;height:32px}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:#0a0a12;color:#c8d6e5;font-family:"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+body{overflow:hidden}
+#app{
+  height:100dvh;height:100vh;
+  max-width:1100px;margin:0 auto;
+  display:flex;flex-direction:column;
+  padding:env(safe-area-inset-top,0) env(safe-area-inset-right,6px) env(safe-area-inset-bottom,0) env(safe-area-inset-left,6px);
 }
-#cmds button{background:#1a1a2e;color:#c8d6e5;border:1px solid #2a2a4a;border-radius:4px;padding:6px 11px;font-size:12px;cursor:pointer;font-family:inherit}
-#cmds button:hover{background:#2e2e4e;border-color:#54a0ff}
-#cmds button:active{transform:scale(.96)}
-#targets button .hint,
-#cmds button .hint{display:block;font-size:9px;color:#576574;font-weight:normal;margin-top:1px;letter-spacing:0}
-.bm{min-width:42px;text-align:center;font-weight:bold}
+#brand{
+  flex-shrink:0;display:flex;align-items:center;gap:8px;
+  padding:6px 8px 4px;font-size:13px;color:#7f8fa6;
+}
+#brand b{color:#c8d6e5;font-size:15px;letter-spacing:1px}
+#brand a{color:#54a0ff;text-decoration:none;margin-left:auto;font-size:11px}
+#status{
+  flex-shrink:0;display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center;
+  background:linear-gradient(135deg,#1a1a2e,#16213e);border:1px solid #2a2a4a;
+  border-radius:8px;padding:6px 8px;margin:0 4px 6px;font-size:12px;
+}
+.st{display:flex;align-items:center;gap:3px}
+.sl{color:#7f8fa6}.sv{color:#fff;font-weight:bold}
+.hpbar{display:inline-block;width:56px;height:8px;background:#2d2d3a;border-radius:4px;overflow:hidden}
+.hpfill{height:100%;background:linear-gradient(90deg,#e74c3c,#2ecc71);border-radius:4px}
+#map-btn{margin-left:auto;background:#1e1e32;color:#54a0ff;border:1px solid #3a3a5a;border-radius:4px;padding:4px 8px;font-size:11px;font-family:inherit}
+#map-btn.off{color:#7f8fa6}
+
+#play-row{flex:1;min-height:0;display:flex;flex-direction:column;gap:6px;padding:0 4px;margin-bottom:4px}
+#main-col{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column}
+#story{
+  flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  background:#0f0f1a;border:1px solid #1e1e32;border-radius:8px;
+  padding:10px 12px;line-height:1.65;font-size:13px;white-space:pre-wrap;word-break:break-word;
+}
+#story .cmd{color:#54a0ff;margin-top:6px}
+#story .sep{border-top:1px dashed #1e1e32;margin:5px 0}
+
+#input-row{
+  flex-shrink:0;display:flex;gap:6px;align-items:center;
+  background:#12121e;border:1px solid #2a2a4a;border-radius:8px;padding:5px 8px;margin-top:6px;
+}
+#input-row span{color:#7f8fa6;font-size:12px}
+#input-box{
+  flex:1;min-width:0;background:#0f0f1a;color:#c8d6e5;border:1px solid #2a2a4a;
+  border-radius:4px;padding:8px 10px;font-size:16px;font-family:inherit;outline:none;
+}
+#input-box:focus{border-color:#54a0ff}
+#input-btn{background:#1e1e32;color:#54a0ff;border:1px solid #3a3a5a;border-radius:4px;padding:8px 10px;font-size:12px;font-family:inherit}
+
+#targets{
+  display:none;flex-wrap:wrap;gap:6px;padding:6px 8px;margin-top:6px;
+  background:#12121e;border:1px solid #2a2a4a;border-radius:8px;flex-shrink:0;max-height:28vh;overflow-y:auto;
+}
+#targets .tl{width:100%;color:#7f8fa6;font-size:11px}
+#targets button{background:#1e1e32;color:#c8d6e5;border:1px solid #3a3a5a;border-radius:4px;padding:8px 10px;font-size:12px;font-family:inherit}
+#targets .bc{background:#2a1a1a;border-color:#5a2a2a;color:#e74c3c}
+
+#cmds{
+  flex-shrink:0;display:flex;flex-wrap:wrap;gap:4px 6px;align-items:flex-start;
+  background:#12121e;border:1px solid #1e1e32;border-radius:8px;
+  padding:6px 8px;margin:0 4px 6px;max-height:34vh;overflow-y:auto;-webkit-overflow-scrolling:touch;
+}
+.cg{display:flex;flex-direction:column;gap:2px;margin-right:4px}
+.cgl{font-size:9px;color:#576574;letter-spacing:1px}
+.cb{display:flex;flex-wrap:wrap;gap:4px}
+#cmds button,#targets button{
+  background:#1a1a2e;color:#c8d6e5;border:1px solid #2a2a4a;border-radius:6px;
+  padding:8px 10px;font-size:12px;font-family:inherit;min-height:40px;
+}
+#cmds button:active{transform:scale(.96);background:#2e2e4e}
+#cmds button .hint,#targets button .hint{display:block;font-size:9px;color:#576574;margin-top:1px}
+.bm{font-weight:bold;min-width:48px;text-align:center}
+.bv{border-color:#54a0ff;color:#54a0ff;min-width:56px}
 .bi{border-color:#54a0ff;color:#54a0ff}
 .br{border-color:#c0392b;color:#e74c3c}
 .bg{border-color:#27ae60;color:#2ecc71}
 .by{border-color:#d68910;color:#f1c40f}
-#cmds button:disabled,#targets button:disabled{opacity:.4;cursor:not-allowed}
-#story::-webkit-scrollbar{width:6px}
-#story::-webkit-scrollbar-track{background:#0f0f1a}
-#story::-webkit-scrollbar-thumb{background:#2a2a4a;border-radius:3px}
-@media(max-width:600px){#status{font-size:11px;gap:4px 8px}#story{font-size:13px;padding:10px 12px;max-height:42vh}#cmds button{font-size:11px;padding:5px 7px}#input-box{font-size:13px;padding:6px 10px}}
-#input-row{display:flex;gap:6px;padding:6px 10px;background:#12121e;border:1px solid #2a2a4a;border-radius:8px;flex-shrink:0;margin-bottom:10px;align-items:center}
-#input-row span{color:#7f8fa6;font-size:13px;flex-shrink:0}
-#input-box{flex:1;background:#0f0f1a;color:#c8d6e5;border:1px solid #2a2a4a;border-radius:4px;padding:6px 10px;font-size:13px;font-family:inherit;outline:none}
-#input-box:focus{border-color:#54a0ff}
-#input-btn{background:#1e1e32;color:#54a0ff;border:1px solid #3a3a5a;border-radius:4px;padding:6px 12px;font-size:12px;cursor:pointer;font-family:inherit}
-#input-btn:hover{background:#2e2e4e;border-color:#54a0ff}
 
-/* ── 顶部英雄区 ── */
-#hero{position:relative;overflow:hidden;background:linear-gradient(145deg,#0d0d1a 0%,#1a0a2e 30%,#0f1a2e 70%,#0a0a12 100%);border:1px solid #2a2a4a;border-radius:12px;padding:22px 20px 18px;margin-bottom:10px;flex-shrink:0;text-align:center}
-#hero .hero-mist{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;opacity:.15;background:radial-gradient(ellipse at 20% 50%,#4a6fa5 0%,transparent 50%),radial-gradient(ellipse at 80% 30%,#6a4fa5 0%,transparent 50%),radial-gradient(ellipse at 50% 80%,#2a6f6a 0%,transparent 50%);animation:mistDrift 8s ease-in-out infinite alternate}
-#hero #mist2{opacity:.1;background:radial-gradient(ellipse at 30% 70%,#8a6fcf 0%,transparent 40%),radial-gradient(ellipse at 70% 60%,#4f8acf 0%,transparent 40%);animation:mistDrift2 12s ease-in-out infinite alternate}
-@keyframes mistDrift{0%{transform:translateX(-5%) scale(1)}100%{transform:translateX(5%) scale(1.1)}}
-@keyframes mistDrift2{0%{transform:translateX(5%) scale(1.1)}100%{transform:translateX(-5%) scale(0.95)}}
-#hero .hero-title{position:relative;z-index:1}
-#hero .tower-icon{font-size:42px;display:block;margin-bottom:6px;animation:towerFloat 3s ease-in-out infinite;filter:drop-shadow(0 0 12px rgba(84,160,255,.4))}
-@keyframes towerFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-#hero h1{font-size:42px;font-weight:800;letter-spacing:6px;background:linear-gradient(135deg,#c8d6e5 0%,#54a0ff 40%,#a855f7 60%,#54a0ff 80%,#c8d6e5 100%);background-size:200% 200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:titleShine 4s ease-in-out infinite;margin-bottom:4px;text-shadow:none;filter:drop-shadow(0 0 30px rgba(84,160,255,.15))}
-@keyframes titleShine{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
-#hero .subtitle{font-size:13px;color:#576574;letter-spacing:4px;margin-bottom:8px}
-#hero .title-line{width:80px;height:2px;margin:0 auto 8px;background:linear-gradient(90deg,transparent,#54a0ff,#a855f7,transparent);border-radius:2px;animation:linePulse 3s ease-in-out infinite}
-@keyframes linePulse{0%,100%{opacity:.4;transform:scaleX(.8)}50%{opacity:1;transform:scaleX(1)}}
-#hero .tagline{font-size:14px;color:#7f8fa6;letter-spacing:2px;opacity:.8}
-#hero .mobile-link{display:inline-block;margin-top:10px;font-size:12px;color:#54a0ff;text-decoration:none;border:1px solid #3a3a5a;border-radius:4px;padding:4px 12px}
-#hero .mobile-link:hover{border-color:#54a0ff;background:#1a1a2e}
-
-/* ── 浮动粒子 ── */
-#particles{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:hidden;z-index:0}
-.p{position:absolute;width:4px;height:4px;background:#54a0ff;border-radius:50%;opacity:0;animation:particleFloat linear infinite}
-@keyframes particleFloat{0%{transform:translateY(100vh) scale(0);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translateY(-10vh) scale(1);opacity:0}}
-#particles .p:nth-child(1){left:12%;width:3px;height:3px;animation-duration:18s;animation-delay:0s;background:#54a0ff}
-#particles .p:nth-child(2){left:25%;width:5px;height:5px;animation-duration:22s;animation-delay:2s;background:#a855f7}
-#particles .p:nth-child(3){left:38%;width:2px;height:2px;animation-duration:15s;animation-delay:4s;background:#2ecc71}
-#particles .p:nth-child(4){left:50%;width:4px;height:4px;animation-duration:20s;animation-delay:1s;background:#f1c40f}
-#particles .p:nth-child(5){left:62%;width:3px;height:3px;animation-duration:17s;animation-delay:5s;background:#54a0ff}
-#particles .p:nth-child(6){left:75%;width:5px;height:5px;animation-duration:25s;animation-delay:3s;background:#a855f7}
-#particles .p:nth-child(7){left:88%;width:2px;height:2px;animation-duration:14s;animation-delay:6s;background:#2ecc71}
-#particles .p:nth-child(8){left:5%;width:4px;height:4px;animation-duration:21s;animation-delay:7s;background:#f1c40f}
-#particles .p:nth-child(9){left:45%;width:3px;height:3px;animation-duration:19s;animation-delay:2.5s;background:#54a0ff}
-#particles .p:nth-child(10){left:95%;width:4px;height:4px;animation-duration:23s;animation-delay:1.5s;background:#a855f7}
-
-@media(max-width:600px){#hero{padding:18px 14px 14px}#hero h1{font-size:28px;letter-spacing:4px}#hero .tower-icon{font-size:30px}#hero .subtitle{font-size:11px;letter-spacing:2px}#hero .tagline{font-size:12px}}
-
-/* ── 迷雾地图（常驻侧栏） ── */
-#map-panel{width:320px;flex-shrink:0;max-height:calc(48vh + 120px);background:linear-gradient(160deg,#12121e,#0f0f1a);border:1px solid #2a2a4a;border-radius:8px;display:flex;flex-direction:column;overflow:hidden;align-self:stretch}
+#map-panel{
+  flex-shrink:0;height:32vh;min-height:140px;max-height:240px;
+  background:linear-gradient(160deg,#12121e,#0f0f1a);border:1px solid #2a2a4a;border-radius:8px;
+  display:flex;flex-direction:column;overflow:hidden;order:-1;
+}
 #map-panel.hidden{display:none}
-#map-btn{position:relative;margin-left:auto;background:#1e1e32;color:#54a0ff;border:1px solid #3a3a5a;border-radius:4px;padding:4px 10px;font-size:12px;cursor:pointer;font-family:inherit;flex-shrink:0}
-#map-btn:hover{background:#2e2e4e;border-color:#54a0ff}
-#map-btn.off{color:#7f8fa6;border-color:#2a2a4a}
-#map-btn.map-pulse{animation:mapPulse 1s ease-out;border-color:#54a0ff;box-shadow:0 0 12px rgba(84,160,255,.5)}
-#map-btn .map-badge{position:absolute;top:-6px;right:-6px;background:#54a0ff;color:#0a0a12;font-size:9px;font-weight:bold;padding:1px 4px;border-radius:8px;line-height:1.2}
-#map-panel.map-pulse{animation:mapPulse 1s ease-out;border-color:#54a0ff;box-shadow:0 0 16px rgba(84,160,255,.35)}
-@keyframes mapPulse{0%{box-shadow:0 0 0 0 rgba(84,160,255,.55)}100%{box-shadow:0 0 0 12px rgba(84,160,255,0)}}
-#map-hide{background:transparent;border:1px solid #3a3a5a;color:#7f8fa6;border-radius:4px;padding:2px 8px;font-size:11px;cursor:pointer;font-family:inherit}
-#map-hide:hover{border-color:#54a0ff;color:#c8d6e5}
-#map-header{display:flex;align-items:center;gap:8px;padding:8px 10px;border-bottom:1px solid #1e1e32;flex-shrink:0}
-#map-header h2{font-size:13px;color:#c8d6e5;letter-spacing:1px;flex:1}
-#map-count{font-size:11px;color:#7f8fa6}
-#map-toolbar{display:flex;align-items:center;gap:4px;padding:6px 8px;border-bottom:1px solid #1e1e32;flex-shrink:0;flex-wrap:wrap}
-.map-tab,.map-mode{background:#1a1a2e;color:#7f8fa6;border:1px solid #2a2a4a;border-radius:4px;padding:3px 8px;font-size:10px;cursor:pointer;font-family:inherit}
-.map-tab:hover,.map-mode:hover{border-color:#54a0ff;color:#c8d6e5}
+#map-header{display:flex;align-items:center;gap:6px;padding:6px 8px;border-bottom:1px solid #1e1e32;flex-shrink:0}
+#map-header h2{font-size:12px;color:#c8d6e5;flex:1}
+#map-count{font-size:10px;color:#7f8fa6}
+#map-hide{background:transparent;border:1px solid #3a3a5a;color:#7f8fa6;border-radius:4px;padding:2px 8px;font-size:11px;font-family:inherit}
+#map-toolbar{display:flex;align-items:center;gap:4px;padding:4px 6px;border-bottom:1px solid #1e1e32;flex-shrink:0;flex-wrap:wrap}
+.map-tab,.map-mode{background:#1a1a2e;color:#7f8fa6;border:1px solid #2a2a4a;border-radius:4px;padding:4px 8px;font-size:10px;font-family:inherit}
 .map-tab.active,.map-mode.active{background:#1e2a4a;border-color:#54a0ff;color:#54a0ff}
-#map-body{flex:1;overflow:hidden;display:flex;flex-direction:column;min-height:0}
-#map-canvas-wrap{flex:1;overflow:auto;position:relative;min-height:160px;display:none}
+#map-body{flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column}
+#map-canvas-wrap{flex:1;overflow:auto;min-height:0;display:none}
 #map-canvas-wrap.active{display:block}
-#map-svg{display:block;min-width:100%;min-height:160px;touch-action:none;cursor:grab}
-#map-svg.dragging{cursor:grabbing}
-#map-list{display:none;flex:1;overflow-y:auto;padding:6px 8px;min-height:100px}
+#map-svg{display:block;min-width:100%;min-height:100px;touch-action:none}
+#map-list{display:none;flex:1;overflow-y:auto;padding:4px 6px}
 #map-list.active{display:block}
-.map-list-item{padding:6px 8px;border:1px solid #1e1e32;border-radius:6px;margin-bottom:4px;font-size:12px;cursor:pointer;background:#12121e}
-.map-list-item:hover{border-color:#54a0ff}
+.map-list-item{padding:8px;border:1px solid #1e1e32;border-radius:6px;margin-bottom:4px;font-size:12px;background:#12121e}
 .map-list-item.here{border-color:#54a0ff;background:#1a2540}
-.map-list-item .ml-short{margin-right:6px}
-.map-list-item .ml-name{color:#c8d6e5}
-#map-detail{padding:6px 10px;border-top:1px solid #1e1e32;font-size:11px;color:#7f8fa6;min-height:32px;flex-shrink:0;line-height:1.4}
+#map-detail{padding:4px 8px;border-top:1px solid #1e1e32;font-size:10px;color:#7f8fa6;flex-shrink:0;line-height:1.35}
 #map-detail strong{color:#c8d6e5}
-#map-legend{display:flex;gap:10px;padding:4px 10px 8px;font-size:10px;color:#576574;flex-shrink:0}
-.map-legend-item{display:flex;align-items:center;gap:3px}
+#map-legend{display:flex;flex-wrap:wrap;gap:6px 10px;padding:2px 8px 6px;font-size:9px;color:#576574;flex-shrink:0}
 .map-node{cursor:pointer}
-.map-node.combat-disabled{cursor:default;pointer-events:none}
+.map-node.combat-disabled{pointer-events:none}
 .map-node.fog circle{fill:#121820;stroke:#576574;stroke-dasharray:3 2}
-.map-node.walkable circle{stroke:#2ecc71;stroke-width:2;filter:drop-shadow(0 0 4px rgba(46,204,113,.45))}
-.map-node.walkable{cursor:pointer}
+.map-node.walkable circle{stroke:#2ecc71;stroke-width:2}
 .map-edge-known{stroke:#3d5a80;stroke-width:2}
 .map-edge-fog{stroke:#546e7a;stroke-width:1.5;stroke-dasharray:5 4}
 .map-edge-portal{stroke:#7f8fa6;stroke-width:1.5;stroke-dasharray:3 3}
-.map-portal-label{fill:#7f8fa6;font-size:9px;cursor:default}
-.map-portal-label.walkable{fill:#2ecc71;cursor:pointer;font-size:10px}
-@media(max-width:820px){
-  #play-row{flex-direction:column}
-  #map-panel{width:100%;max-height:260px;order:-1}
-  #story{max-height:36vh;min-height:160px}
+.map-portal-label{fill:#7f8fa6;font-size:9px}
+.map-portal-label.walkable{fill:#2ecc71;font-size:10px}
+
+/* 横屏：左右分栏，压低指令区，地图占右侧 */
+@media (orientation:landscape) and (max-height:500px){
+  #brand{padding:2px 8px;font-size:11px}
+  #brand b{font-size:13px}
+  #status{padding:4px 8px;margin-bottom:4px;font-size:11px}
+  #play-row{flex-direction:row;gap:6px}
+  #map-panel{order:0;width:42%;max-width:360px;height:auto;max-height:none;align-self:stretch}
+  #main-col{flex:1}
+  #cmds{max-height:28vh;margin-bottom:4px}
+  #cmds button{min-height:34px;padding:5px 8px;font-size:11px}
+  #input-box{padding:6px 8px;font-size:14px}
+  .bv{min-width:48px}
 }
-@media(max-width:600px){#map-panel{max-height:220px}#map-svg{min-height:120px}}
+@media (orientation:landscape) and (min-height:501px) and (max-width:960px){
+  #play-row{flex-direction:row}
+  #map-panel{order:0;width:38%;height:auto;max-height:none;min-height:0;align-self:stretch}
+}
 </style>
 </head>
 <body>
-<div id="particles"><div class="p"></div><div class="p"></div><div class="p"></div><div class="p"></div><div class="p"></div><div class="p"></div><div class="p"></div><div class="p"></div><div class="p"></div><div class="p"></div></div>
 <div id="app">
-<div id="hero">
-  <div class="hero-mist" id="mist1"></div>
-  <div class="hero-mist" id="mist2"></div>
-  <div class="hero-title">
-    <span class="tower-icon">🏰</span>
-    <h1>迷雾之塔</h1>
-    <p class="subtitle">—— 文字冒险 · 探索 · 解谜 ——</p>
-    <div class="title-line"></div>
-    <p class="tagline">从迷雾中醒来，找回失落的记忆</p>
-    <a class="mobile-link" href="mobile/index.html">📱 打开移动版</a>
+  <div id="brand">
+    <span>🏰</span><b>迷雾之塔</b>
+    <span>移动版</span>
+    <a href="../index.html">桌面版</a>
   </div>
-</div>
-<div id="status">
-<span class="st"><span class="sl">❤️</span><span class="hpbar"><span class="hpfill" id="hpf" style="width:100%"></span></span><span class="sv" id="hpt">60/60</span></span>
-<span class="st"><span class="sl">⚔️</span><span class="sv" id="atk">0</span></span>
-<span class="st"><span class="sl">🛡️</span><span class="sv" id="def">0</span></span>
-<span class="st"><span class="sl">💰</span><span class="sv" id="gdt">30</span></span>
-<span class="st"><span class="sl">🏆</span><span class="sv" id="sct">0</span></span>
-<span class="st"><span class="sl">🎒</span><span class="sv" id="wgt">0/15</span></span>
-<span class="st"><span class="sl">👥</span><span class="sv" id="cpt">无</span></span>
-<button id="map-btn" type="button" title="显示/隐藏地图 (map)">🗺️ 地图</button>
-</div>
-<div id="play-row">
-<div id="main-col">
-<div id="story"></div>
-<div id="input-row">
-  <span>&gt;</span>
-  <input type="text" id="input-box" placeholder="输入指令后按回车…" autocomplete="off" spellcheck="false">
-  <button id="input-btn">执行</button>
-</div>
-<div id="targets"></div>
-<div id="cmds"></div>
-</div>
-<div id="map-panel" aria-label="迷雾残页">
-  <div id="map-header">
-    <h2>🗺️ 迷雾残页</h2>
-    <span id="map-count">已探索 0</span>
-    <button id="map-hide" type="button" title="隐藏地图">隐藏</button>
+  <div id="status">
+    <span class="st"><span class="sl">❤️</span><span class="hpbar"><span class="hpfill" id="hpf" style="width:100%"></span></span><span class="sv" id="hpt">60/60</span></span>
+    <span class="st"><span class="sl">⚔️</span><span class="sv" id="atk">0</span></span>
+    <span class="st"><span class="sl">🛡️</span><span class="sv" id="def">0</span></span>
+    <span class="st"><span class="sl">💰</span><span class="sv" id="gdt">30</span></span>
+    <span class="st"><span class="sl">🏆</span><span class="sv" id="sct">0</span></span>
+    <span class="st"><span class="sl">🎒</span><span class="sv" id="wgt">0/15</span></span>
+    <span class="st"><span class="sl">👥</span><span class="sv" id="cpt">无</span></span>
+    <button id="map-btn" type="button">🗺️ 地图</button>
   </div>
-  <div id="map-toolbar">
-    <button class="map-tab active" data-layer="surface" type="button">地表</button>
-    <button class="map-tab" data-layer="cave" type="button">洞穴</button>
-    <button class="map-tab" data-layer="tower" type="button">高塔</button>
-    <span style="flex:1"></span>
-    <button class="map-mode active" data-mode="graph" type="button">图谱</button>
-    <button class="map-mode" data-mode="list" type="button">列表</button>
+  <div id="play-row">
+    <div id="map-panel" aria-label="迷雾残页">
+      <div id="map-header">
+        <h2>🗺️ 迷雾残页</h2>
+        <span id="map-count">已探索 0</span>
+        <button id="map-hide" type="button">隐藏</button>
+      </div>
+      <div id="map-toolbar">
+        <button class="map-tab active" data-layer="surface" type="button">地表</button>
+        <button class="map-tab" data-layer="cave" type="button">洞穴</button>
+        <button class="map-tab" data-layer="tower" type="button">高塔</button>
+        <span style="flex:1"></span>
+        <button class="map-mode active" data-mode="graph" type="button">图谱</button>
+        <button class="map-mode" data-mode="list" type="button">列表</button>
+      </div>
+      <div id="map-body">
+        <div id="map-canvas-wrap" class="active"><svg id="map-svg"></svg></div>
+        <div id="map-list"></div>
+      </div>
+      <div id="map-detail">点绿圈相邻地点移动</div>
+      <div id="map-legend">
+        <span>🧭 当前位置</span>
+        <span style="color:#2ecc71">绿圈可走</span>
+        <span>❓ 未探索</span>
+      </div>
+    </div>
+    <div id="main-col">
+      <div id="story"></div>
+      <div id="input-row">
+        <span>&gt;</span>
+        <input type="text" id="input-box" placeholder="指令 / 回车" autocomplete="off" spellcheck="false" enterkeyhint="go">
+        <button id="input-btn">执行</button>
+      </div>
+      <div id="targets"></div>
+    </div>
   </div>
-  <div id="map-body">
-    <div id="map-canvas-wrap" class="active"><svg id="map-svg"></svg></div>
-    <div id="map-list"></div>
-  </div>
-  <div id="map-detail">点击相邻地点可移动 · 点击其他地点查看出口</div>
-  <div id="map-legend">
-    <span class="map-legend-item">🧭 你在这里</span>
-    <span class="map-legend-item">已到访</span>
-    <span class="map-legend-item">❓ 可去未探</span>
-    <span class="map-legend-item" style="color:#2ecc71">绿圈可点移动</span>
-  </div>
-</div>
-</div>
+  <div id="cmds"></div>
 </div>
 <script>
+
 // ═══ DATA ═══
 // ═══ ENUMS & HELPERS ═══
 const Direction={NORTH:"north",SOUTH:"south",EAST:"east",WEST:"west",UP:"up",DOWN:"down"};
@@ -546,7 +526,7 @@ class Game{
   doFlee(){if(!this.in_combat)return"没有战斗。";if(Math.random()<0.5){this.in_combat=false;this.current_enemy="";return"你逃跑了！"}const m=this.monsters[this.current_enemy];return`逃跑失败！${m?m.name:"敌人"} 挡住了路。`}
   doRecruit(){const rm=this.rooms[this.current_room_id];if(!rm.npc_id)return"这里没有可招募的人。";const npc=this.npcs[rm.npc_id];const cm={old_hermit:"companion_warrior",wandering_rogue:"companion_rogue",priestess:"companion_healer",hunter:"companion_scout",bounty_hunter:"companion_archer"};const cid=cm[rm.npc_id];if(!cid||!this.companions[cid])return`${npc.name} 看起来不想加入你。`;const c=this.companions[cid];if(c.recruited)return`${c.name} 已经是你的队友了。`;if(c.recruit_item&&!(c.recruit_item in this.inventory)){const n=this.items[c.recruit_item];return`招募 ${c.name} 需要 ${n?n.name:c.recruit_item}。`}if(c.recruit_item&&c.recruit_item in this.inventory)this._invRemove(c.recruit_item);c.recruited=true;this.companion_list.push(cid);rm.npc_id=null;this.score+=20;return`✨ ${c.name} ${c.recruit_msg}`}
   doParty(){if(!this.companion_list.length)return"你目前没有队友。";const l=["👥 你的队友："];for(const cid of this.companion_list){const c=this.companions[cid];if(c){l.push(`  ${c.name} [${c.role}] HP:${c.hp}/${c.max_hp}`);const b=c.get_bonus();l.push(`  攻击+${b.dmg} 防御+${b.def}`);l.push(`  能力：${c.ability_desc||""}`)}}return l.join("\n")}
-  doHelp(){return"╔══════════ 命令列表 ══════════╗\n\n🚶 移动：n/s/e/w/u/d\n👁️ 查看(look) 背包(inv) 帮助(help) 得分(score)\n🗺️ 地图(map) 显示/隐藏迷雾残页\n🎒 拿(take) 丢(drop) 用(use)\n💬 对话(talk) 购买(buy) 出售(sell) 治疗(heal)\n⚔️ 攻击(attack) 逃跑(flee)\n🤝 招募(recruit) 队伍(party)\n\n💡 食物/宝藏/材料可叠加存放(上限999)"}
+  doHelp(){return"╔════════ 移动端帮助 ════════╗\n\n🗺️ 点击地图相邻绿圈地点移动\n⬆️⬇️ 按钮：上下层（洞穴/高塔）\n也可输入 n/s/e/w/u/d\n\n👁️ 查看 🎒背包 🗺️地图\n拿/丢/用 · 对话/买卖/治疗\n⚔️攻击 🏃逃跑 · 招募/队伍\n\n💡 食物/宝藏/材料可叠加(上限999)"}
   doScore(){return`🏆 得分: ${this.score}  |  📖 回合: ${this.turns}\n❤️ HP: ${this.player_hp}/${this.player_max_hp}  |  ⚔️ 攻击: ${this.totalAtk}  |  🛡️ 防御: ${this.totalDef}\n💰 金币: ${this.gold}`}
   get totalAtk(){let b=this.player_atk_bonus;for(const iid in this.inventory){const it=this.items[iid];if(it)b+=it.damage_bonus||0}for(const cid of this.companion_list){const c=this.companions[cid];if(c){const bb=c.get_bonus();b+=bb.dmg}}return b}
   get totalDef(){let b=this.player_def_bonus;for(const iid in this.inventory){const it=this.items[iid];if(it)b+=it.defense_bonus||0}for(const cid of this.companion_list){const c=this.companions[cid];if(c){const bb=c.get_bonus();b+=bb.def}}return b}
@@ -562,7 +542,7 @@ function log(t,c){if(!t||t==="None"||t===null||t===undefined)return;if(c)story.i
 function upd(){document.getElementById("hpt").textContent=`${game.player_hp}/${game.player_max_hp}`;document.getElementById("hpf").style.width=`${(game.player_hp/game.player_max_hp)*100}%`;document.getElementById("atk").textContent=game.totalAtk;document.getElementById("def").textContent=game.totalDef;document.getElementById("gdt").textContent=game.gold;document.getElementById("sct").textContent=game.score;document.getElementById("wgt").textContent=`${game._totalWeight()}/${MAX_WEIGHT}`;const cn=game.companion_list.map(c=>{const c2=game.companions[c];return c2?c2.name:""}).filter(Boolean);document.getElementById("cpt").textContent=cn.length?cn.join(", "):"无";if(mapVisible){syncMapLayerToPlayer();refreshMap()}}
 function notifyNewVisit(){flashMapHint();if(mapVisible){syncMapLayerToPlayer();refreshMap()}}
 function flashMapHint(){const el=mapVisible?mapPanel:mapBtn;el.classList.add("map-pulse");if(!mapVisible){let badge=mapBtn.querySelector(".map-badge");if(!badge){badge=document.createElement("span");badge.className="map-badge";badge.textContent="+1";mapBtn.appendChild(badge)}else badge.textContent="+1"}setTimeout(()=>{el.classList.remove("map-pulse");const b=mapBtn.querySelector(".map-badge");if(b)b.remove()},1000)}
-function applyMapVisibility(){mapPanel.classList.toggle("hidden",!mapVisible);mapBtn.classList.toggle("off",!mapVisible);mapBtn.textContent=mapVisible?"🗺️ 地图":"🗺️ 地图·关";try{localStorage.setItem("mist_map_visible",mapVisible?"1":"0")}catch(e){}if(mapVisible){syncMapLayerToPlayer();refreshMap()}}
+function applyMapVisibility(){mapPanel.classList.toggle("hidden",!mapVisible);mapBtn.classList.toggle("off",!mapVisible);mapBtn.textContent=mapVisible?"🗺️ 地图":"🗺️ 地图·关";try{localStorage.setItem("mist_map_visible_mobile",mapVisible?"1":"0")}catch(e){}if(mapVisible){syncMapLayerToPlayer();refreshMap()}}
 function setMapVisible(v){mapVisible=!!v;applyMapVisibility()}
 function toggleMap(){setMapVisible(!mapVisible);return mapVisible?"已显示迷雾残页。":"已隐藏迷雾残页。"}
 function syncMapLayerToPlayer(){if(!game)return;const curLayer=mapLayerOfRoom(game.current_room_id);if(curLayer&&curLayer!==mapLayer){mapLayer=curLayer;document.querySelectorAll(".map-tab").forEach(t=>t.classList.toggle("active",t.dataset.layer===mapLayer))}}
@@ -729,49 +709,28 @@ function renderMapList(){
   if(game.current_room_id&&mapPos(game.current_room_id,layer))mapDetail.innerHTML=mapNodeDetail(game.current_room_id,false);
 }
 function refreshMap(){if(!game||!mapVisible)return;if(mapMode==="list")renderMapList();else renderMapGraph()}
-function initMapUi(){try{const saved=localStorage.getItem("mist_map_visible");if(saved!==null)mapVisible=saved!=="0"}catch(e){}applyMapVisibility();mapBtn.onclick=()=>toggleMap();document.getElementById("map-hide").onclick=()=>setMapVisible(false);document.querySelectorAll(".map-tab").forEach(t=>t.onclick=()=>setMapLayer(t.dataset.layer));document.querySelectorAll(".map-mode").forEach(m=>m.onclick=()=>setMapMode(m.dataset.mode));mapSvg.addEventListener("pointerdown",e=>{mapDrag={x:e.clientX,y:e.clientY,ox:mapSvg.viewBox.baseVal.x,oy:mapSvg.viewBox.baseVal.y};mapSvg.classList.add("dragging");mapSvg.setPointerCapture(e.pointerId)});mapSvg.addEventListener("pointermove",e=>{if(!mapDrag)return;const dx=(e.clientX-mapDrag.x)*0.6,dy=(e.clientY-mapDrag.y)*0.6;mapSvg.viewBox.baseVal.x=mapDrag.ox-dx;mapSvg.viewBox.baseVal.y=mapDrag.oy-dy});mapSvg.addEventListener("pointerup",()=>{mapDrag=null;mapSvg.classList.remove("dragging")});mapSvg.addEventListener("pointercancel",()=>{mapDrag=null;mapSvg.classList.remove("dragging")})}
+function initMapUi(){try{const saved=localStorage.getItem("mist_map_visible_mobile");if(saved!==null)mapVisible=saved!=="0";else mapVisible=true}catch(e){mapVisible=true}applyMapVisibility();mapBtn.onclick=()=>toggleMap();document.getElementById("map-hide").onclick=()=>setMapVisible(false);document.querySelectorAll(".map-tab").forEach(t=>t.onclick=()=>setMapLayer(t.dataset.layer));document.querySelectorAll(".map-mode").forEach(m=>m.onclick=()=>setMapMode(m.dataset.mode));mapSvg.addEventListener("pointerdown",e=>{mapDrag={x:e.clientX,y:e.clientY,ox:mapSvg.viewBox.baseVal.x,oy:mapSvg.viewBox.baseVal.y};mapSvg.classList.add("dragging");mapSvg.setPointerCapture(e.pointerId)});mapSvg.addEventListener("pointermove",e=>{if(!mapDrag)return;const dx=(e.clientX-mapDrag.x)*0.6,dy=(e.clientY-mapDrag.y)*0.6;mapSvg.viewBox.baseVal.x=mapDrag.ox-dx;mapSvg.viewBox.baseVal.y=mapDrag.oy-dy});mapSvg.addEventListener("pointerup",()=>{mapDrag=null;mapSvg.classList.remove("dragging")});mapSvg.addEventListener("pointercancel",()=>{mapDrag=null;mapSvg.classList.remove("dragging")})}
 function showTargets(label,buttons){target.style.display="flex";target.innerHTML=`<div class="tl">${label}</div>`;for(const{text,hint,cls,action}of buttons){const b=document.createElement("button");b.innerHTML=hint?`${text}<span class="hint">/${hint}</span>`:text;if(cls)b.className=cls;b.onclick=()=>{target.style.display="none";target.innerHTML="";action()};target.appendChild(b)}}
 function clearTargets(){target.style.display="none";target.innerHTML="";pending=null}
 function exec(fn,name){if(game.game_over){log(game.won?"🎉 你已经通关了！刷新页面重玩。":"💀 游戏已结束。刷新页面重玩。");return}if(pending)clearTargets();log(name,true);const r=fn();log(r);if(game.won){log("\n🎉 你找回了所有记忆，打破了迷雾诅咒！通关！");log(`得分：${game.score}`)}if(game.player_hp<=0){log("\n💀 你死了……");game.game_over=true}game.turns++;upd()}
 function addGroup(lbl,buttons){const g=document.createElement("div");g.className="cg";g.innerHTML=`<div class="cgl">${lbl}</div><div class="cb"></div>`;const btns=g.querySelector(".cb");for(const{text,hint,cls,action}of buttons){const b=document.createElement("button");b.innerHTML=hint?`${text}<span class="hint">/${hint}</span>`:text;if(cls)b.className=cls;b.onclick=action;btns.appendChild(b)}cmds.appendChild(g)}
-function mkMoveBtn(text,hint,dir,padCls){
-  const b=document.createElement("button");
-  b.className="bm"+(padCls?" "+padCls:"");
-  b.innerHTML=`${text}<span class="hint">/${hint}</span>`;
-  b.onclick=()=>exec(()=>game.doGo(dir),dir);
-  return b;
-}
-function addMovePad(){
-  const g=document.createElement("div");
-  g.className="cg cg-move";
-  g.innerHTML=`<div class="cgl">移动</div><div class="move-wrap"><div class="pad-compass"></div><div class="pad-vert"></div></div>`;
-  const compass=g.querySelector(".pad-compass");
-  const vert=g.querySelector(".pad-vert");
-  compass.appendChild(mkMoveBtn("北","n","north","pad-n"));
-  compass.appendChild(mkMoveBtn("西","w","west","pad-w"));
-  compass.appendChild(mkMoveBtn("东","e","east","pad-e"));
-  compass.appendChild(mkMoveBtn("南","s","south","pad-s"));
-  vert.appendChild(mkMoveBtn("上","u","up",""));
-  vert.appendChild(mkMoveBtn("下","d","down",""));
-  cmds.appendChild(g);
-}
 function buildCommands(){
-  addMovePad();
-  addGroup("探索",[{text:"👁️ 查看",hint:"look / l",action:()=>exec(()=>game.doLook(),"look")},{text:"🎒 背包",hint:"inv / i",cls:"bi",action:()=>exec(()=>game.doInventory(),"inventory")},{text:"🗺️ 地图",hint:"map / m",cls:"bi",action:()=>exec(()=>toggleMap(),"map")},{text:"📖 帮助",hint:"help / h",action:()=>exec(()=>game.doHelp(),"help")},{text:"🏆 得分",hint:"score",action:()=>exec(()=>game.doScore(),"score")}]);
+  addGroup("垂直",[{text:"⬆️ 上",hint:"up / u",cls:"bm bv",action:()=>exec(()=>game.doGo("up"),"up")},{text:"⬇️ 下",hint:"down / d",cls:"bm bv",action:()=>exec(()=>game.doGo("down"),"down")}]);
+  addGroup("探索",[{text:"👁️ 查看",hint:"look",action:()=>exec(()=>game.doLook(),"look")},{text:"🎒 背包",hint:"inv",cls:"bi",action:()=>exec(()=>game.doInventory(),"inventory")},{text:"🗺️ 地图",hint:"map",cls:"bi",action:()=>exec(()=>toggleMap(),"map")},{text:"📖 帮助",hint:"help",action:()=>exec(()=>game.doHelp(),"help")},{text:"🏆 得分",hint:"score",action:()=>exec(()=>game.doScore(),"score")}]);
   addGroup("物品",[{text:"拿起",hint:"take 序号",action:()=>{const rm=game.rooms[game.current_room_id];if(!rm.items.length){exec(()=>"这里没有可拿的物品。","take");return}showTargets("选择物品：",[...rm.items.map((iid,idx)=>({text:`(${idx+1}) ${emojiLabel(game.items[iid])||iid}`,action:()=>exec(()=>game.doTake([String(idx+1)]),`take ${idx+1}`)})),{text:"拿全部",hint:"take all",cls:"bg",action:()=>exec(()=>game.doTake(["all"]),"take all")},{text:"取消",hint:"esc",cls:"bc",action:clearTargets}])}},{text:"丢弃",hint:"drop 序号",action:()=>{const ik=Object.keys(game.inventory);if(!ik.length){exec(()=>"背包是空的。","drop");return}showTargets("丢弃物品：",[...ik.map((iid,idx)=>{const it=game.items[iid];return{text:`(${idx+1}) ${it?emojiLabel(it):iid}${it&&it.stackable&&game.inventory[iid]>1?" x"+game.inventory[iid]:""}`,action:()=>exec(()=>game.doDrop([String(idx+1)]),`drop ${idx+1}`)}}),{text:"取消",hint:"esc",cls:"bc",action:clearTargets}])}},{text:"使用",hint:"use 序号",action:()=>{const ik=Object.keys(game.inventory);const u=ik.filter(i=>game.items[i]?.usable);if(!u.length){exec(()=>"没有可用物品。","use");return}showTargets("使用物品：",[...u.map(iid=>{const idx=ik.indexOf(iid)+1;const it=game.items[iid];return{text:`(${idx}) ${emojiLabel(it)}${it.stackable&&game.inventory[iid]>1?" x"+game.inventory[iid]:""}`,action:()=>exec(()=>game.doUse([String(idx)]),`use ${idx}`)}}),{text:"取消",hint:"esc",cls:"bc",action:clearTargets}])}}]);
   addGroup("社交",[{text:"💬 对话",hint:"talk",action:()=>exec(()=>game.doTalk(),"talk")},{text:"🛒 商品",hint:"trade",action:()=>exec(()=>game.doTrade(),"trade")},{text:"购买",hint:"buy 序号",action:()=>{const rm=game.rooms[game.current_room_id];if(!rm.npc_id||!game.npcs[rm.npc_id]){exec(()=>"没有商人。","buy");return}const npc=game.npcs[rm.npc_id];if(npc.npc_type!=="MERCHANT"||!npc.trade_items.length){exec(()=>"没有商品。","buy");return}showTargets("购买：",[...npc.trade_items.map(([iid,price],idx)=>({text:`(${idx+1}) ${game.items[iid]?.name||iid} ${price}💰`,action:()=>exec(()=>game.doBuy([String(idx+1)]),`buy ${idx+1}`)})),{text:"取消",hint:"esc",cls:"bc",action:clearTargets}])}},{text:"出售",hint:"sell 序号",action:()=>{const rm=game.rooms[game.current_room_id];if(!rm.npc_id||!game.npcs[rm.npc_id]){exec(()=>"没有商人。","sell");return}const npc=game.npcs[rm.npc_id];if(npc.npc_type!=="MERCHANT"){exec(()=>"不是商人。","sell");return}const ik=Object.keys(game.inventory);const s=ik.filter(i=>{const it=game.items[i];return it&&(npc.buys_types||[]).includes(it.type)});if(!s.length){exec(()=>"没有可卖的。","sell");return}showTargets("出售：",[...s.map(iid=>{const idx=ik.indexOf(iid)+1;const it=game.items[iid];const p=Math.max(2,Math.floor((it.value||0)/2));return{text:`(${idx}) ${it.name} → ${p}💰`,action:()=>exec(()=>game.doSell([String(idx)]),`sell ${idx}`)}}),{text:"取消",hint:"esc",cls:"bc",action:clearTargets}])}},{text:"💚 治疗",hint:"heal",action:()=>exec(()=>game.doHeal(),"heal")}]);
   addGroup("战斗",[{text:"⚔️ 攻击",hint:"attack",cls:"br",action:()=>exec(()=>game.doAttack(),"attack")},{text:"🏃 逃跑",hint:"flee",cls:"by",action:()=>exec(()=>game.doFlee(),"flee")}]);
   addGroup("队友",[{text:"🤝 招募",hint:"recruit",action:()=>exec(()=>game.doRecruit(),"recruit")},{text:"👥 队伍",hint:"party",action:()=>exec(()=>game.doParty(),"party")}]);
 }
-function init(){cmds.innerHTML="";game=new Game();buildCommands();initMapUi();log("迷雾笼罩着古老的森林。你从古树下醒来——\n什么都不记得了。远处的高塔在迷雾中若隐若现……\n\n💡 点击按钮或输入指令后按回车开始冒险！");upd()}
+function init(){cmds.innerHTML="";game=new Game();buildCommands();initMapUi();log("迷雾笼罩着古老的森林。你从古树下醒来——\n什么都不记得了。远处的高塔在迷雾中若隐若现……\n\n💡 点地图绿圈地点移动 · 上下层用⬆️⬇️ · 指令全部在下方");upd()}
 async function loadExternalData(){
   async function getJson(path){const r=await fetch(path);if(!r.ok)throw new Error(path);return r.json()}
   try{
-    const rooms=await getJson("data/rooms.json");
-    const items=await getJson("data/items.json");
-    const monsters=await getJson("data/monsters.json");
-    const npcs=await getJson("data/npcs.json");
-    const companions=await getJson("data/companions.json");
+    const rooms=await getJson("../data/rooms.json");
+    const items=await getJson("../data/items.json");
+    const monsters=await getJson("../data/monsters.json");
+    const npcs=await getJson("../data/npcs.json");
+    const companions=await getJson("../data/companions.json");
     const live={items:{},monsters:{},npcs:{},companions:{},rooms:{}};
     for(const d of items){const p={};if(d.emoji)p.emoji=d.emoji;if(d.use_msg)p.use_msg=d.use_msg;if(Object.keys(p).length)live.items[d.id]=p}
     for(const d of monsters){if(d.emoji)live.monsters[d.id]={emoji:d.emoji}}
@@ -867,6 +826,7 @@ inputBtn.addEventListener("click",()=>{processTextInput(inputBox.value);inputBox
 document.getElementById("story").addEventListener("click",()=>inputBox.focus());
 
 boot();
+
 </script>
 </body>
 </html>

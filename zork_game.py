@@ -82,15 +82,16 @@ class Item:
                  itype: ItemType = ItemType.TREASURE,
                  usable=False, takeable=True, use_msg="",
                  weight=1, value=0, heal=0,
-                 dmg_bonus=0, def_bonus=0):
+                 dmg_bonus=0, def_bonus=0, emoji: str = ""):
         self.id = iid; self.name = name; self.desc = desc
         self.item_type = itype; self.usable = usable
         self.takeable = takeable; self.use_msg = use_msg
         self.weight = weight; self.value = value
         self.heal = heal; self.damage_bonus = dmg_bonus
         self.defense_bonus = def_bonus
+        self.emoji = emoji or ""
 
-    def __str__(self): return self.name
+    def __str__(self): return f"{self.emoji} {self.name}" if self.emoji else self.name
 
     @property
     def stackable(self) -> bool:
@@ -99,8 +100,10 @@ class Item:
     def on_use(self, game) -> str:
         if self.heal > 0:
             game.player_hp = min(game.player_max_hp, game.player_hp + self.heal)
+            if self.use_msg:
+                return self.use_msg
             return f"恢复了 {self.heal} 点生命值！"
-        return self.use_msg
+        return self.use_msg or f"使用了 {self.name}。"
 
 
 # ══════════════════════════════════════════════
@@ -112,7 +115,7 @@ class Monster:
                  hp: int, atk: int, defense: int = 0,
                  rank: MonsterRank = MonsterRank.NORMAL,
                  loot: list = None, exp: int = 10, gold: int = 0,
-                 hostile: bool = True, dialog: dict = None):
+                 hostile: bool = True, dialog: dict = None, emoji: str = ""):
         self.id = mid; self.name = name; self.desc = desc
         self.max_hp = hp; self.hp = hp
         self.attack = atk; self.defense = defense
@@ -120,6 +123,7 @@ class Monster:
         self.exp = exp; self.gold = gold
         self.hostile = hostile; self.dialog = dialog or {}
         self.alive = True
+        self.emoji = emoji or ""
 
     @property
     def hp_status(self) -> str:
@@ -151,13 +155,14 @@ class NPC:
                  dialogs: dict = None,
                  trade_items: list = None, buys_types: list = None,
                  quest_item: str = None, quest_reward: str = None,
-                 quest_score: int = 30, give_item: str = None):
+                 quest_score: int = 30, give_item: str = None, emoji: str = ""):
         self.id = nid; self.name = name; self.title = title; self.desc = desc
         self.npc_type = npc_type; self.dialogs = dialogs or {}
         self.trade_items = trade_items or []; self.buys_types = buys_types or []
         self.quest_item = quest_item; self.quest_reward = quest_reward
         self.quest_score = quest_score; self.give_item = give_item
         self.quest_done = False; self.met_before = False
+        self.emoji = emoji or ""
 
     def on_talk(self, game) -> str:
         lines = [f"[{self.name} · {self.title}]", self.desc]
@@ -274,13 +279,14 @@ class Companion:
                  role: CompanionRole = CompanionRole.WARRIOR,
                  hp: int = 50, atk: int = 8, defense: int = 2,
                  ability_desc: str = "", recruit_item: str = None,
-                 recruit_msg: str = "加入了你的队伍！"):
+                 recruit_msg: str = "加入了你的队伍！", emoji: str = ""):
         self.id = cid; self.name = name; self.desc = desc
         self.role = role; self.max_hp = hp; self.hp = hp
         self.attack = atk; self.defense = defense
         self.ability_desc = ability_desc
         self.recruit_item = recruit_item; self.recruit_msg = recruit_msg
         self.recruited = False
+        self.emoji = emoji or ""
 
     def get_bonus(self) -> dict:
         return {
@@ -322,36 +328,45 @@ class Room:
                  exits: dict = None, items: list = None,
                  dark: bool = False,
                  npc_id: str = None, monster_id: str = None,
-                 on_enter: Callable = None, on_look: Callable = None):
+                 on_enter: Callable = None, on_look: Callable = None,
+                 emoji: str = ""):
         self.id = rid; self.name = name; self.desc = desc
         self.exits = exits or {}; self.items = items or []
         self.dark = dark; self.npc_id = npc_id; self.monster_id = monster_id
         self.visited = False
         self.on_enter = on_enter; self.on_look = on_look
+        self.emoji = emoji or ""
 
     def description(self, game) -> str:
         if self.dark and not game.has_light():
             return "🌑 一片漆黑！你需要光源。"
-        text = f"[{self.name}]\n"
+        title = f"{self.emoji} {self.name}" if self.emoji else self.name
+        text = f"[{title}]\n"
         text += self.desc if not self.visited else self.desc.split("\n")[0]
 
         # 物品（加数字序号）
         its = [game.items[i] for i in self.items if i in game.items]
         if its:
-            numbered = ', '.join(f"({i}) {it.name}" for i, it in enumerate(its, 1))
+            numbered = ', '.join(
+                f"({i}) {getattr(it, 'emoji', '') + ' ' if getattr(it, 'emoji', '') else ''}{it.name}"
+                for i, it in enumerate(its, 1)
+            )
             text += f"\n\n可见物品：{numbered}"
 
         # NPC
         if self.npc_id and self.npc_id in game.npcs:
             n = game.npcs[self.npc_id]
-            text += f"\n👤 {n.name}（{n.title}）"
+            nemoji = getattr(n, "emoji", "") or "👤"
+            text += f"\n{nemoji} {n.name}（{n.title}）"
 
         # 怪物
         if self.monster_id and self.monster_id in game.monsters:
             m = game.monsters[self.monster_id]
             if m.alive:
                 tag = f"[{m.rank.value}]" if m.rank != MonsterRank.NORMAL else ""
-                text += f"\n⚠️ {tag} {m.name}（{m.hp_status}）"
+                memoji = getattr(m, "emoji", "")
+                mname = f"{memoji} {m.name}" if memoji else m.name
+                text += f"\n⚠️ {tag} {mname}（{m.hp_status}）"
 
         text += f"\n出口：{', '.join(d.value for d in self.exits)}"
         return text
@@ -837,7 +852,8 @@ def build_world() -> Game:
             use_msg=d.get("use_msg", ""),
             weight=d.get("weight", 1), value=d.get("value", 0),
             heal=d.get("heal", 0),
-            dmg_bonus=d.get("dmg_bonus", 0), def_bonus=d.get("def_bonus", 0)
+            dmg_bonus=d.get("dmg_bonus", 0), def_bonus=d.get("def_bonus", 0),
+            emoji=d.get("emoji", "")
         )
         g.items[it.id] = it
 
@@ -850,7 +866,8 @@ def build_world() -> Game:
             hp=d["hp"], atk=d["atk"], defense=d.get("defense", 0),
             rank=_parse_monster_rank(d["rank"]) if "rank" in d else MonsterRank.NORMAL,
             loot=d.get("loot", []), exp=d.get("exp", 10), gold=d.get("gold", 0),
-            hostile=d.get("hostile", True), dialog=d.get("dialog")
+            hostile=d.get("hostile", True), dialog=d.get("dialog"),
+            emoji=d.get("emoji", "")
         )
         g.monsters[m.id] = m
 
@@ -872,7 +889,8 @@ def build_world() -> Game:
             dialogs=d.get("dialogs"),
             trade_items=trade, buys_types=buys,
             quest_item=d.get("quest_item"), quest_reward=d.get("quest_reward"),
-            quest_score=d.get("quest_score", 30), give_item=d.get("give_item")
+            quest_score=d.get("quest_score", 30), give_item=d.get("give_item"),
+            emoji=d.get("emoji", "")
         )
         g.npcs[n.id] = n
 
@@ -884,7 +902,8 @@ def build_world() -> Game:
             role=_parse_companion_role(d["role"]) if "role" in d else CompanionRole.WARRIOR,
             hp=d.get("hp", 50), atk=d.get("atk", 8), defense=d.get("defense", 2),
             ability_desc=d.get("ability_desc", ""),
-            recruit_item=d.get("recruit_item"), recruit_msg=d.get("recruit_msg","加入了你的队伍！")
+            recruit_item=d.get("recruit_item"), recruit_msg=d.get("recruit_msg","加入了你的队伍！"),
+            emoji=d.get("emoji", "")
         )
         g.companions[c.id] = c
 
@@ -898,7 +917,8 @@ def build_world() -> Game:
             dark=d.get("dark", False),
             items=d.get("items", []),
             npc_id=d.get("npc_id"), monster_id=d.get("monster_id"),
-            on_enter=None  # 特殊行为下面单独绑定
+            on_enter=None,  # 特殊行为下面单独绑定
+            emoji=d.get("emoji", "")
         )
         g.rooms[r.id] = r
 

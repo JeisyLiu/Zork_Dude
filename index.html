@@ -7,13 +7,15 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:#0a0a12;color:#c8d6e5;font-family:'Segoe UI','Microsoft YaHei',sans-serif;min-height:100vh}
-#app{max-width:920px;width:100%;margin:0 auto;padding:10px 15px;display:flex;flex-direction:column;min-height:100vh;position:relative;z-index:1}
+#app{max-width:1100px;width:100%;margin:0 auto;padding:10px 15px;display:flex;flex-direction:column;min-height:100vh;position:relative;z-index:1}
+#play-row{display:flex;gap:10px;align-items:stretch;flex:1;min-height:0;margin-bottom:10px}
+#main-col{flex:1;min-width:0;display:flex;flex-direction:column}
 #status{background:linear-gradient(135deg,#1a1a2e,#16213e);border:1px solid #2a2a4a;border-radius:8px;padding:8px 14px;display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center;font-size:13px;margin-bottom:10px;flex-shrink:0;box-shadow:0 0 20px rgba(84,160,255,.06)}
 .st{display:flex;align-items:center;gap:4px}
 .sl{color:#7f8fa6}.sv{color:#fff;font-weight:bold}
 .hpbar{display:inline-block;width:80px;height:10px;background:#2d2d3a;border-radius:5px;overflow:hidden;vertical-align:middle}
 .hpfill{height:100%;background:linear-gradient(90deg,#e74c3c,#2ecc71);border-radius:5px;transition:width .3s}
-#story{flex:1;overflow-y:auto;background:#0f0f1a;border:1px solid #1e1e32;border-radius:8px;padding:14px 16px;margin-bottom:10px;min-height:280px;max-height:52vh;line-height:1.7;font-size:14px;white-space:pre-wrap;word-break:break-word}
+#story{flex:1;overflow-y:auto;background:#0f0f1a;border:1px solid #1e1e32;border-radius:8px;padding:14px 16px;margin-bottom:10px;min-height:220px;max-height:48vh;line-height:1.7;font-size:14px;white-space:pre-wrap;word-break:break-word}
 #story .cmd{color:#54a0ff;margin-top:8px}
 #story .sep{border-top:1px dashed #1e1e32;margin:6px 0}
 #targets{display:none;flex-wrap:wrap;gap:6px;padding:8px 10px;background:#12121e;border:1px solid #2a2a4a;border-radius:8px;margin-bottom:10px;flex-shrink:0}
@@ -79,6 +81,50 @@ body{background:#0a0a12;color:#c8d6e5;font-family:'Segoe UI','Microsoft YaHei',s
 #particles .p:nth-child(10){left:95%;width:4px;height:4px;animation-duration:23s;animation-delay:1.5s;background:#a855f7}
 
 @media(max-width:600px){#hero{padding:18px 14px 14px}#hero h1{font-size:28px;letter-spacing:4px}#hero .tower-icon{font-size:30px}#hero .subtitle{font-size:11px;letter-spacing:2px}#hero .tagline{font-size:12px}}
+
+/* ── 迷雾地图（常驻侧栏） ── */
+#map-panel{width:320px;flex-shrink:0;max-height:calc(48vh + 120px);background:linear-gradient(160deg,#12121e,#0f0f1a);border:1px solid #2a2a4a;border-radius:8px;display:flex;flex-direction:column;overflow:hidden;align-self:stretch}
+#map-panel.hidden{display:none}
+#map-btn{position:relative;margin-left:auto;background:#1e1e32;color:#54a0ff;border:1px solid #3a3a5a;border-radius:4px;padding:4px 10px;font-size:12px;cursor:pointer;font-family:inherit;flex-shrink:0}
+#map-btn:hover{background:#2e2e4e;border-color:#54a0ff}
+#map-btn.off{color:#7f8fa6;border-color:#2a2a4a}
+#map-btn.map-pulse{animation:mapPulse 1s ease-out;border-color:#54a0ff;box-shadow:0 0 12px rgba(84,160,255,.5)}
+#map-btn .map-badge{position:absolute;top:-6px;right:-6px;background:#54a0ff;color:#0a0a12;font-size:9px;font-weight:bold;padding:1px 4px;border-radius:8px;line-height:1.2}
+#map-panel.map-pulse{animation:mapPulse 1s ease-out;border-color:#54a0ff;box-shadow:0 0 16px rgba(84,160,255,.35)}
+@keyframes mapPulse{0%{box-shadow:0 0 0 0 rgba(84,160,255,.55)}100%{box-shadow:0 0 0 12px rgba(84,160,255,0)}}
+#map-hide{background:transparent;border:1px solid #3a3a5a;color:#7f8fa6;border-radius:4px;padding:2px 8px;font-size:11px;cursor:pointer;font-family:inherit}
+#map-hide:hover{border-color:#54a0ff;color:#c8d6e5}
+#map-header{display:flex;align-items:center;gap:8px;padding:8px 10px;border-bottom:1px solid #1e1e32;flex-shrink:0}
+#map-header h2{font-size:13px;color:#c8d6e5;letter-spacing:1px;flex:1}
+#map-count{font-size:11px;color:#7f8fa6}
+#map-toolbar{display:flex;align-items:center;gap:4px;padding:6px 8px;border-bottom:1px solid #1e1e32;flex-shrink:0;flex-wrap:wrap}
+.map-tab,.map-mode{background:#1a1a2e;color:#7f8fa6;border:1px solid #2a2a4a;border-radius:4px;padding:3px 8px;font-size:10px;cursor:pointer;font-family:inherit}
+.map-tab:hover,.map-mode:hover{border-color:#54a0ff;color:#c8d6e5}
+.map-tab.active,.map-mode.active{background:#1e2a4a;border-color:#54a0ff;color:#54a0ff}
+#map-body{flex:1;overflow:hidden;display:flex;flex-direction:column;min-height:0}
+#map-canvas-wrap{flex:1;overflow:auto;position:relative;min-height:160px;display:none}
+#map-canvas-wrap.active{display:block}
+#map-svg{display:block;min-width:100%;min-height:160px;touch-action:none;cursor:grab}
+#map-svg.dragging{cursor:grabbing}
+#map-list{display:none;flex:1;overflow-y:auto;padding:6px 8px;min-height:100px}
+#map-list.active{display:block}
+.map-list-item{padding:6px 8px;border:1px solid #1e1e32;border-radius:6px;margin-bottom:4px;font-size:12px;cursor:pointer;background:#12121e}
+.map-list-item:hover{border-color:#54a0ff}
+.map-list-item.here{border-color:#54a0ff;background:#1a2540}
+.map-list-item .ml-short{margin-right:6px}
+.map-list-item .ml-name{color:#c8d6e5}
+#map-detail{padding:6px 10px;border-top:1px solid #1e1e32;font-size:11px;color:#7f8fa6;min-height:32px;flex-shrink:0;line-height:1.4}
+#map-detail strong{color:#c8d6e5}
+#map-legend{display:flex;gap:10px;padding:4px 10px 8px;font-size:10px;color:#576574;flex-shrink:0}
+.map-legend-item{display:flex;align-items:center;gap:3px}
+.map-node{cursor:pointer}
+.map-node.combat-disabled{cursor:default;pointer-events:none}
+@media(max-width:820px){
+  #play-row{flex-direction:column}
+  #map-panel{width:100%;max-height:260px;order:-1}
+  #story{max-height:36vh;min-height:160px}
+}
+@media(max-width:600px){#map-panel{max-height:220px}#map-svg{min-height:120px}}
 </style>
 </head>
 <body>
@@ -90,7 +136,7 @@ body{background:#0a0a12;color:#c8d6e5;font-family:'Segoe UI','Microsoft YaHei',s
   <div class="hero-title">
     <span class="tower-icon">🏰</span>
     <h1>迷雾之塔</h1>
-    <p class="subtitle">—— 冒险 · 探索 · 解谜 ——</p>
+    <p class="subtitle">—— 文字冒险 · 探索 · 解谜 ——</p>
     <div class="title-line"></div>
     <p class="tagline">从迷雾中醒来，找回失落的记忆</p>
   </div>
@@ -101,7 +147,10 @@ body{background:#0a0a12;color:#c8d6e5;font-family:'Segoe UI','Microsoft YaHei',s
 <span class="st"><span class="sl">🏆</span><span class="sv" id="sct">0</span></span>
 <span class="st"><span class="sl">🎒</span><span class="sv" id="wgt">0/12</span></span>
 <span class="st"><span class="sl">👥</span><span class="sv" id="cpt">无</span></span>
+<button id="map-btn" type="button" title="显示/隐藏地图 (map)">🗺️ 地图</button>
 </div>
+<div id="play-row">
+<div id="main-col">
 <div id="story"></div>
 <div id="input-row">
   <span>&gt;</span>
@@ -110,6 +159,32 @@ body{background:#0a0a12;color:#c8d6e5;font-family:'Segoe UI','Microsoft YaHei',s
 </div>
 <div id="targets"></div>
 <div id="cmds"></div>
+</div>
+<div id="map-panel" aria-label="迷雾残页">
+  <div id="map-header">
+    <h2>🗺️ 迷雾残页</h2>
+    <span id="map-count">已探索 0</span>
+    <button id="map-hide" type="button" title="隐藏地图">隐藏</button>
+  </div>
+  <div id="map-toolbar">
+    <button class="map-tab active" data-layer="surface" type="button">地表</button>
+    <button class="map-tab" data-layer="cave" type="button">洞穴</button>
+    <button class="map-tab" data-layer="tower" type="button">高塔</button>
+    <span style="flex:1"></span>
+    <button class="map-mode active" data-mode="graph" type="button">图谱</button>
+    <button class="map-mode" data-mode="list" type="button">列表</button>
+  </div>
+  <div id="map-body">
+    <div id="map-canvas-wrap" class="active"><svg id="map-svg"></svg></div>
+    <div id="map-list"></div>
+  </div>
+  <div id="map-detail">点击地点查看出口</div>
+  <div id="map-legend">
+    <span class="map-legend-item">🧭 你在这里</span>
+    <span class="map-legend-item">已到访地点</span>
+  </div>
+</div>
+</div>
 </div>
 <script>
 // ═══ DATA ═══
@@ -268,6 +343,66 @@ const _ROOMS=[{id:"forest_entrance",name:"迷雾森林入口",desc:"浓雾笼罩
 {id:"forest_tower_ruins",name:"森林塔废墟",desc:"一座倒塌了一半的古老石塔，被藤蔓和苔藓覆盖。\n塔内的螺旋楼梯已经断裂，但地下似乎还有空间。\n一只巨鹰在塔顶筑了巢。",exits:{south:"forest_entrance",west:"bandit_camp"},items:["phoenix_feather","ancient_scroll","mystic_amulet"],monster_id:"giant_eagle"},
 {id:"haunted_graveyard",name:"被诅咒的墓地",desc:"一片荒凉的墓地，墓碑歪歪斜斜地插在土中。\n阴冷的风穿过枯树发出呜咽声。地面下有东西在动……\n一个黑甲佣兵正在墓地中搜寻着什么。",exits:{west:"dark_forest"},npc_id:"bounty_hunter",items:["old_coin","silver_ring","mystic_amulet"],monster_id:"ghost"}
 ];
+// ═══ DATA ENRICH (emoji / use_msg / map from data/) ═══
+const DATA_ENRICH={"items":{"rusty_key":{"emoji":"🗝️","use_msg":"咔嚓一声，似乎打开了什么。"},"silver_key":{"emoji":"🔑","use_msg":"银钥匙闪烁着光芒……"},"crystal_key":{"emoji":"💎","use_msg":"水晶钥匙融入空气中……"},"old_sword":{"emoji":"🗡️"},"iron_sword":{"emoji":"⚔️"},"elven_bow":{"emoji":"🏹"},"magic_staff":{"emoji":"🪄"},"shadow_blade":{"emoji":"🔪"},"war_hammer":{"emoji":"🔨"},"spear":{"emoji":"🗡️"},"rune_sword":{"emoji":"⚔️"},"crossbow":{"emoji":"🏹"},"assassin_dagger":{"emoji":"🗡️"},"thunder_hammer":{"emoji":"⚡"},"leather_armor":{"emoji":"🥋"},"chain_armor":{"emoji":"🛡️"},"scale_armor":{"emoji":"🛡️"},"mage_robe":{"emoji":"🧥"},"shield":{"emoji":"🛡️"},"helmet":{"emoji":"⛑️"},"lesser_potion":{"emoji":"🧪"},"greater_potion":{"emoji":"🧪"},"mana_potion":{"emoji":"🧴"},"fire_potion":{"emoji":"🔥","use_msg":"你喝下火焰药剂，身体变得滚烫！对冰系敌人造成额外伤害！"},"invis_potion":{"emoji":"👻","use_msg":"你喝下隐形药水，身体逐渐透明……似乎没有其他效果。"},"stamina_potion":{"emoji":"💪"},"moonlight_elixir":{"emoji":"🌙","use_msg":"你喝下月光精华，全身被温暖的光芒包围！恢复了50点生命值！"},"lantern":{"emoji":"🏮","use_msg":"提灯照亮了周围。"},"torch":{"emoji":"🔦","use_msg":"火把燃起明亮的火焰。"},"bread":{"emoji":"🍞"},"dried_meat":{"emoji":"🥩"},"mushroom":{"emoji":"🍄"},"fish":{"emoji":"🐟"},"magic_herb":{"emoji":"🌿"},"honey":{"emoji":"🍯"},"golden_cup":{"emoji":"🏆"},"silver_ring":{"emoji":"💍"},"emerald":{"emoji":"💚"},"diamond":{"emoji":"💠"},"ruby":{"emoji":"❤️"},"sapphire":{"emoji":"💙"},"ancient_crown":{"emoji":"👑"},"old_coin":{"emoji":"🪙"},"gold_ingot":{"emoji":"🟨"},"silver_ingot":{"emoji":"⬜"},"wolf_tooth":{"emoji":"🦷"},"spider_silk":{"emoji":"🕸️"},"dragon_scale":{"emoji":"🐉"},"fairy_dust":{"emoji":"✨"},"mandrake_root":{"emoji":"🪴"},"goblin_ear":{"emoji":"👂"},"snake_skin":{"emoji":"🐍"},"bandit_badge":{"emoji":"🎖️"},"ancient_scroll":{"emoji":"📜","use_msg":"卷轴发光……但无法解读。"},"magic_scroll":{"emoji":"📜","use_msg":"卷轴化为光芒！你被传送到森林入口。"},"rope":{"emoji":"🪢","use_msg":"也许在别的地方更有用。"},"compass":{"emoji":"🧭","use_msg":"指南针指向东南方……"},"lockpick":{"emoji":"🔓","use_msg":"你用开锁器鼓捣了一下……好像打开了什么。"},"fishing_rod":{"emoji":"🎣","use_msg":"这里没有水，没法钓鱼。"},"magnifying_glass":{"emoji":"🔍","use_msg":"透过放大镜，你看到了普通人看不到的细节。"},"journal":{"emoji":"📓","use_msg":"日志记载：『塔顶的宝石是封印关键……』"},"magic_book":{"emoji":"📖","use_msg":"你学到了一些魔法知识。"},"magic_gem":{"emoji":"💎","use_msg":"宝石爆发耀眼光芒！"},"sacred_water":{"emoji":"💧","use_msg":"圣水发出温和的白光。"},"phoenix_feather":{"emoji":"🪶","use_msg":"羽毛化为火焰，在你手心留下一个火焰印记！"},"ice_crystal":{"emoji":"❄️"},"ancient_key":{"emoji":"🗝️","use_msg":"钥匙太重了，你几乎举不动。"},"health_ring":{"emoji":"💚","use_msg":"生命戒指发出柔和的绿光！最大HP+10！"},"protection_ring":{"emoji":"🛡️"},"strength_ring":{"emoji":"💪"},"mystic_amulet":{"emoji":"🔮","use_msg":"护符发出微光，你感到一股神秘力量保护着你。"}},"monsters":{"giant_rat":{"emoji":"🐀"},"wolf":{"emoji":"🐺"},"giant_spider":{"emoji":"🕷️"},"stone_golem":{"emoji":"🗿"},"ghost":{"emoji":"👻"},"shadow_beast":{"emoji":"🌑"},"forest_troll":{"emoji":"👹"},"dragon_whelp":{"emoji":"🐉"},"goblin":{"emoji":"👺"},"goblin_shaman":{"emoji":"🧙"},"giant_snake":{"emoji":"🐍"},"bandit_leader":{"emoji":"🏴‍☠️"},"ice_elemental":{"emoji":"❄️"},"mimic":{"emoji":"📦"},"treant":{"emoji":"🌳"},"giant_eagle":{"emoji":"🦅"},"goblin_king":{"emoji":"👑"},"wraith":{"emoji":"😈"},"basilisk":{"emoji":"🦎"}},"npcs":{"old_hermit":{"emoji":"🧙"},"wandering_merchant":{"emoji":"🛒"},"village_elder":{"emoji":"👴"},"healer_lily":{"emoji":"💚"},"wandering_rogue":{"emoji":"🥷"},"tower_guardian":{"emoji":"✨"},"innkeeper":{"emoji":"🍺"},"blacksmith":{"emoji":"⚒️"},"hunter":{"emoji":"🏹"},"priestess":{"emoji":"🕊️"},"mad_alchemist":{"emoji":"🧪"},"gravedigger":{"emoji":"🪦"},"bounty_hunter":{"emoji":"🎯"}},"companions":{"companion_warrior":{"emoji":"⚔️"},"companion_rogue":{"emoji":"🗡️"},"companion_mage":{"emoji":"🔮"},"companion_healer":{"emoji":"💚"},"companion_scout":{"emoji":"🪶"},"companion_archer":{"emoji":"🏹"},"companion_monk":{"emoji":"🥋"}},"rooms":{"forest_entrance":{"emoji":"🌲","map":{"layer":"surface","x":3,"y":3}},"abandoned_hut":{"emoji":"🏠","map":{"layer":"surface","x":2,"y":3}},"dark_forest":{"emoji":"🌳","map":{"layer":"surface","x":3,"y":2}},"cave_entrance":{"emoji":"🕳️","map":{"layer":"cave","x":2,"y":0}},"cave_middle":{"emoji":"🦇","map":{"layer":"cave","x":2,"y":1}},"cave_depths":{"emoji":"🕷️","map":{"layer":"cave","x":2,"y":3}},"ancient_ruins":{"emoji":"🗿","map":{"layer":"cave","x":3,"y":1}},"hidden_passage":{"emoji":"🚪","map":{"layer":"cave","x":3,"y":0}},"crossroads":{"emoji":"🛤️","map":{"layer":"surface","x":4,"y":2}},"tower_base":{"emoji":"🏰","map":{"layers":{"surface":{"x":4,"y":1},"tower":{"x":1,"y":2}}}},"tower_middle":{"emoji":"🌀","map":{"layer":"tower","x":1,"y":1}},"tower_top":{"emoji":"🐉","map":{"layer":"tower","x":1,"y":0}},"lake_shore":{"emoji":"🌊","map":{"layer":"surface","x":5,"y":2}},"lake_village":{"emoji":"🏘️","map":{"layer":"surface","x":5,"y":3}},"lake_island":{"emoji":"🏝️","map":{"layer":"surface","x":6,"y":2}},"goblin_cave":{"emoji":"👺","map":{"layer":"cave","x":1,"y":1}},"goblin_throne":{"emoji":"👑","map":{"layer":"cave","x":1,"y":0}},"underground_river":{"emoji":"💧","map":{"layer":"cave","x":2,"y":2}},"frozen_cave":{"emoji":"❄️","map":{"layer":"cave","x":3,"y":2}},"hidden_grove":{"emoji":"🌿","map":{"layer":"cave","x":1,"y":2}},"bandit_camp":{"emoji":"⛺","map":{"layer":"surface","x":2,"y":4}},"bandit_hideout":{"emoji":"💎","map":{"layer":"surface","x":1,"y":4}},"lake_village_inn":{"emoji":"🍺","map":{"layer":"surface","x":5,"y":4}},"lake_village_smithy":{"emoji":"⚒️","map":{"layer":"surface","x":4,"y":3}},"lake_village_temple":{"emoji":"⛪","map":{"layer":"surface","x":6,"y":3}},"alchemist_lab":{"emoji":"🧪","map":{"layer":"cave","x":0,"y":2}},"forest_tower_ruins":{"emoji":"🏚️","map":{"layer":"surface","x":3,"y":4}},"haunted_graveyard":{"emoji":"🪦","map":{"layer":"surface","x":2,"y":2}}}};
+// ═══ MAP META ═══
+const MAP_CELL=52;
+const MAP_PAD=36;
+const MAP_PLAYER="🧭";
+const MAP_LAYERS={surface:"地表",cave:"洞穴",tower:"高塔"};
+const MAP_DIR_LABEL={north:"北",south:"南",east:"东",west:"西",up:"上",down:"下"};
+function buildMapMetaFromRooms(rooms){
+  const meta={};
+  for(const r of rooms){
+    const emoji=r.emoji||"📍";
+    if(r.map&&r.map.layers){
+      const layers={};
+      for(const[layer,pos]of Object.entries(r.map.layers))layers[layer]={x:pos.x,y:pos.y,short:pos.emoji||emoji};
+      meta[r.id]={layers};
+    }else if(r.map){
+      meta[r.id]={layer:r.map.layer,x:r.map.x,y:r.map.y,short:emoji};
+    }
+  }
+  return meta;
+}
+let MAP_META=buildMapMetaFromRooms([
+  {id:"forest_entrance",emoji:"🌲",map:{layer:"surface",x:3,y:3}},
+  {id:"abandoned_hut",emoji:"🏠",map:{layer:"surface",x:2,y:3}},
+  {id:"dark_forest",emoji:"🌳",map:{layer:"surface",x:3,y:2}},
+  {id:"haunted_graveyard",emoji:"🪦",map:{layer:"surface",x:2,y:2}},
+  {id:"crossroads",emoji:"🛤️",map:{layer:"surface",x:4,y:2}},
+  {id:"tower_base",emoji:"🏰",map:{layers:{surface:{x:4,y:1},tower:{x:1,y:2}}}},
+  {id:"lake_shore",emoji:"🌊",map:{layer:"surface",x:5,y:2}},
+  {id:"lake_island",emoji:"🏝️",map:{layer:"surface",x:6,y:2}},
+  {id:"lake_village",emoji:"🏘️",map:{layer:"surface",x:5,y:3}},
+  {id:"lake_village_inn",emoji:"🍺",map:{layer:"surface",x:5,y:4}},
+  {id:"lake_village_smithy",emoji:"⚒️",map:{layer:"surface",x:4,y:3}},
+  {id:"lake_village_temple",emoji:"⛪",map:{layer:"surface",x:6,y:3}},
+  {id:"forest_tower_ruins",emoji:"🏚️",map:{layer:"surface",x:3,y:4}},
+  {id:"bandit_camp",emoji:"⛺",map:{layer:"surface",x:2,y:4}},
+  {id:"bandit_hideout",emoji:"💎",map:{layer:"surface",x:1,y:4}},
+  {id:"cave_entrance",emoji:"🕳️",map:{layer:"cave",x:2,y:0}},
+  {id:"cave_middle",emoji:"🦇",map:{layer:"cave",x:2,y:1}},
+  {id:"cave_depths",emoji:"🕷️",map:{layer:"cave",x:2,y:3}},
+  {id:"ancient_ruins",emoji:"🗿",map:{layer:"cave",x:3,y:1}},
+  {id:"hidden_passage",emoji:"🚪",map:{layer:"cave",x:3,y:0}},
+  {id:"goblin_cave",emoji:"👺",map:{layer:"cave",x:1,y:1}},
+  {id:"goblin_throne",emoji:"👑",map:{layer:"cave",x:1,y:0}},
+  {id:"underground_river",emoji:"💧",map:{layer:"cave",x:2,y:2}},
+  {id:"frozen_cave",emoji:"❄️",map:{layer:"cave",x:3,y:2}},
+  {id:"hidden_grove",emoji:"🌿",map:{layer:"cave",x:1,y:2}},
+  {id:"alchemist_lab",emoji:"🧪",map:{layer:"cave",x:0,y:2}},
+  {id:"tower_middle",emoji:"🌀",map:{layer:"tower",x:1,y:1}},
+  {id:"tower_top",emoji:"🐉",map:{layer:"tower",x:1,y:0}}
+]);
+function mapPos(roomId,layer){const m=MAP_META[roomId];if(!m)return null;if(m.layers)return m.layers[layer]||null;if(m.layer===layer)return{x:m.x,y:m.y,short:m.short};return null}
+function mapLayerOfRoom(roomId){const m=MAP_META[roomId];if(!m)return"surface";if(roomId==="tower_base")return"surface";if(m.layer==="tower")return"tower";if(m.layers)return"surface";return m.layer}
+function countVisited(){if(!game)return 0;return Object.values(game.rooms).filter(r=>r.visited).length}
+function roomShortName(roomId){const m=MAP_META[roomId];if(!m)return game.rooms[roomId]?.emoji||game.rooms[roomId]?.name||roomId;if(m.short)return m.short;if(m.layers){return m.layers.surface?.short||m.layers.tower?.short||roomId}return roomId}
+function roomExitDetail(roomId){const rm=game.rooms[roomId];if(!rm)return[];const out=[];for(const[dir,tid]of Object.entries(rm.exits||{})){const tr=game.rooms[tid];if(!tr||!tr.visited)continue;out.push({dir,tid,short:roomShortName(tid)})}return out}
+function emojiLabel(obj,fallback=""){if(!obj)return fallback;return obj.emoji?`${obj.emoji} ${obj.name}`:obj.name}
+function applyDataEnrich(src){const e=src||DATA_ENRICH;if(!e)return;if(e.items)for(const d of _ITEMS){const p=e.items[d.id];if(p)Object.assign(d,p)}if(e.monsters)for(const d of _MONSTERS){const p=e.monsters[d.id];if(p)Object.assign(d,p)}if(e.npcs)for(const d of _NPCS){const p=e.npcs[d.id];if(p)Object.assign(d,p)}if(e.companions)for(const d of _COMPANIONS){const p=e.companions[d.id];if(p)Object.assign(d,p)}if(e.rooms){for(const d of _ROOMS){const p=e.rooms[d.id];if(p)Object.assign(d,p)}const built=buildMapMetaFromRooms(_ROOMS);if(Object.keys(built).length)MAP_META=built}}
+
 // ═══ GAME LOGIC ═══
 class Game{
   constructor(){
@@ -278,16 +413,17 @@ class Game{
     this.player_atk_bonus=0;this.player_def_bonus=0;
     this.game_over=false;this.won=false;this.flags={};
     this.in_combat=false;this.current_enemy="";
+    this.visitOrder=[];
     this._buildWorld();
   }
   _buildWorld(){
-    for(const d of _ITEMS){const it={...d};it.takeable=d.takeable!==false;it.damage_bonus=d.dmg_bonus||0;it.defense_bonus=d.def_bonus||0;it.weight=d.weight||1;it.heal=d.heal||0;it.value=d.value||0;it.stackable=isStackable(it);it.use_msg=d.use_msg||"";this.items[d.id]=it}
-    for(const d of _MONSTERS){const m={...d};m.max_hp=d.hp;m.hp=d.hp;m.attack=d.atk;m.defense=d.defense||0;m.alive=true;m.loot=d.loot||[];m.rank=d.rank||"NORMAL";this.monsters[d.id]=m}
-    for(const d of _NPCS){const n={...d};n.met_before=false;n.quest_done=false;n.trade_items=d.trade_items||[];n.buys_types=d.buys_types||[];this.npcs[d.id]=n}
-    for(const d of _COMPANIONS){const c={...d};c.recruited=false;c.max_hp=d.hp;c.role=d.role;c.attack=d.atk;c.recruit_item=d.recruit_item;c.recruit_msg=d.recruit_msg||"加入！";c.get_bonus=function(){return{WARRIOR:{dmg:3,def:2,hp:10},ROGUE:{dmg:2,def:0,hp:5},MAGE:{dmg:5,def:-1,hp:0},HEALER:{dmg:0,def:1,hp:15},SCOUT:{dmg:1,def:0,hp:5}}[this.role]||{dmg:0,def:0,hp:0}};c.banter=function(){const m={WARRIOR:"哼，这点小伤不算什么。",ROGUE:"嘿，前面可能有陷阱。",MAGE:"我能感觉到魔法的波动……",HEALER:"大家注意安全。",SCOUT:"我去前面探探路。"};return`[${this.name}] ${m[this.role]||"…"}`};c.combat_assist=function(g){if(this.role==="MAGE")return`${this.name} 释放魔法箭！`;if(this.role==="HEALER"){const h=roll(6,2);g.player_hp=Math.min(g.player_max_hp,g.player_hp+h);return`${this.name} 为你恢复 ${h} 点HP！`}if(this.role==="ROGUE"&&Math.random()<0.4)return`${this.name} 偷袭！`;return`${this.name} 正在奋战！`};this.companions[d.id]=c}
+    for(const d of _ITEMS){const it={...d};it.takeable=d.takeable!==false;it.damage_bonus=d.dmg_bonus||0;it.defense_bonus=d.def_bonus||0;it.weight=d.weight||1;it.heal=d.heal||0;it.value=d.value||0;it.stackable=isStackable(it);it.use_msg=d.use_msg||"";it.emoji=d.emoji||"";this.items[d.id]=it}
+    for(const d of _MONSTERS){const m={...d};m.max_hp=d.hp;m.hp=d.hp;m.attack=d.atk;m.defense=d.defense||0;m.alive=true;m.loot=d.loot||[];m.rank=d.rank||"NORMAL";m.emoji=d.emoji||"";this.monsters[d.id]=m}
+    for(const d of _NPCS){const n={...d};n.met_before=false;n.quest_done=false;n.trade_items=d.trade_items||[];n.buys_types=d.buys_types||[];n.emoji=d.emoji||"";n.npc_type=d.npc_type||d.type||"";this.npcs[d.id]=n}
+    for(const d of _COMPANIONS){const c={...d};c.recruited=false;c.max_hp=d.hp;c.role=d.role;c.attack=d.atk;c.recruit_item=d.recruit_item;c.recruit_msg=d.recruit_msg||"加入！";c.emoji=d.emoji||"";c.get_bonus=function(){return{WARRIOR:{dmg:3,def:2,hp:10},ROGUE:{dmg:2,def:0,hp:5},MAGE:{dmg:5,def:-1,hp:0},HEALER:{dmg:0,def:1,hp:15},SCOUT:{dmg:1,def:0,hp:5}}[this.role]||{dmg:0,def:0,hp:0}};c.banter=function(){const m={WARRIOR:"哼，这点小伤不算什么。",ROGUE:"嘿，前面可能有陷阱。",MAGE:"我能感觉到魔法的波动……",HEALER:"大家注意安全。",SCOUT:"我去前面探探路。"};return`[${this.emoji?this.emoji+" ":""}${this.name}] ${m[this.role]||"…"}`};c.combat_assist=function(g){if(this.role==="MAGE")return`${this.name} 释放魔法箭！`;if(this.role==="HEALER"){const h=roll(6,2);g.player_hp=Math.min(g.player_max_hp,g.player_hp+h);return`${this.name} 为你恢复 ${h} 点HP！`}if(this.role==="ROGUE"&&Math.random()<0.4)return`${this.name} 偷袭！`;return`${this.name} 正在奋战！`};this.companions[d.id]=c}
     const dm={north:Direction.NORTH,south:Direction.SOUTH,east:Direction.EAST,west:Direction.WEST,up:Direction.UP,down:Direction.DOWN};
-    for(const d of _ROOMS){const ex={};for(const[k,v]of Object.entries(d.exits||{})){const dir=dm[k];if(dir)ex[dir]=v}const r={...d};r.exits=ex;r.items=[...(d.items||[])];r.dark=d.dark||false;r.visited=false;this.rooms[d.id]=r}
-    this._applyBehaviors();this.current_room_id="forest_entrance";this.rooms["forest_entrance"].visited=true;this._invAdd("lesser_potion");this._invAdd("bread")
+    for(const d of _ROOMS){const ex={};for(const[k,v]of Object.entries(d.exits||{})){const dir=dm[k];if(dir)ex[dir]=v}const r={...d};r.exits=ex;r.items=[...(d.items||[])];r.dark=d.dark||false;r.visited=false;r.emoji=d.emoji||MAP_META[d.id]?.short||(MAP_META[d.id]?.layers&&(MAP_META[d.id].layers.surface||MAP_META[d.id].layers.tower)?.short)||"";this.rooms[d.id]=r}
+    this._applyBehaviors();this.current_room_id="forest_entrance";this.rooms["forest_entrance"].visited=true;this.visitOrder.push("forest_entrance");this._invAdd("lesser_potion");this._invAdd("bread")
   }
   _applyBehaviors(){
     const g=this;
@@ -305,10 +441,10 @@ class Game{
   hasLight(){if(this.current_room_id==="tower_top")return true;for(const iid in this.inventory)if(this.items[iid]?.type==="LIGHT")return true;for(const cid of this.companion_list)if(this.companions[cid]?.role==="MAGE")return true;return false}
   roomDesc(id){
     const rm=this.rooms[id];if(!rm)return"未知地点。";if(rm.dark&&!this.hasLight())return"🌑 一片漆黑！你需要光源。";
-    let t=`[${rm.name}]\n${rm.visited?rm.desc.split("\n")[0]:rm.desc}`;
-    const its=rm.items.map(i=>this.items[i]).filter(Boolean);if(its.length)t+="\n\n可见物品："+its.map((it,i)=>`(${i+1}) ${it.name}`).join(", ");
-    if(rm.npc_id&&this.npcs[rm.npc_id]){const n=this.npcs[rm.npc_id];t+=`\n👤 ${n.name}（${n.title||""}）`}
-    if(rm.monster_id&&this.monsters[rm.monster_id]){const m=this.monsters[rm.monster_id];if(m.alive){const tag=m.rank!=="NORMAL"?`[${MonsterRank[m.rank]}]`:"";t+=`\n⚠️ ${tag} ${m.name}`}}
+    let t=`[${emojiLabel(rm)}]\n${rm.visited?rm.desc.split("\n")[0]:rm.desc}`;
+    const its=rm.items.map(i=>this.items[i]).filter(Boolean);if(its.length)t+="\n\n可见物品："+its.map((it,i)=>`(${i+1}) ${emojiLabel(it)}`).join(", ");
+    if(rm.npc_id&&this.npcs[rm.npc_id]){const n=this.npcs[rm.npc_id];t+=`\n${n.emoji||"👤"} ${n.name}（${n.title||""}）`}
+    if(rm.monster_id&&this.monsters[rm.monster_id]){const m=this.monsters[rm.monster_id];if(m.alive){const tag=m.rank!=="NORMAL"?`[${MonsterRank[m.rank]}]`:"";t+=`\n⚠️ ${tag} ${emojiLabel(m)}`}}
     t+=`\n出口：${Object.keys(rm.exits).join(", ")}`;return t
   }
   doGo(ds){
@@ -316,12 +452,12 @@ class Game{
     const map={n:Direction.NORTH,s:Direction.SOUTH,e:Direction.EAST,w:Direction.WEST,u:Direction.UP,d:Direction.DOWN,north:Direction.NORTH,south:Direction.SOUTH,east:Direction.EAST,west:Direction.WEST,up:Direction.UP,down:Direction.DOWN};
     const d=map[ds];if(!d)return`不能往 ${ds}。`;const rm=this.rooms[this.current_room_id];if(!rm.exits[d])return`不能往 ${d}。`;if(rm.dark&&!this.hasLight())return"🌑 太黑了不敢走。";
     this.current_room_id=rm.exits[d];const nr=this.rooms[this.current_room_id];let extra="";
-    if(nr.on_enter){const r=nr.on_enter(this);if(r)extra=`\n\n${r}`}if(!nr.visited){nr.visited=true;this.score+=10}
+    if(nr.on_enter){const r=nr.on_enter(this);if(r)extra=`\n\n${r}`}if(!nr.visited){nr.visited=true;this.visitOrder.push(this.current_room_id);this.score+=10;notifyNewVisit()}
     const cb=this._checkCombat();if(cb)extra+=`\n\n${cb}`;return`${this.roomDesc(this.current_room_id)}${extra}`
   }
   _checkCombat(){const rm=this.rooms[this.current_room_id];if(rm.monster_id&&this.monsters[rm.monster_id]){const m=this.monsters[rm.monster_id];if(m.alive&&m.hostile!==false&&!this.in_combat){this.in_combat=true;this.current_enemy=m.id;return`⚔️ ${m.name} 出现了！`}}}
-  doLook(){const rm=this.rooms[this.current_room_id];rm.visited=false;return this.roomDesc(this.current_room_id)}
-  doInventory(){const total=Object.values(this.inventory).reduce((a,b)=>a+b,0);const lines=[`🎒 背包 (重量 ${this._totalWeight()}/12 · 共 ${total} 件)`];if(Object.keys(this.inventory).length){let i=1;for(const[iid,c]of Object.entries(this.inventory)){const it=this.items[iid];if(it){let l=`  (${i}) ${it.name}`;if(it.stackable&&c>1)l+=` x${c}`;l+=` (${it.type})`;lines.push(l);i++}}}else lines.push("  (空)");lines.push(`\n❤️ HP: ${this.player_hp}/${this.player_max_hp}\n💰 金币: ${this.gold} | 🏆 得分: ${this.score}`);if(this.companion_list.length){lines.push("👥 队友：");for(const cid of this.companion_list){const c=this.companions[cid];if(c)lines.push(`  · ${c.name} [${c.role}] HP:${c.hp}/${c.max_hp}`)}}return lines.join("\n")}
+  doLook(){return this.roomDesc(this.current_room_id)}
+  doInventory(){const total=Object.values(this.inventory).reduce((a,b)=>a+b,0);const lines=[`🎒 背包 (重量 ${this._totalWeight()}/12 · 共 ${total} 件)`];if(Object.keys(this.inventory).length){let i=1;for(const[iid,c]of Object.entries(this.inventory)){const it=this.items[iid];if(it){let l=`  (${i}) ${emojiLabel(it)}`;if(it.stackable&&c>1)l+=` x${c}`;l+=` (${it.type})`;lines.push(l);i++}}}else lines.push("  (空)");lines.push(`\n❤️ HP: ${this.player_hp}/${this.player_max_hp}\n💰 金币: ${this.gold} | 🏆 得分: ${this.score}`);if(this.companion_list.length){lines.push("👥 队友：");for(const cid of this.companion_list){const c=this.companions[cid];if(c)lines.push(`  · ${emojiLabel(c)} [${c.role}] HP:${c.hp}/${c.max_hp}`)}}return lines.join("\n")}
   doTake(args){
     if(!args||!args.length)return"拿什么？";const t=args.join(" ");if(this.in_combat)return"战斗中不能拾取！";const rm=this.rooms[this.current_room_id];
     if(t==="all"){const tk=[];for(const iid of[...rm.items]){const it=this.items[iid];if(it&&it.takeable){const had=iid in this.inventory;if(!had&&this._totalWeight()+it.weight>12)continue;rm.items=rm.items.filter(x=>x!==iid);this._invAdd(iid);this.score+=5;tk.push(it.name)}}return tk.length?`拾取了：${tk.join("、")}。`:"这里没有能拿的东西。"}
@@ -329,7 +465,7 @@ class Game{
     if(!found)return`没有 ${t}。`;const it=this.items[found];if(!it.takeable)return`拿不起 ${it.name}。`;const had=found in this.inventory;if(!had&&this._totalWeight()+it.weight>12)return"负重满了（12）。";rm.items=rm.items.filter(x=>x!==found);this._invAdd(found);this.score+=5;return`拾起了 ${it.name}。`
   }
   doDrop(args){if(!args||!args.length)return"丢什么？";const t=args.join(" ");if(this.in_combat)return"战斗中不能丢弃！";const ik=Object.keys(this.inventory);let found=null;const n=parseInt(t);if(!isNaN(n)&&n>=1&&n<=ik.length)found=ik[n-1];if(!found){const tl=t.toLowerCase();for(const iid of ik){const it=this.items[iid];if(it&&(tl===it.name.toLowerCase()||tl===it.id||it.name.toLowerCase().includes(tl))){found=iid;break}}}if(!found)return`没有 ${t}。`;this._invRemove(found);this.rooms[this.current_room_id].items.push(found);return`丢下了 ${this.items[found].name}。`}
-  doUse(args){if(!args||!args.length)return"用什么？";const t=args.join(" ");const ik=Object.keys(this.inventory);let found=null;const n=parseInt(t);if(!isNaN(n)&&n>=1&&n<=ik.length)found=ik[n-1];if(!found){const tl=t.toLowerCase();for(const iid of ik){const it=this.items[iid];if(it&&(tl===it.name.toLowerCase()||tl===it.id||it.name.toLowerCase().includes(tl))){found=iid;break}}}if(!found)return`没有 ${t}。`;const it=this.items[found];if(!it.usable)return`${it.name} 不能用。`;let msg="";if(typeof it.on_use==="function")msg=it.on_use(this)||`使用了 ${it.name}。`;else if(it.heal>0){this.player_hp=Math.min(this.player_max_hp,this.player_hp+it.heal);msg=`恢复了 ${it.heal} 点生命值！`}else msg=it.use_msg||`使用了 ${it.name}。`;if(it.type==="POTION"||it.type==="FOOD")this._invRemove(found);this.score+=2;return msg}
+  doUse(args){if(!args||!args.length)return"用什么？";const t=args.join(" ");const ik=Object.keys(this.inventory);let found=null;const n=parseInt(t);if(!isNaN(n)&&n>=1&&n<=ik.length)found=ik[n-1];if(!found){const tl=t.toLowerCase();for(const iid of ik){const it=this.items[iid];if(it&&(tl===it.name.toLowerCase()||tl===it.id||it.name.toLowerCase().includes(tl))){found=iid;break}}}if(!found)return`没有 ${t}。`;const it=this.items[found];if(!it.usable)return`${it.name} 不能用。`;let msg="";if(typeof it.on_use==="function"){msg=it.on_use(this)||it.use_msg||`使用了 ${it.name}。`}else{if(it.heal>0)this.player_hp=Math.min(this.player_max_hp,this.player_hp+it.heal);if(it.use_msg)msg=it.use_msg;else if(it.heal>0)msg=`恢复了 ${it.heal} 点生命值！`;else msg=`使用了 ${it.name}。`}if(it.type==="POTION"||it.type==="FOOD")this._invRemove(found);this.score+=2;return msg}
   doTalk(){const rm=this.rooms[this.current_room_id];if(!rm.npc_id||!this.npcs[rm.npc_id])return"这里没有可对话的人。";const npc=this.npcs[rm.npc_id];const d=npc.dialogs||{};const lines=[`[${npc.name} · ${npc.title||""}]`,npc.desc];if(!npc.met_before){npc.met_before=true;lines.push(`\n${npc.name}：「${d.greet||"你好。"}」`);if(npc.give_item&&this.items[npc.give_item]&&!(npc.give_item in this.inventory)){this._invAdd(npc.give_item);lines.push(`\n${npc.name} 给了你 ${this.items[npc.give_item].name}！`);this.score+=5}}else lines.push(`\n${npc.name}：「${d.extra||d.farewell||"还有什么事？"}」`);if(npc.quest_item&&!npc.quest_done){if(npc.quest_item in this.inventory){this._invRemove(npc.quest_item);if(npc.quest_reward){this._invAdd(npc.quest_reward);lines.push(`\n✨ 提交任务！获得 ${this.items[npc.quest_reward].name}！`)}else lines.push(`\n✨ ${npc.name} 感谢你！`);this.score+=npc.quest_score||30;npc.quest_done=true}else{const qi=this.items[npc.quest_item];if(qi)lines.push(`\n💬 ${npc.name}：${d.quest||`帮我找 ${qi.name} 好吗？`}`)}}if(npc.npc_type==="MERCHANT")lines.push("\n🛒 输入 buy <物品> / sell <物品>");if(npc.npc_type==="HEALER")lines.push("\n💚 我可以为你治疗 (输入 heal)");return lines.join("\n")}
   doTrade(){const rm=this.rooms[this.current_room_id];if(!rm.npc_id||!this.npcs[rm.npc_id])return"没有商人。";const npc=this.npcs[rm.npc_id];if(npc.npc_type!=="MERCHANT"||!npc.trade_items.length)return`${npc.name} 没有商品。`;const lines=[`\n🛒 ${npc.name} 的商品：`];for(let i=0;i<npc.trade_items.length;i++){const[iid,price]=npc.trade_items[i];const it=this.items[iid];if(it)lines.push(`  (${i+1}) ${it.name} —— ${price} 金币`)}lines.push(`💰 你有 ${this.gold} 金币`);return lines.join("\n")}
   doBuy(args){if(!args||!args.length)return"买什么？";const rm=this.rooms[this.current_room_id];if(!rm.npc_id||!this.npcs[rm.npc_id])return"没有商人。";const npc=this.npcs[rm.npc_id];if(npc.npc_type!=="MERCHANT")return`${npc.name} 不是商人。`;const name=args.join(" ");const n=parseInt(name);if(!isNaN(n)&&n>=1&&n<=npc.trade_items.length){const[iid,price]=npc.trade_items[n-1];const it=this.items[iid];if(this.gold>=price){this.gold-=price;this._invAdd(iid);return`购买了 ${it.name}！花费 ${price} 金币。`}return`需要 ${price} 金币，你只有 ${this.gold}。`}for(const[iid,price]of npc.trade_items){const it=this.items[iid];if(it&&(name===it.name||name===it.id)){if(this.gold>=price){this.gold-=price;this._invAdd(iid);return`购买了 ${it.name}！花费 ${price} 金币。`}return`需要 ${price} 金币，你只有 ${this.gold}。`}}return`没有 '${name}'。`}
@@ -339,35 +475,74 @@ class Game{
   doFlee(){if(!this.in_combat)return"没有战斗。";if(Math.random()<0.5){this.in_combat=false;this.current_enemy="";return"你逃跑了！"}const m=this.monsters[this.current_enemy];return`逃跑失败！${m?m.name:"敌人"} 挡住了路。`}
   doRecruit(){const rm=this.rooms[this.current_room_id];if(!rm.npc_id)return"这里没有可招募的人。";const npc=this.npcs[rm.npc_id];const cm={old_hermit:"companion_warrior",wandering_rogue:"companion_rogue",priestess:"companion_healer",hunter:"companion_scout",bounty_hunter:"companion_archer"};const cid=cm[rm.npc_id];if(!cid||!this.companions[cid])return`${npc.name} 看起来不想加入你。`;const c=this.companions[cid];if(c.recruited)return`${c.name} 已经是你的队友了。`;if(c.recruit_item&&!(c.recruit_item in this.inventory)){const n=this.items[c.recruit_item];return`招募 ${c.name} 需要 ${n?n.name:c.recruit_item}。`}if(c.recruit_item&&c.recruit_item in this.inventory)this._invRemove(c.recruit_item);c.recruited=true;this.companion_list.push(cid);rm.npc_id=null;this.score+=20;return`✨ ${c.name} ${c.recruit_msg}`}
   doParty(){if(!this.companion_list.length)return"你目前没有队友。";const l=["👥 你的队友："];for(const cid of this.companion_list){const c=this.companions[cid];if(c){l.push(`  ${c.name} [${c.role}] HP:${c.hp}/${c.max_hp}`);const b=c.get_bonus();l.push(`  攻击+${b.dmg} 防御+${b.def}`);l.push(`  能力：${c.ability_desc||""}`)}}return l.join("\n")}
-  doHelp(){return"╔══════════ 命令列表 ══════════╗\n\n🚶 移动：n/s/e/w/u/d\n👁️ 查看(look) 背包(inv) 帮助(help) 得分(score)\n🎒 拿(take) 丢(drop) 用(use)\n💬 对话(talk) 购买(buy) 出售(sell) 治疗(heal)\n⚔️ 攻击(attack) 逃跑(flee)\n🤝 招募(recruit) 队伍(party)\n\n💡 食物/宝藏/材料可叠加存放(上限999)"}
+  doHelp(){return"╔══════════ 命令列表 ══════════╗\n\n🚶 移动：n/s/e/w/u/d\n👁️ 查看(look) 背包(inv) 帮助(help) 得分(score)\n🗺️ 地图(map) 显示/隐藏迷雾残页\n🎒 拿(take) 丢(drop) 用(use)\n💬 对话(talk) 购买(buy) 出售(sell) 治疗(heal)\n⚔️ 攻击(attack) 逃跑(flee)\n🤝 招募(recruit) 队伍(party)\n\n💡 食物/宝藏/材料可叠加存放(上限999)"}
   doScore(){return`🏆 得分: ${this.score}  |  📖 回合: ${this.turns}`}
   get totalAtk(){let b=this.player_atk_bonus;for(const iid in this.inventory){const it=this.items[iid];if(it)b+=it.damage_bonus||0}for(const cid of this.companion_list){const c=this.companions[cid];if(c){const bb=c.get_bonus();b+=bb.dmg}}return b}
   get totalDef(){let b=this.player_def_bonus;for(const iid in this.inventory){const it=this.items[iid];if(it)b+=it.defense_bonus||0}for(const cid of this.companion_list){const c=this.companions[cid];if(c){const bb=c.get_bonus();b+=bb.def}}return b}
 }
 // ═══ UI LOGIC ═══
 const story=document.getElementById("story");const target=document.getElementById("targets");const cmds=document.getElementById("cmds");
+const mapPanel=document.getElementById("map-panel");const mapSvg=document.getElementById("map-svg");
+const mapListEl=document.getElementById("map-list");const mapDetail=document.getElementById("map-detail");
+const mapCountEl=document.getElementById("map-count");const mapBtn=document.getElementById("map-btn");
 let game=null;let pending=null;
+let mapVisible=true;let mapLayer="surface";let mapMode="graph";let mapDrag=null;
 function log(t,c){if(!t||t==="None"||t===null||t===undefined)return;if(c)story.innerHTML+=`<div class="cmd">&gt; ${t}</div>`;else{story.innerHTML+=`<div class="sep"></div><div>${t.replace(/\n/g,"<br>")}</div>`}story.scrollTop=story.scrollHeight}
-function upd(){document.getElementById("hpt").textContent=`${game.player_hp}/${game.player_max_hp}`;document.getElementById("hpf").style.width=`${(game.player_hp/game.player_max_hp)*100}%`;document.getElementById("gdt").textContent=game.gold;document.getElementById("sct").textContent=game.score;document.getElementById("wgt").textContent=`${game._totalWeight()}/12`;const cn=game.companion_list.map(c=>{const c2=game.companions[c];return c2?c2.name:""}).filter(Boolean);document.getElementById("cpt").textContent=cn.length?cn.join(", "):"无"}
+function upd(){document.getElementById("hpt").textContent=`${game.player_hp}/${game.player_max_hp}`;document.getElementById("hpf").style.width=`${(game.player_hp/game.player_max_hp)*100}%`;document.getElementById("gdt").textContent=game.gold;document.getElementById("sct").textContent=game.score;document.getElementById("wgt").textContent=`${game._totalWeight()}/12`;const cn=game.companion_list.map(c=>{const c2=game.companions[c];return c2?c2.name:""}).filter(Boolean);document.getElementById("cpt").textContent=cn.length?cn.join(", "):"无";if(mapVisible){syncMapLayerToPlayer();refreshMap()}}
+function notifyNewVisit(){flashMapHint();if(mapVisible){syncMapLayerToPlayer();refreshMap()}}
+function flashMapHint(){const el=mapVisible?mapPanel:mapBtn;el.classList.add("map-pulse");if(!mapVisible){let badge=mapBtn.querySelector(".map-badge");if(!badge){badge=document.createElement("span");badge.className="map-badge";badge.textContent="+1";mapBtn.appendChild(badge)}else badge.textContent="+1"}setTimeout(()=>{el.classList.remove("map-pulse");const b=mapBtn.querySelector(".map-badge");if(b)b.remove()},1000)}
+function applyMapVisibility(){mapPanel.classList.toggle("hidden",!mapVisible);mapBtn.classList.toggle("off",!mapVisible);mapBtn.textContent=mapVisible?"🗺️ 地图":"🗺️ 地图·关";try{localStorage.setItem("mist_map_visible",mapVisible?"1":"0")}catch(e){}if(mapVisible){syncMapLayerToPlayer();refreshMap()}}
+function setMapVisible(v){mapVisible=!!v;applyMapVisibility()}
+function toggleMap(){setMapVisible(!mapVisible);return mapVisible?"已显示迷雾残页。":"已隐藏迷雾残页。"}
+function syncMapLayerToPlayer(){if(!game)return;const curLayer=mapLayerOfRoom(game.current_room_id);if(curLayer&&curLayer!==mapLayer){mapLayer=curLayer;document.querySelectorAll(".map-tab").forEach(t=>t.classList.toggle("active",t.dataset.layer===mapLayer))}}
+function focusMap(){setMapVisible(true);mapPanel.scrollIntoView({behavior:"smooth",block:"nearest"});return"已显示迷雾残页。"}
+function setMapLayer(layer){mapLayer=layer;document.querySelectorAll(".map-tab").forEach(t=>t.classList.toggle("active",t.dataset.layer===layer));if(mapVisible)refreshMap()}
+function setMapMode(mode){mapMode=mode;document.querySelectorAll(".map-mode").forEach(m=>m.classList.toggle("active",m.dataset.mode===mode));document.getElementById("map-canvas-wrap").classList.toggle("active",mode==="graph");mapListEl.classList.toggle("active",mode==="list");if(mapVisible)refreshMap()}
+function visitedOnLayer(layer){return Object.keys(game.rooms).filter(id=>game.rooms[id].visited&&mapPos(id,layer))}
+function mapNodeDetail(roomId){const rm=game.rooms[roomId];const pos=mapPos(roomId,mapLayer)||{short:roomShortName(roomId)};if(!rm)return"";const exits=roomExitDetail(roomId);const exitTxt=exits.length?exits.map(e=>`${MAP_DIR_LABEL[e.dir]||e.dir}→${e.short}`).join(" · "):"（尚无已探索出口）";let dark=rm.dark&&!game.hasLight()?" · 🌑需光源":"";return`<strong>${rm.name}</strong> ${pos.short}　出口：${exitTxt}${dark}`}
+function onMapNodeClick(roomId){if(game.in_combat)return;mapDetail.innerHTML=mapNodeDetail(roomId)}
+function mapEdgesForLayer(layer){const edges=[];const seen=new Set();for(const id of visitedOnLayer(layer)){const rm=game.rooms[id];for(const[dir,tid]of Object.entries(rm.exits||{})){if(!game.rooms[tid]?.visited)continue;if(!mapPos(tid,layer))continue;const key=[id,tid].sort().join("|");if(seen.has(key))continue;seen.add(key);edges.push({from:id,to:tid})}}return edges}
+function renderMapGraph(){const layer=mapLayer;const ids=visitedOnLayer(layer);mapSvg.innerHTML="";if(!ids.length){mapSvg.setAttribute("viewBox","0 0 200 80");mapSvg.innerHTML='<text x="100" y="44" text-anchor="middle" fill="#576574" font-size="13">此层尚无探索记录</text>';mapCountEl.textContent=`已探索 ${countVisited()}`;return}let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;const pts={};for(const id of ids){const p=mapPos(id,layer);const cx=MAP_PAD+p.x*MAP_CELL;const cy=MAP_PAD+p.y*MAP_CELL;pts[id]={cx,cy,short:p.short};minX=Math.min(minX,cx);minY=Math.min(minY,cy);maxX=Math.max(maxX,cx);maxY=Math.max(maxY,cy)}const edges=mapEdgesForLayer(layer);const gEdges=document.createElementNS("http://www.w3.org/2000/svg","g");gEdges.setAttribute("stroke","#2a3a5a");gEdges.setAttribute("stroke-width","2");for(const e of edges){const a=pts[e.from],b=pts[e.to];if(!a||!b)continue;const line=document.createElementNS("http://www.w3.org/2000/svg","line");line.setAttribute("x1",a.cx);line.setAttribute("y1",a.cy);line.setAttribute("x2",b.cx);line.setAttribute("y2",b.cy);gEdges.appendChild(line)}mapSvg.appendChild(gEdges);const gNodes=document.createElementNS("http://www.w3.org/2000/svg","g");const here=game.current_room_id;const combat=game.in_combat;for(const id of ids){const p=pts[id];const isHere=id===here;const g=document.createElementNS("http://www.w3.org/2000/svg","g");g.setAttribute("class","map-node"+(combat?" combat-disabled":""));g.setAttribute("transform",`translate(${p.cx},${p.cy})`);if(!combat)g.addEventListener("click",()=>onMapNodeClick(id));const circle=document.createElementNS("http://www.w3.org/2000/svg","circle");circle.setAttribute("r",isHere?16:13);circle.setAttribute("fill",isHere?"#1a3050":"#1e2a4a");circle.setAttribute("stroke",isHere?"#54a0ff":"#3a4a6a");circle.setAttribute("stroke-width",isHere?2.5:1.2);if(isHere)circle.setAttribute("filter","drop-shadow(0 0 6px rgba(84,160,255,.7))");g.appendChild(circle);const label=document.createElementNS("http://www.w3.org/2000/svg","text");label.setAttribute("text-anchor","middle");label.setAttribute("dominant-baseline","central");label.setAttribute("font-size",isHere?"16":"14");label.textContent=isHere?MAP_PLAYER:p.short;g.appendChild(label);gNodes.appendChild(g)}mapSvg.appendChild(gNodes);const w=maxX-minX+MAP_PAD*2,h=maxY-minY+MAP_PAD*2;mapSvg.setAttribute("viewBox",`${minX-MAP_PAD} ${minY-MAP_PAD} ${Math.max(w,180)} ${Math.max(h,140)}`);mapCountEl.textContent=`已探索 ${countVisited()}`;if(here&&pts[here])mapDetail.innerHTML=mapNodeDetail(here)}
+function renderMapList(){const layer=mapLayer;const ids=game.visitOrder.filter(id=>game.rooms[id]?.visited&&mapPos(id,layer));mapListEl.innerHTML="";if(!ids.length){mapListEl.innerHTML='<div style="color:#576574;font-size:12px;padding:8px 0">此层尚无探索记录</div>'}else{for(const id of ids){const rm=game.rooms[id];const pos=mapPos(id,layer);const div=document.createElement("div");div.className="map-list-item"+(id===game.current_room_id?" here":"");div.innerHTML=`<span class="ml-short">${id===game.current_room_id?MAP_PLAYER:pos.short}</span><span class="ml-name">${rm.name}</span>`;if(!game.in_combat)div.onclick=()=>onMapNodeClick(id);mapListEl.appendChild(div)}}mapCountEl.textContent=`已探索 ${countVisited()}`;if(game.current_room_id&&mapPos(game.current_room_id,layer))mapDetail.innerHTML=mapNodeDetail(game.current_room_id)}
+function refreshMap(){if(!game||!mapVisible)return;if(mapMode==="list")renderMapList();else renderMapGraph()}
+function initMapUi(){try{const saved=localStorage.getItem("mist_map_visible");if(saved!==null)mapVisible=saved!=="0"}catch(e){}applyMapVisibility();mapBtn.onclick=()=>toggleMap();document.getElementById("map-hide").onclick=()=>setMapVisible(false);document.querySelectorAll(".map-tab").forEach(t=>t.onclick=()=>setMapLayer(t.dataset.layer));document.querySelectorAll(".map-mode").forEach(m=>m.onclick=()=>setMapMode(m.dataset.mode));mapSvg.addEventListener("pointerdown",e=>{mapDrag={x:e.clientX,y:e.clientY,ox:mapSvg.viewBox.baseVal.x,oy:mapSvg.viewBox.baseVal.y};mapSvg.classList.add("dragging");mapSvg.setPointerCapture(e.pointerId)});mapSvg.addEventListener("pointermove",e=>{if(!mapDrag)return;const dx=(e.clientX-mapDrag.x)*0.6,dy=(e.clientY-mapDrag.y)*0.6;mapSvg.viewBox.baseVal.x=mapDrag.ox-dx;mapSvg.viewBox.baseVal.y=mapDrag.oy-dy});mapSvg.addEventListener("pointerup",()=>{mapDrag=null;mapSvg.classList.remove("dragging")});mapSvg.addEventListener("pointercancel",()=>{mapDrag=null;mapSvg.classList.remove("dragging")})}
 function showTargets(label,buttons){target.style.display="flex";target.innerHTML=`<div class="tl">${label}</div>`;for(const{text,hint,cls,action}of buttons){const b=document.createElement("button");b.innerHTML=hint?`${text}<span class="hint">/${hint}</span>`:text;if(cls)b.className=cls;b.onclick=()=>{target.style.display="none";target.innerHTML="";action()};target.appendChild(b)}}
 function clearTargets(){target.style.display="none";target.innerHTML="";pending=null}
 function exec(fn,name){if(game.game_over){log(game.won?"🎉 你已经通关了！刷新页面重玩。":"💀 游戏已结束。刷新页面重玩。");return}if(pending)clearTargets();log(name,true);const r=fn();log(r);if(game.won){log("\n🎉 你找回了所有记忆，打破了迷雾诅咒！通关！");log(`得分：${game.score}`)}if(game.player_hp<=0){log("\n💀 你死了……");game.game_over=true}game.turns++;upd()}
 function addGroup(lbl,buttons){const g=document.createElement("div");g.className="cg";g.innerHTML=`<div class="cgl">${lbl}</div><div class="cb"></div>`;const btns=g.querySelector(".cb");for(const{text,hint,cls,action}of buttons){const b=document.createElement("button");b.innerHTML=hint?`${text}<span class="hint">/${hint}</span>`:text;if(cls)b.className=cls;b.onclick=action;btns.appendChild(b)}cmds.appendChild(g)}
 function buildCommands(){
   addGroup("移动",[{text:"北",hint:"north",cls:"bm",action:()=>exec(()=>game.doGo("north"),"north")},{text:"南",hint:"south",cls:"bm",action:()=>exec(()=>game.doGo("south"),"south")},{text:"东",hint:"east",cls:"bm",action:()=>exec(()=>game.doGo("east"),"east")},{text:"西",hint:"west",cls:"bm",action:()=>exec(()=>game.doGo("west"),"west")},{text:"上",hint:"up",cls:"bm",action:()=>exec(()=>game.doGo("up"),"up")},{text:"下",hint:"down",cls:"bm",action:()=>exec(()=>game.doGo("down"),"down")}]);
-  addGroup("探索",[{text:"👁️ 查看",hint:"look / l",action:()=>exec(()=>game.doLook(),"look")},{text:"🎒 背包",hint:"inv / i",cls:"bi",action:()=>exec(()=>game.doInventory(),"inventory")},{text:"📖 帮助",hint:"help / h",action:()=>exec(()=>game.doHelp(),"help")},{text:"🏆 得分",hint:"score",action:()=>exec(()=>game.doScore(),"score")}]);
-  addGroup("物品",[{text:"拿起",hint:"take 序号",action:()=>{const rm=game.rooms[game.current_room_id];if(!rm.items.length){exec(()=>"这里没有可拿的物品。","take");return}showTargets("选择物品：",[...rm.items.map((iid,idx)=>({text:`(${idx+1}) ${game.items[iid]?.name||iid}`,action:()=>exec(()=>game.doTake([String(idx+1)]),`take ${idx+1}`)})),{text:"拿全部",hint:"take all",cls:"bg",action:()=>exec(()=>game.doTake(["all"]),"take all")},{text:"取消",hint:"esc",cls:"bc",action:clearTargets}])}},{text:"丢弃",hint:"drop 序号",action:()=>{const ik=Object.keys(game.inventory);if(!ik.length){exec(()=>"背包是空的。","drop");return}showTargets("丢弃物品：",[...ik.map((iid,idx)=>{const it=game.items[iid];return{text:`(${idx+1}) ${it?it.name:iid}${it&&it.stackable&&game.inventory[iid]>1?" x"+game.inventory[iid]:""}`,action:()=>exec(()=>game.doDrop([String(idx+1)]),`drop ${idx+1}`)}}),{text:"取消",hint:"esc",cls:"bc",action:clearTargets}])}},{text:"使用",hint:"use 序号",action:()=>{const ik=Object.keys(game.inventory);const u=ik.filter(i=>game.items[i]?.usable);if(!u.length){exec(()=>"没有可用物品。","use");return}showTargets("使用物品：",[...u.map(iid=>{const idx=ik.indexOf(iid)+1;const it=game.items[iid];return{text:`(${idx}) ${it.name}${it.stackable&&game.inventory[iid]>1?" x"+game.inventory[iid]:""}`,action:()=>exec(()=>game.doUse([String(idx)]),`use ${idx}`)}}),{text:"取消",hint:"esc",cls:"bc",action:clearTargets}])}}]);
+  addGroup("探索",[{text:"👁️ 查看",hint:"look / l",action:()=>exec(()=>game.doLook(),"look")},{text:"🎒 背包",hint:"inv / i",cls:"bi",action:()=>exec(()=>game.doInventory(),"inventory")},{text:"🗺️ 地图",hint:"map / m",cls:"bi",action:()=>exec(()=>toggleMap(),"map")},{text:"📖 帮助",hint:"help / h",action:()=>exec(()=>game.doHelp(),"help")},{text:"🏆 得分",hint:"score",action:()=>exec(()=>game.doScore(),"score")}]);
+  addGroup("物品",[{text:"拿起",hint:"take 序号",action:()=>{const rm=game.rooms[game.current_room_id];if(!rm.items.length){exec(()=>"这里没有可拿的物品。","take");return}showTargets("选择物品：",[...rm.items.map((iid,idx)=>({text:`(${idx+1}) ${emojiLabel(game.items[iid])||iid}`,action:()=>exec(()=>game.doTake([String(idx+1)]),`take ${idx+1}`)})),{text:"拿全部",hint:"take all",cls:"bg",action:()=>exec(()=>game.doTake(["all"]),"take all")},{text:"取消",hint:"esc",cls:"bc",action:clearTargets}])}},{text:"丢弃",hint:"drop 序号",action:()=>{const ik=Object.keys(game.inventory);if(!ik.length){exec(()=>"背包是空的。","drop");return}showTargets("丢弃物品：",[...ik.map((iid,idx)=>{const it=game.items[iid];return{text:`(${idx+1}) ${it?emojiLabel(it):iid}${it&&it.stackable&&game.inventory[iid]>1?" x"+game.inventory[iid]:""}`,action:()=>exec(()=>game.doDrop([String(idx+1)]),`drop ${idx+1}`)}}),{text:"取消",hint:"esc",cls:"bc",action:clearTargets}])}},{text:"使用",hint:"use 序号",action:()=>{const ik=Object.keys(game.inventory);const u=ik.filter(i=>game.items[i]?.usable);if(!u.length){exec(()=>"没有可用物品。","use");return}showTargets("使用物品：",[...u.map(iid=>{const idx=ik.indexOf(iid)+1;const it=game.items[iid];return{text:`(${idx}) ${emojiLabel(it)}${it.stackable&&game.inventory[iid]>1?" x"+game.inventory[iid]:""}`,action:()=>exec(()=>game.doUse([String(idx)]),`use ${idx}`)}}),{text:"取消",hint:"esc",cls:"bc",action:clearTargets}])}}]);
   addGroup("社交",[{text:"💬 对话",hint:"talk",action:()=>exec(()=>game.doTalk(),"talk")},{text:"🛒 商品",hint:"trade",action:()=>exec(()=>game.doTrade(),"trade")},{text:"购买",hint:"buy 序号",action:()=>{const rm=game.rooms[game.current_room_id];if(!rm.npc_id||!game.npcs[rm.npc_id]){exec(()=>"没有商人。","buy");return}const npc=game.npcs[rm.npc_id];if(npc.npc_type!=="MERCHANT"||!npc.trade_items.length){exec(()=>"没有商品。","buy");return}showTargets("购买：",[...npc.trade_items.map(([iid,price],idx)=>({text:`(${idx+1}) ${game.items[iid]?.name||iid} ${price}💰`,action:()=>exec(()=>game.doBuy([String(idx+1)]),`buy ${idx+1}`)})),{text:"取消",hint:"esc",cls:"bc",action:clearTargets}])}},{text:"出售",hint:"sell 序号",action:()=>{const rm=game.rooms[game.current_room_id];if(!rm.npc_id||!game.npcs[rm.npc_id]){exec(()=>"没有商人。","sell");return}const npc=game.npcs[rm.npc_id];if(npc.npc_type!=="MERCHANT"){exec(()=>"不是商人。","sell");return}const ik=Object.keys(game.inventory);const s=ik.filter(i=>{const it=game.items[i];return it&&(npc.buys_types||[]).includes(it.type)});if(!s.length){exec(()=>"没有可卖的。","sell");return}showTargets("出售：",[...s.map(iid=>{const idx=ik.indexOf(iid)+1;const it=game.items[iid];const p=Math.max(2,Math.floor((it.value||0)/2));return{text:`(${idx}) ${it.name} → ${p}💰`,action:()=>exec(()=>game.doSell([String(idx)]),`sell ${idx}`)}}),{text:"取消",hint:"esc",cls:"bc",action:clearTargets}])}},{text:"💚 治疗",hint:"heal",action:()=>exec(()=>game.doHeal(),"heal")}]);
   addGroup("战斗",[{text:"⚔️ 攻击",hint:"attack",cls:"br",action:()=>exec(()=>game.doAttack(),"attack")},{text:"🏃 逃跑",hint:"flee",cls:"by",action:()=>exec(()=>game.doFlee(),"flee")}]);
   addGroup("队友",[{text:"🤝 招募",hint:"recruit",action:()=>exec(()=>game.doRecruit(),"recruit")},{text:"👥 队伍",hint:"party",action:()=>exec(()=>game.doParty(),"party")}]);
 }
-function init(){cmds.innerHTML="";game=new Game();buildCommands();log("迷雾笼罩着古老的森林。你从古树下醒来——\n什么都不记得了。远处的高塔在迷雾中若隐若现……\n\n💡 点击按钮或输入指令后按回车开始冒险！");upd()}
+function init(){cmds.innerHTML="";game=new Game();buildCommands();initMapUi();log("迷雾笼罩着古老的森林。你从古树下醒来——\n什么都不记得了。远处的高塔在迷雾中若隐若现……\n\n💡 点击按钮或输入指令后按回车开始冒险！");upd()}
+async function loadExternalData(){
+  async function getJson(path){const r=await fetch(path);if(!r.ok)throw new Error(path);return r.json()}
+  try{
+    const rooms=await getJson("data/rooms.json");
+    const items=await getJson("data/items.json");
+    const monsters=await getJson("data/monsters.json");
+    const npcs=await getJson("data/npcs.json");
+    const companions=await getJson("data/companions.json");
+    const live={items:{},monsters:{},npcs:{},companions:{},rooms:{}};
+    for(const d of items){const p={};if(d.emoji)p.emoji=d.emoji;if(d.use_msg)p.use_msg=d.use_msg;if(Object.keys(p).length)live.items[d.id]=p}
+    for(const d of monsters){if(d.emoji)live.monsters[d.id]={emoji:d.emoji}}
+    for(const d of npcs){if(d.emoji)live.npcs[d.id]={emoji:d.emoji}}
+    for(const d of companions){if(d.emoji)live.companions[d.id]={emoji:d.emoji}}
+    for(const d of rooms){const p={};if(d.emoji)p.emoji=d.emoji;if(d.map)p.map=d.map;if(Object.keys(p).length)live.rooms[d.id]=p}
+    applyDataEnrich(live);
+    return true;
+  }catch(e){return false}
+}
+async function boot(){applyDataEnrich();await loadExternalData();init()}
 
 // ── 文本输入处理 ──
 const inputBox=document.getElementById("input-box");
 const inputBtn=document.getElementById("input-btn");
 
-// Python 风格的指令映射：主键 → {type, func, hint}
 const COMMANDS={
   look:{type:"探索",func:(g,a)=>g.doLook(),hint:"look / l"},
   l:{type:"",func:(g,a)=>g.doLook(),hint:""},
@@ -404,6 +579,8 @@ const COMMANDS={
   h:{type:"",func:(g,a)=>g.doHelp(),hint:""},
   score:{type:"系统",func:(g,a)=>g.doScore(),hint:"score"},
   status:{type:"",func:(g,a)=>g.doScore(),hint:""},
+  map:{type:"系统",func:(g,a)=>toggleMap(),hint:"map / m"},
+  m:{type:"",func:(g,a)=>toggleMap(),hint:""},
 };
 
 function processTextInput(raw){
@@ -444,7 +621,7 @@ inputBtn.addEventListener("click",()=>{processTextInput(inputBox.value);inputBox
 // 点击故事区自动聚焦输入框
 document.getElementById("story").addEventListener("click",()=>inputBox.focus());
 
-init();
+boot();
 </script>
 </body>
 </html>

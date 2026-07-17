@@ -1,0 +1,97 @@
+[
+  {
+    "id":"old_hermit", "name":"老隐士", "title":"迷雾森林的守护者",
+    "desc":"一位白发苍苍的老人，眼神中透着智慧。",
+    "type":"WISEMAN",
+    "dialogs":{"greet":"你终于醒了……我等了你很久。", "extra":"记住，高塔封印着一切答案。", "farewell":"愿光明指引你。"},
+    "give_item":"journal",
+    "quest_item":"magic_gem", "quest_reward":"greater_potion", "quest_score":40
+  },
+  {
+    "id":"wandering_merchant", "name":"流浪商人", "title":"穿梭各地的行商",
+    "desc":"一个矮胖的中年人，身上挂满了各种货物。",
+    "type":"MERCHANT",
+    "dialogs":{"greet":"嘿嘿，来得正好！看看我的货吧。", "extra":"都是好货，童叟无欺！", "farewell":"下次再来啊！"},
+    "trade_items":[["lesser_potion",8], ["torch",3], ["bread",2], ["dried_meat",4], ["rope",3], ["iron_sword",15], ["leather_armor",12], ["elven_bow",25]],
+    "buys_types":["TREASURE","MATERIAL","MINERAL"]
+  },
+  {
+    "id":"village_elder", "name":"村长", "title":"湖边村的村长",
+    "desc":"一位慈祥的老者，手里拄着拐杖。",
+    "type":"QUEST",
+    "dialogs":{"greet":"陌生人，欢迎来到湖边村。", "quest":"最近湖心岛出现异象……你能去看看吗？", "extra":"小心湖中的生物。", "farewell":"愿神保佑你。"},
+    "quest_item":"sacred_water", "quest_reward":"silver_key", "quest_score":25
+  },
+  {
+    "id":"healer_lily", "name":"莉莉", "title":"游方医师",
+    "desc":"一位背着药箱的年轻女子，笑容温暖。",
+    "type":"HEALER",
+    "dialogs":{"greet":"你受伤了？我可以帮你。", "extra":"注意安全，冒险者。", "farewell":"保重身体。"}
+  },
+  {
+    "id":"wandering_rogue", "name":"影", "title":"神秘的流浪者",
+    "desc":"一个披着斗篷的人影，看不清面容。",
+    "type":"WANDERER",
+    "dialogs":{"greet":"……你也在这迷雾中迷失了吗？", "extra":"这个世界比你以为的要复杂。", "farewell":"后会有期。"},
+    "give_item":"shadow_blade"
+  },
+  {
+    "id":"tower_guardian", "name":"塔灵", "title":"高塔的魔法守卫",
+    "desc":"一个由光芒凝聚成的人形，声音如钟鸣。",
+    "type":"GUARDIAN",
+    "dialogs":{"greet":"进入高塔者，需证明自己的价值。", "quest":"收集三件圣物：银钥匙、水晶钥匙、圣水。", "extra":"只有纯净者才能通过。", "farewell":"……"},
+    "quest_item":"crystal_key", "quest_reward":"magic_scroll", "quest_score":30
+  },
+  {
+    "id":"innkeeper", "name":"老汤姆", "title":"迷雾酒馆的老板",
+    "desc":"一个圆滚滚的大胖子，脸上永远挂着笑容。",
+    "type":"INNKEEPER",
+    "dialogs":{"greet":"欢迎光临迷雾酒馆！要点什么吗？", "extra":"听说最近森林里不太平，你最好小心点。", "farewell":"慢走啊！"},
+    "give_item":"fish"
+  },
+  {
+    "id":"blacksmith", "name":"铁砧", "title":"铁匠铺的主人",
+    "desc":"浑身肌肉的壮汉，穿着皮围裙，手中铁锤不停。",
+    "type":"BLACKSMITH",
+    "dialogs":{"greet":"需要武器或防具？我的手艺是方圆百里最好的！", "extra":"如果你有好材料，我可以帮你打造装备。", "farewell":"下次带好材料来！"},
+    "trade_items":[["iron_sword",12], ["war_hammer",35], ["spear",18], ["scale_armor",40], ["shield",15], ["helmet",8], ["crossbow",30]],
+    "buys_types":["MATERIAL","MINERAL"]
+  },
+  {
+    "id":"hunter", "name":"猎人格雷", "title":"经验丰富的老猎人",
+    "desc":"穿着兽皮大衣的老人，背着一把长弓。",
+    "type":"HUNTER",
+    "dialogs":{"greet":"嗯？你不是本地人吧。", "quest":"最近森林里的哥布林越来越多了……你能帮我清剿一些吗？", "extra":"我可以教你一些狩猎技巧。", "farewell":"注意安全。"},
+    "quest_item":"goblin_ear", "quest_reward":"elven_bow", "quest_score":25
+  },
+  {
+    "id":"priestess", "name":"塞拉", "title":"光之神殿的祭司",
+    "desc":"身穿白色长袍的美丽女子，周身环绕淡淡光晕。",
+    "type":"PRIESTESS",
+    "dialogs":{"greet":"愿光明指引你的道路。", "extra":"如果你有圣水，我可以帮你净化它。", "farewell":"光明与你同在。"},
+    "give_item":"lesser_potion",
+    "quest_item":"phoenix_feather", "quest_reward":"health_ring", "quest_score":35
+  },
+  {
+    "id":"mad_alchemist", "name":"疯修士", "title":"隐居的炼金术士",
+    "desc":"一个穿着破旧长袍的怪人，实验室里瓶瓶罐罐堆成山。",
+    "type":"WISEMAN",
+    "dialogs":{"greet":"实验品！不，我是说……客人！", "extra":"你知道吗？龙鳞粉加上月光草可以炼制最强的药剂！", "farewell":"下次带点有趣的材料来！"},
+    "give_item":"mana_potion",
+    "quest_item":"dragon_scale", "quest_reward":"protection_ring", "quest_score":30
+  },
+  {
+    "id":"gravedigger", "name":"老掘墓人", "title":"守墓的老人",
+    "desc":"一个驼背的老人，手里拿着铁锹，眼神古怪。",
+    "type":"WANDERER",
+    "dialogs":{"greet":"你来墓地做什么？这里可不是散步的地方……", "extra":"听说地下埋着好东西，但我这把老骨头挖不动了。", "farewell":"小心脚下的土……有些会动。"},
+    "give_item":"old_coin"
+  },
+  {
+    "id":"bounty_hunter", "name":"血鸦", "title":"冷酷的赏金猎人",
+    "desc":"一个身穿黑甲的独行佣兵，脸上有条深深的刀疤，腰间挂着一排战利品。",
+    "type":"HUNTER",
+    "dialogs":{"greet":"哼，你不是来抢我生意的吧。", "quest":"我最近在追一只石化蜥蜴，它躲在古老墓地深处。如果你能带回它的鳞片，我可以分你一份报酬。", "extra":"那畜生已经石化了三个冒险者了。", "farewell":"小心别变成石像。"},
+    "quest_item":"dragon_scale", "quest_reward":"strength_ring", "quest_score":35
+  }
+]

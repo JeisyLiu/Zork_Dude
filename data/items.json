@@ -1,0 +1,86 @@
+[
+  {"id":"rusty_key", "name":"生锈钥匙", "desc":"古老的铁钥匙，还能用。", "type":"KEY", "usable":true, "use_msg":"咔嚓一声，似乎打开了什么。", "value":5},
+  {"id":"silver_key", "name":"银钥匙", "desc":"精致的银色钥匙，散发魔法微光。", "type":"KEY", "usable":true, "use_msg":"银钥匙闪烁着光芒……", "value":10},
+  {"id":"crystal_key", "name":"水晶钥匙", "desc":"完全透明的水晶钥匙，几乎看不见。", "type":"KEY", "usable":true, "use_msg":"水晶钥匙融入空气中……", "value":15},
+
+  {"id":"old_sword", "name":"生锈铁剑", "desc":"布满铁锈，但勉强能用。", "type":"WEAPON", "dmg_bonus":1, "value":5},
+  {"id":"iron_sword", "name":"铁剑", "desc":"普通但可靠的铁剑。", "type":"WEAPON", "dmg_bonus":2, "value":15},
+  {"id":"elven_bow", "name":"精灵短弓", "desc":"精灵打造的短弓，轻便精准。", "type":"WEAPON", "dmg_bonus":3, "value":25},
+  {"id":"magic_staff", "name":"魔法杖", "desc":"杖头镶嵌蓝色宝石，蕴含魔力。", "type":"WEAPON", "dmg_bonus":4, "value":35},
+  {"id":"shadow_blade", "name":"影刃", "desc":"漆黑的匕首，几乎不反光。", "type":"WEAPON", "dmg_bonus":3, "value":30},
+  {"id":"war_hammer", "name":"战锤", "desc":"沉重的双手战锤，一击可以碎石。", "type":"WEAPON", "dmg_bonus":5, "weight":3, "value":40},
+  {"id":"spear", "name":"长矛", "desc":"矛尖泛着寒光，可以刺穿铠甲。", "type":"WEAPON", "dmg_bonus":3, "value":22},
+  {"id":"rune_sword", "name":"符文剑", "desc":"剑身刻着发光符文，对黑暗生物有额外杀伤。", "type":"WEAPON", "dmg_bonus":4, "value":45},
+  {"id":"crossbow", "name":"十字弩", "desc":"上弦的机械弩，威力惊人。", "type":"WEAPON", "dmg_bonus":4, "weight":2, "value":35},
+  {"id":"assassin_dagger", "name":"刺客匕首", "desc":"涂了剧毒的匕首，见血封喉。", "type":"WEAPON", "dmg_bonus":3, "value":28},
+  {"id":"thunder_hammer", "name":"雷神之锤", "desc":"锤身缠绕着跳动的电弧，挥舞时隐隐有雷声。", "type":"WEAPON", "dmg_bonus":6, "weight":4, "value":60},
+
+  {"id":"leather_armor", "name":"皮甲", "desc":"鞣制过的硬皮甲。", "type":"ARMOR", "def_bonus":2, "value":12},
+  {"id":"chain_armor", "name":"锁子甲", "desc":"铁环编织的锁甲。", "type":"ARMOR", "def_bonus":4, "value":30},
+  {"id":"scale_armor", "name":"鳞甲", "desc":"用龙鳞和铁片编成的铠甲。", "type":"ARMOR", "def_bonus":5, "weight":3, "value":45},
+  {"id":"mage_robe", "name":"法师长袍", "desc":"附魔的长袍，轻便而防寒。", "type":"ARMOR", "def_bonus":2, "value":20},
+  {"id":"shield", "name":"铁盾", "desc":"圆形的铁盾，格挡利器。", "type":"ARMOR", "def_bonus":3, "weight":2, "value":18},
+  {"id":"helmet", "name":"铁头盔", "desc":"保护头部的铁盔。", "type":"ARMOR", "def_bonus":1, "value":10},
+
+  {"id":"lesser_potion", "name":"小治疗药水", "desc":"恢复15点HP。", "type":"POTION", "usable":true, "heal":15, "value":8},
+  {"id":"greater_potion", "name":"大治疗药水", "desc":"恢复35点HP。", "type":"POTION", "usable":true, "heal":35, "value":20},
+  {"id":"mana_potion", "name":"魔力药水", "desc":"恢复20点HP。", "type":"POTION", "usable":true, "heal":20, "value":12},
+  {"id":"fire_potion", "name":"火焰药剂", "desc":"瓶中的液体像熔岩一样翻滚。", "type":"POTION", "usable":true, "heal":10, "use_msg":"你喝下火焰药剂，身体变得滚烫！对冰系敌人造成额外伤害！", "value":16},
+  {"id":"invis_potion", "name":"隐形药水", "desc":"喝下后变得透明。", "type":"POTION", "usable":true, "heal":5, "use_msg":"你喝下隐形药水，身体逐渐透明……似乎没有其他效果。", "value":25},
+  {"id":"stamina_potion", "name":"体力药水", "desc":"恢复25点HP。", "type":"POTION", "usable":true, "heal":25, "value":15},
+  {"id":"moonlight_elixir", "name":"月光精华", "desc":"银色瓶中的液体如月光般流动，散发出柔和的光芒。", "type":"POTION", "usable":true, "heal":50, "use_msg":"你喝下月光精华，全身被温暖的光芒包围！恢复了50点生命值！", "value":40},
+
+  {"id":"lantern", "name":"提灯", "desc":"旧提灯，里面还有油。", "type":"LIGHT", "usable":true, "use_msg":"提灯照亮了周围。", "weight":2, "value":8},
+  {"id":"torch", "name":"火把", "desc":"松脂火把。", "type":"LIGHT", "usable":true, "use_msg":"火把燃起明亮的火焰。", "value":3},
+
+  {"id":"bread", "name":"硬面包", "desc":"干硬的黑面包。", "type":"FOOD", "usable":true, "heal":5, "value":2},
+  {"id":"dried_meat", "name":"肉干", "desc":"咸味的熏肉干。", "type":"FOOD", "usable":true, "heal":8, "value":4},
+  {"id":"mushroom", "name":"荧光蘑菇", "desc":"发着微光的蘑菇，不知道能不能吃。", "type":"FOOD", "usable":true, "heal":3, "value":1},
+  {"id":"fish", "name":"烤鱼", "desc":"香喷喷的烤鱼。", "type":"FOOD", "usable":true, "heal":7, "value":3},
+  {"id":"magic_herb", "name":"魔法草药", "desc":"散发七彩光芒的草药。", "type":"FOOD", "usable":true, "heal":12, "value":6},
+  {"id":"honey", "name":"蜂蜜", "desc":"金黄色的野蜜，很甜。", "type":"FOOD", "usable":true, "heal":6, "value":4},
+
+  {"id":"golden_cup", "name":"金杯", "desc":"纯金打造的高脚杯。", "type":"TREASURE", "value":40, "weight":2},
+  {"id":"silver_ring", "name":"银戒指", "desc":"刻着古老花纹的银戒指。", "type":"TREASURE", "value":20},
+  {"id":"emerald", "name":"祖母绿宝石", "desc":"拇指大小的绿色宝石。", "type":"TREASURE", "value":50},
+  {"id":"diamond", "name":"钻石", "desc":"切割完美的钻石。", "type":"TREASURE", "value":80},
+  {"id":"ruby", "name":"红宝石", "desc":"血红剔透的红宝石。", "type":"TREASURE", "value":60},
+  {"id":"sapphire", "name":"蓝宝石", "desc":"深蓝色的宝石，像海洋一般。", "type":"TREASURE", "value":55},
+  {"id":"ancient_crown", "name":"古老皇冠", "desc":"某位国王的遗物，镶满了宝石。", "type":"TREASURE", "value":120, "weight":2},
+  {"id":"old_coin", "name":"古金币", "desc":"一枚刻着模糊图案的古金币。", "type":"TREASURE", "value":15},
+
+  {"id":"gold_ingot", "name":"金锭", "desc":"纯金铸成的金锭。", "type":"MINERAL", "value":35, "weight":2},
+  {"id":"silver_ingot", "name":"银锭", "desc":"纯银铸成的银锭。", "type":"MINERAL", "value":18, "weight":2},
+  {"id":"wolf_tooth", "name":"狼牙", "desc":"巨狼的尖牙，可以作为力量的证明。", "type":"MATERIAL", "value":5},
+  {"id":"spider_silk", "name":"蜘蛛丝", "desc":"晶莹剔透的蛛丝。", "type":"MATERIAL", "value":8},
+  {"id":"dragon_scale", "name":"龙鳞", "desc":"幼龙身上掉落的鳞片，坚硬无比。", "type":"MATERIAL", "value":50},
+  {"id":"fairy_dust", "name":"妖精之尘", "desc":"闪闪发光的粉末。", "type":"MATERIAL", "value":20},
+  {"id":"mandrake_root", "name":"曼德拉草根", "desc":"形如人形的草根，据说有魔力。", "type":"MATERIAL", "value":15},
+  {"id":"goblin_ear", "name":"哥布林耳朵", "desc":"哥布林身上割下来的耳朵，血腥味很重。", "type":"MATERIAL", "value":3},
+  {"id":"snake_skin", "name":"蛇皮", "desc":"巨蟒蜕下的皮，非常坚韧。", "type":"MATERIAL", "value":12},
+  {"id":"bandit_badge", "name":"强盗徽章", "desc":"强盗头目的身份徽章。", "type":"MATERIAL", "value":10},
+
+  {"id":"ancient_scroll", "name":"古老卷轴", "desc":"看不懂的古代文字。", "type":"SCROLL", "usable":true, "use_msg":"卷轴发光……但无法解读。", "value":5},
+  {"id":"magic_scroll", "name":"传送卷轴", "desc":"记载传送咒语。", "type":"SCROLL", "usable":true, "use_msg":"卷轴化为光芒！你被传送到森林入口。", "value":15},
+
+  {"id":"rope", "name":"麻绳", "desc":"10米长的结实麻绳。", "type":"TOOL", "usable":true, "use_msg":"也许在别的地方更有用。", "value":3},
+  {"id":"compass", "name":"古老指南针", "desc":"指针指向特殊方向。", "type":"TOOL", "usable":true, "use_msg":"指南针指向东南方……", "value":8},
+  {"id":"lockpick", "name":"开锁器", "desc":"一套精巧的开锁工具。", "type":"TOOL", "usable":true, "use_msg":"你用开锁器鼓捣了一下……好像打开了什么。", "value":12},
+  {"id":"fishing_rod", "name":"鱼竿", "desc":"一根细长的鱼竿。", "type":"TOOL", "usable":true, "use_msg":"这里没有水，没法钓鱼。", "value":5},
+  {"id":"magnifying_glass", "name":"放大镜", "desc":"可以观察细微之物。", "type":"TOOL", "usable":true, "use_msg":"透过放大镜，你看到了普通人看不到的细节。", "value":8},
+
+  {"id":"journal", "name":"冒险者日志", "desc":"某位冒险者留下的日记。", "type":"BOOK", "usable":true, "use_msg":"日志记载：『塔顶的宝石是封印关键……』", "value":5},
+  {"id":"magic_book", "name":"魔法入门", "desc":"基础魔法理论。", "type":"BOOK", "usable":true, "use_msg":"你学到了一些魔法知识。", "value":10},
+
+  {"id":"magic_gem", "name":"魔法宝石", "desc":"散发紫光的宝石，蕴含强大魔力。", "type":"QUEST", "usable":true, "use_msg":"宝石爆发耀眼光芒！", "value":0, "weight":1},
+  {"id":"sacred_water", "name":"圣水", "desc":"受过祝福的圣水，装在玻璃瓶里。", "type":"QUEST", "usable":true, "use_msg":"圣水发出温和的白光。", "value":0},
+  {"id":"phoenix_feather", "name":"凤凰羽毛", "desc":"火红色的凤凰尾羽，仍然温暖。", "type":"QUEST", "usable":true, "use_msg":"羽毛化为火焰，在你手心留下一个火焰印记！", "value":0},
+  {"id":"ice_crystal", "name":"冰晶", "desc":"极寒之地凝结的永恒冰晶。", "type":"QUEST", "value":0, "weight":1},
+  {"id":"ancient_key", "name":"古代钥匙", "desc":"一把巨大的石钥匙，非常沉重。", "type":"KEY", "usable":true, "use_msg":"钥匙太重了，你几乎举不动。", "weight":5, "value":0},
+
+  {"id":"health_ring", "name":"生命戒指", "desc":"戴着它感觉精力充沛。", "type":"RING", "usable":true, "use_msg":"生命戒指发出柔和的绿光！最大HP+10！", "heal":10, "value":30},
+  {"id":"protection_ring", "name":"守护之戒", "desc":"佩戴者会获得隐形护盾。", "type":"RING", "def_bonus":2, "value":35},
+  {"id":"strength_ring", "name":"力量戒指", "desc":"提升佩戴者的力量。", "type":"RING", "dmg_bonus":2, "value":32},
+
+  {"id":"mystic_amulet", "name":"神秘护符", "desc":"刻着古老符文的护符，来历不明。", "type":"AMULET", "usable":true, "use_msg":"护符发出微光，你感到一股神秘力量保护着你。", "def_bonus":1, "value":25}
+]

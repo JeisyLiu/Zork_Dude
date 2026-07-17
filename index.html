@@ -190,10 +190,11 @@ body{background:#0a0a12;color:#c8d6e5;font-family:'Segoe UI','Microsoft YaHei',s
 // ═══ DATA ═══
 // ═══ ENUMS & HELPERS ═══
 const Direction={NORTH:"north",SOUTH:"south",EAST:"east",WEST:"west",UP:"up",DOWN:"down"};
-const ItemType={KEY:"key",WEAPON:"weapon",ARMOR:"armor",POTION:"potion",TREASURE:"treasure",TOOL:"tool",LIGHT:"light",SCROLL:"scroll",FOOD:"food",QUEST:"quest",MATERIAL:"material",BOOK:"book",RING:"ring",AMULET:"amulet",MINERAL:"mineral"};
+// 与 data/items.json、内嵌 _ITEMS 的 type 字段一致（大写枚举名）
+const ItemType={KEY:"KEY",WEAPON:"WEAPON",ARMOR:"ARMOR",POTION:"POTION",TREASURE:"TREASURE",TOOL:"TOOL",LIGHT:"LIGHT",SCROLL:"SCROLL",FOOD:"FOOD",QUEST:"QUEST",MATERIAL:"MATERIAL",BOOK:"BOOK",RING:"RING",AMULET:"AMULET",MINERAL:"MINERAL"};
 const MonsterRank={NORMAL:"普通",ELITE:"精英",BOSS:"BOSS"};
 const STACK_TYPES=[ItemType.FOOD,ItemType.TREASURE,ItemType.MATERIAL];
-function isStackable(it){return STACK_TYPES.includes(it.type)}
+function isStackable(it){return STACK_TYPES.includes(String(it.type||"").toUpperCase())}
 function roll(s,t){t=t||1;let r=0;for(let i=0;i<t;i++)r+=Math.floor(Math.random()*s)+1;return r}
 // ═══ ITEMS ═══
 const _ITEMS=[{id:"rusty_key",name:"生锈钥匙",desc:"古老的铁钥匙，还能用。",type:"KEY",usable:true,value:5},

@@ -1,30 +1,1119 @@
 [
-  {"id":"forest_entrance", "name":"迷雾森林入口", "emoji":"🌲", "map":{"layer":"surface","x":3,"y":3}, "desc":"浓雾笼罩的森林边缘。古木参天，灰雾流动。\n小路通向森林深处（north），西边有废弃小屋（west）。\n一个老人在墓碑旁驻着铁锹，似乎在等什么。", "exits":{"north":"dark_forest","west":"abandoned_hut"}, "npc_id":"gravedigger"},
-  {"id":"abandoned_hut", "name":"废弃小屋", "emoji":"🏠", "map":{"layer":"surface","x":2,"y":3}, "desc":"破败的木屋，屋顶塌了一半。墙角有铁箱，桌上有提灯。\n角落里好像有什么东西在动……", "exits":{"east":"forest_entrance"}, "items":["rusty_key","lantern","old_coin"], "monster_id":"giant_rat"},
-  {"id":"dark_forest", "name":"黑暗森林", "emoji":"🌳", "map":{"layer":"surface","x":3,"y":2}, "desc":"越来越暗。古树扭曲，雾中有影。远处有狼嚎。\n向西似乎有一座废弃的墓地，北通洞穴，东达十字路口。", "exits":{"south":"forest_entrance","north":"cave_entrance","east":"crossroads","west":"haunted_graveyard"}, "items":["old_sword","bread"], "monster_id":"wolf"},
-  {"id":"cave_entrance", "name":"洞穴入口", "emoji":"🕳️", "map":{"layer":"cave","x":2,"y":0}, "desc":"漆黑的洞口，阴风阵阵。洞壁有刻痕。向下有通道。", "exits":{"south":"dark_forest","down":"cave_middle"}, "dark":true, "items":["torch","mushroom"]},
-  {"id":"cave_middle", "name":"洞穴中层", "emoji":"🦇", "map":{"layer":"cave","x":2,"y":1}, "desc":"天然洞穴大厅，上方裂缝透光。洞壁发光苔藓。\n多条通道通向不同方向。", "exits":{"up":"cave_entrance","down":"cave_depths","east":"ancient_ruins","north":"goblin_cave","south":"underground_river"}, "dark":true, "items":["silver_key","lesser_potion"]},
-  {"id":"cave_depths", "name":"洞穴深处", "emoji":"🕷️", "map":{"layer":"cave","x":2,"y":3}, "desc":"洞穴最深处，气味刺鼻。地上有白骨。\n巨大的蜘蛛在角落织网……", "exits":{"up":"cave_middle"}, "dark":true, "items":["golden_cup","spider_silk"], "monster_id":"giant_spider"},
-  {"id":"ancient_ruins", "name":"远古遗迹", "emoji":"🗿", "map":{"layer":"cave","x":3,"y":1}, "desc":"石室，墙上刻满浮雕。中央石台有天鹅绒垫。\n东墙有石门。", "exits":{"west":"cave_middle","north":"hidden_passage"}, "items":["magic_scroll","ancient_scroll"]},
-  {"id":"hidden_passage", "name":"秘密通道", "emoji":"🚪", "map":{"layer":"cave","x":3,"y":0}, "desc":"狭窄的通道，仅容一人通过。墙壁上有发光符文。\n通道尽头有向上的楼梯。", "exits":{"south":"ancient_ruins","up":"tower_base"}, "dark":true, "monster_id":"ghost"},
-  {"id":"crossroads", "name":"十字路口", "emoji":"🛤️", "map":{"layer":"surface","x":4,"y":2}, "desc":"森林空地，五条路交汇。路牌：←湖 | 北：塔 | 南：森林 | 东：←", "exits":{"west":"dark_forest","north":"tower_base","east":"lake_shore","south":"forest_entrance"}, "npc_id":"old_hermit"},
-  {"id":"tower_base", "name":"高塔底部", "emoji":"🏰", "map":{"layers":{"surface":{"x":4,"y":1},"tower":{"x":1,"y":2}}}, "desc":"古老石塔，爬满藤蔓。塔门紧闭，有特殊锁孔。", "exits":{"south":"crossroads","up":"tower_middle"}, "items":["journal","lesser_potion"]},
-  {"id":"tower_middle", "name":"高塔中层", "emoji":"🌀", "map":{"layer":"tower","x":1,"y":1}, "desc":"塔内环形大厅，墙上挂满古老挂毯。\n螺旋楼梯继续向上。", "exits":{"down":"tower_base","up":"tower_top"}, "npc_id":"tower_guardian", "items":["crystal_key","magic_book"]},
-  {"id":"tower_top", "name":"高塔顶层", "emoji":"🐉", "map":{"layer":"tower","x":1,"y":0}, "desc":"塔顶房间！堆满书籍和魔法器具。窗外是无尽迷雾。\n中央书桌上有一颗闪烁的魔法宝石。但一条幼龙盘踞在宝石旁边！", "exits":{"down":"tower_middle"}, "monster_id":"dragon_whelp"},
-  {"id":"lake_shore", "name":"湖边", "emoji":"🌊", "map":{"layer":"surface","x":5,"y":2}, "desc":"宁静的湖泊，湖水清澈。小木船漂在湖面。\n南边有一个小村落。一个背着弓的老人在湖边钓鱼。", "exits":{"west":"crossroads","south":"lake_village"}, "npc_id":"hunter", "items":["compass","fishing_rod"]},
-  {"id":"lake_village", "name":"湖边村", "emoji":"🏘️", "map":{"layer":"surface","x":5,"y":3}, "desc":"宁静的小渔村。几间木屋，炊烟袅袅。\n村口公告栏贴着告示。村中有酒馆、铁匠铺和神殿。", "exits":{"north":"lake_shore","south":"lake_village_inn","west":"lake_village_smithy","east":"lake_village_temple"}, "npc_id":"healer_lily", "items":["dried_meat","bread"]},
-  {"id":"lake_island", "name":"湖心岛", "emoji":"🏝️", "map":{"layer":"surface","x":6,"y":2}, "desc":"岛上有神殿废墟。祭坛上的宝石被魔法屏障保护。\n水中有阴影游动……", "exits":{"west":"lake_shore"}, "monster_id":"shadow_beast", "items":["sacred_water","emerald"]},
-  {"id":"goblin_cave", "name":"哥布林巢穴", "emoji":"👺", "map":{"layer":"cave","x":1,"y":1}, "desc":"股鼻的气味扑面而来！洞穴里堆满了偷来的杂物和骨头。\n一群哥布林正在分赃，看到你后尖叫着冲了过来！", "exits":{"south":"cave_middle","north":"goblin_throne"}, "dark":true, "items":["golden_cup","old_coin","lockpick","goblin_ear"], "monster_id":"goblin"},
-  {"id":"goblin_throne", "name":"哥布林王座", "emoji":"👑", "map":{"layer":"cave","x":1,"y":0}, "desc":"洞穴最深处的一座天然石殿。一个巨大的哥布林坐在骨堆上。\n它头戴骨冠，手中巨棒上还沾着血迹——这就是哥布林王！", "exits":{"south":"goblin_cave"}, "dark":true, "items":["ancient_crown","rune_sword"], "monster_id":"goblin_king"},
-  {"id":"underground_river", "name":"地下河", "emoji":"💧", "map":{"layer":"cave","x":2,"y":2}, "desc":"洞穴在这里豁然开朗，一条漆黑的地下河缓缓流过。\n河岸上有萤火虫般的发光苔藓，水中有东西在游动……", "exits":{"north":"cave_middle","east":"frozen_cave","west":"hidden_grove"}, "dark":true, "items":["fishing_rod","magic_herb","silver_ingot"], "monster_id":"giant_snake"},
-  {"id":"frozen_cave", "name":"冰封洞穴", "emoji":"❄️", "map":{"layer":"cave","x":3,"y":2}, "desc":"洞穴的墙壁覆盖着厚厚的冰霜，温度骤降。\n呼出的气瞬间凝成白雾，地面结冰非常滑。\n一个由冰晶构成的生物在角落里静止不动……直到看见你。", "exits":{"west":"underground_river"}, "dark":true, "items":["ice_crystal","scale_armor","mana_potion"], "monster_id":"ice_elemental"},
-  {"id":"hidden_grove", "name":"隐藏树丛", "emoji":"🌿", "map":{"layer":"cave","x":1,"y":2}, "desc":"一个被古老树木环绕的隐秘空地。阳光透过树叶洒下斑驳光影。\n空地中央有一座石头祭坛，周围长满了发光的草药。\n空气中充满了花香和魔法气息。", "exits":{"east":"underground_river"}, "npc_id":"wandering_rogue", "items":["fairy_dust","magic_herb","mushroom","health_ring"]},
-  {"id":"bandit_camp", "name":"强盗营地", "emoji":"⛺", "map":{"layer":"surface","x":2,"y":4}, "desc":"森林深处的一片空地，搭着几个简陋的帐篷。篝火还在燃烧。\n几个面目狰狞的强盗正在分赃，看到你后纷纷拔出了武器！", "exits":{"north":"bandit_hideout","west":"forest_tower_ruins"}, "items":["old_coin","dried_meat","leather_armor"], "monster_id":"bandit_leader"},
-  {"id":"bandit_hideout", "name":"强盗藏宝室", "emoji":"💎", "map":{"layer":"surface","x":1,"y":4}, "desc":"强盗们的秘密藏宝室！堆满了抢来的财物。\n角落里有一个巨大的宝箱……它在呼吸？！", "exits":{"south":"bandit_camp"}, "items":["gold_ingot","silver_ingot","ruby","sapphire","diamond"], "monster_id":"mimic"},
-  {"id":"lake_village_inn", "name":"迷雾酒馆", "emoji":"🍺", "map":{"layer":"surface","x":5,"y":4}, "desc":"温暖的酒馆里弥漫着麦酒和烤肉的味道。壁炉里的火烧得正旺。\n墙上挂着各种猎物头颅，几个 locals 在角落里喝酒聊天。", "exits":{"south":"lake_village"}, "npc_id":"innkeeper", "items":["fish","bread","honey"]},
-  {"id":"lake_village_smithy", "name":"铁匠铺", "emoji":"⚒️", "map":{"layer":"surface","x":4,"y":3}, "desc":"炙热的熔炉和叮当的锤声。墙上挂满了各种武器和防具。\n温度比外面高了不少。", "exits":{"east":"lake_village"}, "npc_id":"blacksmith", "items":["iron_sword","helmet","shield"]},
-  {"id":"lake_village_temple", "name":"光之神殿", "emoji":"⛪", "map":{"layer":"surface","x":6,"y":3}, "desc":"一座小巧而庄严的神殿。彩色玻璃窗透入柔和的光芒。\n空气中弥漫着熏香的味道，让人心平气和。", "exits":{"west":"lake_village"}, "npc_id":"priestess", "items":["lesser_potion","sacred_water"]},
-  {"id":"alchemist_lab", "name":"炼金术士的实验室", "emoji":"🧪", "map":{"layer":"cave","x":0,"y":2}, "desc":"一个堆满奇怪仪器和瓶瓶罐罐的洞穴实验室。\n五颜六色的液体在烧瓶中沸腾，空气中充满刺鼻气味。", "exits":{"west":"hidden_grove"}, "npc_id":"mad_alchemist", "items":["mana_potion","fairy_dust","mandrake_root"]},
-  {"id":"forest_tower_ruins", "name":"森林塔废墟", "emoji":"🏚️", "map":{"layer":"surface","x":3,"y":4}, "desc":"一座倒塌了一半的古老石塔，被藤蔓和苔藓覆盖。\n塔内的螺旋楼梯已经断裂，但地下似乎还有空间。\n一只巨鹰在塔顶筑了巢。", "exits":{"south":"forest_entrance","west":"bandit_camp"}, "items":["phoenix_feather","ancient_scroll","mystic_amulet"], "monster_id":"giant_eagle"},
-  {"id":"haunted_graveyard", "name":"被诅咒的墓地", "emoji":"🪦", "map":{"layer":"surface","x":2,"y":2}, "desc":"一片荒凉的墓地，墓碑歪歪斜斜地插在土中。\n阴冷的风穿过枯树发出呜咽声。地面下有东西在动……\n墓地的尽头有一座被藤蔓缠绕的石门。\n一个黑甲佣兵正在墓地中搜寻着什么。", "exits":{"west":"dark_forest"}, "npc_id":"bounty_hunter", "items":["old_coin","silver_ring","mystic_amulet"], "monster_id":"ghost"}
+  {
+    "id": "forest_entrance",
+    "name": "迷雾森林入口",
+    "emoji": "🌲",
+    "map": {
+      "layer": "surface",
+      "x": 3,
+      "y": 3
+    },
+    "desc": "浓雾笼罩的森林边缘。古木参天，灰雾流动。\n小路通向森林深处（north），西边有废弃小屋（west）。\n一个老人在墓碑旁驻着铁锹，似乎在等什么。",
+    "exits": {
+      "north": "dark_forest",
+      "west": "abandoned_hut"
+    },
+    "npc_id": "gravedigger"
+  },
+  {
+    "id": "abandoned_hut",
+    "name": "废弃小屋",
+    "emoji": "🏠",
+    "map": {
+      "layer": "surface",
+      "x": 2,
+      "y": 3
+    },
+    "desc": "破败的木屋，屋顶塌了一半。墙角有铁箱，桌上有提灯。\n角落里好像有什么东西在动……",
+    "exits": {
+      "east": "forest_entrance"
+    },
+    "items": [
+      "rusty_key",
+      "lantern",
+      "old_coin"
+    ],
+    "monster_id": "giant_rat"
+  },
+  {
+    "id": "dark_forest",
+    "name": "黑暗森林",
+    "emoji": "🌳",
+    "map": {
+      "layer": "surface",
+      "x": 3,
+      "y": 2
+    },
+    "desc": "越来越暗。古树扭曲，雾中有影。远处有狼嚎。\n向西似乎有一座废弃的墓地，北通洞穴，东达十字路口。",
+    "exits": {
+      "south": "forest_entrance",
+      "north": "cave_entrance",
+      "east": "crossroads",
+      "west": "haunted_graveyard"
+    },
+    "items": [
+      "old_sword",
+      "bread"
+    ],
+    "monster_id": "wolf"
+  },
+  {
+    "id": "cave_entrance",
+    "name": "洞穴入口",
+    "emoji": "🕳️",
+    "map": {
+      "layer": "cave",
+      "x": 2,
+      "y": 0
+    },
+    "desc": "漆黑的洞口，阴风阵阵。洞壁有刻痕。向下有通道。",
+    "exits": {
+      "south": "dark_forest",
+      "down": "cave_middle"
+    },
+    "dark": true,
+    "items": [
+      "torch",
+      "mushroom"
+    ]
+  },
+  {
+    "id": "cave_middle",
+    "name": "洞穴中层",
+    "emoji": "🦇",
+    "map": {
+      "layer": "cave",
+      "x": 2,
+      "y": 1
+    },
+    "desc": "天然洞穴大厅，上方裂缝透光。洞壁发光苔藓。\n多条通道通向不同方向。",
+    "exits": {
+      "up": "cave_entrance",
+      "down": "cave_depths",
+      "east": "ancient_ruins",
+      "north": "goblin_cave",
+      "south": "underground_river"
+    },
+    "dark": true,
+    "items": [
+      "silver_key",
+      "lesser_potion"
+    ]
+  },
+  {
+    "id": "cave_depths",
+    "name": "洞穴深处",
+    "emoji": "🕷️",
+    "map": {
+      "layer": "cave",
+      "x": 2,
+      "y": 3
+    },
+    "desc": "洞穴最深处，气味刺鼻。地上有白骨。\n巨大的蜘蛛在角落织网……",
+    "exits": {
+      "up": "cave_middle"
+    },
+    "dark": true,
+    "items": [
+      "golden_cup",
+      "spider_silk"
+    ],
+    "monster_id": "giant_spider"
+  },
+  {
+    "id": "ancient_ruins",
+    "name": "远古遗迹",
+    "emoji": "🗿",
+    "map": {
+      "layer": "cave",
+      "x": 3,
+      "y": 1
+    },
+    "desc": "石室，墙上刻满浮雕。中央石台有天鹅绒垫。\n东墙有石门。",
+    "exits": {
+      "west": "cave_middle",
+      "north": "hidden_passage"
+    },
+    "items": [
+      "magic_scroll",
+      "ancient_scroll"
+    ]
+  },
+  {
+    "id": "hidden_passage",
+    "name": "秘密通道",
+    "emoji": "🚪",
+    "map": {
+      "layer": "cave",
+      "x": 3,
+      "y": 0
+    },
+    "desc": "狭窄的通道，仅容一人通过。墙壁上有发光符文。\n通道尽头有向上的楼梯。",
+    "exits": {
+      "south": "ancient_ruins",
+      "up": "tower_base"
+    },
+    "dark": true,
+    "monster_id": "ghost"
+  },
+  {
+    "id": "crossroads",
+    "name": "十字路口",
+    "emoji": "🛤️",
+    "map": {
+      "layer": "surface",
+      "x": 4,
+      "y": 2
+    },
+    "desc": "森林空地，五条路交汇。路牌：←湖 | 北：塔 | 南：森林 | 东：←",
+    "exits": {
+      "west": "dark_forest",
+      "north": "tower_base",
+      "east": "lake_shore",
+      "south": "forest_entrance"
+    },
+    "npc_id": "old_hermit"
+  },
+  {
+    "id": "tower_base",
+    "name": "高塔底部",
+    "emoji": "🏰",
+    "map": {
+      "layers": {
+        "surface": {
+          "x": 4,
+          "y": 1
+        },
+        "tower": {
+          "x": 1,
+          "y": 2
+        }
+      }
+    },
+    "desc": "古老石塔，爬满藤蔓。塔门紧闭，有特殊锁孔。",
+    "exits": {
+      "south": "crossroads",
+      "up": "tower_middle"
+    },
+    "items": [
+      "journal",
+      "lesser_potion"
+    ]
+  },
+  {
+    "id": "tower_middle",
+    "name": "高塔中层",
+    "emoji": "🌀",
+    "map": {
+      "layer": "tower",
+      "x": 1,
+      "y": 1
+    },
+    "desc": "塔内环形大厅，墙上挂满古老挂毯。\n螺旋楼梯继续向上。",
+    "exits": {
+      "down": "tower_base",
+      "up": "tower_top"
+    },
+    "npc_id": "tower_guardian",
+    "items": [
+      "crystal_key",
+      "magic_book"
+    ]
+  },
+  {
+    "id": "tower_top",
+    "name": "高塔顶层",
+    "emoji": "🐉",
+    "map": {
+      "layer": "tower",
+      "x": 1,
+      "y": 0
+    },
+    "desc": "塔顶房间！堆满书籍和魔法器具。窗外是无尽迷雾。\n中央书桌上有一颗闪烁的魔法宝石。但一条幼龙盘踞在宝石旁边！",
+    "exits": {
+      "down": "tower_middle"
+    },
+    "monster_id": "dragon_whelp"
+  },
+  {
+    "id": "lake_shore",
+    "name": "湖边",
+    "emoji": "🌊",
+    "map": {
+      "layer": "surface",
+      "x": 5,
+      "y": 2
+    },
+    "desc": "宁静的湖泊，湖水清澈。小木船漂在湖面。\n南边有一个小村落。一个背着弓的老人在湖边钓鱼。",
+    "exits": {
+      "west": "crossroads",
+      "south": "lake_village"
+    },
+    "npc_id": "hunter",
+    "items": [
+      "compass",
+      "fishing_rod"
+    ]
+  },
+  {
+    "id": "lake_village",
+    "name": "湖边村",
+    "emoji": "🏘️",
+    "map": {
+      "layer": "surface",
+      "x": 5,
+      "y": 3
+    },
+    "desc": "宁静的小渔村。几间木屋，炊烟袅袅。\n村口公告栏贴着告示。村中有酒馆、铁匠铺和神殿。",
+    "exits": {
+      "north": "lake_shore",
+      "south": "lake_village_inn",
+      "west": "lake_village_smithy",
+      "east": "lake_village_temple"
+    },
+    "npc_id": "healer_lily",
+    "items": [
+      "dried_meat",
+      "bread"
+    ]
+  },
+  {
+    "id": "lake_island",
+    "name": "湖心岛",
+    "emoji": "🏝️",
+    "map": {
+      "layer": "surface",
+      "x": 6,
+      "y": 2
+    },
+    "desc": "岛上有神殿废墟。祭坛上的宝石被魔法屏障保护。\n水中有阴影游动……",
+    "exits": {
+      "west": "lake_shore"
+    },
+    "monster_id": "shadow_beast",
+    "items": [
+      "sacred_water",
+      "emerald"
+    ]
+  },
+  {
+    "id": "goblin_cave",
+    "name": "哥布林巢穴",
+    "emoji": "👺",
+    "map": {
+      "layer": "cave",
+      "x": 1,
+      "y": 1
+    },
+    "desc": "股鼻的气味扑面而来！洞穴里堆满了偷来的杂物和骨头。\n一群哥布林正在分赃，看到你后尖叫着冲了过来！",
+    "exits": {
+      "south": "cave_middle",
+      "north": "goblin_throne"
+    },
+    "dark": true,
+    "items": [
+      "golden_cup",
+      "old_coin",
+      "lockpick",
+      "goblin_ear"
+    ],
+    "monster_id": "goblin"
+  },
+  {
+    "id": "goblin_throne",
+    "name": "哥布林王座",
+    "emoji": "👑",
+    "map": {
+      "layer": "cave",
+      "x": 1,
+      "y": 0
+    },
+    "desc": "洞穴最深处的一座天然石殿。一个巨大的哥布林坐在骨堆上。\n它头戴骨冠，手中巨棒上还沾着血迹——这就是哥布林王！",
+    "exits": {
+      "south": "goblin_cave"
+    },
+    "dark": true,
+    "items": [
+      "ancient_crown",
+      "rune_sword"
+    ],
+    "monster_id": "goblin_king"
+  },
+  {
+    "id": "underground_river",
+    "name": "地下河",
+    "emoji": "💧",
+    "map": {
+      "layer": "cave",
+      "x": 2,
+      "y": 2
+    },
+    "desc": "洞穴在这里豁然开朗，一条漆黑的地下河缓缓流过。\n河岸上有萤火虫般的发光苔藓，水中有东西在游动……",
+    "exits": {
+      "north": "cave_middle",
+      "east": "frozen_cave",
+      "west": "hidden_grove"
+    },
+    "dark": true,
+    "items": [
+      "fishing_rod",
+      "magic_herb",
+      "silver_ingot"
+    ],
+    "monster_id": "giant_snake"
+  },
+  {
+    "id": "frozen_cave",
+    "name": "冰封洞穴",
+    "emoji": "❄️",
+    "map": {
+      "layer": "cave",
+      "x": 3,
+      "y": 2
+    },
+    "desc": "洞穴的墙壁覆盖着厚厚的冰霜，温度骤降。\n呼出的气瞬间凝成白雾，地面结冰非常滑。\n一个由冰晶构成的生物在角落里静止不动……直到看见你。",
+    "exits": {
+      "west": "underground_river"
+    },
+    "dark": true,
+    "items": [
+      "ice_crystal",
+      "scale_armor",
+      "mana_potion"
+    ],
+    "monster_id": "ice_elemental"
+  },
+  {
+    "id": "hidden_grove",
+    "name": "隐藏树丛",
+    "emoji": "🌿",
+    "map": {
+      "layer": "cave",
+      "x": 1,
+      "y": 2
+    },
+    "desc": "一个被古老树木环绕的隐秘空地。阳光透过树叶洒下斑驳光影。\n空地中央有一座石头祭坛，周围长满了发光的草药。\n空气中充满了花香和魔法气息。",
+    "exits": {
+      "east": "underground_river"
+    },
+    "npc_id": "wandering_rogue",
+    "items": [
+      "fairy_dust",
+      "magic_herb",
+      "mushroom",
+      "health_ring"
+    ]
+  },
+  {
+    "id": "bandit_camp",
+    "name": "强盗营地",
+    "emoji": "⛺",
+    "map": {
+      "layer": "surface",
+      "x": 2,
+      "y": 4
+    },
+    "desc": "森林深处的一片空地，搭着几个简陋的帐篷。篝火还在燃烧。\n几个面目狰狞的强盗正在分赃，看到你后纷纷拔出了武器！",
+    "exits": {
+      "north": "bandit_hideout",
+      "west": "forest_tower_ruins"
+    },
+    "items": [
+      "old_coin",
+      "dried_meat",
+      "leather_armor"
+    ],
+    "monster_id": "bandit_leader"
+  },
+  {
+    "id": "bandit_hideout",
+    "name": "强盗藏宝室",
+    "emoji": "💎",
+    "map": {
+      "layer": "surface",
+      "x": 1,
+      "y": 4
+    },
+    "desc": "强盗们的秘密藏宝室！堆满了抢来的财物。\n角落里有一个巨大的宝箱……它在呼吸？！",
+    "exits": {
+      "south": "bandit_camp"
+    },
+    "items": [
+      "gold_ingot",
+      "silver_ingot",
+      "ruby",
+      "sapphire",
+      "diamond"
+    ],
+    "monster_id": "mimic"
+  },
+  {
+    "id": "lake_village_inn",
+    "name": "迷雾酒馆",
+    "emoji": "🍺",
+    "map": {
+      "layer": "surface",
+      "x": 5,
+      "y": 4
+    },
+    "desc": "温暖的酒馆里弥漫着麦酒和烤肉的味道。壁炉里的火烧得正旺。\n墙上挂着各种猎物头颅，几个 locals 在角落里喝酒聊天。",
+    "exits": {
+      "south": "lake_village"
+    },
+    "npc_id": "innkeeper",
+    "items": [
+      "fish",
+      "bread",
+      "honey"
+    ]
+  },
+  {
+    "id": "lake_village_smithy",
+    "name": "铁匠铺",
+    "emoji": "⚒️",
+    "map": {
+      "layer": "surface",
+      "x": 4,
+      "y": 3
+    },
+    "desc": "炙热的熔炉和叮当的锤声。墙上挂满了各种武器和防具。\n温度比外面高了不少。",
+    "exits": {
+      "east": "lake_village"
+    },
+    "npc_id": "blacksmith",
+    "items": [
+      "iron_sword",
+      "helmet",
+      "shield"
+    ]
+  },
+  {
+    "id": "lake_village_temple",
+    "name": "光之神殿",
+    "emoji": "⛪",
+    "map": {
+      "layer": "surface",
+      "x": 6,
+      "y": 3
+    },
+    "desc": "一座小巧而庄严的神殿。彩色玻璃窗透入柔和的光芒。\n空气中弥漫着熏香的味道，让人心平气和。",
+    "exits": {
+      "west": "lake_village"
+    },
+    "npc_id": "priestess",
+    "items": [
+      "lesser_potion",
+      "sacred_water"
+    ]
+  },
+  {
+    "id": "alchemist_lab",
+    "name": "炼金术士的实验室",
+    "emoji": "🧪",
+    "map": {
+      "layer": "cave",
+      "x": 0,
+      "y": 2
+    },
+    "desc": "一个堆满奇怪仪器和瓶瓶罐罐的洞穴实验室。\n五颜六色的液体在烧瓶中沸腾，空气中充满刺鼻气味。",
+    "exits": {
+      "west": "hidden_grove"
+    },
+    "npc_id": "mad_alchemist",
+    "items": [
+      "mana_potion",
+      "fairy_dust",
+      "mandrake_root"
+    ]
+  },
+  {
+    "id": "forest_tower_ruins",
+    "name": "森林塔废墟",
+    "emoji": "🏚️",
+    "map": {
+      "layer": "surface",
+      "x": 3,
+      "y": 4
+    },
+    "desc": "一座倒塌了一半的古老石塔，被藤蔓和苔藓覆盖。\n塔内的螺旋楼梯已经断裂，但地下似乎还有空间。\n一只巨鹰在塔顶筑了巢。",
+    "exits": {
+      "south": "forest_entrance",
+      "west": "bandit_camp"
+    },
+    "items": [
+      "phoenix_feather",
+      "ancient_scroll",
+      "mystic_amulet"
+    ],
+    "monster_id": "giant_eagle"
+  },
+  {
+    "id": "haunted_graveyard",
+    "name": "被诅咒的墓地",
+    "emoji": "🪦",
+    "map": {
+      "layer": "surface",
+      "x": 2,
+      "y": 2
+    },
+    "desc": "一片荒凉的墓地，墓碑歪歪斜斜地插在土中。\n阴冷的风穿过枯树发出呜咽声。地面下有东西在动……\n墓地的尽头有一座被藤蔓缠绕的石门，似乎需要某种门禁卡。\n一个黑甲佣兵正在墓地中搜寻着什么。",
+    "exits": {
+      "west": "dark_forest"
+    },
+    "npc_id": "bounty_hunter",
+    "items": [
+      "old_coin",
+      "silver_ring",
+      "mystic_amulet",
+      "scp_dossier",
+      "keycard_lvl2"
+    ],
+    "monster_id": "ghost"
+  },
+  {
+    "id": "scp_site_gate",
+    "name": "收容站点门禁",
+    "emoji": "🚧",
+    "map": {
+      "layer": "site",
+      "x": 1,
+      "y": 2
+    },
+    "desc": "混凝土走廊尽头是一扇厚重的气密门，墙上贴着褪色的基金会标识。\n门禁读卡器闪着红灯，但通道似乎还能通行。",
+    "exits": {
+      "south": "haunted_graveyard",
+      "north": "scp_security_hall"
+    },
+    "items": [
+      "site_ration"
+    ]
+  },
+  {
+    "id": "scp_security_hall",
+    "name": "安保指挥厅",
+    "emoji": "🛡️",
+    "map": {
+      "layer": "site",
+      "x": 1,
+      "y": 1
+    },
+    "desc": "布满监控屏幕的指挥厅，大部分设备已断电。角落里堆着废弃的防具箱。",
+    "exits": {
+      "south": "scp_site_gate",
+      "east": "scp_containment_hall"
+    },
+    "npc_id": "mtf_liaison"
+  },
+  {
+    "id": "scp_containment_hall",
+    "name": "收容走廊",
+    "emoji": "🚪",
+    "map": {
+      "layer": "site",
+      "x": 2,
+      "y": 1
+    },
+    "desc": "两侧是编号模糊的收容单元，多数大门扭曲变形。\n南侧通往单元区，向下隐约传来齿轮声——那是914号。",
+    "exits": {
+      "west": "scp_security_hall",
+      "north": "scp_archive",
+      "east": "scp_breach_chamber",
+      "south": "scp_cell_block",
+      "down": "scp_914_chamber"
+    },
+    "dark": true,
+    "items": [
+      "observation_log",
+      "lesser_potion"
+    ],
+    "monster_id": "scp_sentry_drone"
+  },
+  {
+    "id": "scp_archive",
+    "name": "档案室",
+    "emoji": "📚",
+    "map": {
+      "layer": "site",
+      "x": 2,
+      "y": 0
+    },
+    "desc": "倒塌的书架间，一台终端仍在循环播放警告录像。空气中弥漫着纸张霉味。",
+    "exits": {
+      "south": "scp_containment_hall"
+    },
+    "npc_id": "dr_ellis",
+    "monster_id": "scp_mimic_clerk"
+  },
+  {
+    "id": "scp_breach_chamber",
+    "name": "失控收容间",
+    "emoji": "⚠️",
+    "map": {
+      "layer": "site",
+      "x": 3,
+      "y": 1
+    },
+    "desc": "房间中央的收容柱已碎裂，一个脉动的异常核心悬浮在半空。墙壁上的警示灯疯狂闪烁。",
+    "exits": {
+      "west": "scp_containment_hall"
+    },
+    "dark": true,
+    "monster_id": "scp_breach_core"
+  },
+  {
+    "id": "scp_cell_block",
+    "name": "收容单元区",
+    "emoji": "🏢",
+    "map": {
+      "layer": "site",
+      "x": 2,
+      "y": 2
+    },
+    "desc": "长廊两侧挂着损坏的铭牌：012、096、173、049……警报灯仍在闪烁。",
+    "exits": {
+      "north": "scp_containment_hall",
+      "east": "scp_012_cell",
+      "west": "scp_173_cell",
+      "south": "scp_096_cell",
+      "down": "scp_087_stair",
+      "up": "scp_294_lounge"
+    },
+    "items": [
+      "scp_701_script"
+    ]
+  },
+  {
+    "id": "scp_914_chamber",
+    "name": "齿轮工房(SCP-ZH-914)",
+    "emoji": "⚙️",
+    "map": {
+      "layer": "site",
+      "x": 1,
+      "y": 3
+    },
+    "desc": "巨大的发条机械占据大厅。进料斗与档位盘完好。\n铭牌：Rough / 1:1 / Fine / Very Fine。\n输入 use 914 可尝试精炼背包中的一件非任务物品。",
+    "exits": {
+      "up": "scp_containment_hall"
+    },
+    "items": [
+      "scp_447_slime"
+    ]
+  },
+  {
+    "id": "scp_012_cell",
+    "name": "012号单元",
+    "emoji": "🎼",
+    "map": {
+      "layer": "site",
+      "x": 3,
+      "y": 2
+    },
+    "desc": "玻璃后的谱架上钉着染血乐谱。低语迫使你走近。",
+    "exits": {
+      "west": "scp_cell_block"
+    },
+    "items": [
+      "scp_012_score"
+    ]
+  },
+  {
+    "id": "scp_096_cell",
+    "name": "096号单元",
+    "emoji": "🫣",
+    "map": {
+      "layer": "site",
+      "x": 2,
+      "y": 3
+    },
+    "desc": "加厚隔音室。监控被划花。角落坐着双手遮面的苍白身影。",
+    "exits": {
+      "north": "scp_cell_block"
+    },
+    "monster_id": "scp_096"
+  },
+  {
+    "id": "scp_173_cell",
+    "name": "173号单元",
+    "emoji": "🗿",
+    "map": {
+      "layer": "site",
+      "x": 1,
+      "y": 2
+    },
+    "desc": "空荡收容间，地面有刮痕与污渍。雕塑面朝门口——你发誓它刚才不在那儿。",
+    "exits": {
+      "east": "scp_cell_block"
+    },
+    "monster_id": "scp_173",
+    "items": [
+      "scp_513_bell"
+    ]
+  },
+  {
+    "id": "scp_087_stair",
+    "name": "无尽楼梯(SCP-ZH-087)",
+    "emoji": "🌀",
+    "map": {
+      "layer": "site",
+      "x": 2,
+      "y": 4
+    },
+    "desc": "混凝土楼梯向下延伸，没有尽头。下方传来微弱哭泣。",
+    "exits": {
+      "up": "scp_cell_block",
+      "down": "scp_087_depth"
+    },
+    "dark": true
+  },
+  {
+    "id": "scp_087_depth",
+    "name": "楼梯更深处",
+    "emoji": "🌑",
+    "map": {
+      "layer": "site",
+      "x": 2,
+      "y": 5
+    },
+    "desc": "灯光几乎熄灭。脸孔贴在下方转角……又或许只是污渍。",
+    "exits": {
+      "up": "scp_087_stair",
+      "east": "scp_106_corridor"
+    },
+    "dark": true,
+    "monster_id": "scp_372",
+    "items": [
+      "scp_055_object"
+    ]
+  },
+  {
+    "id": "scp_106_corridor",
+    "name": "腐蚀走廊",
+    "emoji": "🟤",
+    "map": {
+      "layer": "site",
+      "x": 3,
+      "y": 5
+    },
+    "desc": "墙壁渗出黑色腐蚀液，脚印消失在固体墙中。",
+    "exits": {
+      "west": "scp_087_depth",
+      "north": "scp_002_room"
+    },
+    "monster_id": "scp_106",
+    "dark": true
+  },
+  {
+    "id": "scp_002_room",
+    "name": "血肉房间(SCP-ZH-002)",
+    "emoji": "🫀",
+    "map": {
+      "layer": "site",
+      "x": 3,
+      "y": 4
+    },
+    "desc": "球形房间覆盖着静脉与肌腱，家具由骨骼长成。",
+    "exits": {
+      "south": "scp_106_corridor",
+      "east": "scp_049_ward"
+    },
+    "items": [
+      "scp_035_mask"
+    ]
+  },
+  {
+    "id": "scp_049_ward",
+    "name": "隔离病房",
+    "emoji": "🏥",
+    "map": {
+      "layer": "site",
+      "x": 4,
+      "y": 4
+    },
+    "desc": "废弃医疗区，空气里有福尔马林气味。瘟疫医生站在病床旁。",
+    "exits": {
+      "west": "scp_002_room",
+      "north": "scp_999_play",
+      "east": "scp_079_server"
+    },
+    "npc_id": "scp_049",
+    "items": [
+      "scp_008_vial",
+      "lesser_potion"
+    ]
+  },
+  {
+    "id": "scp_999_play",
+    "name": "快乐隔离间",
+    "emoji": "🧡",
+    "map": {
+      "layer": "site",
+      "x": 4,
+      "y": 3
+    },
+    "desc": "软垫房间里，橙色胶团正欢快地弹跳。",
+    "exits": {
+      "south": "scp_049_ward",
+      "west": "scp_294_lounge"
+    },
+    "npc_id": "scp_999",
+    "items": [
+      "scp_1230_book"
+    ]
+  },
+  {
+    "id": "scp_079_server",
+    "name": "服务器室(SCP-ZH-079)",
+    "emoji": "💻",
+    "map": {
+      "layer": "site",
+      "x": 5,
+      "y": 4
+    },
+    "desc": "机架轰鸣。一台古董电脑的屏幕亮着：WAITING…",
+    "exits": {
+      "west": "scp_049_ward",
+      "north": "scp_343_room",
+      "east": "scp_682_pit"
+    },
+    "npc_id": "scp_079",
+    "items": [
+      "scp_1981_tape"
+    ]
+  },
+  {
+    "id": "scp_343_room",
+    "name": "会客厅",
+    "emoji": "☕",
+    "map": {
+      "layer": "site",
+      "x": 5,
+      "y": 3
+    },
+    "desc": "与站点风格不符的温馨会客室。壁炉、沙发、茶具一应俱全。",
+    "exits": {
+      "south": "scp_079_server"
+    },
+    "npc_id": "scp_343"
+  },
+  {
+    "id": "scp_294_lounge",
+    "name": "咖啡休息室(SCP-ZH-294)",
+    "emoji": "☕",
+    "map": {
+      "layer": "site",
+      "x": 3,
+      "y": 3
+    },
+    "desc": "角落立着能提供任何饮品的咖啡机。面板写着：输入 use 294。",
+    "exits": {
+      "east": "scp_999_play",
+      "west": "scp_261_canteen",
+      "down": "scp_cell_block"
+    },
+    "items": [
+      "site_ration"
+    ]
+  },
+  {
+    "id": "scp_261_canteen",
+    "name": "次元贩卖机廊(SCP-ZH-261)",
+    "emoji": "🥤",
+    "map": {
+      "layer": "site",
+      "x": 0,
+      "y": 3
+    },
+    "desc": "奇怪的贩卖机吐出包装不明的零食。投币口闪着光：use 261。",
+    "exits": {
+      "east": "scp_294_lounge",
+      "north": "scp_895_cctv"
+    },
+    "items": [
+      "old_coin",
+      "scp_140_chronicle",
+      "scp_261_snack"
+    ]
+  },
+  {
+    "id": "scp_895_cctv",
+    "name": "监控室(SCP-ZH-895)",
+    "emoji": "📹",
+    "map": {
+      "layer": "site",
+      "x": 0,
+      "y": 2
+    },
+    "desc": "屏幕显示一座棺材的特写。越看越觉得画面在看着你。",
+    "exits": {
+      "south": "scp_261_canteen",
+      "east": "scp_073_chamber"
+    },
+    "items": [
+      "scp_205_lamp"
+    ]
+  },
+  {
+    "id": "scp_073_chamber",
+    "name": "073号会谈室",
+    "emoji": "👁️",
+    "map": {
+      "layer": "site",
+      "x": 0,
+      "y": 1
+    },
+    "desc": "朴素会谈室。额头有标记的男人安静地坐着。",
+    "exits": {
+      "west": "scp_895_cctv",
+      "east": "scp_076_crypt"
+    },
+    "npc_id": "scp_073"
+  },
+  {
+    "id": "scp_076_crypt",
+    "name": "石棺密室(SCP-ZH-076)",
+    "emoji": "⚰️",
+    "map": {
+      "layer": "site",
+      "x": 1,
+      "y": 1
+    },
+    "desc": "黑色石棺半开，地面布满刀痕。",
+    "exits": {
+      "west": "scp_073_chamber"
+    },
+    "monster_id": "scp_076",
+    "items": [
+      "scp_860_key"
+    ]
+  },
+  {
+    "id": "scp_682_pit",
+    "name": "682号酸池",
+    "emoji": "☢️",
+    "map": {
+      "layer": "site",
+      "x": 6,
+      "y": 4
+    },
+    "desc": "巨大的酸液收容池。水面下有什么在动——不灭的憎恶仍在。",
+    "exits": {
+      "west": "scp_079_server",
+      "north": "scp_3008_aisle"
+    },
+    "monster_id": "scp_682"
+  },
+  {
+    "id": "scp_3008_aisle",
+    "name": "无尽卖场通道(SCP-ZH-3008)",
+    "emoji": "🛒",
+    "map": {
+      "layer": "site",
+      "x": 6,
+      "y": 3
+    },
+    "desc": "仓储式货架延伸到视野尽头。广播提示：即将进入夜间。",
+    "exits": {
+      "south": "scp_682_pit",
+      "west": "scp_939_den",
+      "north": "scp_egg_storage"
+    },
+    "items": [
+      "scp_1471_phone",
+      "site_ration"
+    ],
+    "monster_id": "scp_1048"
+  },
+  {
+    "id": "scp_egg_storage",
+    "name": "卵储藏室(SCP-ZH-3199)",
+    "emoji": "🥚",
+    "map": {
+      "layer": "site",
+      "x": 6,
+      "y": 2
+    },
+    "desc": "冷藏柜破裂，黏液与空壳散落一地。",
+    "exits": {
+      "south": "scp_3008_aisle"
+    },
+    "monster_id": "scp_3199",
+    "items": [
+      "scp_409_crystal"
+    ]
+  },
+  {
+    "id": "scp_939_den",
+    "name": "多喉巢穴",
+    "emoji": "🦷",
+    "map": {
+      "layer": "site",
+      "x": 5,
+      "y": 3
+    },
+    "desc": "黑暗中传来熟悉的呼救。声音听起来不太对。",
+    "exits": {
+      "east": "scp_3008_aisle",
+      "south": "scp_966_dark",
+      "west": "scp_131_bay"
+    },
+    "dark": true,
+    "monster_id": "scp_939"
+  },
+  {
+    "id": "scp_966_dark",
+    "name": "无光猎场",
+    "emoji": "🌫️",
+    "map": {
+      "layer": "site",
+      "x": 5,
+      "y": 4
+    },
+    "desc": "红外提示灯损坏。你感觉有东西在呼吸节奏里等待。",
+    "exits": {
+      "north": "scp_939_den"
+    },
+    "dark": true,
+    "monster_id": "scp_966",
+    "items": [
+      "scp_178_glasses"
+    ]
+  },
+  {
+    "id": "scp_131_bay",
+    "name": "探测者库房",
+    "emoji": "👀",
+    "map": {
+      "layer": "site",
+      "x": 4,
+      "y": 3
+    },
+    "desc": "充电架上，两只眼球机器人兴奋地滚来滚去。",
+    "exits": {
+      "east": "scp_939_den",
+      "south": "scp_017_vault"
+    },
+    "npc_id": "scp_131",
+    "items": [
+      "scp_113_rock"
+    ]
+  },
+  {
+    "id": "scp_017_vault",
+    "name": "光封锁柜",
+    "emoji": "🌑",
+    "map": {
+      "layer": "site",
+      "x": 4,
+      "y": 4
+    },
+    "desc": "强光灯环绕的保险库。阴影在灯柱之间扭动。",
+    "exits": {
+      "north": "scp_131_bay"
+    },
+    "monster_id": "scp_017",
+    "items": [
+      "scp_093_disc",
+      "scp_5000_file"
+    ]
+  }
 ]

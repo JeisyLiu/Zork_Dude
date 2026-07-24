@@ -298,5 +298,225 @@
       "gold_ingot"
     ],
     "emoji": "🦎"
+  },
+  {
+    "id": "scp_sentry_drone",
+    "name": "安保无人机",
+    "desc": "基金会遗留的自动巡逻无人机，红色扫描灯锁定了你。",
+    "hp": 16,
+    "atk": 5,
+    "defense": 2,
+    "exp": 18,
+    "gold": 12,
+    "loot": [
+      "old_coin"
+    ],
+    "emoji": "🤖"
+  },
+  {
+    "id": "scp_mimic_clerk",
+    "name": "拟态职员",
+    "desc": "穿着基金会制服的……某种东西，面部是一团模糊的肉块。",
+    "hp": 24,
+    "atk": 7,
+    "defense": 1,
+    "rank": "ELITE",
+    "exp": 30,
+    "gold": 20,
+    "loot": [
+      "keycard_lvl3",
+      "amnesia_pill"
+    ],
+    "emoji": "👔"
+  },
+  {
+    "id": "scp_breach_core",
+    "name": "失控异常核心",
+    "desc": "收容柱碎裂后泄漏的异常实体，形态不断变化，空气因它而扭曲。",
+    "hp": 55,
+    "atk": 12,
+    "defense": 3,
+    "rank": "BOSS",
+    "exp": 80,
+    "gold": 50,
+    "loot": [
+      "anomaly_core",
+      "bag_anomalous"
+    ],
+    "dialog": {
+      "taunt": "■■■……你……不该……在这里……"
+    },
+    "emoji": "🌀"
+  },
+  {
+    "id": "scp_173",
+    "name": "混凝土雕塑(SCP-ZH-173)",
+    "desc": "沾满红漆与污物的人形雕塑。你眨眼时，它已经挪近了。",
+    "hp": 35,
+    "atk": 14,
+    "defense": 2,
+    "rank": "ELITE",
+    "exp": 45,
+    "gold": 25,
+    "loot": [
+      "old_coin",
+      "scp_447_slime"
+    ],
+    "emoji": "🗿"
+  },
+  {
+    "id": "scp_096",
+    "name": "害羞者(SCP-ZH-096)",
+    "desc": "苍白瘦高的人形，双手遮面。任何看见其脸的人都会被追杀。",
+    "hp": 70,
+    "atk": 16,
+    "defense": 1,
+    "rank": "BOSS",
+    "exp": 90,
+    "gold": 40,
+    "loot": [
+      "scp_148_telekill",
+      "greater_potion"
+    ],
+    "emoji": "🫣"
+  },
+  {
+    "id": "scp_106",
+    "name": "腐老人(SCP-ZH-106)",
+    "desc": "腐蚀性老人，能从墙壁中渗出。所过之处金属锈蚀。",
+    "hp": 42,
+    "atk": 11,
+    "defense": 3,
+    "rank": "ELITE",
+    "exp": 55,
+    "gold": 30,
+    "loot": [
+      "scp_409_crystal",
+      "amnesia_pill"
+    ],
+    "emoji": "🧓"
+  },
+  {
+    "id": "scp_682",
+    "name": "不灭爬行者(SCP-ZH-682)",
+    "desc": "巨大的憎恶爬行生物，适应性极强，几乎无法彻底消灭。",
+    "hp": 120,
+    "atk": 18,
+    "defense": 6,
+    "rank": "BOSS",
+    "exp": 150,
+    "gold": 100,
+    "loot": [
+      "anomaly_core",
+      "scp_500_pill",
+      "dragon_scale"
+    ],
+    "emoji": "🦎"
+  },
+  {
+    "id": "scp_939",
+    "name": "多喉猎手(SCP-ZH-939)",
+    "desc": "无目红色猎食者，能模仿人类呼救声。",
+    "hp": 28,
+    "atk": 9,
+    "defense": 2,
+    "rank": "ELITE",
+    "exp": 35,
+    "gold": 18,
+    "loot": [
+      "dried_meat",
+      "scp_008_vial"
+    ],
+    "emoji": "🦷"
+  },
+  {
+    "id": "scp_966",
+    "name": "猎食潜影(SCP-ZH-966)",
+    "desc": "近乎隐形的人形，专在猎物疲惫时出手。",
+    "hp": 22,
+    "atk": 8,
+    "defense": 0,
+    "exp": 28,
+    "gold": 15,
+    "loot": [
+      "scp_178_glasses"
+    ],
+    "emoji": "👻"
+  },
+  {
+    "id": "scp_076",
+    "name": "亚伯(SCP-ZH-076)",
+    "desc": "黑发战士从石棺中醒来，手持骨刃，只想战斗。",
+    "hp": 50,
+    "atk": 13,
+    "defense": 3,
+    "rank": "ELITE",
+    "exp": 60,
+    "gold": 35,
+    "loot": [
+      "rune_sword",
+      "scp_714_ring"
+    ],
+    "emoji": "⚔️"
+  },
+  {
+    "id": "scp_017",
+    "name": "影人(SCP-ZH-017)",
+    "desc": "绝对黑暗的人形剪影，吞噬一切照到它的光线。",
+    "hp": 20,
+    "atk": 7,
+    "defense": 1,
+    "exp": 22,
+    "gold": 12,
+    "loot": [
+      "scp_205_lamp"
+    ],
+    "emoji": "🌑"
+  },
+  {
+    "id": "scp_1048",
+    "name": "建筑熊(SCP-ZH-1048)",
+    "desc": "看似无害的棕色泰迪熊，关节处渗出不明物质。",
+    "hp": 26,
+    "atk": 8,
+    "defense": 2,
+    "rank": "ELITE",
+    "exp": 32,
+    "gold": 20,
+    "loot": [
+      "scp_1230_book",
+      "old_coin"
+    ],
+    "emoji": "🧸"
+  },
+  {
+    "id": "scp_372",
+    "name": "余光人(SCP-ZH-372)",
+    "desc": "永远停在视野边缘的生物，你一转头它就消失。",
+    "hp": 18,
+    "atk": 6,
+    "defense": 0,
+    "exp": 20,
+    "gold": 10,
+    "loot": [
+      "scp_055_object"
+    ],
+    "emoji": "👁️"
+  },
+  {
+    "id": "scp_3199",
+    "name": "人类否(SCP-ZH-3199)",
+    "desc": "类人卵生掠食者，尖啸刺耳。",
+    "hp": 32,
+    "atk": 10,
+    "defense": 2,
+    "rank": "ELITE",
+    "exp": 40,
+    "gold": 22,
+    "loot": [
+      "scp_008_vial",
+      "lesser_potion"
+    ],
+    "emoji": "🥚"
   }
 ]

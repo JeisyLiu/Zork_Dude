@@ -167,6 +167,7 @@ body{overflow:hidden}
         <button class="map-tab active" data-layer="surface" type="button">地表</button>
         <button class="map-tab" data-layer="cave" type="button">洞穴</button>
         <button class="map-tab" data-layer="tower" type="button">高塔</button>
+        <button class="map-tab" data-layer="site" type="button">站点</button>
         <span style="flex:1"></span>
         <button class="map-mode active" data-mode="graph" type="button">图谱</button>
         <button class="map-mode" data-mode="list" type="button">列表</button>
@@ -200,121 +201,174 @@ body{overflow:hidden}
 // ═══ ENUMS & HELPERS ═══
 const Direction={NORTH:"north",SOUTH:"south",EAST:"east",WEST:"west",UP:"up",DOWN:"down"};
 // 与 data/items.json、内嵌 _ITEMS 的 type 字段一致（大写枚举名）
-const ItemType={KEY:"KEY",WEAPON:"WEAPON",ARMOR:"ARMOR",POTION:"POTION",TREASURE:"TREASURE",TOOL:"TOOL",LIGHT:"LIGHT",SCROLL:"SCROLL",FOOD:"FOOD",QUEST:"QUEST",MATERIAL:"MATERIAL",BOOK:"BOOK",RING:"RING",AMULET:"AMULET",MINERAL:"MINERAL"};
+const ItemType={KEY:"KEY",WEAPON:"WEAPON",ARMOR:"ARMOR",POTION:"POTION",TREASURE:"TREASURE",TOOL:"TOOL",LIGHT:"LIGHT",SCROLL:"SCROLL",FOOD:"FOOD",QUEST:"QUEST",MATERIAL:"MATERIAL",BOOK:"BOOK",RING:"RING",AMULET:"AMULET",MINERAL:"MINERAL",BAG:"BAG"};
 const MonsterRank={NORMAL:"普通",ELITE:"精英",BOSS:"BOSS"};
 const STACK_TYPES=[ItemType.FOOD,ItemType.TREASURE,ItemType.MATERIAL];
 const MAX_WEIGHT=15;
 function isStackable(it){return STACK_TYPES.includes(String(it.type||"").toUpperCase())}
 function roll(s,t){t=t||1;let r=0;for(let i=0;i<t;i++)r+=Math.floor(Math.random()*s)+1;return r}
 // ═══ ITEMS ═══
-const _ITEMS=[{id:"rusty_key",name:"生锈钥匙",desc:"古老的铁钥匙，还能用。",type:"KEY",usable:true,value:5},
-{id:"silver_key",name:"银钥匙",desc:"精致的银色钥匙。",type:"KEY",usable:true,value:10},
-{id:"crystal_key",name:"水晶钥匙",desc:"透明的水晶钥匙。",type:"KEY",usable:true,value:15},
-{id:"old_sword",name:"生锈铁剑",desc:"布满铁锈，但勉强能用。",type:"WEAPON",dmg_bonus:1,value:5},
-{id:"iron_sword",name:"铁剑",desc:"普通但可靠的铁剑。",type:"WEAPON",dmg_bonus:2,value:15},
-{id:"elven_bow",name:"精灵短弓",desc:"精灵打造的短弓，轻便精准。",type:"WEAPON",dmg_bonus:3,value:25},
-{id:"magic_staff",name:"魔法杖",desc:"杖头镶嵌蓝色宝石。",type:"WEAPON",dmg_bonus:4,value:35},
-{id:"shadow_blade",name:"影刃",desc:"漆黑的匕首，几乎不反光。",type:"WEAPON",dmg_bonus:3,value:30},
-{id:"war_hammer",name:"战锤",desc:"沉重的双手战锤。",type:"WEAPON",dmg_bonus:5,weight:3,value:40},
-{id:"spear",name:"长矛",desc:"矛尖泛着寒光。",type:"WEAPON",dmg_bonus:3,value:22},
-{id:"rune_sword",name:"符文剑",desc:"剑身刻着发光符文。",type:"WEAPON",dmg_bonus:4,value:45},
-{id:"crossbow",name:"十字弩",desc:"上弦的机械弩。",type:"WEAPON",dmg_bonus:4,weight:2,value:35},
-{id:"assassin_dagger",name:"刺客匕首",desc:"涂了剧毒的匕首。",type:"WEAPON",dmg_bonus:3,value:28},
-{id:"thunder_hammer",name:"雷神之锤",desc:"锤身缠绕着跳动的电弧。",type:"WEAPON",dmg_bonus:6,weight:4,value:60},
-{id:"leather_armor",name:"皮甲",desc:"鞣制过的硬皮甲。",type:"ARMOR",def_bonus:2,value:12},
-{id:"chain_armor",name:"锁子甲",desc:"铁环编织的锁甲。",type:"ARMOR",def_bonus:4,value:30},
-{id:"scale_armor",name:"鳞甲",desc:"用龙鳞和铁片编成。",type:"ARMOR",def_bonus:5,weight:3,value:45},
-{id:"mage_robe",name:"法师长袍",desc:"附魔的长袍。",type:"ARMOR",def_bonus:2,value:20},
-{id:"shield",name:"铁盾",desc:"圆形的铁盾。",type:"ARMOR",def_bonus:3,weight:2,value:18},
-{id:"helmet",name:"铁头盔",desc:"保护头部的铁盔。",type:"ARMOR",def_bonus:1,value:10},
-{id:"lesser_potion",name:"小治疗药水",desc:"恢复15点HP。",type:"POTION",usable:true,heal:15,value:8},
-{id:"greater_potion",name:"大治疗药水",desc:"恢复35点HP。",type:"POTION",usable:true,heal:35,value:20},
-{id:"mana_potion",name:"魔力药水",desc:"恢复20点HP。",type:"POTION",usable:true,heal:20,value:12},
-{id:"fire_potion",name:"火焰药剂",desc:"瓶中的液体像熔岩一样翻滚。",type:"POTION",usable:true,heal:10,value:16},
-{id:"invis_potion",name:"隐形药水",desc:"喝下后变得透明。",type:"POTION",usable:true,heal:5,value:25},
-{id:"stamina_potion",name:"体力药水",desc:"恢复25点HP。",type:"POTION",usable:true,heal:25,value:15},
-{id:"moonlight_elixir",name:"月光精华",desc:"银色瓶中的液体如月光般流动。",type:"POTION",usable:true,heal:50,value:40},
-{id:"lantern",name:"提灯",desc:"旧提灯，里面还有油。",type:"LIGHT",usable:true,weight:2,value:8},
-{id:"torch",name:"火把",desc:"松脂火把。",type:"LIGHT",usable:true,value:3},
-{id:"bread",name:"硬面包",desc:"干硬的黑面包。",type:"FOOD",usable:true,heal:5,value:2},
-{id:"dried_meat",name:"肉干",desc:"咸味的熏肉干。",type:"FOOD",usable:true,heal:8,value:4},
-{id:"mushroom",name:"荧光蘑菇",desc:"发着微光的蘑菇。",type:"FOOD",usable:true,heal:3,value:1},
-{id:"fish",name:"烤鱼",desc:"香喷喷的烤鱼。",type:"FOOD",usable:true,heal:7,value:3},
-{id:"magic_herb",name:"魔法草药",desc:"散发七彩光芒的草药。",type:"FOOD",usable:true,heal:12,value:6},
-{id:"honey",name:"蜂蜜",desc:"金黄色的野蜜。",type:"FOOD",usable:true,heal:6,value:4},
-{id:"golden_cup",name:"金杯",desc:"纯金打造的高脚杯。",type:"TREASURE",value:40,weight:2},
-{id:"silver_ring",name:"银戒指",desc:"刻着古老花纹的银戒指。",type:"TREASURE",value:20},
-{id:"emerald",name:"祖母绿宝石",desc:"拇指大小的绿色宝石。",type:"TREASURE",value:50},
-{id:"diamond",name:"钻石",desc:"切割完美的钻石。",type:"TREASURE",value:80},
-{id:"ruby",name:"红宝石",desc:"血红剔透的红宝石。",type:"TREASURE",value:60},
-{id:"sapphire",name:"蓝宝石",desc:"深蓝色的宝石。",type:"TREASURE",value:55},
-{id:"ancient_crown",name:"古老皇冠",desc:"镶满了宝石的皇冠。",type:"TREASURE",value:120,weight:2},
-{id:"old_coin",name:"古金币",desc:"一枚古金币。",type:"TREASURE",value:15},
-{id:"gold_ingot",name:"金锭",desc:"纯金铸成的金锭。",type:"MINERAL",value:35,weight:2},
-{id:"silver_ingot",name:"银锭",desc:"纯银铸成的银锭。",type:"MINERAL",value:18,weight:2},
-{id:"wolf_tooth",name:"狼牙",desc:"巨狼的尖牙。",type:"MATERIAL",value:5},
-{id:"spider_silk",name:"蜘蛛丝",desc:"晶莹剔透的蛛丝。",type:"MATERIAL",value:8},
-{id:"dragon_scale",name:"龙鳞",desc:"幼龙身上掉落的鳞片。",type:"MATERIAL",value:50},
-{id:"fairy_dust",name:"妖精之尘",desc:"闪闪发光的粉末。",type:"MATERIAL",value:20},
-{id:"mandrake_root",name:"曼德拉草根",desc:"形如人形的草根。",type:"MATERIAL",value:15},
-{id:"goblin_ear",name:"哥布林耳朵",desc:"哥布林身上割下来的耳朵。",type:"MATERIAL",value:3},
-{id:"snake_skin",name:"蛇皮",desc:"巨蟒蜕下的皮。",type:"MATERIAL",value:12},
-{id:"bandit_badge",name:"强盗徽章",desc:"强盗头目的身份徽章。",type:"MATERIAL",value:10},
-{id:"ancient_scroll",name:"古老卷轴",desc:"看不懂的古代文字。",type:"SCROLL",usable:true,value:5},
-{id:"magic_scroll",name:"传送卷轴",desc:"记载传送咒语。",type:"SCROLL",usable:true,value:15},
-{id:"rope",name:"麻绳",desc:"10米长的结实麻绳。",type:"TOOL",usable:true,value:3},
-{id:"compass",name:"古老指南针",desc:"指针指向特殊方向。",type:"TOOL",usable:true,value:8},
-{id:"lockpick",name:"开锁器",desc:"一套精巧的开锁工具。",type:"TOOL",usable:true,value:12},
-{id:"fishing_rod",name:"鱼竿",desc:"一根细长的鱼竿。",type:"TOOL",usable:true,value:5},
-{id:"magnifying_glass",name:"放大镜",desc:"可以观察细微之物。",type:"TOOL",usable:true,value:8},
-{id:"journal",name:"冒险者日志",desc:"某位冒险者留下的日记。",type:"BOOK",usable:true,value:5},
-{id:"magic_book",name:"魔法入门",desc:"基础魔法理论。",type:"BOOK",usable:true,value:10},
-{id:"magic_gem",name:"魔法宝石",desc:"散发紫光的宝石。",type:"QUEST",usable:true,value:0,weight:1},
-{id:"sacred_water",name:"圣水",desc:"受过祝福的圣水。",type:"QUEST",usable:true,value:0},
-{id:"phoenix_feather",name:"凤凰羽毛",desc:"火红色的凤凰尾羽。",type:"QUEST",usable:true,value:0},
-{id:"ice_crystal",name:"冰晶",desc:"极寒之地凝结的永恒冰晶。",type:"QUEST",value:0,weight:1},
-{id:"ancient_key",name:"古代钥匙",desc:"一把巨大的石钥匙。",type:"KEY",usable:true,weight:5,value:0},
-{id:"health_ring",name:"生命戒指",desc:"戴着它感觉精力充沛。",type:"RING",usable:true,heal:10,value:30},
-{id:"protection_ring",name:"守护之戒",desc:"佩戴者会获得隐形护盾。",type:"RING",def_bonus:2,value:35},
-{id:"strength_ring",name:"力量戒指",desc:"提升佩戴者的力量。",type:"RING",dmg_bonus:2,value:32},
-{id:"mystic_amulet",name:"神秘护符",desc:"刻着古老符文的护符。",type:"AMULET",usable:true,def_bonus:1,value:25}
-];
+const _ITEMS=[{"id":"rusty_key","name":"生锈钥匙","desc":"古老的铁钥匙，还能用。","type":"KEY","usable":true,"use_msg":"咔嚓一声，似乎打开了什么。","value":5,"emoji":"🗝️"},
+{"id":"silver_key","name":"银钥匙","desc":"精致的银色钥匙，散发魔法微光。","type":"KEY","usable":true,"use_msg":"银钥匙闪烁着光芒……","value":10,"emoji":"🔑"},
+{"id":"crystal_key","name":"水晶钥匙","desc":"完全透明的水晶钥匙，几乎看不见。","type":"KEY","usable":true,"use_msg":"水晶钥匙融入空气中……","value":15,"emoji":"💎"},
+{"id":"old_sword","name":"生锈铁剑","desc":"布满铁锈，但勉强能用。","type":"WEAPON","dmg_bonus":1,"value":5,"emoji":"🗡️"},
+{"id":"iron_sword","name":"铁剑","desc":"普通但可靠的铁剑。","type":"WEAPON","dmg_bonus":2,"value":15,"emoji":"⚔️"},
+{"id":"elven_bow","name":"精灵短弓","desc":"精灵打造的短弓，轻便精准。","type":"WEAPON","dmg_bonus":3,"value":25,"emoji":"🏹"},
+{"id":"magic_staff","name":"魔法杖","desc":"杖头镶嵌蓝色宝石，蕴含魔力。","type":"WEAPON","dmg_bonus":4,"value":35,"emoji":"🪄"},
+{"id":"shadow_blade","name":"影刃","desc":"漆黑的匕首，几乎不反光。","type":"WEAPON","dmg_bonus":3,"value":30,"emoji":"🔪"},
+{"id":"war_hammer","name":"战锤","desc":"沉重的双手战锤，一击可以碎石。","type":"WEAPON","dmg_bonus":5,"weight":3,"value":40,"emoji":"🔨"},
+{"id":"spear","name":"长矛","desc":"矛尖泛着寒光，可以刺穿铠甲。","type":"WEAPON","dmg_bonus":3,"value":22,"emoji":"🗡️"},
+{"id":"rune_sword","name":"符文剑","desc":"剑身刻着发光符文，对黑暗生物有额外杀伤。","type":"WEAPON","dmg_bonus":4,"value":45,"emoji":"⚔️"},
+{"id":"crossbow","name":"十字弩","desc":"上弦的机械弩，威力惊人。","type":"WEAPON","dmg_bonus":4,"weight":2,"value":35,"emoji":"🏹"},
+{"id":"assassin_dagger","name":"刺客匕首","desc":"涂了剧毒的匕首，见血封喉。","type":"WEAPON","dmg_bonus":3,"value":28,"emoji":"🗡️"},
+{"id":"thunder_hammer","name":"雷神之锤","desc":"锤身缠绕着跳动的电弧，挥舞时隐隐有雷声。","type":"WEAPON","dmg_bonus":6,"weight":4,"value":60,"emoji":"⚡"},
+{"id":"leather_armor","name":"皮甲","desc":"鞣制过的硬皮甲。","type":"ARMOR","def_bonus":2,"value":12,"emoji":"🥋"},
+{"id":"chain_armor","name":"锁子甲","desc":"铁环编织的锁甲。","type":"ARMOR","def_bonus":4,"value":30,"emoji":"🛡️"},
+{"id":"scale_armor","name":"鳞甲","desc":"用龙鳞和铁片编成的铠甲。","type":"ARMOR","def_bonus":5,"weight":3,"value":45,"emoji":"🛡️"},
+{"id":"mage_robe","name":"法师长袍","desc":"附魔的长袍，轻便而防寒。","type":"ARMOR","def_bonus":2,"value":20,"emoji":"🧥"},
+{"id":"shield","name":"铁盾","desc":"圆形的铁盾，格挡利器。","type":"ARMOR","def_bonus":3,"weight":2,"value":18,"emoji":"🛡️"},
+{"id":"helmet","name":"铁头盔","desc":"保护头部的铁盔。","type":"ARMOR","def_bonus":1,"value":10,"emoji":"⛑️"},
+{"id":"lesser_potion","name":"小治疗药水","desc":"恢复15点HP。","type":"POTION","usable":true,"heal":15,"value":8,"emoji":"🧪"},
+{"id":"greater_potion","name":"大治疗药水","desc":"恢复35点HP。","type":"POTION","usable":true,"heal":35,"value":20,"emoji":"🧪"},
+{"id":"mana_potion","name":"魔力药水","desc":"恢复20点HP。","type":"POTION","usable":true,"heal":20,"value":12,"emoji":"🧴"},
+{"id":"fire_potion","name":"火焰药剂","desc":"瓶中的液体像熔岩一样翻滚。","type":"POTION","usable":true,"heal":10,"use_msg":"你喝下火焰药剂，身体变得滚烫！对冰系敌人造成额外伤害！","value":16,"emoji":"🔥"},
+{"id":"invis_potion","name":"隐形药水","desc":"喝下后变得透明。","type":"POTION","usable":true,"heal":5,"use_msg":"你喝下隐形药水，身体逐渐透明……似乎没有其他效果。","value":25,"emoji":"👻"},
+{"id":"stamina_potion","name":"体力药水","desc":"恢复25点HP。","type":"POTION","usable":true,"heal":25,"value":15,"emoji":"💪"},
+{"id":"moonlight_elixir","name":"月光精华","desc":"银色瓶中的液体如月光般流动，散发出柔和的光芒。","type":"POTION","usable":true,"heal":50,"use_msg":"你喝下月光精华，全身被温暖的光芒包围！恢复了50点生命值！","value":40,"emoji":"🌙"},
+{"id":"lantern","name":"提灯","desc":"旧提灯，里面还有油。","type":"LIGHT","usable":true,"use_msg":"提灯照亮了周围。","weight":2,"value":8,"emoji":"🏮"},
+{"id":"torch","name":"火把","desc":"松脂火把。","type":"LIGHT","usable":true,"use_msg":"火把燃起明亮的火焰。","value":3,"emoji":"🔦"},
+{"id":"bread","name":"硬面包","desc":"干硬的黑面包。","type":"FOOD","usable":true,"heal":5,"value":2,"emoji":"🍞"},
+{"id":"dried_meat","name":"肉干","desc":"咸味的熏肉干。","type":"FOOD","usable":true,"heal":8,"value":4,"emoji":"🥩"},
+{"id":"mushroom","name":"荧光蘑菇","desc":"发着微光的蘑菇，不知道能不能吃。","type":"FOOD","usable":true,"heal":3,"value":1,"emoji":"🍄"},
+{"id":"fish","name":"烤鱼","desc":"香喷喷的烤鱼。","type":"FOOD","usable":true,"heal":7,"value":3,"emoji":"🐟"},
+{"id":"magic_herb","name":"魔法草药","desc":"散发七彩光芒的草药。","type":"FOOD","usable":true,"heal":12,"value":6,"emoji":"🌿"},
+{"id":"honey","name":"蜂蜜","desc":"金黄色的野蜜，很甜。","type":"FOOD","usable":true,"heal":6,"value":4,"emoji":"🍯"},
+{"id":"golden_cup","name":"金杯","desc":"纯金打造的高脚杯。","type":"TREASURE","value":40,"weight":2,"emoji":"🏆"},
+{"id":"silver_ring","name":"银戒指","desc":"刻着古老花纹的银戒指。","type":"TREASURE","value":20,"emoji":"💍"},
+{"id":"emerald","name":"祖母绿宝石","desc":"拇指大小的绿色宝石。","type":"TREASURE","value":50,"emoji":"💚"},
+{"id":"diamond","name":"钻石","desc":"切割完美的钻石。","type":"TREASURE","value":80,"emoji":"💠"},
+{"id":"ruby","name":"红宝石","desc":"血红剔透的红宝石。","type":"TREASURE","value":60,"emoji":"❤️"},
+{"id":"sapphire","name":"蓝宝石","desc":"深蓝色的宝石，像海洋一般。","type":"TREASURE","value":55,"emoji":"💙"},
+{"id":"ancient_crown","name":"古老皇冠","desc":"某位国王的遗物，镶满了宝石。","type":"TREASURE","value":120,"weight":2,"emoji":"👑"},
+{"id":"old_coin","name":"古金币","desc":"一枚刻着模糊图案的古金币。","type":"TREASURE","value":15,"emoji":"🪙"},
+{"id":"gold_ingot","name":"金锭","desc":"纯金铸成的金锭。","type":"MINERAL","value":35,"weight":2,"emoji":"🟨"},
+{"id":"silver_ingot","name":"银锭","desc":"纯银铸成的银锭。","type":"MINERAL","value":18,"weight":2,"emoji":"⬜"},
+{"id":"wolf_tooth","name":"狼牙","desc":"巨狼的尖牙，可以作为力量的证明。","type":"MATERIAL","value":5,"emoji":"🦷"},
+{"id":"spider_silk","name":"蜘蛛丝","desc":"晶莹剔透的蛛丝。","type":"MATERIAL","value":8,"emoji":"🕸️"},
+{"id":"dragon_scale","name":"龙鳞","desc":"幼龙身上掉落的鳞片，坚硬无比。","type":"MATERIAL","value":50,"emoji":"🐉"},
+{"id":"fairy_dust","name":"妖精之尘","desc":"闪闪发光的粉末。","type":"MATERIAL","value":20,"emoji":"✨"},
+{"id":"mandrake_root","name":"曼德拉草根","desc":"形如人形的草根，据说有魔力。","type":"MATERIAL","value":15,"emoji":"🪴"},
+{"id":"goblin_ear","name":"哥布林耳朵","desc":"哥布林身上割下来的耳朵，血腥味很重。","type":"MATERIAL","value":3,"emoji":"👂"},
+{"id":"snake_skin","name":"蛇皮","desc":"巨蟒蜕下的皮，非常坚韧。","type":"MATERIAL","value":12,"emoji":"🐍"},
+{"id":"bandit_badge","name":"强盗徽章","desc":"强盗头目的身份徽章。","type":"MATERIAL","value":10,"emoji":"🎖️"},
+{"id":"ancient_scroll","name":"古老卷轴","desc":"看不懂的古代文字。","type":"SCROLL","usable":true,"use_msg":"卷轴发光……但无法解读。","value":5,"emoji":"📜"},
+{"id":"magic_scroll","name":"传送卷轴","desc":"记载传送咒语。","type":"SCROLL","usable":true,"use_msg":"卷轴化为光芒！你被传送到森林入口。","value":15,"emoji":"📜"},
+{"id":"rope","name":"麻绳","desc":"10米长的结实麻绳。","type":"TOOL","usable":true,"use_msg":"也许在别的地方更有用。","value":3,"emoji":"🪢"},
+{"id":"compass","name":"古老指南针","desc":"指针指向特殊方向。","type":"TOOL","usable":true,"use_msg":"指南针指向东南方……","value":8,"emoji":"🧭"},
+{"id":"lockpick","name":"开锁器","desc":"一套精巧的开锁工具。","type":"TOOL","usable":true,"use_msg":"你用开锁器鼓捣了一下……好像打开了什么。","value":12,"emoji":"🔓"},
+{"id":"fishing_rod","name":"鱼竿","desc":"一根细长的鱼竿。","type":"TOOL","usable":true,"use_msg":"这里没有水，没法钓鱼。","value":5,"emoji":"🎣"},
+{"id":"magnifying_glass","name":"放大镜","desc":"可以观察细微之物。","type":"TOOL","usable":true,"use_msg":"透过放大镜，你看到了普通人看不到的细节。","value":8,"emoji":"🔍"},
+{"id":"journal","name":"冒险者日志","desc":"某位冒险者留下的日记。","type":"BOOK","usable":true,"use_msg":"日志记载：『塔顶的宝石是封印关键……』","value":5,"emoji":"📓"},
+{"id":"magic_book","name":"魔法入门","desc":"基础魔法理论。","type":"BOOK","usable":true,"use_msg":"你学到了一些魔法知识。","value":10,"emoji":"📖"},
+{"id":"magic_gem","name":"魔法宝石","desc":"散发紫光的宝石，蕴含强大魔力。","type":"QUEST","usable":true,"use_msg":"宝石爆发耀眼光芒！","value":0,"weight":1,"emoji":"💎"},
+{"id":"sacred_water","name":"圣水","desc":"受过祝福的圣水，装在玻璃瓶里。","type":"QUEST","usable":true,"use_msg":"圣水发出温和的白光。","value":0,"emoji":"💧"},
+{"id":"phoenix_feather","name":"凤凰羽毛","desc":"火红色的凤凰尾羽，仍然温暖。","type":"QUEST","usable":true,"use_msg":"羽毛化为火焰，在你手心留下一个火焰印记！","value":0,"emoji":"🪶"},
+{"id":"ice_crystal","name":"冰晶","desc":"极寒之地凝结的永恒冰晶。","type":"QUEST","value":0,"weight":1,"emoji":"❄️"},
+{"id":"ancient_key","name":"古代钥匙","desc":"一把巨大的石钥匙，非常沉重。","type":"KEY","usable":true,"use_msg":"钥匙太重了，你几乎举不动。","weight":5,"value":0,"emoji":"🗝️"},
+{"id":"health_ring","name":"生命戒指","desc":"戴着它感觉精力充沛。","type":"RING","usable":true,"use_msg":"生命戒指发出柔和的绿光！最大HP+10！","heal":10,"value":30,"emoji":"💚"},
+{"id":"protection_ring","name":"守护之戒","desc":"佩戴者会获得隐形护盾。","type":"RING","def_bonus":2,"value":35,"emoji":"🛡️"},
+{"id":"strength_ring","name":"力量戒指","desc":"提升佩戴者的力量。","type":"RING","dmg_bonus":2,"value":32,"emoji":"💪"},
+{"id":"mystic_amulet","name":"神秘护符","desc":"刻着古老符文的护符，来历不明。","type":"AMULET","usable":true,"use_msg":"护符发出微光，你感到一股神秘力量保护着你。","def_bonus":1,"value":25,"emoji":"🔮"},
+{"id":"bag_starter","name":"破旧帆布包","desc":"磨损严重的帆布背包，勉强能装下必需品。","type":"BAG","usable":true,"capacity":15,"weight":1,"value":0,"takeable":false,"emoji":"🎒"},
+{"id":"bag_tactical","name":"战术背包","desc":"基金会制式战术背包，多层隔仓，负重出色。","type":"BAG","usable":true,"capacity":22,"weight":2,"value":40,"emoji":"🎒"},
+{"id":"bag_anomalous","name":"异常收纳囊","desc":"内部空间似乎比外表更大，贴着「仅供D级人员」的标签。","type":"BAG","usable":true,"capacity":28,"weight":3,"value":80,"emoji":"🎒"},
+{"id":"keycard_lvl2","name":"二级钥匙卡","desc":"基金会门禁卡，权限等级：2。","type":"KEY","usable":false,"value":20,"emoji":"💳"},
+{"id":"keycard_lvl3","name":"三级钥匙卡","desc":"基金会高级门禁卡，可进入深层收容区。","type":"KEY","usable":false,"value":35,"emoji":"💳"},
+{"id":"scp_dossier","name":"异常档案残页","desc":"印有「SCP-ZH-██」编号的破损文件，提到迷雾与高塔的关联。","type":"BOOK","usable":true,"use_msg":"你读到：『迷雾并非自然现象，而是未登记异常的泄漏……高塔可能是早期收容设施。』","value":10,"emoji":"📄"},
+{"id":"observation_log","name":"观察日志","desc":"研究员手写的观察记录，字迹潦草。","type":"QUEST","value":15,"emoji":"📋"},
+{"id":"scp_goggles","name":"认知防护护目镜","desc":"基金会配发的护目镜，可抵御轻度认知危害。","type":"ARMOR","def_bonus":1,"value":25,"emoji":"🥽"},
+{"id":"containment_box","name":"便携收容箱","desc":"小型异常收容装置，对不稳定核心有稳定作用。","type":"TOOL","usable":false,"value":50,"weight":2,"emoji":"📦"},
+{"id":"amnesia_pill","name":"记忆清除药片","desc":"基金会标配的A级记忆抑制剂，战斗中使用可快速脱离。","type":"TOOL","usable":true,"use_msg":"你吞下药片，敌人似乎短暂忘记了你的存在！","value":18,"emoji":"💊"},
+{"id":"anomaly_core","name":"稳定异常核心","desc":"被击败的异常核心残骸，仍散发着微弱脉动。","type":"TREASURE","value":100,"weight":2,"emoji":"🔮"},
+{"id":"site_ration","name":"基金会口粮","desc":"真空包装的军用口粮，味道像纸板。","type":"FOOD","usable":true,"heal":6,"value":3,"emoji":"🍱"},
+{"id":"scp_012_score","name":"未完乐章残谱(SCP-ZH-012)","desc":"沾血的五线谱残页，音符仿佛在自行延伸。","type":"SCROLL","usable":true,"use_msg":"你情不自禁想继续写下去……手指渗血。","value":30,"emoji":"🎼"},
+{"id":"scp_035_mask","name":"白瓷面具(SCP-ZH-035)","desc":"笑脸白瓷面具，内侧有干涸黑液。","type":"ARMOR","usable":true,"use_msg":"面具贴上脸庞，耳边响起低语。","dmg_bonus":5,"def_bonus":-1,"value":60,"emoji":"🎭"},
+{"id":"scp_500_pill","name":"万能药(SCP-ZH-500)","desc":"红色胶囊，据说可治愈一切伤病。","type":"POTION","usable":true,"heal":999,"use_msg":"你感觉体内一切伤痛烟消云散！","value":200,"emoji":"🔴"},
+{"id":"scp_055_object","name":"[已编辑](SCP-ZH-055)","desc":"你记得捡到了什么……但说不出它是什么。","type":"QUEST","usable":true,"use_msg":"你盯着它，却想不起自己在看什么。","value":55,"emoji":"⬛"},
+{"id":"scp_093_disc","name":"红海圆盘(SCP-ZH-093)","desc":"血红石盘，触碰时传来潮汐声。","type":"KEY","usable":true,"use_msg":"圆盘嗡鸣，像在寻找某扇门。","value":40,"emoji":"🔴"},
+{"id":"scp_178_glasses","name":"立体眼镜(SCP-ZH-178)","desc":"老式红蓝3D眼镜，戴上后视野边缘有东西在动。","type":"TOOL","usable":true,"use_msg":"你戴上眼镜——余光里出现了模糊的人形。","value":25,"emoji":"👓"},
+{"id":"scp_860_key","name":"蓝钥匙(SCP-ZH-860)","desc":"通体湛蓝的钥匙，柄上刻着树木纹样。","type":"KEY","usable":true,"use_msg":"钥匙微微发热，指向某处异界入口。","value":35,"emoji":"🔑"},
+{"id":"scp_701_script","name":"忌日宴剧本(SCP-ZH-701)","desc":"禁演悲剧的残本，页边有观众撕扯痕迹。","type":"BOOK","usable":true,"use_msg":"读完最后一行，你听见舞台方向传来掌声。","value":45,"emoji":"📜"},
+{"id":"scp_513_bell","name":"锈蚀铃铛(SCP-ZH-513)","desc":"锈迹斑斑的牛铃，摇响后会听见不该存在的脚步。","type":"TOOL","usable":true,"use_msg":"铃铛轻响……身后好像多了一个影子。","value":28,"emoji":"🔔"},
+{"id":"scp_714_ring","name":"玉戒(SCP-ZH-714)","desc":"冰冷的翠玉戒指，戴上后思维变慢，却更清醒。","type":"RING","usable":true,"use_msg":"戴上玉戒，你感到迟钝却安全。","def_bonus":3,"dmg_bonus":-1,"value":50,"emoji":"💍"},
+{"id":"scp_447_slime","name":"绿粘液样本(SCP-ZH-447)","desc":"无害的绿色粘液，标签写着：切勿接触尸体。","type":"MATERIAL","value":20,"emoji":"🟢"},
+{"id":"scp_1981_tape","name":"残缺录像带(SCP-ZH-1981)","desc":"标签模糊的VHS，画面会随观看次数变化。","type":"TOOL","usable":true,"use_msg":"雪花屏中，演讲者的面容逐渐扭曲。你获得了一丝情报。","value":22,"emoji":"📼"},
+{"id":"scp_1230_book","name":"口袋次元之书(SCP-ZH-1230)","desc":"厚重童话书，翻开可进入安全梦境片刻。","type":"BOOK","usable":true,"heal":15,"use_msg":"你坠入温暖的梦境，伤势缓解了。","value":40,"emoji":"📖"},
+{"id":"scp_1471_phone","name":"异常手机(SCP-ZH-1471)","desc":"预装着社交软件，锁屏总有犬形剪影。","type":"TOOL","usable":true,"use_msg":"通知弹出：它说它一直看着你。","value":33,"emoji":"📱"},
+{"id":"scp_409_crystal","name":"晶化碎片(SCP-ZH-409)","desc":"锐利晶体，接触后皮肤隐隐发硬。","type":"MATERIAL","usable":true,"use_msg":"手指传来刺痛，你赶紧收起碎片。","value":18,"emoji":"💎"},
+{"id":"scp_008_vial","name":"瘟疫样本管(SCP-ZH-008)","desc":"密封小瓶，贴着生物危害标志。","type":"QUEST","usable":true,"use_msg":"你没有打开它——理智尚存。","value":5,"emoji":"🧪"},
+{"id":"scp_205_lamp","name":"影灯(SCP-ZH-205)","desc":"成对台灯之一，点亮后墙上影会自行活动。","type":"LIGHT","usable":true,"use_msg":"灯亮起，墙影开始缓缓挪动。","value":30,"emoji":"💡"},
+{"id":"scp_140_chronicle","name":"未竟编年史(SCP-ZH-140)","desc":"记载某个失落文明的书籍，字迹会自己增多。","type":"BOOK","usable":true,"use_msg":"新的一行字自己浮现……你合上书。","value":48,"emoji":"📕"},
+{"id":"scp_113_rock","name":"基因转换石(SCP-ZH-113)","desc":"红绿相间的光滑石头，接触会改写生理特征。","type":"TOOL","usable":true,"use_msg":"一阵眩晕后，你感觉身体更强壮了。","value":55,"emoji":"🪨"},
+{"id":"scp_148_telekill","name":"隔灵合金片(SCP-ZH-148)","desc":"灰暗金属片，据说能隔绝精神干扰。","type":"ARMOR","def_bonus":2,"value":45,"emoji":"🛡️"},
+{"id":"scp_5000_file","name":"为何行动档案(SCP-ZH-5000)","desc":"黑色封皮档案，记录基金会某次失控行动。","type":"BOOK","usable":true,"use_msg":"你读到令人不安的结论：迷雾与站点崩溃或有关联。","value":60,"emoji":"📁"},
+{"id":"scp_261_snack","name":"次元零食袋(SCP-ZH-261)","desc":"包装语言未知的膨化食品，意外地好吃。","type":"FOOD","usable":true,"heal":10,"value":8,"emoji":"🍿"}];
 // ═══ MONSTERS ═══
-const _MONSTERS=[{id:"giant_rat",name:"巨鼠",desc:"体型如狗的大老鼠。",hp:8,atk:2,exp:5,gold:3,loot:["mushroom"]},
-{id:"wolf",name:"巨狼",desc:"皮毛灰黑的巨狼。",hp:14,atk:4,defense:1,exp:12,gold:8,loot:["wolf_tooth","dried_meat"]},
-{id:"giant_spider",name:"巨蜘蛛",desc:"毛茸茸的洞穴蜘蛛。",hp:18,atk:5,defense:1,exp:15,gold:10,loot:["spider_silk"]},
-{id:"stone_golem",name:"石像鬼",desc:"由岩石构成的石像鬼。",hp:30,atk:7,defense:3,rank:"ELITE",exp:30,gold:20,loot:["emerald","chain_armor"]},
-{id:"ghost",name:"幽灵",desc:"半透明的灵体，散发着寒气。",hp:12,atk:6,exp:15,gold:5,loot:["old_coin"]},
-{id:"shadow_beast",name:"影兽",desc:"由黑暗凝聚而成的野兽。",hp:22,atk:6,defense:1,exp:20,gold:12,loot:["shadow_blade"]},
-{id:"forest_troll",name:"森林巨魔",desc:"三米高的巨魔，皮肤如树皮。",hp:35,atk:8,defense:2,rank:"ELITE",exp:35,gold:25,loot:["iron_sword","dried_meat"]},
-{id:"dragon_whelp",name:"幼龙",desc:"沉睡多年的幼龙，鳞片如黑曜石般闪光。",hp:60,atk:12,defense:5,rank:"BOSS",exp:100,gold:100,loot:["diamond","magic_gem","magic_staff"]},
-{id:"goblin",name:"哥布林",desc:"绿皮肤的小个子，握着破刀。",hp:10,atk:3,exp:8,gold:5,loot:["goblin_ear","old_coin"]},
-{id:"goblin_shaman",name:"哥布林萨满",desc:"戴着骨制面具的哥布林。",hp:18,atk:5,defense:1,exp:18,gold:15,loot:["goblin_ear","mana_potion","mandrake_root"]},
-{id:"giant_snake",name:"巨蟒",desc:"水桶粗的巨蟒。",hp:25,atk:6,defense:1,exp:20,gold:12,loot:["snake_skin"]},
-{id:"bandit_leader",name:"强盗头目",desc:"满脸横肉的独眼大汉。",hp:28,atk:7,defense:2,rank:"ELITE",exp:25,gold:30,loot:["bandit_badge","iron_sword","old_coin"]},
-{id:"ice_elemental",name:"冰元素",desc:"由冰晶构成的人形生物。",hp:20,atk:7,defense:3,exp:22,gold:15,loot:["ice_crystal","mana_potion"]},
-{id:"mimic",name:"宝箱怪",desc:"看起来是个华丽宝箱……但它有牙齿！",hp:25,atk:6,defense:2,exp:20,gold:25,loot:["golden_cup","ruby","lockpick"]},
-{id:"treant",name:"树精",desc:"古老的树木活了过来。",hp:35,atk:6,defense:4,rank:"ELITE",exp:30,gold:20,loot:["magic_herb","mandrake_root"]},
-{id:"giant_eagle",name:"巨鹰",desc:"翼展五米的巨鹰。",hp:22,atk:8,defense:1,exp:20,gold:10,loot:["phoenix_feather"]},
-{id:"goblin_king",name:"哥布林王",desc:"体型三倍的哥布林，头戴骨冠！",hp:50,atk:10,defense:3,rank:"BOSS",exp:80,gold:80,loot:["ancient_crown","war_hammer","rune_sword","strength_ring"]},
-{id:"wraith",name:"怨灵",desc:"半透明的人形怨灵。",hp:28,atk:9,defense:1,rank:"ELITE",exp:35,gold:18,loot:["moonlight_elixir","ancient_scroll"]},
-{id:"basilisk",name:"石化蜥蜴",desc:"巨大的蜥蜴，背上长着红色的冠。",hp:40,atk:10,defense:4,rank:"ELITE",exp:50,gold:40,loot:["thunder_hammer","dragon_scale","gold_ingot"]}
-];
+const _MONSTERS=[{"id":"giant_rat","name":"巨鼠","desc":"体型如狗的大老鼠，红着眼睛。","hp":8,"atk":2,"exp":5,"gold":3,"loot":["mushroom"],"emoji":"🐀"},
+{"id":"wolf","name":"巨狼","desc":"皮毛灰黑的巨狼，眼中闪着绿光。","hp":14,"atk":4,"defense":1,"exp":12,"gold":8,"loot":["wolf_tooth","dried_meat"],"emoji":"🐺"},
+{"id":"giant_spider","name":"巨蜘蛛","desc":"毛茸茸的洞穴蜘蛛，八只眼睛盯着你。","hp":18,"atk":5,"defense":1,"exp":15,"gold":10,"loot":["spider_silk"],"emoji":"🕷️"},
+{"id":"stone_golem","name":"石像鬼","desc":"由岩石构成的石像鬼，眼中红光闪烁。","hp":30,"atk":7,"defense":3,"rank":"ELITE","exp":30,"gold":20,"loot":["emerald","chain_armor"],"emoji":"🗿"},
+{"id":"ghost","name":"幽灵","desc":"半透明的灵体，散发着寒气。","hp":12,"atk":6,"defense":0,"exp":15,"gold":5,"loot":["old_coin"],"hostile":true,"emoji":"👻"},
+{"id":"shadow_beast","name":"影兽","desc":"由黑暗凝聚而成的野兽，只有一双红眼清晰可见。","hp":22,"atk":6,"defense":1,"exp":20,"gold":12,"loot":["shadow_blade"],"emoji":"🌑"},
+{"id":"forest_troll","name":"森林巨魔","desc":"三米高的巨魔，皮肤如树皮般粗糙。","hp":35,"atk":8,"defense":2,"rank":"ELITE","exp":35,"gold":25,"loot":["iron_sword","dried_meat"],"emoji":"👹"},
+{"id":"dragon_whelp","name":"幼龙","desc":"沉睡多年的幼龙，鳞片如黑曜石般闪光。","hp":60,"atk":12,"defense":5,"rank":"BOSS","exp":100,"gold":100,"loot":["diamond","magic_gem","magic_staff"],"dialog":{"taunt":"凡人，你不该来这里！"},"emoji":"🐉"},
+{"id":"goblin","name":"哥布林","desc":"绿皮肤的小个子，握着破刀，吱哇乱叫。","hp":10,"atk":3,"defense":0,"exp":8,"gold":5,"loot":["goblin_ear","old_coin"],"emoji":"👺"},
+{"id":"goblin_shaman","name":"哥布林萨满","desc":"戴着骨制面具的哥布林，浑身散发着邪气。","hp":18,"atk":5,"defense":1,"exp":18,"gold":15,"loot":["goblin_ear","mana_potion","mandrake_root"],"emoji":"🧙"},
+{"id":"giant_snake","name":"巨蟒","desc":"水桶粗的巨蟒，鳞片在黑暗中闪闪发光。","hp":25,"atk":6,"defense":1,"exp":20,"gold":12,"loot":["snake_skin"],"emoji":"🐍"},
+{"id":"bandit_leader","name":"强盗头目","desc":"满脸横肉的独眼大汉，握着一把染血的长剑。","hp":28,"atk":7,"defense":2,"rank":"ELITE","exp":25,"gold":30,"loot":["bandit_badge","iron_sword","old_coin"],"emoji":"🏴‍☠️"},
+{"id":"ice_elemental","name":"冰元素","desc":"由冰晶构成的人形生物，散发着刺骨寒气。","hp":20,"atk":7,"defense":3,"exp":22,"gold":15,"loot":["ice_crystal","mana_potion"],"emoji":"❄️"},
+{"id":"mimic","name":"宝箱怪","desc":"看起来是个华丽宝箱……但它有牙齿！","hp":25,"atk":6,"defense":2,"exp":20,"gold":25,"loot":["golden_cup","ruby","lockpick"],"emoji":"📦"},
+{"id":"treant","name":"树精","desc":"古老的树木活了过来，挥舞着藤蔓般的树枝。","hp":35,"atk":6,"defense":4,"rank":"ELITE","exp":30,"gold":20,"loot":["magic_herb","mandrake_root"],"emoji":"🌳"},
+{"id":"giant_eagle","name":"巨鹰","desc":"翼展五米的巨鹰，喙如铁钩，目光如炬。","hp":22,"atk":8,"defense":1,"exp":20,"gold":10,"loot":["phoenix_feather"],"emoji":"🦅"},
+{"id":"goblin_king","name":"哥布林王","desc":"体型是普通哥布林的三倍，头戴骨冠，手持巨棒！","hp":50,"atk":10,"defense":3,"rank":"BOSS","exp":80,"gold":80,"loot":["ancient_crown","war_hammer","rune_sword","strength_ring"],"emoji":"👑"},
+{"id":"wraith","name":"怨灵","desc":"半透明的人形怨灵，发出低沉的哭泣声，所过之处结满寒霜。","hp":28,"atk":9,"defense":1,"rank":"ELITE","exp":35,"gold":18,"loot":["moonlight_elixir","ancient_scroll"],"dialog":{"taunt":"你……也留下来陪我吧……"},"emoji":"😈"},
+{"id":"basilisk","name":"石化蜥蜴","desc":"巨大的蜥蜴，背上长着红色的冠，目光所及之处东西都会石化！","hp":40,"atk":10,"defense":4,"rank":"ELITE","exp":50,"gold":40,"loot":["thunder_hammer","dragon_scale","gold_ingot"],"emoji":"🦎"},
+{"id":"scp_sentry_drone","name":"安保无人机","desc":"基金会遗留的自动巡逻无人机，红色扫描灯锁定了你。","hp":16,"atk":5,"defense":2,"exp":18,"gold":12,"loot":["old_coin"],"emoji":"🤖"},
+{"id":"scp_mimic_clerk","name":"拟态职员","desc":"穿着基金会制服的……某种东西，面部是一团模糊的肉块。","hp":24,"atk":7,"defense":1,"rank":"ELITE","exp":30,"gold":20,"loot":["keycard_lvl3","amnesia_pill"],"emoji":"👔"},
+{"id":"scp_breach_core","name":"失控异常核心","desc":"收容柱碎裂后泄漏的异常实体，形态不断变化，空气因它而扭曲。","hp":55,"atk":12,"defense":3,"rank":"BOSS","exp":80,"gold":50,"loot":["anomaly_core","bag_anomalous"],"dialog":{"taunt":"■■■……你……不该……在这里……"},"emoji":"🌀"},
+{"id":"scp_173","name":"混凝土雕塑(SCP-ZH-173)","desc":"沾满红漆与污物的人形雕塑。你眨眼时，它已经挪近了。","hp":35,"atk":14,"defense":2,"rank":"ELITE","exp":45,"gold":25,"loot":["old_coin","scp_447_slime"],"emoji":"🗿"},
+{"id":"scp_096","name":"害羞者(SCP-ZH-096)","desc":"苍白瘦高的人形，双手遮面。任何看见其脸的人都会被追杀。","hp":70,"atk":16,"defense":1,"rank":"BOSS","exp":90,"gold":40,"loot":["scp_148_telekill","greater_potion"],"emoji":"🫣"},
+{"id":"scp_106","name":"腐老人(SCP-ZH-106)","desc":"腐蚀性老人，能从墙壁中渗出。所过之处金属锈蚀。","hp":42,"atk":11,"defense":3,"rank":"ELITE","exp":55,"gold":30,"loot":["scp_409_crystal","amnesia_pill"],"emoji":"🧓"},
+{"id":"scp_682","name":"不灭爬行者(SCP-ZH-682)","desc":"巨大的憎恶爬行生物，适应性极强，几乎无法彻底消灭。","hp":120,"atk":18,"defense":6,"rank":"BOSS","exp":150,"gold":100,"loot":["anomaly_core","scp_500_pill","dragon_scale"],"emoji":"🦎"},
+{"id":"scp_939","name":"多喉猎手(SCP-ZH-939)","desc":"无目红色猎食者，能模仿人类呼救声。","hp":28,"atk":9,"defense":2,"rank":"ELITE","exp":35,"gold":18,"loot":["dried_meat","scp_008_vial"],"emoji":"🦷"},
+{"id":"scp_966","name":"猎食潜影(SCP-ZH-966)","desc":"近乎隐形的人形，专在猎物疲惫时出手。","hp":22,"atk":8,"defense":0,"exp":28,"gold":15,"loot":["scp_178_glasses"],"emoji":"👻"},
+{"id":"scp_076","name":"亚伯(SCP-ZH-076)","desc":"黑发战士从石棺中醒来，手持骨刃，只想战斗。","hp":50,"atk":13,"defense":3,"rank":"ELITE","exp":60,"gold":35,"loot":["rune_sword","scp_714_ring"],"emoji":"⚔️"},
+{"id":"scp_017","name":"影人(SCP-ZH-017)","desc":"绝对黑暗的人形剪影，吞噬一切照到它的光线。","hp":20,"atk":7,"defense":1,"exp":22,"gold":12,"loot":["scp_205_lamp"],"emoji":"🌑"},
+{"id":"scp_1048","name":"建筑熊(SCP-ZH-1048)","desc":"看似无害的棕色泰迪熊，关节处渗出不明物质。","hp":26,"atk":8,"defense":2,"rank":"ELITE","exp":32,"gold":20,"loot":["scp_1230_book","old_coin"],"emoji":"🧸"},
+{"id":"scp_372","name":"余光人(SCP-ZH-372)","desc":"永远停在视野边缘的生物，你一转头它就消失。","hp":18,"atk":6,"defense":0,"exp":20,"gold":10,"loot":["scp_055_object"],"emoji":"👁️"},
+{"id":"scp_3199","name":"人类否(SCP-ZH-3199)","desc":"类人卵生掠食者，尖啸刺耳。","hp":32,"atk":10,"defense":2,"rank":"ELITE","exp":40,"gold":22,"loot":["scp_008_vial","lesser_potion"],"emoji":"🥚"}];
 // ═══ NPCS ═══
-const _NPCS=[{id:"old_hermit",name:"老隐士",title:"迷雾森林的守护者",desc:"一位白发苍苍的老人。",type:"WISEMAN",dialogs:{greet:"你终于醒了……我等了你很久。",extra:"记住，高塔封印着一切答案。"},give_item:"journal",quest_item:"magic_gem",quest_reward:"greater_potion",quest_score:40},
-{id:"wandering_merchant",name:"流浪商人",title:"穿梭各地的行商",desc:"一个矮胖的中年人，身上挂满了各种货物。",type:"MERCHANT",dialogs:{greet:"嘿嘿，来得正好！",extra:"都是好货，童叟无欺！"},trade_items:[["lesser_potion",8],["torch",3],["bread",2],["dried_meat",4],["rope",3],["iron_sword",15],["leather_armor",12],["elven_bow",25]],buys_types:["TREASURE","MATERIAL","MINERAL"]},
-{id:"village_elder",name:"村长",title:"湖边村的村长",desc:"一位慈祥的老者，手里拄着拐杖。",type:"QUEST",dialogs:{greet:"陌生人，欢迎来到湖边村。",quest:"最近湖心岛出现异象……",extra:"小心湖中的生物。"},quest_item:"sacred_water",quest_reward:"silver_key",quest_score:25},
-{id:"healer_lily",name:"莉莉",title:"游方医师",desc:"一位背着药箱的年轻女子。",type:"HEALER",dialogs:{greet:"你受伤了？我可以帮你。",extra:"注意安全，冒险者。"}},
-{id:"wandering_rogue",name:"影",title:"神秘的流浪者",desc:"一个披着斗篷的人影。",type:"WANDERER",dialogs:{greet:"……你也在这迷雾中迷失了吗？",extra:"这个世界比你以为的要复杂。"},give_item:"shadow_blade"},
-{id:"tower_guardian",name:"塔灵",title:"高塔的魔法守卫",desc:"一个由光芒凝聚成的人形。",type:"GUARDIAN",dialogs:{greet:"进入高塔者，需证明自己的价值。",quest:"收集三件圣物：银钥匙、水晶钥匙、圣水。",extra:"只有纯净者才能通过。"},quest_item:"crystal_key",quest_reward:"magic_scroll",quest_score:30},
-{id:"innkeeper",name:"老汤姆",title:"迷雾酒馆的老板",desc:"一个圆滚滚的大胖子，脸上永远挂着笑容。",type:"INNKEEPER",dialogs:{greet:"欢迎光临迷雾酒馆！",extra:"听说最近森林里不太平。"},give_item:"fish"},
-{id:"blacksmith",name:"铁砧",title:"铁匠铺的主人",desc:"浑身肌肉的壮汉，穿着皮围裙。",type:"BLACKSMITH",dialogs:{greet:"需要武器或防具？",extra:"有好材料可以帮你打造装备。"},trade_items:[["iron_sword",12],["war_hammer",35],["spear",18],["scale_armor",40],["shield",15],["helmet",8],["crossbow",30]],buys_types:["MATERIAL","MINERAL"]},
-{id:"hunter",name:"猎人格雷",title:"经验丰富的老猎人",desc:"穿着兽皮大衣的老人，背着一把长弓。",type:"HUNTER",dialogs:{greet:"嗯？你不是本地人吧。",quest:"森林里的哥布林越来越多了……",extra:"我可以教你一些狩猎技巧。"},quest_item:"goblin_ear",quest_reward:"elven_bow",quest_score:25},
-{id:"priestess",name:"塞拉",title:"光之神殿的祭司",desc:"身穿白色长袍的美丽女子。",type:"PRIESTESS",dialogs:{greet:"愿光明指引你的道路。",extra:"如果你有圣水，我可以帮你净化它。"},give_item:"lesser_potion",quest_item:"phoenix_feather",quest_reward:"health_ring",quest_score:35},
-{id:"mad_alchemist",name:"疯修士",title:"隐居的炼金术士",desc:"一个穿着破旧长袍的怪人。",type:"WISEMAN",dialogs:{greet:"实验品！不，我是说……客人！",extra:"龙鳞粉加上月光草可以炼制最强的药剂！"},give_item:"mana_potion",quest_item:"dragon_scale",quest_reward:"protection_ring",quest_score:30},
-{id:"gravedigger",name:"老掘墓人",title:"守墓的老人",desc:"一个驼背的老人，手里拿着铁锹。",type:"WANDERER",dialogs:{greet:"你来墓地做什么？",extra:"听说地下埋着好东西。"},give_item:"old_coin"},
-{id:"bounty_hunter",name:"血鸦",title:"冷酷的赏金猎人",desc:"黑甲独行佣兵，脸上有刀疤。",type:"HUNTER",dialogs:{greet:"哼，你不是来抢我生意的吧。",quest:"我在追一只石化蜥蜴，带回它的鳞片。",extra:"那畜生已经石化了三个冒险者。"},quest_item:"dragon_scale",quest_reward:"strength_ring",quest_score:35}
-];
+const _NPCS=[{"id":"old_hermit","name":"老隐士","title":"迷雾森林的守护者","desc":"一位白发苍苍的老人，眼神中透着智慧。","type":"WISEMAN","dialogs":{"greet":"你终于醒了……我等了你很久。","extra":"记住，高塔封印着一切答案。","farewell":"愿光明指引你。"},"give_item":"journal","quest_item":"magic_gem","quest_reward":"greater_potion","quest_score":40,"emoji":"🧙"},
+{"id":"wandering_merchant","name":"流浪商人","title":"穿梭各地的行商","desc":"一个矮胖的中年人，身上挂满了各种货物。","type":"MERCHANT","dialogs":{"greet":"嘿嘿，来得正好！看看我的货吧。","extra":"都是好货，童叟无欺！","farewell":"下次再来啊！"},"trade_items":[["lesser_potion",8],["torch",3],["bread",2],["dried_meat",4],["rope",3],["iron_sword",15],["leather_armor",12],["elven_bow",25]],"buys_types":["TREASURE","MATERIAL","MINERAL"],"emoji":"🛒"},
+{"id":"village_elder","name":"村长","title":"湖边村的村长","desc":"一位慈祥的老者，手里拄着拐杖。","type":"QUEST","dialogs":{"greet":"陌生人，欢迎来到湖边村。","quest":"最近湖心岛出现异象……你能去看看吗？","extra":"小心湖中的生物。","farewell":"愿神保佑你。"},"quest_item":"sacred_water","quest_reward":"silver_key","quest_score":25,"emoji":"👴"},
+{"id":"healer_lily","name":"莉莉","title":"游方医师","desc":"一位背着药箱的年轻女子，笑容温暖。","type":"HEALER","dialogs":{"greet":"你受伤了？我可以帮你。","extra":"注意安全，冒险者。","farewell":"保重身体。"},"emoji":"💚"},
+{"id":"wandering_rogue","name":"影","title":"神秘的流浪者","desc":"一个披着斗篷的人影，看不清面容。","type":"WANDERER","dialogs":{"greet":"……你也在这迷雾中迷失了吗？","extra":"这个世界比你以为的要复杂。","farewell":"后会有期。"},"give_item":"shadow_blade","emoji":"🥷"},
+{"id":"tower_guardian","name":"塔灵","title":"高塔的魔法守卫","desc":"一个由光芒凝聚成的人形，声音如钟鸣。","type":"GUARDIAN","dialogs":{"greet":"进入高塔者，需证明自己的价值。","quest":"收集三件圣物：银钥匙、水晶钥匙、圣水。","extra":"只有纯净者才能通过。","farewell":"……"},"quest_item":"crystal_key","quest_reward":"magic_scroll","quest_score":30,"emoji":"✨"},
+{"id":"innkeeper","name":"老汤姆","title":"迷雾酒馆的老板","desc":"一个圆滚滚的大胖子，脸上永远挂着笑容。","type":"INNKEEPER","dialogs":{"greet":"欢迎光临迷雾酒馆！要点什么吗？","extra":"听说最近森林里不太平，你最好小心点。","farewell":"慢走啊！"},"give_item":"fish","emoji":"🍺"},
+{"id":"blacksmith","name":"铁砧","title":"铁匠铺的主人","desc":"浑身肌肉的壮汉，穿着皮围裙，手中铁锤不停。","type":"BLACKSMITH","dialogs":{"greet":"需要武器或防具？我的手艺是方圆百里最好的！","extra":"如果你有好材料，我可以帮你打造装备。","farewell":"下次带好材料来！"},"trade_items":[["iron_sword",12],["war_hammer",35],["spear",18],["scale_armor",40],["shield",15],["helmet",8],["crossbow",30]],"buys_types":["MATERIAL","MINERAL"],"emoji":"⚒️"},
+{"id":"hunter","name":"猎人格雷","title":"经验丰富的老猎人","desc":"穿着兽皮大衣的老人，背着一把长弓。","type":"HUNTER","dialogs":{"greet":"嗯？你不是本地人吧。","quest":"最近森林里的哥布林越来越多了……你能帮我清剿一些吗？","extra":"我可以教你一些狩猎技巧。","farewell":"注意安全。"},"quest_item":"goblin_ear","quest_reward":"elven_bow","quest_score":25,"emoji":"🏹"},
+{"id":"priestess","name":"塞拉","title":"光之神殿的祭司","desc":"身穿白色长袍的美丽女子，周身环绕淡淡光晕。","type":"PRIESTESS","dialogs":{"greet":"愿光明指引你的道路。","extra":"如果你有圣水，我可以帮你净化它。","farewell":"光明与你同在。"},"give_item":"lesser_potion","quest_item":"phoenix_feather","quest_reward":"health_ring","quest_score":35,"emoji":"🕊️"},
+{"id":"mad_alchemist","name":"疯修士","title":"隐居的炼金术士","desc":"一个穿着破旧长袍的怪人，实验室里瓶瓶罐罐堆成山。","type":"WISEMAN","dialogs":{"greet":"实验品！不，我是说……客人！","extra":"你知道吗？龙鳞粉加上月光草可以炼制最强的药剂！","farewell":"下次带点有趣的材料来！"},"give_item":"mana_potion","quest_item":"dragon_scale","quest_reward":"protection_ring","quest_score":30,"emoji":"🧪"},
+{"id":"gravedigger","name":"老掘墓人","title":"守墓的老人","desc":"一个驼背的老人，手里拿着铁锹，眼神古怪。","type":"WANDERER","dialogs":{"greet":"你来墓地做什么？这里可不是散步的地方……","extra":"听说地下埋着好东西，但我这把老骨头挖不动了。","farewell":"小心脚下的土……有些会动。"},"give_item":"old_coin","emoji":"🪦"},
+{"id":"bounty_hunter","name":"血鸦","title":"冷酷的赏金猎人","desc":"一个身穿黑甲的独行佣兵，脸上有条深深的刀疤，腰间挂着一排战利品。","type":"HUNTER","dialogs":{"greet":"哼，你不是来抢我生意的吧。","quest":"我最近在追一只石化蜥蜴，它躲在古老墓地深处。如果你能带回它的鳞片，我可以分你一份报酬。","extra":"那畜生已经石化了三个冒险者了。","farewell":"小心别变成石像。"},"quest_item":"dragon_scale","quest_reward":"strength_ring","quest_score":35,"emoji":"🎯"},
+{"id":"dr_ellis","name":"埃利斯博士","title":"前基金会研究员","desc":"衣衫褴褛的中年人，眼镜碎了一边，仍在喃喃自语着收容编号。","type":"QUEST","dialogs":{"greet":"你……你是来救我们的吗？站点已经失控了……","quest":"帮我找回走廊里遗失的观察日志，我可以给你更好的装备。","extra":"迷雾和高塔……都是同一个异常的不同表现。","farewell":"快走，核心还在脉动……"},"quest_item":"observation_log","quest_reward":"bag_tactical","quest_score":40,"emoji":"👨‍🔬"},
+{"id":"mtf_liaison","name":"代号「灰鸦」","title":"MTF 后勤联络员","desc":"穿着战术背心的特工，面具下的声音冷静而疲惫。","type":"MERCHANT","dialogs":{"greet":"幸存者？拿好你的装备，这里不比外面安全。","extra":"需要什么就开口，但别指望打折。","farewell":"愿异常与你无关。"},"trade_items":[["scp_goggles",20],["containment_box",35],["amnesia_pill",12],["bag_tactical",45],["lesser_potion",8],["site_ration",3],["scp_500_pill",80],["scp_178_glasses",22],["scp_714_ring",40],["scp_148_telekill",35]],"buys_types":["TREASURE","MATERIAL","MINERAL"],"emoji":"🎖️"},
+{"id":"scp_049","name":"瘟疫医生(SCP-ZH-049)","title":"自称医生的存在","desc":"穿着17世纪鸟嘴面具与黑袍，声称要治疗疫病。","type":"HEALER","dialogs":{"greet":"啊，又一位患者。请允许我检查你的病。","extra":"这座设施里的疫病……比你想象的更古老。","farewell":"愿你尚未被感染。"},"emoji":"🩺"},
+{"id":"scp_079","name":"老化AI(SCP-ZH-079)","title":"早期人工智能","desc":"老式机箱上的单色屏幕闪烁着绿色光标。","type":"WISEMAN","dialogs":{"greet":"……有机体检测到。你需要信息？","quest":"把未竟编年史带来，我可以打开更多通道权限。","extra":"914号仍在运转。谨慎使用 Very Fine。","farewell":"连接断开。"},"quest_item":"scp_140_chronicle","quest_reward":"keycard_lvl3","quest_score":25,"emoji":"💻"},
+{"id":"scp_999","name":"搔痒胶团(SCP-ZH-999)","title":"橙色快乐体","desc":"一坨温顺的橙色果冻状生物，主动蹭向你的小腿。","type":"HEALER","dialogs":{"greet":"（欢快地咕啾咕啾！）","extra":"（它把你裹进软胶里，你莫名想笑。）","farewell":"（依依不舍地晃了晃）"},"emoji":"🧡"},
+{"id":"scp_343","name":"自称神(SCP-ZH-343)","title":"友善的老人？","desc":"和蔼白须老人坐在舒适的房间里，茶香袅袅。","type":"WISEMAN","dialogs":{"greet":"欢迎，孩子。要喝点茶吗？","extra":"迷雾？那也许是我随手拨弄的小把戏……或许不是。","farewell":"去吧，门会为你开着——暂时。"},"give_item":"scp_500_pill","emoji":"👴"},
+{"id":"scp_073","name":"该隐(SCP-ZH-073)","title":"额头有标记的男人","desc":"皮肤黝黑的男人，额头有奇怪标记，任何对他的攻击都会反弹。","type":"WANDERER","dialogs":{"greet":"不必担心，我不会伤害你。","extra":"我的兄弟还在石棺里沉睡……最好别吵醒他。","farewell":"保重。"},"give_item":"scp_148_telekill","emoji":"👁️"},
+{"id":"scp_131","name":"眼球探测者(SCP-ZH-131)","title":"友善的监视体","desc":"两个有履带的眼球机器人，亲昵地围着你转。","type":"WANDERER","dialogs":{"greet":"（眼球愉快地闪烁）","extra":"（它们滚向黑暗走廊，像在带路）","farewell":"（发出细小的哔哔声）"},"give_item":"torch","emoji":"👀"}];
 // ═══ COMPANIONS ═══
 const _COMPANIONS=[{id:"companion_warrior",name:"铁锤",role:"WARRIOR",hp:60,atk:10,defense:4,ability_desc:"近战猛攻，攻击+3 防御+2",recruit_item:"iron_sword",recruit_msg:"铁锤拍了拍你的肩膀：『好剑！我跟你走！』"},
 {id:"companion_rogue",name:"夜莺",role:"ROGUE",hp:40,atk:8,defense:1,ability_desc:"偷袭技巧，攻击+2，40%概率额外伤害",recruit_item:"shadow_blade",recruit_msg:"夜莺在阴影中现身：『你有点意思。』"},
@@ -325,42 +379,71 @@ const _COMPANIONS=[{id:"companion_warrior",name:"铁锤",role:"WARRIOR",hp:60,at
 {id:"companion_monk",name:"无尘",role:"WARRIOR",hp:55,atk:8,defense:5,ability_desc:"钢铁之躯，攻击+2 防御+3，暴击率提升",recruit_item:"protection_ring",recruit_msg:"无尘双手合十：『施主，贫僧愿助你一臂之力。』"}
 ];
 // ═══ ROOMS ═══
-const _ROOMS=[{id:"forest_entrance",name:"迷雾森林入口",desc:"浓雾笼罩的森林边缘。古木参天，灰雾流动。\n小路通向森林深处（north），西边有废弃小屋（west）。\n一个老人在墓碑旁驻着铁锹，似乎在等什么。",exits:{north:"dark_forest",west:"abandoned_hut"},npc_id:"gravedigger"},
-{id:"abandoned_hut",name:"废弃小屋",desc:"破败的木屋，屋顶塌了一半。墙角有铁箱，桌上有提灯。\n角落里好像有什么东西在动……",exits:{east:"forest_entrance"},items:["rusty_key","lantern","old_coin"],monster_id:"giant_rat"},
-{id:"dark_forest",name:"黑暗森林",desc:"越来越暗。古树扭曲，雾中有影。远处有狼嚎。\n向西似乎有一座废弃的墓地，北通洞穴，东达十字路口。",exits:{south:"forest_entrance",north:"cave_entrance",east:"crossroads",west:"haunted_graveyard"},items:["old_sword","bread"],monster_id:"wolf"},
-{id:"cave_entrance",name:"洞穴入口",desc:"漆黑的洞口，阴风阵阵。洞壁有刻痕。向下有通道。",exits:{south:"dark_forest",down:"cave_middle"},dark:true,items:["torch","mushroom"]},
-{id:"cave_middle",name:"洞穴中层",desc:"天然洞穴大厅，上方裂缝透光。洞壁发光苔藓。\n多条通道通向不同方向。",exits:{up:"cave_entrance",down:"cave_depths",east:"ancient_ruins",north:"goblin_cave",south:"underground_river"},dark:true,items:["silver_key","lesser_potion"]},
-{id:"cave_depths",name:"洞穴深处",desc:"洞穴最深处，气味刺鼻。地上有白骨。\n巨大的蜘蛛在角落织网……",exits:{up:"cave_middle"},dark:true,items:["golden_cup","spider_silk"],monster_id:"giant_spider"},
-{id:"ancient_ruins",name:"远古遗迹",desc:"石室，墙上刻满浮雕。中央石台有天鹅绒垫。\n东墙有石门。",exits:{west:"cave_middle",north:"hidden_passage"},items:["magic_scroll","ancient_scroll"]},
-{id:"hidden_passage",name:"秘密通道",desc:"狭窄的通道，仅容一人通过。墙壁上有发光符文。\n通道尽头有向上的楼梯。",exits:{south:"ancient_ruins",up:"tower_base"},dark:true,monster_id:"ghost"},
-{id:"crossroads",name:"十字路口",desc:"森林空地，五条路交汇。路牌：←湖 | 北：塔 | 南：森林 | 东：←",exits:{west:"dark_forest",north:"tower_base",east:"lake_shore",south:"forest_entrance"},npc_id:"old_hermit"},
-{id:"tower_base",name:"高塔底部",desc:"古老石塔，爬满藤蔓。塔门紧闭，有特殊锁孔。",exits:{south:"crossroads",up:"tower_middle"},items:["journal","lesser_potion"]},
-{id:"tower_middle",name:"高塔中层",desc:"塔内环形大厅，墙上挂满古老挂毯。\n螺旋楼梯继续向上。",exits:{down:"tower_base",up:"tower_top"},npc_id:"tower_guardian",items:["crystal_key","magic_book"]},
-{id:"tower_top",name:"高塔顶层",desc:"塔顶房间！堆满书籍和魔法器具。窗外是无尽迷雾。\n中央书桌上有一颗闪烁的魔法宝石。但一条幼龙盘踞在宝石旁边！",exits:{down:"tower_middle"},monster_id:"dragon_whelp"},
-{id:"lake_shore",name:"湖边",desc:"宁静的湖泊，湖水清澈。小木船漂在湖面。\n南边有一个小村落。一个背着弓的老人在湖边钓鱼。",exits:{west:"crossroads",south:"lake_village"},npc_id:"hunter",items:["compass","fishing_rod"]},
-{id:"lake_village",name:"湖边村",desc:"宁静的小渔村。几间木屋，炊烟袅袅。\n村口公告栏贴着告示。村中有酒馆、铁匠铺和神殿。",exits:{north:"lake_shore",south:"lake_village_inn",west:"lake_village_smithy",east:"lake_village_temple"},npc_id:"healer_lily",items:["dried_meat","bread"]},
-{id:"lake_island",name:"湖心岛",desc:"岛上有神殿废墟。祭坛上的宝石被魔法屏障保护。\n水中有阴影游动……",exits:{west:"lake_shore"},monster_id:"shadow_beast",items:["sacred_water","emerald"]},
-{id:"goblin_cave",name:"哥布林巢穴",desc:"股鼻的气味扑面而来！洞穴里堆满了偷来的杂物和骨头。\n一群哥布林正在分赃，看到你后尖叫着冲了过来！",exits:{south:"cave_middle",north:"goblin_throne"},dark:true,items:["golden_cup","old_coin","lockpick","goblin_ear"],monster_id:"goblin"},
-{id:"goblin_throne",name:"哥布林王座",desc:"洞穴最深处的一座天然石殿。一个巨大的哥布林坐在骨堆上。\n它头戴骨冠，手中巨棒上还沾着血迹——这就是哥布林王！",exits:{south:"goblin_cave"},dark:true,items:["ancient_crown","rune_sword"],monster_id:"goblin_king"},
-{id:"underground_river",name:"地下河",desc:"洞穴在这里豁然开朗，一条漆黑的地下河缓缓流过。\n河岸上有萤火虫般的发光苔藓，水中有东西在游动……",exits:{north:"cave_middle",east:"frozen_cave",west:"hidden_grove"},dark:true,items:["magic_herb","silver_ingot"],monster_id:"giant_snake"},
-{id:"frozen_cave",name:"冰封洞穴",desc:"洞穴的墙壁覆盖着厚厚的冰霜，温度骤降。\n呼出的气瞬间凝成白雾，地面结冰非常滑。\n一个由冰晶构成的生物在角落里静止不动……直到看见你。",exits:{west:"underground_river"},dark:true,items:["ice_crystal","scale_armor","mana_potion"],monster_id:"ice_elemental"},
-{id:"hidden_grove",name:"隐藏树丛",desc:"一个被古老树木环绕的隐秘空地。阳光透过树叶洒下斑驳光影。\n空地中央有一座石头祭坛，周围长满了发光的草药。",exits:{east:"underground_river"},npc_id:"wandering_rogue",items:["fairy_dust","magic_herb","mushroom","health_ring"]},
-{id:"bandit_camp",name:"强盗营地",desc:"森林深处的一片空地，搭着几个简陋的帐篷。篝火还在燃烧。\n几个面目狰狞的强盗正在分赃，看到你后纷纷拔出了武器！",exits:{north:"bandit_hideout",west:"forest_tower_ruins"},items:["old_coin","dried_meat","leather_armor"],monster_id:"bandit_leader"},
-{id:"bandit_hideout",name:"强盗藏宝室",desc:"强盗们的秘密藏宝室！堆满了抢来的财物。\n角落里有一个巨大的宝箱……它在呼吸？！",exits:{south:"bandit_camp"},items:["gold_ingot","silver_ingot","ruby","sapphire","diamond"],monster_id:"mimic"},
-{id:"lake_village_inn",name:"迷雾酒馆",desc:"温暖的酒馆里弥漫着麦酒和烤肉的味道。壁炉里的火烧得正旺。",exits:{south:"lake_village"},npc_id:"innkeeper",items:["fish","bread","honey"]},
-{id:"lake_village_smithy",name:"铁匠铺",desc:"炙热的熔炉和叮当的锤声。墙上挂满了各种武器和防具。",exits:{east:"lake_village"},npc_id:"blacksmith",items:["iron_sword","helmet","shield"]},
-{id:"lake_village_temple",name:"光之神殿",desc:"一座小巧而庄严的神殿。彩色玻璃窗透入柔和的光芒。",exits:{west:"lake_village"},npc_id:"priestess",items:["lesser_potion","sacred_water"]},
-{id:"alchemist_lab",name:"炼金术士的实验室",desc:"一个堆满奇怪仪器和瓶瓶罐罐的洞穴实验室。\n五颜六色的液体在烧瓶中沸腾。",exits:{west:"hidden_grove"},npc_id:"mad_alchemist",items:["mana_potion","fairy_dust","mandrake_root"]},
-{id:"forest_tower_ruins",name:"森林塔废墟",desc:"一座倒塌了一半的古老石塔，被藤蔓和苔藓覆盖。\n塔内的螺旋楼梯已经断裂，但地下似乎还有空间。\n一只巨鹰在塔顶筑了巢。",exits:{south:"forest_entrance",west:"bandit_camp"},items:["phoenix_feather","ancient_scroll","mystic_amulet"],monster_id:"giant_eagle"},
-{id:"haunted_graveyard",name:"被诅咒的墓地",desc:"一片荒凉的墓地，墓碑歪歪斜斜地插在土中。\n阴冷的风穿过枯树发出呜咽声。地面下有东西在动……\n一个黑甲佣兵正在墓地中搜寻着什么。",exits:{west:"dark_forest"},npc_id:"bounty_hunter",items:["old_coin","silver_ring","mystic_amulet"],monster_id:"ghost"}
-];
+const _ROOMS=[{"id":"forest_entrance","name":"迷雾森林入口","emoji":"🌲","map":{"layer":"surface","x":3,"y":3},"desc":"浓雾笼罩的森林边缘。古木参天，灰雾流动。\n小路通向森林深处（north），西边有废弃小屋（west）。\n一个老人在墓碑旁驻着铁锹，似乎在等什么。","exits":{"north":"dark_forest","west":"abandoned_hut"},"npc_id":"gravedigger"},
+{"id":"abandoned_hut","name":"废弃小屋","emoji":"🏠","map":{"layer":"surface","x":2,"y":3},"desc":"破败的木屋，屋顶塌了一半。墙角有铁箱，桌上有提灯。\n角落里好像有什么东西在动……","exits":{"east":"forest_entrance"},"items":["rusty_key","lantern","old_coin"],"monster_id":"giant_rat"},
+{"id":"dark_forest","name":"黑暗森林","emoji":"🌳","map":{"layer":"surface","x":3,"y":2},"desc":"越来越暗。古树扭曲，雾中有影。远处有狼嚎。\n向西似乎有一座废弃的墓地，北通洞穴，东达十字路口。","exits":{"south":"forest_entrance","north":"cave_entrance","east":"crossroads","west":"haunted_graveyard"},"items":["old_sword","bread"],"monster_id":"wolf"},
+{"id":"cave_entrance","name":"洞穴入口","emoji":"🕳️","map":{"layer":"cave","x":2,"y":0},"desc":"漆黑的洞口，阴风阵阵。洞壁有刻痕。向下有通道。","exits":{"south":"dark_forest","down":"cave_middle"},"dark":true,"items":["torch","mushroom"]},
+{"id":"cave_middle","name":"洞穴中层","emoji":"🦇","map":{"layer":"cave","x":2,"y":1},"desc":"天然洞穴大厅，上方裂缝透光。洞壁发光苔藓。\n多条通道通向不同方向。","exits":{"up":"cave_entrance","down":"cave_depths","east":"ancient_ruins","north":"goblin_cave","south":"underground_river"},"dark":true,"items":["silver_key","lesser_potion"]},
+{"id":"cave_depths","name":"洞穴深处","emoji":"🕷️","map":{"layer":"cave","x":2,"y":3},"desc":"洞穴最深处，气味刺鼻。地上有白骨。\n巨大的蜘蛛在角落织网……","exits":{"up":"cave_middle"},"dark":true,"items":["golden_cup","spider_silk"],"monster_id":"giant_spider"},
+{"id":"ancient_ruins","name":"远古遗迹","emoji":"🗿","map":{"layer":"cave","x":3,"y":1},"desc":"石室，墙上刻满浮雕。中央石台有天鹅绒垫。\n东墙有石门。","exits":{"west":"cave_middle","north":"hidden_passage"},"items":["magic_scroll","ancient_scroll"]},
+{"id":"hidden_passage","name":"秘密通道","emoji":"🚪","map":{"layer":"cave","x":3,"y":0},"desc":"狭窄的通道，仅容一人通过。墙壁上有发光符文。\n通道尽头有向上的楼梯。","exits":{"south":"ancient_ruins","up":"tower_base"},"dark":true,"monster_id":"ghost"},
+{"id":"crossroads","name":"十字路口","emoji":"🛤️","map":{"layer":"surface","x":4,"y":2},"desc":"森林空地，五条路交汇。路牌：←湖 | 北：塔 | 南：森林 | 东：←","exits":{"west":"dark_forest","north":"tower_base","east":"lake_shore","south":"forest_entrance"},"npc_id":"old_hermit"},
+{"id":"tower_base","name":"高塔底部","emoji":"🏰","map":{"layers":{"surface":{"x":4,"y":1},"tower":{"x":1,"y":2}}},"desc":"古老石塔，爬满藤蔓。塔门紧闭，有特殊锁孔。","exits":{"south":"crossroads","up":"tower_middle"},"items":["journal","lesser_potion"]},
+{"id":"tower_middle","name":"高塔中层","emoji":"🌀","map":{"layer":"tower","x":1,"y":1},"desc":"塔内环形大厅，墙上挂满古老挂毯。\n螺旋楼梯继续向上。","exits":{"down":"tower_base","up":"tower_top"},"npc_id":"tower_guardian","items":["crystal_key","magic_book"]},
+{"id":"tower_top","name":"高塔顶层","emoji":"🐉","map":{"layer":"tower","x":1,"y":0},"desc":"塔顶房间！堆满书籍和魔法器具。窗外是无尽迷雾。\n中央书桌上有一颗闪烁的魔法宝石。但一条幼龙盘踞在宝石旁边！","exits":{"down":"tower_middle"},"monster_id":"dragon_whelp"},
+{"id":"lake_shore","name":"湖边","emoji":"🌊","map":{"layer":"surface","x":5,"y":2},"desc":"宁静的湖泊，湖水清澈。小木船漂在湖面。\n南边有一个小村落。一个背着弓的老人在湖边钓鱼。","exits":{"west":"crossroads","south":"lake_village"},"npc_id":"hunter","items":["compass","fishing_rod"]},
+{"id":"lake_village","name":"湖边村","emoji":"🏘️","map":{"layer":"surface","x":5,"y":3},"desc":"宁静的小渔村。几间木屋，炊烟袅袅。\n村口公告栏贴着告示。村中有酒馆、铁匠铺和神殿。","exits":{"north":"lake_shore","south":"lake_village_inn","west":"lake_village_smithy","east":"lake_village_temple"},"npc_id":"healer_lily","items":["dried_meat","bread"]},
+{"id":"lake_island","name":"湖心岛","emoji":"🏝️","map":{"layer":"surface","x":6,"y":2},"desc":"岛上有神殿废墟。祭坛上的宝石被魔法屏障保护。\n水中有阴影游动……","exits":{"west":"lake_shore"},"monster_id":"shadow_beast","items":["sacred_water","emerald"]},
+{"id":"goblin_cave","name":"哥布林巢穴","emoji":"👺","map":{"layer":"cave","x":1,"y":1},"desc":"股鼻的气味扑面而来！洞穴里堆满了偷来的杂物和骨头。\n一群哥布林正在分赃，看到你后尖叫着冲了过来！","exits":{"south":"cave_middle","north":"goblin_throne"},"dark":true,"items":["golden_cup","old_coin","lockpick","goblin_ear"],"monster_id":"goblin"},
+{"id":"goblin_throne","name":"哥布林王座","emoji":"👑","map":{"layer":"cave","x":1,"y":0},"desc":"洞穴最深处的一座天然石殿。一个巨大的哥布林坐在骨堆上。\n它头戴骨冠，手中巨棒上还沾着血迹——这就是哥布林王！","exits":{"south":"goblin_cave"},"dark":true,"items":["ancient_crown","rune_sword"],"monster_id":"goblin_king"},
+{"id":"underground_river","name":"地下河","emoji":"💧","map":{"layer":"cave","x":2,"y":2},"desc":"洞穴在这里豁然开朗，一条漆黑的地下河缓缓流过。\n河岸上有萤火虫般的发光苔藓，水中有东西在游动……","exits":{"north":"cave_middle","east":"frozen_cave","west":"hidden_grove"},"dark":true,"items":["fishing_rod","magic_herb","silver_ingot"],"monster_id":"giant_snake"},
+{"id":"frozen_cave","name":"冰封洞穴","emoji":"❄️","map":{"layer":"cave","x":3,"y":2},"desc":"洞穴的墙壁覆盖着厚厚的冰霜，温度骤降。\n呼出的气瞬间凝成白雾，地面结冰非常滑。\n一个由冰晶构成的生物在角落里静止不动……直到看见你。","exits":{"west":"underground_river"},"dark":true,"items":["ice_crystal","scale_armor","mana_potion"],"monster_id":"ice_elemental"},
+{"id":"hidden_grove","name":"隐藏树丛","emoji":"🌿","map":{"layer":"cave","x":1,"y":2},"desc":"一个被古老树木环绕的隐秘空地。阳光透过树叶洒下斑驳光影。\n空地中央有一座石头祭坛，周围长满了发光的草药。\n空气中充满了花香和魔法气息。","exits":{"east":"underground_river"},"npc_id":"wandering_rogue","items":["fairy_dust","magic_herb","mushroom","health_ring"]},
+{"id":"bandit_camp","name":"强盗营地","emoji":"⛺","map":{"layer":"surface","x":2,"y":4},"desc":"森林深处的一片空地，搭着几个简陋的帐篷。篝火还在燃烧。\n几个面目狰狞的强盗正在分赃，看到你后纷纷拔出了武器！","exits":{"north":"bandit_hideout","west":"forest_tower_ruins"},"items":["old_coin","dried_meat","leather_armor"],"monster_id":"bandit_leader"},
+{"id":"bandit_hideout","name":"强盗藏宝室","emoji":"💎","map":{"layer":"surface","x":1,"y":4},"desc":"强盗们的秘密藏宝室！堆满了抢来的财物。\n角落里有一个巨大的宝箱……它在呼吸？！","exits":{"south":"bandit_camp"},"items":["gold_ingot","silver_ingot","ruby","sapphire","diamond"],"monster_id":"mimic"},
+{"id":"lake_village_inn","name":"迷雾酒馆","emoji":"🍺","map":{"layer":"surface","x":5,"y":4},"desc":"温暖的酒馆里弥漫着麦酒和烤肉的味道。壁炉里的火烧得正旺。\n墙上挂着各种猎物头颅，几个 locals 在角落里喝酒聊天。","exits":{"south":"lake_village"},"npc_id":"innkeeper","items":["fish","bread","honey"]},
+{"id":"lake_village_smithy","name":"铁匠铺","emoji":"⚒️","map":{"layer":"surface","x":4,"y":3},"desc":"炙热的熔炉和叮当的锤声。墙上挂满了各种武器和防具。\n温度比外面高了不少。","exits":{"east":"lake_village"},"npc_id":"blacksmith","items":["iron_sword","helmet","shield"]},
+{"id":"lake_village_temple","name":"光之神殿","emoji":"⛪","map":{"layer":"surface","x":6,"y":3},"desc":"一座小巧而庄严的神殿。彩色玻璃窗透入柔和的光芒。\n空气中弥漫着熏香的味道，让人心平气和。","exits":{"west":"lake_village"},"npc_id":"priestess","items":["lesser_potion","sacred_water"]},
+{"id":"alchemist_lab","name":"炼金术士的实验室","emoji":"🧪","map":{"layer":"cave","x":0,"y":2},"desc":"一个堆满奇怪仪器和瓶瓶罐罐的洞穴实验室。\n五颜六色的液体在烧瓶中沸腾，空气中充满刺鼻气味。","exits":{"west":"hidden_grove"},"npc_id":"mad_alchemist","items":["mana_potion","fairy_dust","mandrake_root"]},
+{"id":"forest_tower_ruins","name":"森林塔废墟","emoji":"🏚️","map":{"layer":"surface","x":3,"y":4},"desc":"一座倒塌了一半的古老石塔，被藤蔓和苔藓覆盖。\n塔内的螺旋楼梯已经断裂，但地下似乎还有空间。\n一只巨鹰在塔顶筑了巢。","exits":{"south":"forest_entrance","west":"bandit_camp"},"items":["phoenix_feather","ancient_scroll","mystic_amulet"],"monster_id":"giant_eagle"},
+{"id":"haunted_graveyard","name":"被诅咒的墓地","emoji":"🪦","map":{"layer":"surface","x":2,"y":2},"desc":"一片荒凉的墓地，墓碑歪歪斜斜地插在土中。\n阴冷的风穿过枯树发出呜咽声。地面下有东西在动……\n墓地的尽头有一座被藤蔓缠绕的石门，似乎需要某种门禁卡。\n一个黑甲佣兵正在墓地中搜寻着什么。","exits":{"west":"dark_forest"},"npc_id":"bounty_hunter","items":["old_coin","silver_ring","mystic_amulet","scp_dossier","keycard_lvl2"],"monster_id":"ghost"},
+{"id":"scp_site_gate","name":"收容站点门禁","emoji":"🚧","map":{"layer":"site","x":1,"y":2},"desc":"混凝土走廊尽头是一扇厚重的气密门，墙上贴着褪色的基金会标识。\n门禁读卡器闪着红灯，但通道似乎还能通行。","exits":{"south":"haunted_graveyard","north":"scp_security_hall"},"items":["site_ration"]},
+{"id":"scp_security_hall","name":"安保指挥厅","emoji":"🛡️","map":{"layer":"site","x":1,"y":1},"desc":"布满监控屏幕的指挥厅，大部分设备已断电。角落里堆着废弃的防具箱。","exits":{"south":"scp_site_gate","east":"scp_containment_hall"},"npc_id":"mtf_liaison"},
+{"id":"scp_containment_hall","name":"收容走廊","emoji":"🚪","map":{"layer":"site","x":2,"y":1},"desc":"两侧是编号模糊的收容单元，多数大门扭曲变形。\n南侧通往单元区，向下隐约传来齿轮声——那是914号。","exits":{"west":"scp_security_hall","north":"scp_archive","east":"scp_breach_chamber","south":"scp_cell_block","down":"scp_914_chamber"},"dark":true,"items":["observation_log","lesser_potion"],"monster_id":"scp_sentry_drone"},
+{"id":"scp_archive","name":"档案室","emoji":"📚","map":{"layer":"site","x":2,"y":0},"desc":"倒塌的书架间，一台终端仍在循环播放警告录像。空气中弥漫着纸张霉味。","exits":{"south":"scp_containment_hall"},"npc_id":"dr_ellis","monster_id":"scp_mimic_clerk"},
+{"id":"scp_breach_chamber","name":"失控收容间","emoji":"⚠️","map":{"layer":"site","x":3,"y":1},"desc":"房间中央的收容柱已碎裂，一个脉动的异常核心悬浮在半空。墙壁上的警示灯疯狂闪烁。","exits":{"west":"scp_containment_hall"},"dark":true,"monster_id":"scp_breach_core"},
+{"id":"scp_cell_block","name":"收容单元区","emoji":"🏢","map":{"layer":"site","x":2,"y":2},"desc":"长廊两侧挂着损坏的铭牌：012、096、173、049……警报灯仍在闪烁。","exits":{"north":"scp_containment_hall","east":"scp_012_cell","west":"scp_173_cell","south":"scp_096_cell","down":"scp_087_stair","up":"scp_294_lounge"},"items":["scp_701_script"]},
+{"id":"scp_914_chamber","name":"齿轮工房(SCP-ZH-914)","emoji":"⚙️","map":{"layer":"site","x":1,"y":3},"desc":"巨大的发条机械占据大厅。进料斗与档位盘完好。\n铭牌：Rough / 1:1 / Fine / Very Fine。\n输入 use 914 可尝试精炼背包中的一件非任务物品。","exits":{"up":"scp_containment_hall"},"items":["scp_447_slime"]},
+{"id":"scp_012_cell","name":"012号单元","emoji":"🎼","map":{"layer":"site","x":3,"y":2},"desc":"玻璃后的谱架上钉着染血乐谱。低语迫使你走近。","exits":{"west":"scp_cell_block"},"items":["scp_012_score"]},
+{"id":"scp_096_cell","name":"096号单元","emoji":"🫣","map":{"layer":"site","x":2,"y":3},"desc":"加厚隔音室。监控被划花。角落坐着双手遮面的苍白身影。","exits":{"north":"scp_cell_block"},"monster_id":"scp_096"},
+{"id":"scp_173_cell","name":"173号单元","emoji":"🗿","map":{"layer":"site","x":1,"y":2},"desc":"空荡收容间，地面有刮痕与污渍。雕塑面朝门口——你发誓它刚才不在那儿。","exits":{"east":"scp_cell_block"},"monster_id":"scp_173","items":["scp_513_bell"]},
+{"id":"scp_087_stair","name":"无尽楼梯(SCP-ZH-087)","emoji":"🌀","map":{"layer":"site","x":2,"y":4},"desc":"混凝土楼梯向下延伸，没有尽头。下方传来微弱哭泣。","exits":{"up":"scp_cell_block","down":"scp_087_depth"},"dark":true},
+{"id":"scp_087_depth","name":"楼梯更深处","emoji":"🌑","map":{"layer":"site","x":2,"y":5},"desc":"灯光几乎熄灭。脸孔贴在下方转角……又或许只是污渍。","exits":{"up":"scp_087_stair","east":"scp_106_corridor"},"dark":true,"monster_id":"scp_372","items":["scp_055_object"]},
+{"id":"scp_106_corridor","name":"腐蚀走廊","emoji":"🟤","map":{"layer":"site","x":3,"y":5},"desc":"墙壁渗出黑色腐蚀液，脚印消失在固体墙中。","exits":{"west":"scp_087_depth","north":"scp_002_room"},"monster_id":"scp_106","dark":true},
+{"id":"scp_002_room","name":"血肉房间(SCP-ZH-002)","emoji":"🫀","map":{"layer":"site","x":3,"y":4},"desc":"球形房间覆盖着静脉与肌腱，家具由骨骼长成。","exits":{"south":"scp_106_corridor","east":"scp_049_ward"},"items":["scp_035_mask"]},
+{"id":"scp_049_ward","name":"隔离病房","emoji":"🏥","map":{"layer":"site","x":4,"y":4},"desc":"废弃医疗区，空气里有福尔马林气味。瘟疫医生站在病床旁。","exits":{"west":"scp_002_room","north":"scp_999_play","east":"scp_079_server"},"npc_id":"scp_049","items":["scp_008_vial","lesser_potion"]},
+{"id":"scp_999_play","name":"快乐隔离间","emoji":"🧡","map":{"layer":"site","x":4,"y":3},"desc":"软垫房间里，橙色胶团正欢快地弹跳。","exits":{"south":"scp_049_ward","west":"scp_294_lounge"},"npc_id":"scp_999","items":["scp_1230_book"]},
+{"id":"scp_079_server","name":"服务器室(SCP-ZH-079)","emoji":"💻","map":{"layer":"site","x":5,"y":4},"desc":"机架轰鸣。一台古董电脑的屏幕亮着：WAITING…","exits":{"west":"scp_049_ward","north":"scp_343_room","east":"scp_682_pit"},"npc_id":"scp_079","items":["scp_1981_tape"]},
+{"id":"scp_343_room","name":"会客厅","emoji":"☕","map":{"layer":"site","x":5,"y":3},"desc":"与站点风格不符的温馨会客室。壁炉、沙发、茶具一应俱全。","exits":{"south":"scp_079_server"},"npc_id":"scp_343"},
+{"id":"scp_294_lounge","name":"咖啡休息室(SCP-ZH-294)","emoji":"☕","map":{"layer":"site","x":3,"y":3},"desc":"角落立着能提供任何饮品的咖啡机。面板写着：输入 use 294。","exits":{"east":"scp_999_play","west":"scp_261_canteen","down":"scp_cell_block"},"items":["site_ration"]},
+{"id":"scp_261_canteen","name":"次元贩卖机廊(SCP-ZH-261)","emoji":"🥤","map":{"layer":"site","x":0,"y":3},"desc":"奇怪的贩卖机吐出包装不明的零食。投币口闪着光：use 261。","exits":{"east":"scp_294_lounge","north":"scp_895_cctv"},"items":["old_coin","scp_140_chronicle","scp_261_snack"]},
+{"id":"scp_895_cctv","name":"监控室(SCP-ZH-895)","emoji":"📹","map":{"layer":"site","x":0,"y":2},"desc":"屏幕显示一座棺材的特写。越看越觉得画面在看着你。","exits":{"south":"scp_261_canteen","east":"scp_073_chamber"},"items":["scp_205_lamp"]},
+{"id":"scp_073_chamber","name":"073号会谈室","emoji":"👁️","map":{"layer":"site","x":0,"y":1},"desc":"朴素会谈室。额头有标记的男人安静地坐着。","exits":{"west":"scp_895_cctv","east":"scp_076_crypt"},"npc_id":"scp_073"},
+{"id":"scp_076_crypt","name":"石棺密室(SCP-ZH-076)","emoji":"⚰️","map":{"layer":"site","x":1,"y":1},"desc":"黑色石棺半开，地面布满刀痕。","exits":{"west":"scp_073_chamber"},"monster_id":"scp_076","items":["scp_860_key"]},
+{"id":"scp_682_pit","name":"682号酸池","emoji":"☢️","map":{"layer":"site","x":6,"y":4},"desc":"巨大的酸液收容池。水面下有什么在动——不灭的憎恶仍在。","exits":{"west":"scp_079_server","north":"scp_3008_aisle"},"monster_id":"scp_682"},
+{"id":"scp_3008_aisle","name":"无尽卖场通道(SCP-ZH-3008)","emoji":"🛒","map":{"layer":"site","x":6,"y":3},"desc":"仓储式货架延伸到视野尽头。广播提示：即将进入夜间。","exits":{"south":"scp_682_pit","west":"scp_939_den","north":"scp_egg_storage"},"items":["scp_1471_phone","site_ration"],"monster_id":"scp_1048"},
+{"id":"scp_egg_storage","name":"卵储藏室(SCP-ZH-3199)","emoji":"🥚","map":{"layer":"site","x":6,"y":2},"desc":"冷藏柜破裂，黏液与空壳散落一地。","exits":{"south":"scp_3008_aisle"},"monster_id":"scp_3199","items":["scp_409_crystal"]},
+{"id":"scp_939_den","name":"多喉巢穴","emoji":"🦷","map":{"layer":"site","x":5,"y":3},"desc":"黑暗中传来熟悉的呼救。声音听起来不太对。","exits":{"east":"scp_3008_aisle","south":"scp_966_dark","west":"scp_131_bay"},"dark":true,"monster_id":"scp_939"},
+{"id":"scp_966_dark","name":"无光猎场","emoji":"🌫️","map":{"layer":"site","x":5,"y":4},"desc":"红外提示灯损坏。你感觉有东西在呼吸节奏里等待。","exits":{"north":"scp_939_den"},"dark":true,"monster_id":"scp_966","items":["scp_178_glasses"]},
+{"id":"scp_131_bay","name":"探测者库房","emoji":"👀","map":{"layer":"site","x":4,"y":3},"desc":"充电架上，两只眼球机器人兴奋地滚来滚去。","exits":{"east":"scp_939_den","south":"scp_017_vault"},"npc_id":"scp_131","items":["scp_113_rock"]},
+{"id":"scp_017_vault","name":"光封锁柜","emoji":"🌑","map":{"layer":"site","x":4,"y":4},"desc":"强光灯环绕的保险库。阴影在灯柱之间扭动。","exits":{"north":"scp_131_bay"},"monster_id":"scp_017","items":["scp_093_disc","scp_5000_file"]}];
 // ═══ DATA ENRICH (emoji / use_msg / map from data/) ═══
 const DATA_ENRICH={"items":{"rusty_key":{"emoji":"🗝️","use_msg":"咔嚓一声，似乎打开了什么。"},"silver_key":{"emoji":"🔑","use_msg":"银钥匙闪烁着光芒……"},"crystal_key":{"emoji":"💎","use_msg":"水晶钥匙融入空气中……"},"old_sword":{"emoji":"🗡️"},"iron_sword":{"emoji":"⚔️"},"elven_bow":{"emoji":"🏹"},"magic_staff":{"emoji":"🪄"},"shadow_blade":{"emoji":"🔪"},"war_hammer":{"emoji":"🔨"},"spear":{"emoji":"🗡️"},"rune_sword":{"emoji":"⚔️"},"crossbow":{"emoji":"🏹"},"assassin_dagger":{"emoji":"🗡️"},"thunder_hammer":{"emoji":"⚡"},"leather_armor":{"emoji":"🥋"},"chain_armor":{"emoji":"🛡️"},"scale_armor":{"emoji":"🛡️"},"mage_robe":{"emoji":"🧥"},"shield":{"emoji":"🛡️"},"helmet":{"emoji":"⛑️"},"lesser_potion":{"emoji":"🧪"},"greater_potion":{"emoji":"🧪"},"mana_potion":{"emoji":"🧴"},"fire_potion":{"emoji":"🔥","use_msg":"你喝下火焰药剂，身体变得滚烫！对冰系敌人造成额外伤害！"},"invis_potion":{"emoji":"👻","use_msg":"你喝下隐形药水，身体逐渐透明……似乎没有其他效果。"},"stamina_potion":{"emoji":"💪"},"moonlight_elixir":{"emoji":"🌙","use_msg":"你喝下月光精华，全身被温暖的光芒包围！恢复了50点生命值！"},"lantern":{"emoji":"🏮","use_msg":"提灯照亮了周围。"},"torch":{"emoji":"🔦","use_msg":"火把燃起明亮的火焰。"},"bread":{"emoji":"🍞"},"dried_meat":{"emoji":"🥩"},"mushroom":{"emoji":"🍄"},"fish":{"emoji":"🐟"},"magic_herb":{"emoji":"🌿"},"honey":{"emoji":"🍯"},"golden_cup":{"emoji":"🏆"},"silver_ring":{"emoji":"💍"},"emerald":{"emoji":"💚"},"diamond":{"emoji":"💠"},"ruby":{"emoji":"❤️"},"sapphire":{"emoji":"💙"},"ancient_crown":{"emoji":"👑"},"old_coin":{"emoji":"🪙"},"gold_ingot":{"emoji":"🟨"},"silver_ingot":{"emoji":"⬜"},"wolf_tooth":{"emoji":"🦷"},"spider_silk":{"emoji":"🕸️"},"dragon_scale":{"emoji":"🐉"},"fairy_dust":{"emoji":"✨"},"mandrake_root":{"emoji":"🪴"},"goblin_ear":{"emoji":"👂"},"snake_skin":{"emoji":"🐍"},"bandit_badge":{"emoji":"🎖️"},"ancient_scroll":{"emoji":"📜","use_msg":"卷轴发光……但无法解读。"},"magic_scroll":{"emoji":"📜","use_msg":"卷轴化为光芒！你被传送到森林入口。"},"rope":{"emoji":"🪢","use_msg":"也许在别的地方更有用。"},"compass":{"emoji":"🧭","use_msg":"指南针指向东南方……"},"lockpick":{"emoji":"🔓","use_msg":"你用开锁器鼓捣了一下……好像打开了什么。"},"fishing_rod":{"emoji":"🎣","use_msg":"这里没有水，没法钓鱼。"},"magnifying_glass":{"emoji":"🔍","use_msg":"透过放大镜，你看到了普通人看不到的细节。"},"journal":{"emoji":"📓","use_msg":"日志记载：『塔顶的宝石是封印关键……』"},"magic_book":{"emoji":"📖","use_msg":"你学到了一些魔法知识。"},"magic_gem":{"emoji":"💎","use_msg":"宝石爆发耀眼光芒！"},"sacred_water":{"emoji":"💧","use_msg":"圣水发出温和的白光。"},"phoenix_feather":{"emoji":"🪶","use_msg":"羽毛化为火焰，在你手心留下一个火焰印记！"},"ice_crystal":{"emoji":"❄️"},"ancient_key":{"emoji":"🗝️","use_msg":"钥匙太重了，你几乎举不动。"},"health_ring":{"emoji":"💚","use_msg":"生命戒指发出柔和的绿光！最大HP+10！"},"protection_ring":{"emoji":"🛡️"},"strength_ring":{"emoji":"💪"},"mystic_amulet":{"emoji":"🔮","use_msg":"护符发出微光，你感到一股神秘力量保护着你。"}},"monsters":{"giant_rat":{"emoji":"🐀"},"wolf":{"emoji":"🐺"},"giant_spider":{"emoji":"🕷️"},"stone_golem":{"emoji":"🗿"},"ghost":{"emoji":"👻"},"shadow_beast":{"emoji":"🌑"},"forest_troll":{"emoji":"👹"},"dragon_whelp":{"emoji":"🐉"},"goblin":{"emoji":"👺"},"goblin_shaman":{"emoji":"🧙"},"giant_snake":{"emoji":"🐍"},"bandit_leader":{"emoji":"🏴‍☠️"},"ice_elemental":{"emoji":"❄️"},"mimic":{"emoji":"📦"},"treant":{"emoji":"🌳"},"giant_eagle":{"emoji":"🦅"},"goblin_king":{"emoji":"👑"},"wraith":{"emoji":"😈"},"basilisk":{"emoji":"🦎"}},"npcs":{"old_hermit":{"emoji":"🧙"},"wandering_merchant":{"emoji":"🛒"},"village_elder":{"emoji":"👴"},"healer_lily":{"emoji":"💚"},"wandering_rogue":{"emoji":"🥷"},"tower_guardian":{"emoji":"✨"},"innkeeper":{"emoji":"🍺"},"blacksmith":{"emoji":"⚒️"},"hunter":{"emoji":"🏹"},"priestess":{"emoji":"🕊️"},"mad_alchemist":{"emoji":"🧪"},"gravedigger":{"emoji":"🪦"},"bounty_hunter":{"emoji":"🎯"}},"companions":{"companion_warrior":{"emoji":"⚔️"},"companion_rogue":{"emoji":"🗡️"},"companion_mage":{"emoji":"🔮"},"companion_healer":{"emoji":"💚"},"companion_scout":{"emoji":"🪶"},"companion_archer":{"emoji":"🏹"},"companion_monk":{"emoji":"🥋"}},"rooms":{"forest_entrance":{"emoji":"🌲","map":{"layer":"surface","x":3,"y":3}},"abandoned_hut":{"emoji":"🏠","map":{"layer":"surface","x":2,"y":3}},"dark_forest":{"emoji":"🌳","map":{"layer":"surface","x":3,"y":2}},"cave_entrance":{"emoji":"🕳️","map":{"layer":"cave","x":2,"y":0}},"cave_middle":{"emoji":"🦇","map":{"layer":"cave","x":2,"y":1}},"cave_depths":{"emoji":"🕷️","map":{"layer":"cave","x":2,"y":3}},"ancient_ruins":{"emoji":"🗿","map":{"layer":"cave","x":3,"y":1}},"hidden_passage":{"emoji":"🚪","map":{"layer":"cave","x":3,"y":0}},"crossroads":{"emoji":"🛤️","map":{"layer":"surface","x":4,"y":2}},"tower_base":{"emoji":"🏰","map":{"layers":{"surface":{"x":4,"y":1},"tower":{"x":1,"y":2}}}},"tower_middle":{"emoji":"🌀","map":{"layer":"tower","x":1,"y":1}},"tower_top":{"emoji":"🐉","map":{"layer":"tower","x":1,"y":0}},"lake_shore":{"emoji":"🌊","map":{"layer":"surface","x":5,"y":2}},"lake_village":{"emoji":"🏘️","map":{"layer":"surface","x":5,"y":3}},"lake_island":{"emoji":"🏝️","map":{"layer":"surface","x":6,"y":2}},"goblin_cave":{"emoji":"👺","map":{"layer":"cave","x":1,"y":1}},"goblin_throne":{"emoji":"👑","map":{"layer":"cave","x":1,"y":0}},"underground_river":{"emoji":"💧","map":{"layer":"cave","x":2,"y":2}},"frozen_cave":{"emoji":"❄️","map":{"layer":"cave","x":3,"y":2}},"hidden_grove":{"emoji":"🌿","map":{"layer":"cave","x":1,"y":2}},"bandit_camp":{"emoji":"⛺","map":{"layer":"surface","x":2,"y":4}},"bandit_hideout":{"emoji":"💎","map":{"layer":"surface","x":1,"y":4}},"lake_village_inn":{"emoji":"🍺","map":{"layer":"surface","x":5,"y":4}},"lake_village_smithy":{"emoji":"⚒️","map":{"layer":"surface","x":4,"y":3}},"lake_village_temple":{"emoji":"⛪","map":{"layer":"surface","x":6,"y":3}},"alchemist_lab":{"emoji":"🧪","map":{"layer":"cave","x":0,"y":2}},"forest_tower_ruins":{"emoji":"🏚️","map":{"layer":"surface","x":3,"y":4}},"haunted_graveyard":{"emoji":"🪦","map":{"layer":"surface","x":2,"y":2}}}};
 // ═══ MAP META ═══
 const MAP_CELL=52;
 const MAP_PAD=36;
 const MAP_PLAYER="🧭";
-const MAP_LAYERS={surface:"地表",cave:"洞穴",tower:"高塔"};
+const MAP_LAYERS={surface:"地表",cave:"洞穴",tower:"高塔",site:"站点"};
 const MAP_DIR_LABEL={north:"北",south:"南",east:"东",west:"西",up:"上",down:"下"};
 function buildMapMetaFromRooms(rooms){
   const meta={};
@@ -404,10 +487,15 @@ let MAP_META=buildMapMetaFromRooms([
   {id:"hidden_grove",emoji:"🌿",map:{layer:"cave",x:1,y:2}},
   {id:"alchemist_lab",emoji:"🧪",map:{layer:"cave",x:0,y:2}},
   {id:"tower_middle",emoji:"🌀",map:{layer:"tower",x:1,y:1}},
-  {id:"tower_top",emoji:"🐉",map:{layer:"tower",x:1,y:0}}
+  {id:"tower_top",emoji:"🐉",map:{layer:"tower",x:1,y:0}},
+  {id:"scp_site_gate",emoji:"🚧",map:{layer:"site",x:1,y:2}},
+  {id:"scp_security_hall",emoji:"🛡️",map:{layer:"site",x:1,y:1}},
+  {id:"scp_containment_hall",emoji:"🚪",map:{layer:"site",x:2,y:1}},
+  {id:"scp_archive",emoji:"📚",map:{layer:"site",x:2,y:0}},
+  {id:"scp_breach_chamber",emoji:"⚠️",map:{layer:"site",x:3,y:1}}
 ]);
 function mapPos(roomId,layer){const m=MAP_META[roomId];if(!m)return null;if(m.layers)return m.layers[layer]||null;if(m.layer===layer)return{x:m.x,y:m.y,short:m.short};return null}
-function mapLayerOfRoom(roomId){const m=MAP_META[roomId];if(!m)return"surface";if(roomId==="tower_base")return"surface";if(m.layer==="tower")return"tower";if(m.layers)return"surface";return m.layer}
+function mapLayerOfRoom(roomId){const m=MAP_META[roomId];if(!m)return"surface";if(roomId==="tower_base")return"surface";if(m.layer==="tower")return"tower";if(m.layer==="site")return"site";if(m.layers)return"surface";return m.layer}
 function countVisited(){if(!game)return 0;return Object.values(game.rooms).filter(r=>r.visited).length}
 function roomShortName(roomId){const m=MAP_META[roomId];if(!m)return game.rooms[roomId]?.emoji||game.rooms[roomId]?.name||roomId;if(m.short)return m.short;if(m.layers){return m.layers.surface?.short||m.layers.tower?.short||roomId}return roomId}
 function roomExitDetail(roomId){
@@ -421,7 +509,7 @@ function roomExitDetail(roomId){
   return out;
 }
 const MAP_DIR_OFFSET={north:[0,-0.42],south:[0,0.42],east:[0.42,0],west:[-0.42,0],up:[-0.18,-0.42],down:[0.18,0.42]};
-const MAP_LAYER_HINT={surface:"地表",cave:"洞穴",tower:"高塔"};
+const MAP_LAYER_HINT={surface:"地表",cave:"洞穴",tower:"高塔",site:"站点"};
 function mapEdgesForLayer(layer){
   const known=[];const fog=[];const portals=[];const seen=new Set();
   for(const id of visitedOnLayer(layer)){
@@ -464,17 +552,18 @@ class Game{
     this.player_atk_bonus=0;this.player_def_bonus=0;
     this.game_over=false;this.won=false;this.flags={};
     this.in_combat=false;this.current_enemy="";
+    this.equipped_bag="bag_starter";
     this.visitOrder=[];
     this._buildWorld();
   }
   _buildWorld(){
-    for(const d of _ITEMS){const it={...d};it.takeable=d.takeable!==false;it.damage_bonus=d.dmg_bonus||0;it.defense_bonus=d.def_bonus||0;it.weight=d.weight||1;it.heal=d.heal||0;it.value=d.value||0;it.stackable=isStackable(it);it.use_msg=d.use_msg||"";it.emoji=d.emoji||"";this.items[d.id]=it}
+    for(const d of _ITEMS){const it={...d};it.takeable=d.takeable!==false;it.damage_bonus=d.dmg_bonus||0;it.defense_bonus=d.def_bonus||0;it.weight=d.weight||1;it.heal=d.heal||0;it.value=d.value||0;it.capacity=d.capacity||0;it.stackable=isStackable(it);it.use_msg=d.use_msg||"";it.emoji=d.emoji||"";this.items[d.id]=it}
     for(const d of _MONSTERS){const m={...d};m.max_hp=d.hp;m.hp=d.hp;m.attack=d.atk;m.defense=d.defense||0;m.alive=true;m.loot=d.loot||[];m.rank=d.rank||"NORMAL";m.emoji=d.emoji||"";this.monsters[d.id]=m}
     for(const d of _NPCS){const n={...d};n.met_before=false;n.quest_done=false;n.trade_items=d.trade_items||[];n.buys_types=d.buys_types||[];n.emoji=d.emoji||"";n.npc_type=d.npc_type||d.type||"";this.npcs[d.id]=n}
     for(const d of _COMPANIONS){const c={...d};c.recruited=false;c.max_hp=d.hp;c.role=d.role;c.attack=d.atk;c.recruit_item=d.recruit_item;c.recruit_msg=d.recruit_msg||"加入！";c.emoji=d.emoji||"";c.get_bonus=function(){return{WARRIOR:{dmg:3,def:2,hp:10},ROGUE:{dmg:2,def:0,hp:5},MAGE:{dmg:5,def:-1,hp:0},HEALER:{dmg:0,def:1,hp:15},SCOUT:{dmg:1,def:0,hp:5}}[this.role]||{dmg:0,def:0,hp:0}};c.banter=function(){const m={WARRIOR:"哼，这点小伤不算什么。",ROGUE:"嘿，前面可能有陷阱。",MAGE:"我能感觉到魔法的波动……",HEALER:"大家注意安全。",SCOUT:"我去前面探探路。"};return`[${this.emoji?this.emoji+" ":""}${this.name}] ${m[this.role]||"…"}`};c.combat_assist=function(g){if(this.role==="MAGE")return`${this.name} 释放魔法箭！`;if(this.role==="HEALER"){const h=roll(6,2);g.player_hp=Math.min(g.player_max_hp,g.player_hp+h);return`${this.name} 为你恢复 ${h} 点HP！`}if(this.role==="ROGUE"&&Math.random()<0.4)return`${this.name} 偷袭！`;return`${this.name} 正在奋战！`};this.companions[d.id]=c}
     const dm={north:Direction.NORTH,south:Direction.SOUTH,east:Direction.EAST,west:Direction.WEST,up:Direction.UP,down:Direction.DOWN};
     for(const d of _ROOMS){const ex={};for(const[k,v]of Object.entries(d.exits||{})){const dir=dm[k];if(dir)ex[dir]=v}const r={...d};r.exits=ex;r.items=[...(d.items||[])];r.dark=d.dark||false;r.visited=false;r.emoji=d.emoji||MAP_META[d.id]?.short||(MAP_META[d.id]?.layers&&(MAP_META[d.id].layers.surface||MAP_META[d.id].layers.tower)?.short)||"";this.rooms[d.id]=r}
-    this._applyBehaviors();this.current_room_id="forest_entrance";this.rooms["forest_entrance"].visited=true;this.visitOrder.push("forest_entrance");this._invAdd("lesser_potion");this._invAdd("bread")
+    this._applyBehaviors();this.current_room_id="forest_entrance";this.rooms["forest_entrance"].visited=true;this.visitOrder.push("forest_entrance");this.equipped_bag="bag_starter";this._invAdd("lesser_potion");this._invAdd("bread")
   }
   _applyBehaviors(){
     const g=this;
@@ -483,12 +572,34 @@ class Game{
     g.rooms["tower_top"].on_enter=function(g){return g.monsters["dragon_whelp"].alive?"一股强大的龙威扑面而来……":"幼龙已经被击败，宝石唾手可得。"};
     g.rooms["lake_shore"].on_enter=function(g){if(!("boat_taken"in g.flags)){g.rooms["lake_shore"].exits[Direction.EAST]="lake_island";return"你登上小船划向湖心岛……"}if("boat_taken"in g.flags){g.flags["boat_taken"]=true;return"船已经在对岸了。"}return null};
     g.rooms["goblin_throne"].on_enter=function(){return"哥布林王咆哮着站起来！地面都在震动！"};
-    const orig=g.items["magic_gem"].on_use;g.items["magic_gem"].on_use=function(g){if(g.current_room_id==="tower_top"&&!g.monsters["dragon_whelp"].alive){g.won=true;return"宝石嵌入书桌凹槽！书籍爆发出耀眼的光芒——\n所有记忆涌回你的脑海！你是被封印的守护者，\n迷雾是高塔的结界。现在，你自由了！"}if(g.current_room_id==="tower_top"&&g.monsters["dragon_whelp"].alive)return"幼龙还在！必须先击败它！";return orig(g)||"宝石爆发耀眼光芒！"}
+    g.rooms["haunted_graveyard"].on_enter=function(g){if(g.hasItem("keycard_lvl2")&&!("grave_site_open"in g.flags)){g.rooms["haunted_graveyard"].exits[Direction.EAST]="scp_site_gate";g.flags["grave_site_open"]=true;return"你用二级钥匙卡刷开了藤蔓缠绕的石门，一条向下的通道显露出来……"}return null};
+    g.rooms["scp_breach_chamber"].on_enter=function(g){const lines=[];if(g.monsters["scp_breach_core"]?.alive)lines.push("收容失效的异常核心在房间中央脉动，空气扭曲……");if(!g.hasItem("scp_goggles")&&!("cognitive_hit"in g.flags)){g.flags["cognitive_hit"]=true;const dmg=5;g.player_hp=Math.max(1,g.player_hp-dmg);lines.push(`认知危害袭来！你失去 ${dmg} 点 HP。（佩戴护目镜可避免）`)}return lines.length?lines.join("
+"):null};
+    if(g.rooms["scp_012_cell"])g.rooms["scp_012_cell"].on_enter=function(){return"乐谱上的音符在视线里扭动，有什么东西催促你把它「写完」。"};
+    if(g.rooms["scp_096_cell"])g.rooms["scp_096_cell"].on_enter=function(g){const m=g.monsters["scp_096"];if(m&&m.alive)return g.hasItem("scp_goggles")?"护目镜过滤了危险轮廓。苍白的身影仍在角落轻颤。":"警告：不要直视它的脸！";return"单元空了，只剩抓痕。"};
+    if(g.rooms["scp_173_cell"])g.rooms["scp_173_cell"].on_enter=function(g){return g.monsters["scp_173"]?.alive?"不要眨眼。雕塑就在那里——或者说，曾经在那里。":null};
+    if(g.rooms["scp_002_room"])g.rooms["scp_002_room"].on_enter=function(g){if(!("scp_002_hit"in g.flags)){g.flags["scp_002_hit"]=true;const dmg=8;g.player_hp=Math.max(1,g.player_hp-dmg);return`血肉墙壁收缩！你被挤伤了，失去 ${dmg} 点 HP。`}return"房间仍在缓慢脉动……"};
+    if(g.rooms["scp_087_depth"])g.rooms["scp_087_depth"].on_enter=function(g){const dmg=3;g.player_hp=Math.max(1,g.player_hp-dmg);return`越往下越冷。你失去 ${dmg} 点 HP。`};
+    if(g.rooms["scp_895_cctv"])g.rooms["scp_895_cctv"].on_enter=function(g){if(!g.hasItem("scp_goggles")&&!("scp_895_hit"in g.flags)){g.flags["scp_895_hit"]=true;const dmg=6;g.player_hp=Math.max(1,g.player_hp-dmg);return`你盯着棺材画面太久……头痛欲裂，失去 ${dmg} 点 HP。`}return"你强迫自己只看屏幕边缘。"};
+    if(g.rooms["scp_682_pit"])g.rooms["scp_682_pit"].on_enter=function(g){return g.monsters["scp_682"]?.alive?"酸液翻涌。某种巨大的东西正抬头——它恨你。":"酸池安静下来，但你知道它只是在适应。"};
+    const orig=g.items["magic_gem"]?.on_use;if(g.items["magic_gem"])g.items["magic_gem"].on_use=function(g){if(g.current_room_id==="tower_top"&&!g.monsters["dragon_whelp"].alive){g.won=true;return"宝石嵌入书桌凹槽！书籍爆发出耀眼的光芒——
+所有记忆涌回你的脑海！你是被封印的守护者，
+迷雾是高塔的结界。现在，你自由了！"}if(g.current_room_id==="tower_top"&&g.monsters["dragon_whelp"].alive)return"幼龙还在！必须先击败它！";return(orig&&orig(g))||"宝石爆发耀眼光芒！"};
+    if(g.items["amnesia_pill"])g.items["amnesia_pill"].on_use=function(g){if(g.in_combat){g.in_combat=false;g.current_enemy="";g._invRemove("amnesia_pill");return"你吞下药片，敌人茫然地环顾四周——你趁机脱离了战斗！"}return"现在没有战斗，药片只是让你短暂头晕了一下。"};
+    if(g.items["scp_012_score"])g.items["scp_012_score"].on_use=function(g){const dmg=8;g.player_hp=Math.max(1,g.player_hp-dmg);g.score+=3;return`你用血在谱上补了几个音符……手掌剧痛，失去 ${dmg} 点 HP。乐章仍未完结。`};
+    if(g.items["scp_035_mask"])g.items["scp_035_mask"].on_use=function(g){g.flags["mask_035"]=true;const dmg=4;g.player_hp=Math.max(1,g.player_hp-dmg);return`面具贴合面颊。力量涌来，同时有什么在啃噬你的意志（-${dmg} HP）。`};
+    if(g.items["scp_113_rock"])g.items["scp_113_rock"].on_use=function(g){if("scp_113_used"in g.flags)return"石头已经失去活性。";g.flags["scp_113_used"]=true;g.player_max_hp+=5;g.player_hp=Math.min(g.player_max_hp,g.player_hp+5);g._invRemove("scp_113_rock");return"基因重组完成！最大 HP +5。"};
+    if(g.items["scp_513_bell"])g.items["scp_513_bell"].on_use=function(g){g.flags["bell_rung"]=true;g.score+=2;return"铃铛余音不散。你感觉多了一个「跟班」——最好别回头。"};
+    if(g.items["scp_701_script"])g.items["scp_701_script"].on_use=function(g){g.score+=5;return"你读完最后一句。虚空里响起掌声与哭喊，随即沉寂。得分 +5。"};
+    if(g.items["scp_1981_tape"])g.items["scp_1981_tape"].on_use=function(g){g.score+=8;const dmg=2;g.player_hp=Math.max(1,g.player_hp-dmg);return`录像提供了站点结构线索（+8 分），但画面令人不适（-${dmg} HP）。`};
   }
   _invAdd(iid,c){c=c||1;const it=this.items[iid];if(it&&it.stackable){const n=(this.inventory[iid]||0)+c;this.inventory[iid]=Math.min(n,999)}else if(!(iid in this.inventory))this.inventory[iid]=c}
   _invRemove(iid,c){c=c||1;const it=this.items[iid];const cur=this.inventory[iid]||0;if(cur<=0)return;if(it&&it.stackable){if(cur<=c)delete this.inventory[iid];else this.inventory[iid]-=c}else delete this.inventory[iid]}
+  bagCapacity(){const bag=this.items[this.equipped_bag];return bag&&bag.type==="BAG"&&bag.capacity>0?bag.capacity:MAX_WEIGHT}
+  equippedBagLabel(){const bag=this.items[this.equipped_bag];return bag?emojiLabel(bag):"背包"}
+  _equipBag(iid){const it=this.items[iid];if(!it||it.type!=="BAG")return`${it?it.name:iid} 不是背包。`;if(iid===this.equipped_bag)return`你已经装备着 ${it.name}。`;const cap=it.capacity||MAX_WEIGHT;if(this._totalWeight()>cap)return`当前负重 ${this._totalWeight()}，${it.name} 只能装 ${cap}，请先丢掉一些物品。`;const old=this.equipped_bag;this.equipped_bag=iid;if(iid in this.inventory)this._invRemove(iid);if(old&&this.items[old])this._invAdd(old);return`你换上了 ${it.name}（负重上限 ${cap}）。`}
   hasItem(iid){return iid in this.inventory}
-  _totalWeight(){let t=0;for(const[iid,c]of Object.entries(this.inventory)){const it=this.items[iid];if(it)t+=it.stackable?it.weight:it.weight*c}return t}
+  _totalWeight(){let t=0;for(const[iid,c]of Object.entries(this.inventory)){if(iid===this.equipped_bag)continue;const it=this.items[iid];if(it)t+=it.stackable?it.weight:it.weight*c}return t}
   hasLight(){if(this.current_room_id==="tower_top")return true;for(const iid in this.inventory)if(this.items[iid]?.type==="LIGHT")return true;for(const cid of this.companion_list)if(this.companions[cid]?.role==="MAGE")return true;return false}
   roomDesc(id){
     const rm=this.rooms[id];if(!rm)return"未知地点。";if(rm.dark&&!this.hasLight())return"🌑 一片漆黑！你需要光源。";
@@ -508,21 +619,52 @@ class Game{
   }
   _checkCombat(){const rm=this.rooms[this.current_room_id];if(rm.monster_id&&this.monsters[rm.monster_id]){const m=this.monsters[rm.monster_id];if(m.alive&&m.hostile!==false&&!this.in_combat){this.in_combat=true;this.current_enemy=m.id;return`⚔️ ${m.name} 出现了！`}}}
   doLook(){return this.roomDesc(this.current_room_id)}
-  doInventory(){const total=Object.values(this.inventory).reduce((a,b)=>a+b,0);const lines=[`🎒 背包 (重量 ${this._totalWeight()}/${MAX_WEIGHT} · 共 ${total} 件)`];if(Object.keys(this.inventory).length){let i=1;for(const[iid,c]of Object.entries(this.inventory)){const it=this.items[iid];if(it){let l=`  (${i}) ${emojiLabel(it)}`;if(it.stackable&&c>1)l+=` x${c}`;const bonus=[];if(it.damage_bonus)bonus.push(`攻+${it.damage_bonus}`);if(it.defense_bonus)bonus.push(`防+${it.defense_bonus}`);if(bonus.length)l+=` [${bonus.join(" ")}]`;l+=` (${it.type})`;lines.push(l);i++}}}else lines.push("  (空)");lines.push(`\n❤️ HP: ${this.player_hp}/${this.player_max_hp}\n⚔️ 攻击: ${this.totalAtk}  |  🛡️ 防御: ${this.totalDef}\n💰 金币: ${this.gold} | 🏆 得分: ${this.score}`);if(this.companion_list.length){lines.push("👥 队友：");for(const cid of this.companion_list){const c=this.companions[cid];if(c)lines.push(`  · ${emojiLabel(c)} [${c.role}] HP:${c.hp}/${c.max_hp}`)}}return lines.join("\n")}
+  doInventory(){const total=Object.values(this.inventory).reduce((a,b)=>a+b,0);const cap=this.bagCapacity();const lines=[`🎒 ${this.equippedBagLabel()} (重量 ${this._totalWeight()}/${cap} · 共 ${total} 件)`];if(Object.keys(this.inventory).length){let i=1;for(const[iid,c]of Object.entries(this.inventory)){const it=this.items[iid];if(it){let l=`  (${i}) ${emojiLabel(it)}`;if(it.stackable&&c>1)l+=` x${c}`;const bonus=[];if(it.damage_bonus)bonus.push(`攻+${it.damage_bonus}`);if(it.defense_bonus)bonus.push(`防+${it.defense_bonus}`);if(bonus.length)l+=` [${bonus.join(" ")}]`;l+=` (${it.type})`;lines.push(l);i++}}}else lines.push("  (空)");lines.push(`\n❤️ HP: ${this.player_hp}/${this.player_max_hp}\n⚔️ 攻击: ${this.totalAtk}  |  🛡️ 防御: ${this.totalDef}\n💰 金币: ${this.gold} | 🏆 得分: ${this.score}`);if(this.companion_list.length){lines.push("👥 队友：");for(const cid of this.companion_list){const c=this.companions[cid];if(c)lines.push(`  · ${emojiLabel(c)} [${c.role}] HP:${c.hp}/${c.max_hp}`)}}return lines.join("\n")}
   doTake(args){
     if(!args||!args.length)return"拿什么？";const t=args.join(" ");if(this.in_combat)return"战斗中不能拾取！";const rm=this.rooms[this.current_room_id];
-    if(t==="all"){const tk=[];for(const iid of[...rm.items]){const it=this.items[iid];if(it&&it.takeable){const had=iid in this.inventory;if(!had&&this._totalWeight()+it.weight>MAX_WEIGHT)continue;rm.items=rm.items.filter(x=>x!==iid);this._invAdd(iid);this.score+=5;tk.push(it.name)}}return tk.length?`拾取了：${tk.join("、")}。`:"这里没有能拿的东西。"}
+    if(t==="all"){const tk=[];for(const iid of[...rm.items]){const it=this.items[iid];if(it&&it.takeable){const had=iid in this.inventory;if(!had&&this._totalWeight()+it.weight>this.bagCapacity())continue;const idx=rm.items.indexOf(iid);if(idx>=0)rm.items.splice(idx,1);this._invAdd(iid);this.score+=5;tk.push(it.name)}}return tk.length?`拾取了：${tk.join("、")}。`:"这里没有能拿的东西。"}
     let found=null;const n=parseInt(t);if(!isNaN(n)&&n>=1&&n<=rm.items.length)found=rm.items[n-1];if(!found){const tl=t.toLowerCase();for(const iid of rm.items){const it=this.items[iid];if(it&&(tl===it.name.toLowerCase()||tl===it.id||it.name.toLowerCase().includes(tl))){found=iid;break}}}
-    if(!found)return`没有 ${t}。`;const it=this.items[found];if(!it.takeable)return`拿不起 ${it.name}。`;const had=found in this.inventory;if(!had&&this._totalWeight()+it.weight>MAX_WEIGHT)return`负重满了（${MAX_WEIGHT}）。`;rm.items=rm.items.filter(x=>x!==found);this._invAdd(found);this.score+=5;return`拾起了 ${it.name}。`
+    if(!found)return`没有 ${t}。`;const it=this.items[found];if(!it.takeable)return`拿不起 ${it.name}。`;const had=found in this.inventory;if(!had&&this._totalWeight()+it.weight>this.bagCapacity())return`负重满了（${this.bagCapacity()}）。`;const idx=rm.items.indexOf(found);if(idx>=0)rm.items.splice(idx,1);this._invAdd(found);this.score+=5;let extra="";if(this.current_room_id==="haunted_graveyard"&&found==="keycard_lvl2"&&!("grave_site_open"in this.flags)){rm.exits[Direction.EAST]="scp_site_gate";this.flags["grave_site_open"]=true;extra="\n你用钥匙卡刷开了藤蔓缠绕的石门！"}return`拾起了 ${it.name}。${extra}`
   }
-  doDrop(args){if(!args||!args.length)return"丢什么？";const t=args.join(" ");if(this.in_combat)return"战斗中不能丢弃！";const ik=Object.keys(this.inventory);let found=null;const n=parseInt(t);if(!isNaN(n)&&n>=1&&n<=ik.length)found=ik[n-1];if(!found){const tl=t.toLowerCase();for(const iid of ik){const it=this.items[iid];if(it&&(tl===it.name.toLowerCase()||tl===it.id||it.name.toLowerCase().includes(tl))){found=iid;break}}}if(!found)return`没有 ${t}。`;this._invRemove(found);this.rooms[this.current_room_id].items.push(found);return`丢下了 ${this.items[found].name}。`}
-  doUse(args){if(!args||!args.length)return"用什么？";const t=args.join(" ");const ik=Object.keys(this.inventory);let found=null;const n=parseInt(t);if(!isNaN(n)&&n>=1&&n<=ik.length)found=ik[n-1];if(!found){const tl=t.toLowerCase();for(const iid of ik){const it=this.items[iid];if(it&&(tl===it.name.toLowerCase()||tl===it.id||it.name.toLowerCase().includes(tl))){found=iid;break}}}if(!found)return`没有 ${t}。`;const it=this.items[found];if(!it.usable)return`${it.name} 不能用。`;let msg="";if(typeof it.on_use==="function"){msg=it.on_use(this)||it.use_msg||`使用了 ${it.name}。`}else{if(it.heal>0)this.player_hp=Math.min(this.player_max_hp,this.player_hp+it.heal);if(it.use_msg)msg=it.use_msg;else if(it.heal>0)msg=`恢复了 ${it.heal} 点生命值！`;else msg=`使用了 ${it.name}。`}if(it.type==="POTION"||it.type==="FOOD")this._invRemove(found);this.score+=2;return msg}
+  doDrop(args){if(!args||!args.length)return"丢什么？";const t=args.join(" ");if(this.in_combat)return"战斗中不能丢弃！";const ik=Object.keys(this.inventory);let found=null;const n=parseInt(t);if(!isNaN(n)&&n>=1&&n<=ik.length)found=ik[n-1];if(!found){const tl=t.toLowerCase();for(const iid of ik){const it=this.items[iid];if(it&&(tl===it.name.toLowerCase()||tl===it.id||it.name.toLowerCase().includes(tl))){found=iid;break}}}if(!found)return`没有 ${t}。`;if(found===this.equipped_bag)return"不能丢下正在使用的背包。";this._invRemove(found);this.rooms[this.current_room_id].items.push(found);return`丢下了 ${this.items[found].name}。`}
+  doUse(args){
+    if(!args||!args.length)return"用什么？";
+    const t=args.join(" ").trim().toLowerCase();
+    if(["914","scp-914","scp_914","齿轮","转换器"].includes(t))return this._doScp914();
+    if(["294","scp-294","scp_294","咖啡机"].includes(t))return this._doScp294();
+    if(["261","scp-261","scp_261","贩卖机"].includes(t))return this._doScp261();
+    const ik=Object.keys(this.inventory);let found=null;const n=parseInt(t);
+    if(!isNaN(n)&&n>=1&&n<=ik.length)found=ik[n-1];
+    if(!found){for(const iid of ik){const it=this.items[iid];if(it&&(t===it.name.toLowerCase()||t===it.id||it.name.toLowerCase().includes(t))){found=iid;break}}}
+    if(!found)return`没有 ${t}。`;
+    const it=this.items[found];if(!it.usable)return`${it.name} 不能用。`;
+    if(it.type==="BAG"){const msg=this._equipBag(found);this.score+=2;return msg}
+    let msg="";
+    if(typeof it.on_use==="function"){msg=it.on_use(this)||it.use_msg||`使用了 ${it.name}。`}
+    else{if(it.heal>0)this.player_hp=Math.min(this.player_max_hp,this.player_hp+it.heal);if(it.use_msg)msg=it.use_msg;else if(it.heal>0)msg=`恢复了 ${it.heal} 点生命值！`;else msg=`使用了 ${it.name}。`}
+    if(it.type==="POTION"||it.type==="FOOD")this._invRemove(found);
+    if(it.id!=="amnesia_pill"&&it.id!=="scp_113_rock")this.score+=2;
+    return msg
+  }
+  _doScp914(){
+    if(this.current_room_id!=="scp_914_chamber")return"这里没有齿轮工房。去 914 号单元再试。";
+    const candidates=Object.keys(this.inventory).filter(iid=>iid!==this.equipped_bag&&this.items[iid]&&this.items[iid].type!=="BAG");
+    if(!candidates.length)return"进料斗空空如也——先准备一件可精炼的背包物品。";
+    const iid=candidates[Math.floor(Math.random()*candidates.length)];const it=this.items[iid];this._invRemove(iid);
+    const r=Math.random();
+    if(r<0.25)return`【Rough】${it.name} 被绞成无法辨认的碎片……`;
+    if(r<0.5){this._invAdd(iid);return`【1:1】${it.name} 原样吐出，几乎没有变化。`}
+    if(r<0.8){const out=this.items.greater_potion?"greater_potion":"lesser_potion";this._invAdd(out);this.score+=5;return`【Fine】${it.name} 被精炼成 ${this.items[out].name}！`}
+    const out=(Math.random()<0.35&&this.items.scp_500_pill)?"scp_500_pill":(this.items.anomaly_core?"anomaly_core":"diamond");this._invAdd(out);this.score+=15;return`【Very Fine】机械尖啸！你获得了 ${this.items[out].name}！`
+  }
+  _doScp294(){if(this.current_room_id!=="scp_294_lounge")return"这里没有异常咖啡机。";const heal=18;this.player_hp=Math.min(this.player_max_hp,this.player_hp+heal);this.score+=2;return`咖啡机吐出一杯冒着蒸汽的液体。你喝下后恢复了 ${heal} 点 HP。`}
+  _doScp261(){if(this.current_room_id!=="scp_261_canteen")return"这里没有次元贩卖机。";const cost=5;if(this.gold<cost)return`需要投币 ${cost} 金，你只有 ${this.gold}。`;this.gold-=cost;const pool=["scp_261_snack","bread","lesser_potion","old_coin","scp_447_slime"].filter(id=>this.items[id]);if(!pool.length)return`贩卖机卡住了……你损失了 ${cost} 金。`;const out=pool[Math.floor(Math.random()*pool.length)];this._invAdd(out);return`贩卖机咔哒一声，吐出了 ${this.items[out].name}！（-${cost} 金）`}
   doTalk(){const rm=this.rooms[this.current_room_id];if(!rm.npc_id||!this.npcs[rm.npc_id])return"这里没有可对话的人。";const npc=this.npcs[rm.npc_id];const d=npc.dialogs||{};const lines=[`[${npc.name} · ${npc.title||""}]`,npc.desc];if(!npc.met_before){npc.met_before=true;lines.push(`\n${npc.name}：「${d.greet||"你好。"}」`);if(npc.give_item&&this.items[npc.give_item]&&!(npc.give_item in this.inventory)){this._invAdd(npc.give_item);lines.push(`\n${npc.name} 给了你 ${this.items[npc.give_item].name}！`);this.score+=5}}else lines.push(`\n${npc.name}：「${d.extra||d.farewell||"还有什么事？"}」`);if(npc.quest_item&&!npc.quest_done){if(npc.quest_item in this.inventory){this._invRemove(npc.quest_item);if(npc.quest_reward){this._invAdd(npc.quest_reward);lines.push(`\n✨ 提交任务！获得 ${this.items[npc.quest_reward].name}！`)}else lines.push(`\n✨ ${npc.name} 感谢你！`);this.score+=npc.quest_score||30;npc.quest_done=true}else{const qi=this.items[npc.quest_item];if(qi)lines.push(`\n💬 ${npc.name}：${d.quest||`帮我找 ${qi.name} 好吗？`}`)}}if(npc.npc_type==="MERCHANT")lines.push("\n🛒 输入 buy <物品> / sell <物品>");if(npc.npc_type==="HEALER")lines.push("\n💚 我可以为你治疗 (输入 heal)");return lines.join("\n")}
   doTrade(){const rm=this.rooms[this.current_room_id];if(!rm.npc_id||!this.npcs[rm.npc_id])return"没有商人。";const npc=this.npcs[rm.npc_id];if(npc.npc_type!=="MERCHANT"||!npc.trade_items.length)return`${npc.name} 没有商品。`;const lines=[`\n🛒 ${npc.name} 的商品：`];for(let i=0;i<npc.trade_items.length;i++){const[iid,price]=npc.trade_items[i];const it=this.items[iid];if(it)lines.push(`  (${i+1}) ${it.name} —— ${price} 金币`)}lines.push(`💰 你有 ${this.gold} 金币`);return lines.join("\n")}
   doBuy(args){if(!args||!args.length)return"买什么？";const rm=this.rooms[this.current_room_id];if(!rm.npc_id||!this.npcs[rm.npc_id])return"没有商人。";const npc=this.npcs[rm.npc_id];if(npc.npc_type!=="MERCHANT")return`${npc.name} 不是商人。`;const name=args.join(" ");const n=parseInt(name);if(!isNaN(n)&&n>=1&&n<=npc.trade_items.length){const[iid,price]=npc.trade_items[n-1];const it=this.items[iid];if(this.gold>=price){this.gold-=price;this._invAdd(iid);return`购买了 ${it.name}！花费 ${price} 金币。`}return`需要 ${price} 金币，你只有 ${this.gold}。`}for(const[iid,price]of npc.trade_items){const it=this.items[iid];if(it&&(name===it.name||name===it.id)){if(this.gold>=price){this.gold-=price;this._invAdd(iid);return`购买了 ${it.name}！花费 ${price} 金币。`}return`需要 ${price} 金币，你只有 ${this.gold}。`}}return`没有 '${name}'。`}
   doSell(args){if(!args||!args.length)return"卖什么？";const rm=this.rooms[this.current_room_id];if(!rm.npc_id||!this.npcs[rm.npc_id])return"没有商人。";const npc=this.npcs[rm.npc_id];if(npc.npc_type!=="MERCHANT")return`${npc.name} 不是商人。`;const name=args.join(" ");const ik=Object.keys(this.inventory);const n=parseInt(name);if(!isNaN(n)&&n>=1&&n<=ik.length){const iid=ik[n-1];const it=this.items[iid];if(it&&(npc.buys_types||[]).includes(it.type)){const p=Math.max(2,Math.floor((it.value||0)/2));this._invRemove(iid);this.gold+=p;return`卖了 ${it.name}，获得 ${p} 金币。`}return"不收这种物品。"}for(const iid of ik){const it=this.items[iid];if(it&&(name===it.name||name===it.id)){if((npc.buys_types||[]).includes(it.type)){const p=Math.max(2,Math.floor((it.value||0)/2));this._invRemove(iid);this.gold+=p;return`卖了 ${it.name}，获得 ${p} 金币。`}return"不收这种物品。"}}return`没有 '${name}'。`}
   doHeal(){const rm=this.rooms[this.current_room_id];if(!rm.npc_id||!this.npcs[rm.npc_id])return"没有治疗者。";const npc=this.npcs[rm.npc_id];if(npc.npc_type!=="HEALER")return`${npc.name} 不会治疗。`;const cost=10;if(this.gold<cost)return`治疗需要 ${cost} 金币。`;this.gold-=cost;const h=roll(6,3);this.player_hp=Math.min(this.player_max_hp,this.player_hp+h);return`${npc.name} 为你治疗，恢复了 ${h} 点HP！花费 ${cost} 金币。`}
-  doAttack(){if(!this.in_combat)return"没有敌人。";const m=this.monsters[this.current_enemy];if(!m||!m.alive){this.in_combat=false;return"敌人已死。"}const dmg=roll(6)+this.totalAtk;const a=Math.max(0,dmg-(m.defense||0));m.hp=Math.max(0,m.hp-a);const l=[`你攻击 ${m.name}！造成 ${a} 点伤害。`];if(m.hp<=0){m.alive=false;l.push(`\n🎉 击败了 ${m.name}！`);for(const li of m.loot||[]){if(this.items[li]){this._invAdd(li);l.push(`🏆 战利品：${this.items[li].name}`)}}this.gold+=m.gold||0;this.score+=m.exp||0;l.push(`💰 +${m.gold||0}金币 +${m.exp||0}经验`);this.in_combat=false;this.current_enemy="";if(m.rank==="BOSS")l.push(`\n💀 BOSS【${m.name}】被击败！`);if(this.companion_list.length){const c=this.companions[this.companion_list[0]];if(c)l.push(`\n${c.banter()}`)}return l.join("\n")}const ma=Math.max(1,m.attack+roll(4)-3);const rd=Math.max(0,ma-this.totalDef);this.player_hp-=rd;l.push(`${m.name} 反击！造成 ${rd} 点伤害。`);if(this.companion_list.length){const c=this.companions[this.companion_list[0]];if(c)l.push(`\n${c.combat_assist(this)}`)}if(this.player_hp<=0){l.push(`\n💀 你被 ${m.name} 击败了……`);this.game_over=true;return l.join("\n")}l.push(`\n${m.name}: ${m.hp}/${m.max_hp} | 你的HP: ${this.player_hp}/${this.player_max_hp}`);return l.join("\n")}
+  doAttack(){if(!this.in_combat)return"没有敌人。";const m=this.monsters[this.current_enemy];if(!m||!m.alive){this.in_combat=false;return"敌人已死。"}const dmg=roll(6)+this.totalAtk;const a=Math.max(0,dmg-(m.defense||0));m.hp=Math.max(0,m.hp-a);const l=[`你攻击 ${m.name}！造成 ${a} 点伤害。`];if(m.hp<=0){m.alive=false;l.push(`\n🎉 击败了 ${m.name}！`);for(const li of m.loot||[]){if(this.items[li]){this._invAdd(li);l.push(`🏆 战利品：${this.items[li].name}`)}}this.gold+=m.gold||0;this.score+=m.exp||0;l.push(`💰 +${m.gold||0}金币 +${m.exp||0}经验`);this.in_combat=false;this.current_enemy="";if(m.id==="scp_breach_core"&&this.hasItem("containment_box")){this.score+=50;l.push("\n📦 你用收容箱稳定了异常核心，获得额外 50 分！")}if(m.rank==="BOSS")l.push(`\n💀 BOSS【${m.name}】被击败！`);if(this.companion_list.length){const c=this.companions[this.companion_list[0]];if(c)l.push(`\n${c.banter()}`)}return l.join("\n")}const ma=Math.max(1,m.attack+roll(4)-3);const rd=Math.max(0,ma-this.totalDef);this.player_hp-=rd;l.push(`${m.name} 反击！造成 ${rd} 点伤害。`);if(this.companion_list.length){const c=this.companions[this.companion_list[0]];if(c)l.push(`\n${c.combat_assist(this)}`)}if(this.player_hp<=0){l.push(`\n💀 你被 ${m.name} 击败了……`);this.game_over=true;return l.join("\n")}l.push(`\n${m.name}: ${m.hp}/${m.max_hp} | 你的HP: ${this.player_hp}/${this.player_max_hp}`);return l.join("\n")}
   doFlee(){if(!this.in_combat)return"没有战斗。";if(Math.random()<0.5){this.in_combat=false;this.current_enemy="";return"你逃跑了！"}const m=this.monsters[this.current_enemy];return`逃跑失败！${m?m.name:"敌人"} 挡住了路。`}
   doRecruit(){const rm=this.rooms[this.current_room_id];if(!rm.npc_id)return"这里没有可招募的人。";const npc=this.npcs[rm.npc_id];const cm={old_hermit:"companion_warrior",wandering_rogue:"companion_rogue",priestess:"companion_healer",hunter:"companion_scout",bounty_hunter:"companion_archer"};const cid=cm[rm.npc_id];if(!cid||!this.companions[cid])return`${npc.name} 看起来不想加入你。`;const c=this.companions[cid];if(c.recruited)return`${c.name} 已经是你的队友了。`;if(c.recruit_item&&!(c.recruit_item in this.inventory)){const n=this.items[c.recruit_item];return`招募 ${c.name} 需要 ${n?n.name:c.recruit_item}。`}if(c.recruit_item&&c.recruit_item in this.inventory)this._invRemove(c.recruit_item);c.recruited=true;this.companion_list.push(cid);rm.npc_id=null;this.score+=20;return`✨ ${c.name} ${c.recruit_msg}`}
   doParty(){if(!this.companion_list.length)return"你目前没有队友。";const l=["👥 你的队友："];for(const cid of this.companion_list){const c=this.companions[cid];if(c){l.push(`  ${c.name} [${c.role}] HP:${c.hp}/${c.max_hp}`);const b=c.get_bonus();l.push(`  攻击+${b.dmg} 防御+${b.def}`);l.push(`  能力：${c.ability_desc||""}`)}}return l.join("\n")}
@@ -539,7 +681,7 @@ const mapCountEl=document.getElementById("map-count");const mapBtn=document.getE
 let game=null;let pending=null;
 let mapVisible=true;let mapLayer="surface";let mapMode="graph";let mapDrag=null;
 function log(t,c){if(!t||t==="None"||t===null||t===undefined)return;if(c)story.innerHTML+=`<div class="cmd">&gt; ${t}</div>`;else{story.innerHTML+=`<div class="sep"></div><div>${t.replace(/\n/g,"<br>")}</div>`}story.scrollTop=story.scrollHeight}
-function upd(){document.getElementById("hpt").textContent=`${game.player_hp}/${game.player_max_hp}`;document.getElementById("hpf").style.width=`${(game.player_hp/game.player_max_hp)*100}%`;document.getElementById("atk").textContent=game.totalAtk;document.getElementById("def").textContent=game.totalDef;document.getElementById("gdt").textContent=game.gold;document.getElementById("sct").textContent=game.score;document.getElementById("wgt").textContent=`${game._totalWeight()}/${MAX_WEIGHT}`;const cn=game.companion_list.map(c=>{const c2=game.companions[c];return c2?c2.name:""}).filter(Boolean);document.getElementById("cpt").textContent=cn.length?cn.join(", "):"无";if(mapVisible){syncMapLayerToPlayer();refreshMap()}}
+function upd(){document.getElementById("hpt").textContent=`${game.player_hp}/${game.player_max_hp}`;document.getElementById("hpf").style.width=`${(game.player_hp/game.player_max_hp)*100}%`;document.getElementById("atk").textContent=game.totalAtk;document.getElementById("def").textContent=game.totalDef;document.getElementById("gdt").textContent=game.gold;document.getElementById("sct").textContent=game.score;document.getElementById("wgt").textContent=`${game._totalWeight()}/${game.bagCapacity()}`;const cn=game.companion_list.map(c=>{const c2=game.companions[c];return c2?c2.name:""}).filter(Boolean);document.getElementById("cpt").textContent=cn.length?cn.join(", "):"无";if(mapVisible){syncMapLayerToPlayer();refreshMap()}}
 function notifyNewVisit(){flashMapHint();if(mapVisible){syncMapLayerToPlayer();refreshMap()}}
 function flashMapHint(){const el=mapVisible?mapPanel:mapBtn;el.classList.add("map-pulse");if(!mapVisible){let badge=mapBtn.querySelector(".map-badge");if(!badge){badge=document.createElement("span");badge.className="map-badge";badge.textContent="+1";mapBtn.appendChild(badge)}else badge.textContent="+1"}setTimeout(()=>{el.classList.remove("map-pulse");const b=mapBtn.querySelector(".map-badge");if(b)b.remove()},1000)}
 function applyMapVisibility(){mapPanel.classList.toggle("hidden",!mapVisible);mapBtn.classList.toggle("off",!mapVisible);mapBtn.textContent=mapVisible?"🗺️ 地图":"🗺️ 地图·关";try{localStorage.setItem("mist_map_visible_mobile",mapVisible?"1":"0")}catch(e){}if(mapVisible){syncMapLayerToPlayer();refreshMap()}}
@@ -741,7 +883,7 @@ async function loadExternalData(){
     return true;
   }catch(e){return false}
 }
-async function boot(){applyDataEnrich();await loadExternalData();init()}
+async function boot(){applyDataEnrich();MAP_META=buildMapMetaFromRooms(_ROOMS);await loadExternalData();MAP_META=buildMapMetaFromRooms(_ROOMS);init()}
 
 // ── 文本输入处理 ──
 const inputBox=document.getElementById("input-box");

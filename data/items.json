@@ -669,5 +669,346 @@
     "def_bonus": 1,
     "value": 25,
     "emoji": "🔮"
+  },
+  {
+    "id": "bag_starter",
+    "name": "破旧帆布包",
+    "desc": "磨损严重的帆布背包，勉强能装下必需品。",
+    "type": "BAG",
+    "usable": true,
+    "capacity": 15,
+    "weight": 1,
+    "value": 0,
+    "takeable": false,
+    "emoji": "🎒"
+  },
+  {
+    "id": "bag_tactical",
+    "name": "战术背包",
+    "desc": "基金会制式战术背包，多层隔仓，负重出色。",
+    "type": "BAG",
+    "usable": true,
+    "capacity": 22,
+    "weight": 2,
+    "value": 40,
+    "emoji": "🎒"
+  },
+  {
+    "id": "bag_anomalous",
+    "name": "异常收纳囊",
+    "desc": "内部空间似乎比外表更大，贴着「仅供D级人员」的标签。",
+    "type": "BAG",
+    "usable": true,
+    "capacity": 28,
+    "weight": 3,
+    "value": 80,
+    "emoji": "🎒"
+  },
+  {
+    "id": "keycard_lvl2",
+    "name": "二级钥匙卡",
+    "desc": "基金会门禁卡，权限等级：2。",
+    "type": "KEY",
+    "usable": false,
+    "value": 20,
+    "emoji": "💳"
+  },
+  {
+    "id": "keycard_lvl3",
+    "name": "三级钥匙卡",
+    "desc": "基金会高级门禁卡，可进入深层收容区。",
+    "type": "KEY",
+    "usable": false,
+    "value": 35,
+    "emoji": "💳"
+  },
+  {
+    "id": "scp_dossier",
+    "name": "异常档案残页",
+    "desc": "印有「SCP-ZH-██」编号的破损文件，提到迷雾与高塔的关联。",
+    "type": "BOOK",
+    "usable": true,
+    "use_msg": "你读到：『迷雾并非自然现象，而是未登记异常的泄漏……高塔可能是早期收容设施。』",
+    "value": 10,
+    "emoji": "📄"
+  },
+  {
+    "id": "observation_log",
+    "name": "观察日志",
+    "desc": "研究员手写的观察记录，字迹潦草。",
+    "type": "QUEST",
+    "value": 15,
+    "emoji": "📋"
+  },
+  {
+    "id": "scp_goggles",
+    "name": "认知防护护目镜",
+    "desc": "基金会配发的护目镜，可抵御轻度认知危害。",
+    "type": "ARMOR",
+    "def_bonus": 1,
+    "value": 25,
+    "emoji": "🥽"
+  },
+  {
+    "id": "containment_box",
+    "name": "便携收容箱",
+    "desc": "小型异常收容装置，对不稳定核心有稳定作用。",
+    "type": "TOOL",
+    "usable": false,
+    "value": 50,
+    "weight": 2,
+    "emoji": "📦"
+  },
+  {
+    "id": "amnesia_pill",
+    "name": "记忆清除药片",
+    "desc": "基金会标配的A级记忆抑制剂，战斗中使用可快速脱离。",
+    "type": "TOOL",
+    "usable": true,
+    "use_msg": "你吞下药片，敌人似乎短暂忘记了你的存在！",
+    "value": 18,
+    "emoji": "💊"
+  },
+  {
+    "id": "anomaly_core",
+    "name": "稳定异常核心",
+    "desc": "被击败的异常核心残骸，仍散发着微弱脉动。",
+    "type": "TREASURE",
+    "value": 100,
+    "weight": 2,
+    "emoji": "🔮"
+  },
+  {
+    "id": "site_ration",
+    "name": "基金会口粮",
+    "desc": "真空包装的军用口粮，味道像纸板。",
+    "type": "FOOD",
+    "usable": true,
+    "heal": 6,
+    "value": 3,
+    "emoji": "🍱"
+  },
+  {
+    "id": "scp_012_score",
+    "name": "未完乐章残谱(SCP-ZH-012)",
+    "desc": "沾血的五线谱残页，音符仿佛在自行延伸。",
+    "type": "SCROLL",
+    "usable": true,
+    "use_msg": "你情不自禁想继续写下去……手指渗血。",
+    "value": 30,
+    "emoji": "🎼"
+  },
+  {
+    "id": "scp_035_mask",
+    "name": "白瓷面具(SCP-ZH-035)",
+    "desc": "笑脸白瓷面具，内侧有干涸黑液。",
+    "type": "ARMOR",
+    "usable": true,
+    "use_msg": "面具贴上脸庞，耳边响起低语。",
+    "dmg_bonus": 5,
+    "def_bonus": -1,
+    "value": 60,
+    "emoji": "🎭"
+  },
+  {
+    "id": "scp_500_pill",
+    "name": "万能药(SCP-ZH-500)",
+    "desc": "红色胶囊，据说可治愈一切伤病。",
+    "type": "POTION",
+    "usable": true,
+    "heal": 999,
+    "use_msg": "你感觉体内一切伤痛烟消云散！",
+    "value": 200,
+    "emoji": "🔴"
+  },
+  {
+    "id": "scp_055_object",
+    "name": "[已编辑](SCP-ZH-055)",
+    "desc": "你记得捡到了什么……但说不出它是什么。",
+    "type": "QUEST",
+    "usable": true,
+    "use_msg": "你盯着它，却想不起自己在看什么。",
+    "value": 55,
+    "emoji": "⬛"
+  },
+  {
+    "id": "scp_093_disc",
+    "name": "红海圆盘(SCP-ZH-093)",
+    "desc": "血红石盘，触碰时传来潮汐声。",
+    "type": "KEY",
+    "usable": true,
+    "use_msg": "圆盘嗡鸣，像在寻找某扇门。",
+    "value": 40,
+    "emoji": "🔴"
+  },
+  {
+    "id": "scp_178_glasses",
+    "name": "立体眼镜(SCP-ZH-178)",
+    "desc": "老式红蓝3D眼镜，戴上后视野边缘有东西在动。",
+    "type": "TOOL",
+    "usable": true,
+    "use_msg": "你戴上眼镜——余光里出现了模糊的人形。",
+    "value": 25,
+    "emoji": "👓"
+  },
+  {
+    "id": "scp_860_key",
+    "name": "蓝钥匙(SCP-ZH-860)",
+    "desc": "通体湛蓝的钥匙，柄上刻着树木纹样。",
+    "type": "KEY",
+    "usable": true,
+    "use_msg": "钥匙微微发热，指向某处异界入口。",
+    "value": 35,
+    "emoji": "🔑"
+  },
+  {
+    "id": "scp_701_script",
+    "name": "忌日宴剧本(SCP-ZH-701)",
+    "desc": "禁演悲剧的残本，页边有观众撕扯痕迹。",
+    "type": "BOOK",
+    "usable": true,
+    "use_msg": "读完最后一行，你听见舞台方向传来掌声。",
+    "value": 45,
+    "emoji": "📜"
+  },
+  {
+    "id": "scp_513_bell",
+    "name": "锈蚀铃铛(SCP-ZH-513)",
+    "desc": "锈迹斑斑的牛铃，摇响后会听见不该存在的脚步。",
+    "type": "TOOL",
+    "usable": true,
+    "use_msg": "铃铛轻响……身后好像多了一个影子。",
+    "value": 28,
+    "emoji": "🔔"
+  },
+  {
+    "id": "scp_714_ring",
+    "name": "玉戒(SCP-ZH-714)",
+    "desc": "冰冷的翠玉戒指，戴上后思维变慢，却更清醒。",
+    "type": "RING",
+    "usable": true,
+    "use_msg": "戴上玉戒，你感到迟钝却安全。",
+    "def_bonus": 3,
+    "dmg_bonus": -1,
+    "value": 50,
+    "emoji": "💍"
+  },
+  {
+    "id": "scp_447_slime",
+    "name": "绿粘液样本(SCP-ZH-447)",
+    "desc": "无害的绿色粘液，标签写着：切勿接触尸体。",
+    "type": "MATERIAL",
+    "value": 20,
+    "emoji": "🟢"
+  },
+  {
+    "id": "scp_1981_tape",
+    "name": "残缺录像带(SCP-ZH-1981)",
+    "desc": "标签模糊的VHS，画面会随观看次数变化。",
+    "type": "TOOL",
+    "usable": true,
+    "use_msg": "雪花屏中，演讲者的面容逐渐扭曲。你获得了一丝情报。",
+    "value": 22,
+    "emoji": "📼"
+  },
+  {
+    "id": "scp_1230_book",
+    "name": "口袋次元之书(SCP-ZH-1230)",
+    "desc": "厚重童话书，翻开可进入安全梦境片刻。",
+    "type": "BOOK",
+    "usable": true,
+    "heal": 15,
+    "use_msg": "你坠入温暖的梦境，伤势缓解了。",
+    "value": 40,
+    "emoji": "📖"
+  },
+  {
+    "id": "scp_1471_phone",
+    "name": "异常手机(SCP-ZH-1471)",
+    "desc": "预装着社交软件，锁屏总有犬形剪影。",
+    "type": "TOOL",
+    "usable": true,
+    "use_msg": "通知弹出：它说它一直看着你。",
+    "value": 33,
+    "emoji": "📱"
+  },
+  {
+    "id": "scp_409_crystal",
+    "name": "晶化碎片(SCP-ZH-409)",
+    "desc": "锐利晶体，接触后皮肤隐隐发硬。",
+    "type": "MATERIAL",
+    "usable": true,
+    "use_msg": "手指传来刺痛，你赶紧收起碎片。",
+    "value": 18,
+    "emoji": "💎"
+  },
+  {
+    "id": "scp_008_vial",
+    "name": "瘟疫样本管(SCP-ZH-008)",
+    "desc": "密封小瓶，贴着生物危害标志。",
+    "type": "QUEST",
+    "usable": true,
+    "use_msg": "你没有打开它——理智尚存。",
+    "value": 5,
+    "emoji": "🧪"
+  },
+  {
+    "id": "scp_205_lamp",
+    "name": "影灯(SCP-ZH-205)",
+    "desc": "成对台灯之一，点亮后墙上影会自行活动。",
+    "type": "LIGHT",
+    "usable": true,
+    "use_msg": "灯亮起，墙影开始缓缓挪动。",
+    "value": 30,
+    "emoji": "💡"
+  },
+  {
+    "id": "scp_140_chronicle",
+    "name": "未竟编年史(SCP-ZH-140)",
+    "desc": "记载某个失落文明的书籍，字迹会自己增多。",
+    "type": "BOOK",
+    "usable": true,
+    "use_msg": "新的一行字自己浮现……你合上书。",
+    "value": 48,
+    "emoji": "📕"
+  },
+  {
+    "id": "scp_113_rock",
+    "name": "基因转换石(SCP-ZH-113)",
+    "desc": "红绿相间的光滑石头，接触会改写生理特征。",
+    "type": "TOOL",
+    "usable": true,
+    "use_msg": "一阵眩晕后，你感觉身体更强壮了。",
+    "value": 55,
+    "emoji": "🪨"
+  },
+  {
+    "id": "scp_148_telekill",
+    "name": "隔灵合金片(SCP-ZH-148)",
+    "desc": "灰暗金属片，据说能隔绝精神干扰。",
+    "type": "ARMOR",
+    "def_bonus": 2,
+    "value": 45,
+    "emoji": "🛡️"
+  },
+  {
+    "id": "scp_5000_file",
+    "name": "为何行动档案(SCP-ZH-5000)",
+    "desc": "黑色封皮档案，记录基金会某次失控行动。",
+    "type": "BOOK",
+    "usable": true,
+    "use_msg": "你读到令人不安的结论：迷雾与站点崩溃或有关联。",
+    "value": 60,
+    "emoji": "📁"
+  },
+  {
+    "id": "scp_261_snack",
+    "name": "次元零食袋(SCP-ZH-261)",
+    "desc": "包装语言未知的膨化食品，意外地好吃。",
+    "type": "FOOD",
+    "usable": true,
+    "heal": 10,
+    "value": 8,
+    "emoji": "🍿"
   }
 ]

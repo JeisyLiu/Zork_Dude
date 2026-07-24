@@ -61,7 +61,7 @@ class ItemType(Enum):
     KEY, WEAPON, ARMOR, POTION = "key","weapon","armor","potion"
     TREASURE, TOOL, LIGHT, SCROLL = "treasure","tool","light","scroll"
     FOOD, QUEST, MATERIAL, BOOK, RING = "food","quest","material","book","ring"
-    AMULET, MINERAL = "amulet", "mineral"
+    AMULET, MINERAL, BAG = "amulet", "mineral", "bag"
 
 class NpcType(Enum):
     MERCHANT, QUEST, WISEMAN = "merchant","quest","wiseman"
@@ -84,7 +84,8 @@ class Item:
                  itype: ItemType = ItemType.TREASURE,
                  usable=False, takeable=True, use_msg="",
                  weight=1, value=0, heal=0,
-                 dmg_bonus=0, def_bonus=0, emoji: str = ""):
+                 dmg_bonus=0, def_bonus=0, emoji: str = "",
+                 capacity: int = 0):
         self.id = iid; self.name = name; self.desc = desc
         self.item_type = itype; self.usable = usable
         self.takeable = takeable; self.use_msg = use_msg
@@ -92,6 +93,7 @@ class Item:
         self.heal = heal; self.damage_bonus = dmg_bonus
         self.defense_bonus = def_bonus
         self.emoji = emoji or ""
+        self.capacity = capacity
 
     def __str__(self): return f"{self.emoji} {self.name}" if self.emoji else self.name
 
@@ -100,6 +102,8 @@ class Item:
         return self.item_type in (ItemType.FOOD, ItemType.TREASURE, ItemType.MATERIAL)
 
     def on_use(self, game) -> str:
+        if self.item_type == ItemType.BAG:
+            return game._equip_bag(self.id)
         if self.heal > 0:
             game.player_hp = min(game.player_max_hp, game.player_hp + self.heal)
             if self.use_msg:
@@ -394,8 +398,36 @@ class Game:
         self.game_over = False; self.won = False
         self.flags: dict = {}
         self.in_combat = False; self.current_enemy = ""
+        self.equipped_bag = "bag_starter"
 
     # ── 背包辅助方法（叠加支持）──
+
+    def bag_capacity(self) -> int:
+        bag = self.items.get(self.equipped_bag)
+        if bag and bag.item_type == ItemType.BAG and bag.capacity > 0:
+            return bag.capacity
+        return MAX_WEIGHT
+
+    def equipped_bag_label(self) -> str:
+        bag = self.items.get(self.equipped_bag)
+        return str(bag) if bag else "背包"
+
+    def _equip_bag(self, iid: str) -> str:
+        it = self.items.get(iid)
+        if not it or it.item_type != ItemType.BAG:
+            return f"{it.name if it else iid} 不是背包。"
+        if iid == self.equipped_bag:
+            return f"你已经装备着 {it.name}。"
+        new_cap = it.capacity or MAX_WEIGHT
+        if self._total_weight() > new_cap:
+            return f"当前负重 {self._total_weight()}，{it.name} 只能装 {new_cap}，请先丢掉一些物品。"
+        old_id = self.equipped_bag
+        self.equipped_bag = iid
+        if iid in self.inventory:
+            self._inv_remove(iid)
+        if old_id and old_id in self.items:
+            self._inv_add(old_id)
+        return f"你换上了 {it.name}（负重上限 {new_cap}）。"
 
     def _inv_add(self, iid: str, count: int = 1):
         """向背包添加物品，可叠加物品自动合并"""
@@ -463,9 +495,11 @@ class Game:
         return iid in self.inventory
 
     def _total_weight(self) -> int:
-        """总负重：可叠加物品只算一次重量，非叠加物品每个都算"""
+        """总负重：可叠加物品只算一次重量，非叠加物品每个都算；装备中的背包不计入"""
         total = 0
         for iid, cnt in self.inventory.items():
+            if iid == self.equipped_bag:
+                continue
             it = self.items.get(iid)
             if it:
                 if it.stackable:
@@ -541,7 +575,9 @@ class Game:
 
     def do_inventory(self, args) -> str:
         total_items = sum(self.inventory.values())  # 实际物品总件数
-        lines = [f"🎒 背包 (重量 {self._total_weight()}/{MAX_WEIGHT} · 共 {total_items} 件)"]
+        cap = self.bag_capacity()
+        bag = self.equipped_bag_label()
+        lines = [f"🎒 {bag} (重量 {self._total_weight()}/{cap} · 共 {total_items} 件)"]
         if self.inventory:
             for idx, (iid, cnt) in enumerate(self.inventory.items(), 1):
                 it = self.items.get(iid)
@@ -582,7 +618,7 @@ class Game:
                 it = self.items.get(iid)
                 if it and it.takeable:
                     already_had = iid in self.inventory
-                    if not already_had and self._total_weight() + it.weight > MAX_WEIGHT:
+                    if not already_had and self._total_weight() + it.weight > self.bag_capacity():
                         continue  # 放不下了
                     rm.items.remove(iid)
                     self._inv_add(iid)
@@ -599,12 +635,17 @@ class Game:
         if not it.takeable: return f"拿不起 {it.name}。"
         # 重量检查：非叠加物品首次拿取、叠加物品首次拿取时需要检查
         already_had = found in self.inventory
-        if not already_had and self._total_weight() + it.weight > MAX_WEIGHT:
-            return f"负重满了（{MAX_WEIGHT}）。"
+        if not already_had and self._total_weight() + it.weight > self.bag_capacity():
+            return f"负重满了（{self.bag_capacity()}）。"
         rm.items.remove(found)
         self._inv_add(found)
         self.score += 5
-        return f"拾起了 {it.name}。"
+        extra = ""
+        if self.current_room_id == "haunted_graveyard" and found == "keycard_lvl2" and "grave_site_open" not in self.flags:
+            self.rooms["haunted_graveyard"].exits[Direction.EAST] = "scp_site_gate"
+            self.flags["grave_site_open"] = True
+            extra = "\n你用钥匙卡刷开了藤蔓缠绕的石门！"
+        return f"拾起了 {it.name}。{extra}"
 
     def do_drop(self, args) -> str:
         if not args: return "丢什么？ 用序号 drop 1"
@@ -612,6 +653,8 @@ class Game:
         if self.in_combat: return "战斗中不能丢弃！"
         found = self._resolve_item_ref(t, self.inventory)
         if not found: return f"没有 {t}。"
+        if found == self.equipped_bag:
+            return "不能丢下正在使用的背包。"
         self._inv_remove(found)
         self.rooms[self.current_room_id].items.append(found)
         it = self.items[found]
@@ -619,7 +662,14 @@ class Game:
 
     def do_use(self, args) -> str:
         if not args: return "用什么？ 用序号 use 1"
-        t = " ".join(args)
+        t = " ".join(args).strip().lower()
+        # 站点装置：914 / 294 / 261
+        if t in ("914", "scp-914", "scp_914", "齿轮", "转换器"):
+            return self._do_scp_914()
+        if t in ("294", "scp-294", "scp_294", "咖啡机"):
+            return self._do_scp_294()
+        if t in ("261", "scp-261", "scp_261", "贩卖机"):
+            return self._do_scp_261()
         found = self._resolve_item_ref(t, self.inventory)
         if not found: return f"没有 {t}。"
         it = self.items[found]
@@ -629,6 +679,62 @@ class Game:
             self._inv_remove(found)  # 消耗一个
         self.score += 2
         return msg or f"使用了 {it.name}。"
+
+    def _do_scp_914(self) -> str:
+        if self.current_room_id != "scp_914_chamber":
+            return "这里没有齿轮工房。去 914 号单元再试。"
+        candidates = [
+            iid for iid in list(self.inventory)
+            if iid != self.equipped_bag
+            and self.items.get(iid)
+            and self.items[iid].item_type != ItemType.BAG
+        ]
+        if not candidates:
+            return "进料斗空空如也——先准备一件可精炼的背包物品。"
+        iid = random.choice(candidates)
+        it = self.items[iid]
+        self._inv_remove(iid)
+        roll = random.random()
+        if roll < 0.25:
+            return f"【Rough】{it.name} 被绞成无法辨认的碎片……"
+        if roll < 0.5:
+            self._inv_add(iid)
+            return f"【1:1】{it.name} 原样吐出，几乎没有变化。"
+        if roll < 0.8:
+            out = "greater_potion" if "greater_potion" in self.items else "lesser_potion"
+            self._inv_add(out)
+            self.score += 5
+            return f"【Fine】{it.name} 被精炼成 {self.items[out].name}！"
+        # Very Fine
+        out = "scp_500_pill" if random.random() < 0.35 and "scp_500_pill" in self.items else "anomaly_core"
+        if out not in self.items:
+            out = "diamond"
+        self._inv_add(out)
+        self.score += 15
+        return f"【Very Fine】机械尖啸！你获得了 {self.items[out].name}！"
+
+    def _do_scp_294(self) -> str:
+        if self.current_room_id != "scp_294_lounge":
+            return "这里没有异常咖啡机。"
+        heal = 18
+        self.player_hp = min(self.player_max_hp, self.player_hp + heal)
+        self.score += 2
+        return f"咖啡机吐出一杯冒着蒸汽的液体。你喝下后恢复了 {heal} 点 HP。"
+
+    def _do_scp_261(self) -> str:
+        if self.current_room_id != "scp_261_canteen":
+            return "这里没有次元贩卖机。"
+        cost = 5
+        if self.gold < cost:
+            return f"需要投币 {cost} 金，你只有 {self.gold}。"
+        self.gold -= cost
+        pool = ["scp_261_snack", "bread", "lesser_potion", "old_coin", "scp_447_slime"]
+        pool = [p for p in pool if p in self.items]
+        out = random.choice(pool) if pool else None
+        if out:
+            self._inv_add(out)
+            return f"贩卖机咔哒一声，吐出了 {self.items[out].name}！（-{cost} 金）"
+        return f"贩卖机卡住了……你损失了 {cost} 金。"
 
     # ── NPC ──
 
@@ -677,6 +783,9 @@ class Game:
             self.gold += m.gold; self.score += m.exp
             lines.append(f"💰 +{m.gold}金币 +{m.exp}经验")
             self.in_combat = False; self.current_enemy = ""
+            if m.id == "scp_breach_core" and self.has_item("containment_box"):
+                self.score += 50
+                lines.append("\n📦 你用收容箱稳定了异常核心，获得额外 50 分！")
             if m.rank == MonsterRank.BOSS:
                 lines.append(f"\n💀 BOSS【{m.name}】被击败！")
             if self.companion_list:
@@ -770,7 +879,7 @@ class Game:
             f"❤️ {self.player_hp}/{self.player_max_hp}  "
             f"⚔️{self.total_atk}  🛡️{self.total_def}  "
             f"💰{self.gold}  🏆{self.score}  "
-            f"🎒{self._total_weight()}/{MAX_WEIGHT}"
+            f"🎒{self._total_weight()}/{self.bag_capacity()}"
         )
     def do_quit(self, args) -> str: self.game_over = True; return "再见！"
 
@@ -876,7 +985,8 @@ def build_world() -> Game:
             weight=d.get("weight", 1), value=d.get("value", 0),
             heal=d.get("heal", 0),
             dmg_bonus=d.get("dmg_bonus", 0), def_bonus=d.get("def_bonus", 0),
-            emoji=d.get("emoji", "")
+            emoji=d.get("emoji", ""),
+            capacity=d.get("capacity", 0)
         )
         g.items[it.id] = it
 
@@ -994,7 +1104,81 @@ def build_world() -> Game:
     # 哥布林王座：BOSS 咆哮
     g.rooms["goblin_throne"].on_enter = lambda g: "哥布林王咆哮着站起来！地面都在震动！"
 
+    # 被诅咒的墓地：二级钥匙卡打开石门通往收容站点
+    def grave_enter(g):
+        if g.has_item("keycard_lvl2") and "grave_site_open" not in g.flags:
+            g.rooms["haunted_graveyard"].exits[Direction.EAST] = "scp_site_gate"
+            g.flags["grave_site_open"] = True
+            return "你用二级钥匙卡刷开了藤蔓缠绕的石门，一条向下的通道显露出来……"
+        return None
+    g.rooms["haunted_graveyard"].on_enter = grave_enter
 
+    # 收容站点：失控间认知危害
+    def breach_enter(g):
+        lines = []
+        if g.monsters["scp_breach_core"].alive:
+            lines.append("收容失效的异常核心在房间中央脉动，空气扭曲……")
+        if not g.has_item("scp_goggles") and "cognitive_hit" not in g.flags:
+            g.flags["cognitive_hit"] = True
+            dmg = 5
+            g.player_hp = max(1, g.player_hp - dmg)
+            lines.append(f"认知危害袭来！你失去 {dmg} 点 HP。（佩戴护目镜可避免）")
+        return "\n".join(lines) if lines else None
+    g.rooms["scp_breach_chamber"].on_enter = breach_enter
+
+    # ── SCP 单元 / 特殊房间 ──
+    def cell_012_enter(g):
+        if g.has_item("scp_012_score") or "scp_012_score" in g.rooms["scp_012_cell"].items:
+            return "乐谱上的音符在视线里扭动，有什么东西催促你把它「写完」。"
+        return None
+    g.rooms["scp_012_cell"].on_enter = cell_012_enter
+
+    def cell_096_enter(g):
+        m = g.monsters.get("scp_096")
+        if m and m.alive:
+            if not g.has_item("scp_goggles"):
+                return "警告：不要直视它的脸！你下意识别过视线……但战斗似乎不可避免。"
+            return "护目镜过滤了危险轮廓。苍白的身影仍在角落轻颤。"
+        return "单元空了，只剩抓痕。"
+    g.rooms["scp_096_cell"].on_enter = cell_096_enter
+
+    def cell_173_enter(g):
+        m = g.monsters.get("scp_173")
+        if m and m.alive:
+            return "不要眨眼。雕塑就在那里——或者说，曾经在那里。"
+        return None
+    g.rooms["scp_173_cell"].on_enter = cell_173_enter
+
+    def room_002_enter(g):
+        if "scp_002_hit" not in g.flags:
+            g.flags["scp_002_hit"] = True
+            dmg = 8
+            g.player_hp = max(1, g.player_hp - dmg)
+            return f"血肉墙壁收缩！你被挤伤了，失去 {dmg} 点 HP。"
+        return "房间仍在缓慢脉动……"
+    g.rooms["scp_002_room"].on_enter = room_002_enter
+
+    def stair_depth_enter(g):
+        dmg = 3
+        g.player_hp = max(1, g.player_hp - dmg)
+        return f"越往下越冷。你失去 {dmg} 点 HP。"
+    g.rooms["scp_087_depth"].on_enter = stair_depth_enter
+
+    def cctv_enter(g):
+        if not g.has_item("scp_goggles") and "scp_895_hit" not in g.flags:
+            g.flags["scp_895_hit"] = True
+            dmg = 6
+            g.player_hp = max(1, g.player_hp - dmg)
+            return f"你盯着棺材画面太久……头痛欲裂，失去 {dmg} 点 HP。"
+        return "你强迫自己只看屏幕边缘。"
+    g.rooms["scp_895_cctv"].on_enter = cctv_enter
+
+    def pit_682_enter(g):
+        m = g.monsters.get("scp_682")
+        if m and m.alive:
+            return "酸液翻涌。某种巨大的东西正抬头——它恨你。"
+        return "酸池安静下来，但你知道它只是在适应。"
+    g.rooms["scp_682_pit"].on_enter = pit_682_enter
 
     # ── 胜利条件 ──
     original_gem_use = g.items["magic_gem"].on_use
@@ -1008,9 +1192,64 @@ def build_world() -> Game:
         return msg
     g.items["magic_gem"].on_use = gem_victory.__get__(g, Game)
 
+    # ── SCP 物品特殊使用 ──
+    def score_012_use(self):
+        dmg = 8
+        self.player_hp = max(1, self.player_hp - dmg)
+        self.score += 3
+        return f"你用血在谱上补了几个音符……手掌剧痛，失去 {dmg} 点 HP。乐章仍未完结。"
+    g.items["scp_012_score"].on_use = score_012_use.__get__(g, Game)
+
+    def mask_035_use(self):
+        self.flags["mask_035"] = True
+        dmg = 4
+        self.player_hp = max(1, self.player_hp - dmg)
+        return f"面具贴合面颊。力量涌来，同时有什么在啃噬你的意志（-{dmg} HP）。攻击已大幅提升。"
+    g.items["scp_035_mask"].on_use = mask_035_use.__get__(g, Game)
+
+    def rock_113_use(self):
+        if "scp_113_used" in self.flags:
+            return "石头已经失去活性。"
+        self.flags["scp_113_used"] = True
+        self.player_max_hp += 5
+        self.player_hp = min(self.player_max_hp, self.player_hp + 5)
+        self._inv_remove("scp_113_rock")
+        return "基因重组完成！最大 HP +5。"
+    g.items["scp_113_rock"].on_use = rock_113_use.__get__(g, Game)
+
+    def bell_513_use(self):
+        self.flags["bell_rung"] = True
+        self.score += 2
+        return "铃铛余音不散。你感觉多了一个「跟班」——最好别回头。"
+    g.items["scp_513_bell"].on_use = bell_513_use.__get__(g, Game)
+
+    def script_701_use(self):
+        self.score += 5
+        return "你读完最后一句。虚空里响起掌声与哭喊，随即沉寂。得分 +5。"
+    g.items["scp_701_script"].on_use = script_701_use.__get__(g, Game)
+
+    def tape_1981_use(self):
+        self.score += 8
+        dmg = 2
+        self.player_hp = max(1, self.player_hp - dmg)
+        return f"录像提供了站点结构线索（+8 分），但画面令人不适（-{dmg} HP）。"
+    g.items["scp_1981_tape"].on_use = tape_1981_use.__get__(g, Game)
+
+    # 记忆清除药片：战斗中可强制脱战
+    def amnesia_use(self):
+        if self.in_combat:
+            self.in_combat = False
+            self.current_enemy = ""
+            self._inv_remove("amnesia_pill")
+            return "你吞下药片，敌人茫然地环顾四周——你趁机脱离了战斗！"
+        return "现在没有战斗，药片只是让你短暂头晕了一下。"
+    g.items["amnesia_pill"].on_use = amnesia_use.__get__(g, Game)
+    g.items["amnesia_pill"].usable = True
+
     # ── 设置起始位置 ──
     g.current_room_id = "forest_entrance"
     g.rooms["forest_entrance"].visited = True
+    g.equipped_bag = "bag_starter"
     # 给玩家初始物品（叠加物品直接使用 _inv_add）
     g._inv_add("lesser_potion")
     g._inv_add("bread")
@@ -1052,7 +1291,7 @@ HELP_TEXT = """
     take / get <名/序号>  —— 拾取物品
     take all / get all    —— 拾取全部物品
     drop <名/序号>  —— 丢弃物品
-    use <名/序号>   —— 使用物品
+    use <名/序号>   —— 使用物品（背包可换装；站点内 use 914/294/261）
     inventory / i   —— 查看背包（带序号）
 
   💬  社交

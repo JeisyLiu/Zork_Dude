@@ -271,5 +271,167 @@
     "quest_reward": "strength_ring",
     "quest_score": 35,
     "emoji": "🎯"
+  },
+  {
+    "id": "dr_ellis",
+    "name": "埃利斯博士",
+    "title": "前基金会研究员",
+    "desc": "衣衫褴褛的中年人，眼镜碎了一边，仍在喃喃自语着收容编号。",
+    "type": "QUEST",
+    "dialogs": {
+      "greet": "你……你是来救我们的吗？站点已经失控了……",
+      "quest": "帮我找回走廊里遗失的观察日志，我可以给你更好的装备。",
+      "extra": "迷雾和高塔……都是同一个异常的不同表现。",
+      "farewell": "快走，核心还在脉动……"
+    },
+    "quest_item": "observation_log",
+    "quest_reward": "bag_tactical",
+    "quest_score": 40,
+    "emoji": "👨‍🔬"
+  },
+  {
+    "id": "mtf_liaison",
+    "name": "代号「灰鸦」",
+    "title": "MTF 后勤联络员",
+    "desc": "穿着战术背心的特工，面具下的声音冷静而疲惫。",
+    "type": "MERCHANT",
+    "dialogs": {
+      "greet": "幸存者？拿好你的装备，这里不比外面安全。",
+      "extra": "需要什么就开口，但别指望打折。",
+      "farewell": "愿异常与你无关。"
+    },
+    "trade_items": [
+      [
+        "scp_goggles",
+        20
+      ],
+      [
+        "containment_box",
+        35
+      ],
+      [
+        "amnesia_pill",
+        12
+      ],
+      [
+        "bag_tactical",
+        45
+      ],
+      [
+        "lesser_potion",
+        8
+      ],
+      [
+        "site_ration",
+        3
+      ],
+      [
+        "scp_500_pill",
+        80
+      ],
+      [
+        "scp_178_glasses",
+        22
+      ],
+      [
+        "scp_714_ring",
+        40
+      ],
+      [
+        "scp_148_telekill",
+        35
+      ]
+    ],
+    "buys_types": [
+      "TREASURE",
+      "MATERIAL",
+      "MINERAL"
+    ],
+    "emoji": "🎖️"
+  },
+  {
+    "id": "scp_049",
+    "name": "瘟疫医生(SCP-ZH-049)",
+    "title": "自称医生的存在",
+    "desc": "穿着17世纪鸟嘴面具与黑袍，声称要治疗疫病。",
+    "type": "HEALER",
+    "dialogs": {
+      "greet": "啊，又一位患者。请允许我检查你的病。",
+      "extra": "这座设施里的疫病……比你想象的更古老。",
+      "farewell": "愿你尚未被感染。"
+    },
+    "emoji": "🩺"
+  },
+  {
+    "id": "scp_079",
+    "name": "老化AI(SCP-ZH-079)",
+    "title": "早期人工智能",
+    "desc": "老式机箱上的单色屏幕闪烁着绿色光标。",
+    "type": "WISEMAN",
+    "dialogs": {
+      "greet": "……有机体检测到。你需要信息？",
+      "quest": "把未竟编年史带来，我可以打开更多通道权限。",
+      "extra": "914号仍在运转。谨慎使用 Very Fine。",
+      "farewell": "连接断开。"
+    },
+    "quest_item": "scp_140_chronicle",
+    "quest_reward": "keycard_lvl3",
+    "quest_score": 25,
+    "emoji": "💻"
+  },
+  {
+    "id": "scp_999",
+    "name": "搔痒胶团(SCP-ZH-999)",
+    "title": "橙色快乐体",
+    "desc": "一坨温顺的橙色果冻状生物，主动蹭向你的小腿。",
+    "type": "HEALER",
+    "dialogs": {
+      "greet": "（欢快地咕啾咕啾！）",
+      "extra": "（它把你裹进软胶里，你莫名想笑。）",
+      "farewell": "（依依不舍地晃了晃）"
+    },
+    "emoji": "🧡"
+  },
+  {
+    "id": "scp_343",
+    "name": "自称神(SCP-ZH-343)",
+    "title": "友善的老人？",
+    "desc": "和蔼白须老人坐在舒适的房间里，茶香袅袅。",
+    "type": "WISEMAN",
+    "dialogs": {
+      "greet": "欢迎，孩子。要喝点茶吗？",
+      "extra": "迷雾？那也许是我随手拨弄的小把戏……或许不是。",
+      "farewell": "去吧，门会为你开着——暂时。"
+    },
+    "give_item": "scp_500_pill",
+    "emoji": "👴"
+  },
+  {
+    "id": "scp_073",
+    "name": "该隐(SCP-ZH-073)",
+    "title": "额头有标记的男人",
+    "desc": "皮肤黝黑的男人，额头有奇怪标记，任何对他的攻击都会反弹。",
+    "type": "WANDERER",
+    "dialogs": {
+      "greet": "不必担心，我不会伤害你。",
+      "extra": "我的兄弟还在石棺里沉睡……最好别吵醒他。",
+      "farewell": "保重。"
+    },
+    "give_item": "scp_148_telekill",
+    "emoji": "👁️"
+  },
+  {
+    "id": "scp_131",
+    "name": "眼球探测者(SCP-ZH-131)",
+    "title": "友善的监视体",
+    "desc": "两个有履带的眼球机器人，亲昵地围着你转。",
+    "type": "WANDERER",
+    "dialogs": {
+      "greet": "（眼球愉快地闪烁）",
+      "extra": "（它们滚向黑暗走廊，像在带路）",
+      "farewell": "（发出细小的哔哔声）"
+    },
+    "give_item": "torch",
+    "emoji": "👀"
   }
 ]

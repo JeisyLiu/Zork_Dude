@@ -63,6 +63,9 @@ class ItemType(Enum):
     FOOD, QUEST, MATERIAL, BOOK, RING = "food","quest","material","book","ring"
     AMULET, MINERAL, BAG = "amulet", "mineral", "bag"
 
+# 仅武器 / 护甲计入背包负重
+EQUIP_WEIGHT_TYPES = (ItemType.WEAPON, ItemType.ARMOR)
+
 class NpcType(Enum):
     MERCHANT, QUEST, WISEMAN = "merchant","quest","wiseman"
     HEALER, BEGGAR, GUARDIAN, WANDERER = "healer","beggar","guardian","wanderer"
@@ -420,7 +423,7 @@ class Game:
             return f"你已经装备着 {it.name}。"
         new_cap = it.capacity or MAX_WEIGHT
         if self._total_weight() > new_cap:
-            return f"当前负重 {self._total_weight()}，{it.name} 只能装 {new_cap}，请先丢掉一些物品。"
+            return f"当前负重 {self._total_weight()}，{it.name} 只能装 {new_cap}，请先丢掉一些装备。"
         old_id = self.equipped_bag
         self.equipped_bag = iid
         if iid in self.inventory:
@@ -494,18 +497,23 @@ class Game:
     def has_item(self, iid: str) -> bool:
         return iid in self.inventory
 
+    def _item_encumbrance(self, it: "Item", count: int = 1) -> int:
+        """单件/堆叠对负重的贡献：只有装备类计入"""
+        if not it or it.item_type not in EQUIP_WEIGHT_TYPES:
+            return 0
+        if it.stackable:
+            return it.weight  # 装备一般不叠加；保守按一次算
+        return it.weight * count
+
     def _total_weight(self) -> int:
-        """总负重：可叠加物品只算一次重量，非叠加物品每个都算；装备中的背包不计入"""
+        """总负重：仅武器/护甲计入；钥匙、宝物、饰品、消耗品等不计"""
         total = 0
         for iid, cnt in self.inventory.items():
             if iid == self.equipped_bag:
                 continue
             it = self.items.get(iid)
             if it:
-                if it.stackable:
-                    total += it.weight  # 叠加物品只算一次
-                else:
-                    total += it.weight * cnt
+                total += self._item_encumbrance(it, cnt)
         return total
 
     # ── 移动 ──
@@ -618,7 +626,7 @@ class Game:
                 it = self.items.get(iid)
                 if it and it.takeable:
                     already_had = iid in self.inventory
-                    if not already_had and self._total_weight() + it.weight > self.bag_capacity():
+                    if not already_had and self._total_weight() + self._item_encumbrance(it) > self.bag_capacity():
                         continue  # 放不下了
                     rm.items.remove(iid)
                     self._inv_add(iid)
@@ -635,8 +643,8 @@ class Game:
         if not it.takeable: return f"拿不起 {it.name}。"
         # 重量检查：非叠加物品首次拿取、叠加物品首次拿取时需要检查
         already_had = found in self.inventory
-        if not already_had and self._total_weight() + it.weight > self.bag_capacity():
-            return f"负重满了（{self.bag_capacity()}）。"
+        if not already_had and self._total_weight() + self._item_encumbrance(it) > self.bag_capacity():
+            return f"负重满了（{self.bag_capacity()}）。装备（武器/护甲）过重。"
         rm.items.remove(found)
         self._inv_add(found)
         self.score += 5

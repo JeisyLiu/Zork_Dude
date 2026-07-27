@@ -995,12 +995,31 @@
       "x": 6,
       "y": 4
     },
-    "desc": "巨大的酸液收容池。水面下有什么在动——不灭的憎恶仍在。",
+    "desc": "巨大的酸液收容池。水面下有什么在动——不灭的憎恶仍在。东侧有一扇封死的黑门，写着划掉又重写的编号「001」。",
     "exits": {
       "west": "scp_079_server",
       "north": "scp_3008_aisle"
     },
     "monster_id": "scp_682"
+  },
+  {
+    "id": "scp_001_vault",
+    "name": "001号终焉收容库",
+    "emoji": "☠️",
+    "map": {
+      "layer": "site",
+      "x": 7,
+      "y": 4
+    },
+    "desc": "黑门内侧空无一物，却又仿佛挤满了眼睛。标签只剩「001」。空气稠得像沥青——站点行动的终点就在这里。",
+    "exits": {
+      "west": "scp_682_pit"
+    },
+    "dark": true,
+    "monster_id": "scp_001",
+    "items": [
+      "observation_log"
+    ]
   },
   {
     "id": "scp_3008_aisle",

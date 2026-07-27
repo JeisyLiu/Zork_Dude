@@ -779,6 +779,15 @@
     "emoji": "🔮"
   },
   {
+    "id": "site_clearance",
+    "name": "站点肃清勋章",
+    "desc": "证明你压制了001号终焉威胁。可继续探索，或开启二周目。",
+    "type": "TREASURE",
+    "value": 500,
+    "weight": 0,
+    "emoji": "🏅"
+  },
+  {
     "id": "site_ration",
     "name": "基金会口粮",
     "desc": "真空包装的军用口粮，味道像纸板。",

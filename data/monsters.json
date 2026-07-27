@@ -399,7 +399,7 @@
   {
     "id": "scp_682",
     "name": "不灭爬行者(SCP-ZH-682)",
-    "desc": "巨大的憎恶爬行生物，适应性极强，几乎无法彻底消灭。",
+    "desc": "巨大的憎恶爬行生物，适应性极强。击败它后，通往001号终焉收容库的门才会打开。",
     "hp": 120,
     "atk": 18,
     "defense": 6,
@@ -412,6 +412,27 @@
       "dragon_scale"
     ],
     "emoji": "🦎"
+  },
+  {
+    "id": "scp_001",
+    "name": "终焉原型(SCP-ZH-001)",
+    "desc": "站点最深处的收容失败产物——所有异常的「原型」。这是基金会站点行动的最终威胁。",
+    "hp": 180,
+    "atk": 22,
+    "defense": 8,
+    "rank": "BOSS",
+    "exp": 250,
+    "gold": 200,
+    "loot": [
+      "site_clearance",
+      "anomaly_core",
+      "bag_anomalous",
+      "scp_500_pill"
+    ],
+    "dialog": {
+      "taunt": "……你看见的，只是开端。"
+    },
+    "emoji": "👁️‍🗨️"
   },
   {
     "id": "scp_939",

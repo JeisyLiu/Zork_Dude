@@ -398,7 +398,8 @@ class Game:
         self.turns = 0; self.score = 0; self.gold = 30
         self.player_hp = 60; self.player_max_hp = 60
         self.player_atk_bonus = 0; self.player_def_bonus = 0
-        self.game_over = False; self.won = False
+        self.game_over = False; self.won = False; self.site_won = False
+        self.ng_cycle = 0
         self.flags: dict = {}
         self.in_combat = False; self.current_enemy = ""
         self.equipped_bag = "bag_starter"
@@ -794,6 +795,11 @@ class Game:
             if m.id == "scp_breach_core" and self.has_item("containment_box"):
                 self.score += 50
                 lines.append("\n📦 你用收容箱稳定了异常核心，获得额外 50 分！")
+            if m.id == "scp_001":
+                self.site_won = True
+                self.score += 100
+                lines.append("\n☢️ 站点最终威胁已被压制！站点行动告一段落（+100 分）。")
+                lines.append("可继续自由探索，或输入 ng+ / newgame+ 开启二周目（保留装备与道具）。")
             if m.rank == MonsterRank.BOSS:
                 lines.append(f"\n💀 BOSS【{m.name}】被击败！")
             if self.companion_list:
@@ -876,8 +882,13 @@ class Game:
 
     def do_help(self, args) -> str: return HELP_TEXT
     def do_score(self, args) -> str:
+        cycle = f" | 🔄 二周目#{self.ng_cycle}" if self.ng_cycle else ""
+        cleared = []
+        if self.won: cleared.append("主线")
+        if self.site_won: cleared.append("站点")
+        clear_txt = f" | ✅ {'+'.join(cleared)}" if cleared else ""
         return (
-            f"🏆 {self.score}分 | 💰 {self.gold}金币 | 🎯 {self.turns}回合\n"
+            f"🏆 {self.score}分 | 💰 {self.gold}金币 | 🎯 {self.turns}回合{cycle}{clear_txt}\n"
             f"❤️ HP: {self.player_hp}/{self.player_max_hp}  |  "
             f"⚔️ 攻击: {self.total_atk}  |  🛡️ 防御: {self.total_def}"
         )
@@ -890,6 +901,54 @@ class Game:
             f"🎒{self._total_weight()}/{self.bag_capacity()}"
         )
     def do_quit(self, args) -> str: self.game_over = True; return "再见！"
+
+    def do_newgame_plus(self, args) -> str:
+        if not (self.won or self.site_won):
+            return "需先完成主线（塔顶使用魔法宝石）或击败站点最终BOSS（001），才能开启二周目。"
+        saved = {
+            "inventory": dict(self.inventory),
+            "equipped_bag": self.equipped_bag,
+            "gold": self.gold,
+            "companion_list": list(self.companion_list),
+            "score": self.score,
+            "player_max_hp": self.player_max_hp,
+            "player_atk_bonus": self.player_atk_bonus,
+            "player_def_bonus": self.player_def_bonus,
+            "ng_cycle": self.ng_cycle + 1,
+        }
+        populate_world(self, starter_items=False)
+        self.inventory = saved["inventory"]
+        self.equipped_bag = saved["equipped_bag"]
+        self.gold = saved["gold"]
+        self.score = saved["score"]
+        self.player_max_hp = saved["player_max_hp"]
+        self.player_hp = self.player_max_hp
+        self.player_atk_bonus = saved["player_atk_bonus"]
+        self.player_def_bonus = saved["player_def_bonus"]
+        self.companion_list = saved["companion_list"]
+        self.ng_cycle = saved["ng_cycle"]
+        self.flags = {"ng_cycle": self.ng_cycle}
+        self.won = False
+        self.site_won = False
+        self.game_over = False
+        self.in_combat = False
+        self.current_enemy = ""
+        for cid in self.companion_list:
+            c = self.companions.get(cid)
+            if c:
+                c.recruited = True
+                c.hp = c.max_hp
+        mul = 1 + 0.15 * self.ng_cycle
+        atk_mul = 1 + 0.1 * self.ng_cycle
+        for m in self.monsters.values():
+            m.max_hp = max(1, int(m.max_hp * mul))
+            m.hp = m.max_hp
+            m.attack = max(1, int(m.attack * atk_mul))
+            m.alive = True
+        return (
+            f"🔄 二周目 #{self.ng_cycle} 开始！装备、道具、金币与队友已保留。\n"
+            f"敌人变得更强了。你回到了迷雾森林入口。"
+        )
 
     COMMANDS = {
         "look":("探索",do_look,"查看"), "l":("探索",do_look,""),
@@ -913,6 +972,8 @@ class Game:
         "party":("队友",do_party,"队友状态"), "companions":("队友",do_party,""),
         "help":("系统",do_help,"帮助"), "h":("系统",do_help,""),
         "score":("系统",do_score,"状态"), "status":("系统",do_score,""),
+        "ng+":("系统",do_newgame_plus,"二周目"), "newgame+":("系统",do_newgame_plus,""),
+        "ngplus":("系统",do_newgame_plus,""),
         "quit":("系统",do_quit,"退出"), "exit":("系统",do_quit,""),
     }
 
@@ -945,11 +1006,20 @@ class Game:
             cmd = input_prompt()
             result = self.process_command(cmd)
             print_slow(f"\n{result}", 0.02)
-            if self.won:
+            if self.won and not self.flags.get("main_win_announced"):
+                self.flags["main_win_announced"] = True
                 print_slow(f"\n{'='*50}")
-                print_slow("🎉 你找回了所有记忆，打破了迷雾诅咒！")
+                print_slow("🎉 主线通关！你找回了所有记忆，打破了迷雾诅咒！")
                 print_slow(f"得分：{self.score}  回合：{self.turns}")
-                print_slow(f"{'='*50}"); break
+                print_slow("可继续探索基金会收容站点，或输入 ng+ 开启二周目（保留装备）。")
+                print_slow(f"{'='*50}")
+            if self.site_won and not self.flags.get("site_win_announced"):
+                self.flags["site_win_announced"] = True
+                print_slow(f"\n{'='*50}")
+                print_slow("☢️ 站点最终BOSS已击败！站点行动完成！")
+                print_slow(f"得分：{self.score}  回合：{self.turns}")
+                print_slow("可继续自由探索，或输入 ng+ / newgame+ 开启二周目（保留装备）。")
+                print_slow(f"{'='*50}")
             if self.player_hp <= 0:
                 print_slow(f"\n💀 你死了……得分：{self.score}"); break
         if self.game_over and not self.won and self.player_hp > 0:
@@ -980,7 +1050,22 @@ def _parse_companion_role(s: str) -> CompanionRole:
     return CompanionRole[s]
 
 def build_world() -> Game:
-    g = Game()
+    return populate_world(Game(), starter_items=True)
+
+
+def populate_world(g: Game, starter_items: bool = True) -> Game:
+    """填充 / 重置世界。可复用于二周目（保留玩家背包由调用方恢复）。"""
+    g.rooms.clear(); g.items.clear(); g.npcs.clear()
+    g.monsters.clear(); g.companions.clear()
+    g.inventory.clear(); g.companion_list.clear()
+    g.flags.clear()
+    g.game_over = False
+    g.won = False
+    g.site_won = False
+    g.in_combat = False
+    g.current_enemy = ""
+    g.turns = 0
+    # 注意：score / gold / HP / ng_cycle 由调用方决定是否覆盖
 
     # ── 道具定义（从 data/items.json 加载）──
     items = _load_json("items.json")
@@ -1074,6 +1159,19 @@ def build_world() -> Game:
             if d: converted[d] = v
         r.exits = converted
 
+    _apply_special_behaviors(g)
+
+    # ── 设置起始位置 ──
+    g.current_room_id = "forest_entrance"
+    g.rooms["forest_entrance"].visited = True
+    g.equipped_bag = "bag_starter"
+    if starter_items:
+        g._inv_add("lesser_potion")
+        g._inv_add("bread")
+    return g
+
+
+def _apply_special_behaviors(g: Game):
     # ── 特殊房间行为（on_enter lambdas — 代码逻辑，不能放在 JSON 中）──
     # 远古遗迹：用生锈钥匙开门
     g.rooms["ancient_ruins"].on_enter = lambda g: (
@@ -1185,19 +1283,30 @@ def build_world() -> Game:
         m = g.monsters.get("scp_682")
         if m and m.alive:
             return "酸液翻涌。某种巨大的东西正抬头——它恨你。"
-        return "酸池安静下来，但你知道它只是在适应。"
+        g.rooms["scp_682_pit"].exits[Direction.EAST] = "scp_001_vault"
+        final = g.monsters.get("scp_001")
+        if final and final.alive:
+            return "酸池暂时平静。东侧厚重金属门缓缓打开——通向001号终焉收容库。"
+        return "酸池平静。001号收容库的门仍开着。"
     g.rooms["scp_682_pit"].on_enter = pit_682_enter
+
+    if "scp_001_vault" in g.rooms:
+        g.rooms["scp_001_vault"].on_enter = lambda g: (
+            "终焉的压力压得你喘不过气……" if g.monsters.get("scp_001") and g.monsters["scp_001"].alive
+            else "收容库空旷下来。勋章与残骸证明：站点威胁已被压制。"
+        )
 
     # ── 胜利条件 ──
     original_gem_use = g.items["magic_gem"].on_use
     def gem_victory(self):
-        msg = original_gem_use(self)
+        if self.won:
+            return "你已经找回记忆、打破迷雾了。可继续探索站点，或输入 ng+ 开启二周目。"
         if self.current_room_id == "tower_top" and not self.monsters["dragon_whelp"].alive:
             self.won = True
-            return "宝石嵌入书桌凹槽！书籍爆发出耀眼的光芒——\n所有记忆涌回你的脑海！你是被封印的守护者，\n迷雾是高塔的结界。现在，你自由了！"
+            return "宝石嵌入书桌凹槽！书籍爆发出耀眼的光芒——\n所有记忆涌回你的脑海！你是被封印的守护者，\n迷雾是高塔的结界。现在，你自由了！\n（主线完成——可继续探索，或 ng+ 二周目）"
         if self.current_room_id == "tower_top" and self.monsters["dragon_whelp"].alive:
             return "幼龙还在！必须先击败它！"
-        return msg
+        return original_gem_use(self)
     g.items["magic_gem"].on_use = gem_victory.__get__(g, Game)
 
     # ── SCP 物品特殊使用 ──
@@ -1253,15 +1362,6 @@ def build_world() -> Game:
         return "现在没有战斗，药片只是让你短暂头晕了一下。"
     g.items["amnesia_pill"].on_use = amnesia_use.__get__(g, Game)
     g.items["amnesia_pill"].usable = True
-
-    # ── 设置起始位置 ──
-    g.current_room_id = "forest_entrance"
-    g.rooms["forest_entrance"].visited = True
-    g.equipped_bag = "bag_starter"
-    # 给玩家初始物品（叠加物品直接使用 _inv_add）
-    g._inv_add("lesser_potion")
-    g._inv_add("bread")
-    return g
 
 
 # ══════════════════════════════════════════════
@@ -1319,6 +1419,7 @@ HELP_TEXT = """
   📋  系统
     help / h    —— 帮助
     score/status—— 状态
+    ng+ / newgame+ —— 二周目（保留装备道具，重置世界）
     quit / exit —— 退出
 
 💡 提示：场景物品和背包物品都带有数字序号 (1)(2)...
@@ -1327,6 +1428,9 @@ HELP_TEXT = """
 
    🥪 食物/宝藏/材料类物品可叠加存放（上限 999）
      背包中显示为「面包 x5」「金币 x20」
+
+   🎯 主线（塔顶宝石）与站点最终BOSS（001）通关后仍可继续玩；
+     通关提示只出现一次。完成任一通关后可用 ng+ 开二周目。
 """
 
 # ══════════════════════════════════════════════

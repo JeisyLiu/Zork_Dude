@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:zork_dude/screens/home_screen.dart';
-import 'package:zork_dude/shared/game_constants.dart';
+import 'package:zork_dude/ui/game_ui_theme.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,16 +27,7 @@ class MistTowerApp extends StatelessWidget {
     return MaterialApp(
       title: '迷雾之塔',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        brightness: Brightness.dark,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: GameConstants.hero,
-          brightness: Brightness.dark,
-          surface: GameConstants.bgDeep,
-        ),
-        scaffoldBackgroundColor: GameConstants.bgDeep,
-        useMaterial3: true,
-      ),
+      theme: GameUiTheme.appTheme(),
       home: const HomeScreen(),
     );
   }

@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:zork_dude/state/game_controller.dart';
+import 'package:zork_dude/ui/components/game_panel.dart';
+import 'package:zork_dude/ui/components/game_progress_bar.dart';
+import 'package:zork_dude/ui/components/game_button.dart';
+import 'package:zork_dude/ui/components/game_outlined_text.dart';
+import 'package:zork_dude/ui/game_ui_theme.dart';
 
 class StatusBar extends StatelessWidget {
   const StatusBar({super.key, required this.controller});
@@ -15,49 +20,38 @@ class StatusBar extends StatelessWidget {
         .map((c) => s.companions[c]?.name)
         .whereType<String>()
         .join(', ');
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(colors: [Color(0xFF1A1A2E), Color(0xFF16213E)]),
-        border: Border.all(color: const Color(0xFF2A2A4A)),
-        borderRadius: BorderRadius.circular(8),
-      ),
+
+    return GamePanel(
+      dark: true,
+      withBorder: true,
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       child: Wrap(
         spacing: 10,
-        runSpacing: 4,
+        runSpacing: 6,
         crossAxisAlignment: WrapCrossAlignment.center,
         children: [
-          _stat('❤️', '${s.playerHp}/${s.playerMaxHp}', child: SizedBox(
-            width: 56,
-            height: 8,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(4),
-              child: LinearProgressIndicator(
-                value: ratio.clamp(0, 1),
-                backgroundColor: const Color(0xFF2D2D3A),
-                color: Color.lerp(const Color(0xFFE74C3C), const Color(0xFF2ECC71), ratio),
-              ),
-            ),
-          )),
-          _stat('⚔️', '${s.totalAtk}'),
-          _stat('🛡️', '${s.totalDef}'),
-          _stat('💰', '${s.gold}'),
-          _stat('🏆', '${s.score}'),
-          _stat('🎒', '${s.totalWeight()}/${s.bagCapacity()}'),
-          if (companions.isNotEmpty) _stat('👥', companions),
-          TextButton(
+          _stat(context, '❤️', '${s.playerHp}/${s.playerMaxHp}', child: GameProgressBar(value: ratio, width: 64)),
+          _stat(context, '⚔️', '${s.totalAtk}'),
+          _stat(context, '🛡️', '${s.totalDef}'),
+          _stat(context, '💰', '${s.gold}'),
+          _stat(context, '🏆', '${s.score}'),
+          _stat(context, '🎒', '${s.totalWeight()}/${s.bagCapacity()}'),
+          if (companions.isNotEmpty) _stat(context, '👥', companions),
+          GameButton(
+            label: controller.mapVisible ? '地图' : '地图·关',
+            subLabel: 'map',
+            height: 32,
+            width: 72,
             onPressed: controller.toggleMap,
-            child: Text(
-              controller.mapVisible ? '🗺️ 地图 map' : '🗺️ 地图·关 map',
-              style: const TextStyle(fontSize: 12),
-            ),
+            semanticLabel: '切换地图',
           ),
         ],
       ),
     );
   }
 
-  Widget _stat(String icon, String value, {Widget? child}) {
+  Widget _stat(BuildContext context, String icon, String value, {Widget? child}) {
+    final d = GameUiTheme.of(context);
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -65,7 +59,13 @@ class StatusBar extends StatelessWidget {
         const SizedBox(width: 3),
         if (child != null) child,
         if (child != null) const SizedBox(width: 4),
-        Text(value, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12)),
+        GameOutlinedText(
+          value,
+          fontSize: 12,
+          fontWeight: FontWeight.bold,
+          color: d.textPrimary,
+          strokeWidth: 2.4,
+        ),
       ],
     );
   }

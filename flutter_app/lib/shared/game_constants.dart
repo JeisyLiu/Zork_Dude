@@ -20,13 +20,15 @@ abstract final class GameConstants {
   static const int actionAttack = 1;
   static const int actionInteract = 2;
 
-  /// Misty palette matching the web/CLI mood.
-  static const Color bgDeep = Color(0xFF0A0A12);
-  static const Color grass = Color(0xFF1E3A2F);
-  static const Color path = Color(0xFF2A3F4A);
-  static const Color wall = Color(0xFF1A1A2E);
-  static const Color tree = Color(0xFF0F2A1C);
-  static const Color hero = Color(0xFF54A0FF);
-  static const Color slime = Color(0xFF2ECC71);
-  static const Color accent = Color(0xFFC8D6E5);
+  /// Soft wood tone — close to Kenney panel brown frames, still muted (not bright).
+  static const Color bgDeep = Color(0xFF3A2E22);
+  static const Color bgMid = Color(0xFF4A3C2C);
+  static const Color bgMist = Color(0xFF554632);
+  static const Color grass = Color(0xFF4A4030);
+  static const Color path = Color(0xFF5A4C38);
+  static const Color wall = Color(0xFF3A2E22);
+  static const Color tree = Color(0xFF3D3224);
+  static const Color hero = Color(0xFFB8955A);
+  static const Color slime = Color(0xFF6B8F5A);
+  static const Color accent = Color(0xFFE8DCC8);
 }

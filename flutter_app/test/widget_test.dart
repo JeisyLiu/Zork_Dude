@@ -1,15 +1,123 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:zork_dude/main.dart';
+import 'package:zork_dude/screens/exploration_screen.dart';
+import 'package:zork_dude/ui/components/game_button.dart';
+import 'package:zork_dude/ui/game_ui_assets.dart';
+import 'package:zork_dude/ui/game_ui_theme.dart';
+import 'package:zork_dude/ui/home/home_ambient_background.dart';
+import 'package:zork_dude/ui/home/pixel_tower_mark.dart';
 
 void main() {
-  testWidgets('Home screen shows Mist Tower title', (tester) async {
-    await tester.pumpWidget(const MistTowerApp());
+  TestWidgetsFlutterBinding.ensureInitialized();
+
+  Future<void> pumpUntilLoaded(WidgetTester tester) async {
+    await tester.pump();
+    for (var i = 0; i < 80; i++) {
+      await tester.pump(const Duration(milliseconds: 100));
+      if (find.textContaining('进入迷雾').evaluate().isNotEmpty) return;
+    }
+  }
+
+  testWidgets('Home screen shows Mist Tower title and navigates', (tester) async {
+    await tester.binding.setSurfaceSize(const Size(1280, 720));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      const MediaQuery(
+        data: MediaQueryData(disableAnimations: true),
+        child: MistTowerApp(),
+      ),
+    );
     expect(find.text('迷雾之塔'), findsOneWidget);
 
-    for (var i = 0; i < 30; i++) {
-      await tester.pump(const Duration(milliseconds: 100));
-      if (find.textContaining('进入迷雾').evaluate().isNotEmpty) break;
-    }
+    await pumpUntilLoaded(tester);
     expect(find.textContaining('进入迷雾'), findsOneWidget);
+
+    await tester.tap(find.text('进入迷雾'));
+    for (var i = 0; i < 20; i++) {
+      await tester.pump(const Duration(milliseconds: 100));
+      if (find.byType(ExplorationScreen).evaluate().isNotEmpty) break;
+    }
+    expect(find.byType(ExplorationScreen), findsOneWidget);
+  });
+
+  testWidgets('UI assets are declared and loadable', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Builder(
+          builder: (context) {
+            return Image.asset(GameUiAssets.panelBrown);
+          },
+        ),
+      ),
+    );
+    await tester.pump();
+    expect(find.byType(Image), findsOneWidget);
+  });
+
+  testWidgets('GameSkinScope switches site skin', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: GameUiTheme.appTheme(),
+        home: Builder(
+          builder: (context) {
+            final fantasy = GameUiTheme.dataFor(GameUiSkin.fantasy);
+            final site = GameUiTheme.dataFor(GameUiSkin.site);
+            expect(fantasy.panel, isNot(equals(site.panelDark)));
+            return const SizedBox();
+          },
+        ),
+      ),
+    );
+  });
+
+  testWidgets('Home layout fits 320x568 without overflow', (tester) async {
+    await tester.binding.setSurfaceSize(const Size(320, 568));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(const MistTowerApp());
+    await pumpUntilLoaded(tester);
+
+    expect(tester.takeException(), isNull);
+    expect(find.text('迷雾之塔'), findsOneWidget);
+    expect(find.byType(PixelTowerMark), findsOneWidget);
+  });
+
+  testWidgets('Home layout fits 390x844 without overflow', (tester) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(const MistTowerApp());
+    await pumpUntilLoaded(tester);
+
+    expect(tester.takeException(), isNull);
+    expect(find.byType(HomeAmbientBackground), findsOneWidget);
+    expect(find.byType(GameButton), findsOneWidget);
+  });
+
+  testWidgets('Home layout fits 1280x720 without overflow', (tester) async {
+    await tester.binding.setSurfaceSize(const Size(1280, 720));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(const MistTowerApp());
+    await pumpUntilLoaded(tester);
+
+    expect(tester.takeException(), isNull);
+    expect(find.text('MIST TOWER'), findsOneWidget);
+  });
+
+  testWidgets('Home renders with animations disabled', (tester) async {
+    await tester.pumpWidget(
+      const MediaQuery(
+        data: MediaQueryData(disableAnimations: true),
+        child: MistTowerApp(),
+      ),
+    );
+    await pumpUntilLoaded(tester);
+
+    expect(tester.takeException(), isNull);
+    expect(find.text('迷雾之塔'), findsOneWidget);
+    expect(find.byType(HomeAmbientBackground), findsOneWidget);
   });
 }

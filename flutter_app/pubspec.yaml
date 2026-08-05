@@ -24,10 +24,12 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/images/home/
     - assets/images/player/
     - assets/images/enemies/
     - assets/images/tiles/
     - assets/maps/
+    - assets/ui/
     - assets/data/items.json
     - assets/data/monsters.json
     - assets/data/npcs.json

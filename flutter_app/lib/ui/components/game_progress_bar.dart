@@ -1,0 +1,59 @@
+import 'package:flutter/material.dart';
+import 'package:zork_dude/ui/game_ui_theme.dart';
+
+/// HP / progress bar using Kenney border + fill clip (no stretch distortion).
+class GameProgressBar extends StatelessWidget {
+  const GameProgressBar({
+    super.key,
+    required this.value,
+    this.width = 80,
+    this.height = 16,
+    this.small = true,
+    this.skin,
+  });
+
+  final double value;
+  final double width;
+  final double height;
+  final bool small;
+  final GameUiSkinData? skin;
+
+  @override
+  Widget build(BuildContext context) {
+    final d = skin ?? GameUiTheme.of(context);
+    final border = small ? d.progressBorderSmall : d.progressBorder;
+    final fill = small ? d.progressFillSmall : d.progressFill;
+    final ratio = value.clamp(0.0, 1.0);
+
+    return SizedBox(
+      width: width,
+      height: height,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          Image.asset(
+            border,
+            fit: BoxFit.fill,
+            filterQuality: FilterQuality.none,
+            gaplessPlayback: true,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(2),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: FractionallySizedBox(
+                widthFactor: ratio,
+                child: Image.asset(
+                  fill,
+                  fit: BoxFit.fill,
+                  filterQuality: FilterQuality.none,
+                  gaplessPlayback: true,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

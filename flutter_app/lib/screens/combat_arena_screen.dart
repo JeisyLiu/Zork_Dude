@@ -8,6 +8,13 @@ import 'package:zork_dude/game/map/arena_map.dart';
 import 'package:zork_dude/game/player/hero_player.dart';
 import 'package:zork_dude/shared/game_constants.dart';
 import 'package:zork_dude/state/game_controller.dart';
+import 'package:zork_dude/ui/components/game_button.dart';
+import 'package:zork_dude/ui/components/game_panel.dart';
+import 'package:zork_dude/ui/components/game_progress_bar.dart';
+import 'package:zork_dude/ui/components/game_outlined_text.dart';
+import 'package:zork_dude/ui/game_skin_scope.dart';
+import 'package:zork_dude/ui/game_ui_assets.dart';
+import 'package:zork_dude/ui/game_ui_theme.dart';
 
 /// Bonfire combat arena — only entered when GameSession.inCombat is true.
 class CombatArenaScreen extends StatefulWidget {
@@ -32,7 +39,9 @@ class _CombatArenaScreenState extends State<CombatArenaScreen> {
       return const Scaffold(body: Center(child: Text('无战斗')));
     }
 
-    return PopScope(
+    return GameSkinScope(
+      skin: GameUiSkin.combat,
+      child: PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, _) {
         if (!didPop) _flee();
@@ -90,9 +99,36 @@ class _CombatArenaScreenState extends State<CombatArenaScreen> {
               ),
               collisionConfig: BonfireCollisionConfig.dafault(),
             ),
+            Positioned(
+              left: 12,
+              bottom: 24,
+              child: IgnorePointer(
+                child: Image.asset(
+                  GameUiAssets.minimapRingGrey,
+                  width: 110,
+                  height: 110,
+                  filterQuality: FilterQuality.none,
+                  opacity: const AlwaysStoppedAnimation(0.45),
+                ),
+              ),
+            ),
+            Positioned(
+              right: 24,
+              bottom: 36,
+              child: IgnorePointer(
+                child: Image.asset(
+                  GameUiAssets.roundGrey,
+                  width: 72,
+                  height: 72,
+                  filterQuality: FilterQuality.none,
+                  opacity: const AlwaysStoppedAnimation(0.45),
+                ),
+              ),
+            ),
           ],
         ),
       ),
+    ),
     );
   }
 
@@ -193,51 +229,71 @@ class _CombatHud extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final d = GameUiTheme.of(context);
+    final hpRatio = session.playerMaxHp > 0 ? session.playerHp / session.playerMaxHp : 0.0;
+    final enemyRatio = monster.maxHp > 0 ? monster.hp / monster.maxHp : 0.0;
+
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    '⚔️ ${monster.label}',
-                    style: const TextStyle(
-                      color: GameConstants.accent,
+        child: GamePanel(
+          dark: true,
+          withBorder: true,
+          padding: const EdgeInsets.all(10),
+          skin: GameUiTheme.dataFor(GameUiSkin.combat),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: GameOutlinedText(
+                      '⚔️ ${monster.label}',
+                      fontSize: 14,
                       fontWeight: FontWeight.bold,
+                      color: d.textPrimary,
+                      strokeWidth: 2.8,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      textAlign: TextAlign.left,
                     ),
-                    overflow: TextOverflow.ellipsis,
                   ),
-                ),
-                Text(
-                  'HP ${session.playerHp}/${session.playerMaxHp}',
-                  style: const TextStyle(color: Colors.white70, fontSize: 12),
-                ),
-                const SizedBox(width: 12),
-                FilledButton(
-                  onPressed: onFlee,
-                  style: FilledButton.styleFrom(
-                    backgroundColor: const Color(0xFFE67E22),
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                  GameProgressBar(
+                    value: enemyRatio,
+                    width: 56,
+                    skin: GameUiTheme.dataFor(GameUiSkin.combat),
                   ),
-                  child: const Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text('逃跑', style: TextStyle(fontSize: 13, height: 1.1)),
-                      Text('flee', style: TextStyle(fontSize: 9, height: 1.1)),
-                    ],
+                  const SizedBox(width: 8),
+                  GameProgressBar(value: hpRatio, width: 56),
+                  const SizedBox(width: 8),
+                  GameOutlinedText(
+                    '${session.playerHp}/${session.playerMaxHp}',
+                    fontSize: 11,
+                    color: d.textMuted,
+                    strokeWidth: 2.2,
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 6),
-            const Text(
-              '左摇杆移动 · Joystick  ·  右键攻击 Attack',
-              style: TextStyle(fontSize: 10, color: Color(0xFF7F8FA6)),
-            ),
-          ],
+                  const SizedBox(width: 8),
+                  GameButton(
+                    label: '逃跑',
+                    subLabel: 'flee',
+                    accent: true,
+                    height: 36,
+                    width: 72,
+                    onPressed: onFlee,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 6),
+              GameOutlinedText(
+                '左摇杆移动 · Joystick · 右键攻击 Attack',
+                fontSize: 10,
+                color: d.textMuted,
+                strokeWidth: 2.2,
+                textAlign: TextAlign.left,
+              ),
+            ],
+          ),
         ),
       ),
     );

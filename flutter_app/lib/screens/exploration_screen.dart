@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:zork_dude/screens/combat_arena_screen.dart';
 import 'package:zork_dude/shared/game_constants.dart';
 import 'package:zork_dude/state/game_controller.dart';
+import 'package:zork_dude/ui/components/game_banner.dart';
+import 'package:zork_dude/ui/components/game_button.dart';
+import 'package:zork_dude/ui/components/game_outlined_text.dart';
+import 'package:zork_dude/ui/components/game_panel.dart';
+import 'package:zork_dude/ui/game_skin_scope.dart';
+import 'package:zork_dude/ui/game_ui_theme.dart';
 import 'package:zork_dude/widgets/command_input.dart';
 import 'package:zork_dude/widgets/mist_map_panel.dart';
 import 'package:zork_dude/widgets/quick_commands.dart';
@@ -45,33 +51,53 @@ class _ExplorationScreenState extends State<ExplorationScreen> {
   void _showTargetPicker(String title, List<({String label, String value})> options) {
     showModalBottomSheet<void>(
       context: context,
-      backgroundColor: const Color(0xFF12121E),
-      builder: (ctx) => SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(12),
-              child: Text(title, style: const TextStyle(color: GameConstants.accent)),
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => GameSkinScope(
+        skin: GameUiTheme.skinForMapLayer(widget.controller.mapLayer),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: GamePanel(
+              dark: true,
+              withBorder: true,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: GameOutlinedText(
+                      title,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: GameUiTheme.of(ctx).textPrimary,
+                      strokeWidth: 2.8,
+                    ),
+                  ),
+                  ...options.map((o) => Padding(
+                        padding: const EdgeInsets.only(bottom: 6),
+                        child: GameButton(
+                          width: double.infinity,
+                          label: o.label,
+                          onPressed: () {
+                            Navigator.pop(ctx);
+                            final lower = title.toLowerCase();
+                            final cmd = lower.contains('drop') || title.contains('丢弃')
+                                ? 'drop ${o.value}'
+                                : lower.contains('use') || title.contains('使用')
+                                    ? 'use ${o.value}'
+                                    : lower.contains('buy') || title.contains('购买')
+                                        ? 'buy ${o.value}'
+                                        : lower.contains('sell') || title.contains('出售')
+                                            ? 'sell ${o.value}'
+                                            : 'take ${o.value}';
+                            widget.controller.executeCommand(cmd);
+                          },
+                        ),
+                      )),
+                ],
+              ),
             ),
-            ...options.map((o) => ListTile(
-                  title: Text(o.label, style: const TextStyle(color: Colors.white70)),
-                  onTap: () {
-                    Navigator.pop(ctx);
-                    final lower = title.toLowerCase();
-                    final cmd = lower.contains('drop') || title.contains('丢弃')
-                        ? 'drop ${o.value}'
-                        : lower.contains('use') || title.contains('使用')
-                            ? 'use ${o.value}'
-                            : lower.contains('buy') || title.contains('购买')
-                                ? 'buy ${o.value}'
-                                : lower.contains('sell') || title.contains('出售')
-                                    ? 'sell ${o.value}'
-                                    : 'take ${o.value}';
-                    widget.controller.executeCommand(cmd);
-                  },
-                )),
-          ],
+          ),
         ),
       ),
     );
@@ -94,45 +120,49 @@ class _ExplorationScreenState extends State<ExplorationScreen> {
     }
 
     final wide = MediaQuery.sizeOf(context).width > 900;
+    final skin = GameUiTheme.skinForMapLayer(c.mapLayer);
 
-    return Scaffold(
-      backgroundColor: GameConstants.bgDeep,
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF12121E),
-        title: const Text('🌫 迷雾之塔', style: TextStyle(letterSpacing: 1)),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(8),
-        child: Column(
-          children: [
-            StatusBar(controller: c),
-            const SizedBox(height: 6),
-            Expanded(
-              child: wide
-                  ? Row(
-                      children: [
-                        Expanded(flex: 3, child: StoryLogView(controller: c)),
-                        if (c.mapVisible) ...[
-                          const SizedBox(width: 8),
-                          Expanded(flex: 2, child: MistMapPanel(controller: c)),
-                        ],
-                      ],
-                    )
-                  : Column(
-                      children: [
-                        if (c.mapVisible) ...[
-                          SizedBox(height: 180, child: MistMapPanel(controller: c)),
-                          const SizedBox(height: 6),
-                        ],
-                        Expanded(child: StoryLogView(controller: c)),
-                      ],
-                    ),
+    return GameSkinScope(
+      skin: skin,
+      child: Scaffold(
+        backgroundColor: GameConstants.bgDeep,
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(8),
+            child: Column(
+              children: [
+                const GameBanner(title: '迷雾之塔', subtitle: 'Exploration', height: 48),
+                const SizedBox(height: 6),
+                StatusBar(controller: c),
+                const SizedBox(height: 6),
+                Expanded(
+                  child: wide
+                      ? Row(
+                          children: [
+                            Expanded(flex: 3, child: StoryLogView(controller: c)),
+                            if (c.mapVisible) ...[
+                              const SizedBox(width: 8),
+                              Expanded(flex: 2, child: MistMapPanel(controller: c)),
+                            ],
+                          ],
+                        )
+                      : Column(
+                          children: [
+                            if (c.mapVisible) ...[
+                              SizedBox(height: 180, child: MistMapPanel(controller: c)),
+                              const SizedBox(height: 6),
+                            ],
+                            Expanded(child: StoryLogView(controller: c)),
+                          ],
+                        ),
+                ),
+                const SizedBox(height: 6),
+                QuickCommandPanel(controller: c, onPickTargets: _showTargetPicker),
+                const SizedBox(height: 6),
+                CommandInputRow(controller: c),
+              ],
             ),
-            const SizedBox(height: 6),
-            QuickCommandPanel(controller: c, onPickTargets: _showTargetPicker),
-            const SizedBox(height: 6),
-            CommandInputRow(controller: c),
-          ],
+          ),
         ),
       ),
     );

@@ -9,12 +9,19 @@
 - **探索主界面**：Zork 指令系统 + 迷雾残页小地图（移植自 Web 版）
 - **战斗场景**：仅当 `inCombat=true` 时进入 Bonfire 动作 Arena
 - **数据**：读取 `assets/data/*.json`（与根目录 `data/` 同步）
+- **UI**：Kenney UI Pack Adventure 像素风资源（棕木幻想 / 灰铆钉站点 / 战斗 HUD）
 
-## 同步游戏数据
+## 同步资源
 
 ```bash
+# 游戏 JSON 数据
 dart run tool/sync_game_data.dart
+
+# UI 贴图（根目录 ui_pack/ → assets/ui/）
+dart run tool/sync_ui_assets.dart
 ```
+
+UI 资源许可见 `assets/ui/License.txt`（Kenney UI Pack Adventure, CC0 1.0）。
 
 ## 快速开始
 
@@ -32,6 +39,16 @@ flutter run
 | 移动 | n/s/e/w/u/d 或方向按钮 |
 | 战斗 | 遇敌自动进入动作场景；摇杆移动 + 攻击按钮；可逃跑 |
 
+## UI 皮肤
+
+| 场景 | 皮肤 | 主要资源 |
+|------|------|----------|
+| 首页 / 地表·洞穴·高塔 | fantasy | `panel_brown*`、`button_brown`、`minimap_ring_brown*` |
+| 收容站点层 | site | `panel_grey_bolts*`、`button_grey` |
+| 战斗 HUD | combat | `panel_grey_bolts_dark`、`progress_red/green`、`button_red` |
+
+核心组件：`lib/ui/components/`（`GamePanel`、`GameButton`、`GameBanner`、`GameProgressBar`）
+
 ## 目录结构
 
 ```
@@ -39,6 +56,7 @@ lib/
 ├── domain/           # GameSession、地图算法、指令处理
 ├── data/             # JSON 加载
 ├── state/            # GameController
+├── ui/               # 主题、资源路径、Kenney 组件
 ├── screens/          # Home、Exploration、CombatArena
 ├── widgets/          # 状态栏、日志、地图、快捷指令
 └── game/             # Bonfire 战斗层（Arena、Player、Enemy）

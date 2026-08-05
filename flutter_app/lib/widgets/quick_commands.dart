@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:zork_dude/domain/models/enums.dart';
-import 'package:zork_dude/shared/game_constants.dart';
 import 'package:zork_dude/state/game_controller.dart';
+import 'package:zork_dude/ui/components/game_button.dart';
+import 'package:zork_dude/ui/components/game_outlined_text.dart';
+import 'package:zork_dude/ui/components/game_panel.dart';
+import 'package:zork_dude/ui/game_ui_assets.dart';
+import 'package:zork_dude/ui/game_ui_theme.dart';
 
 /// Exploration controls: D-pad + bilingual action chips.
 class QuickCommandPanel extends StatelessWidget {
@@ -18,112 +22,72 @@ class QuickCommandPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     final s = controller.session;
     final inCombat = s?.inCombat ?? false;
+    final d = GameUiTheme.of(context);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (!inCombat) ...[
-              DirectionPad(
-                onMove: (dir) => controller.move(dir),
-              ),
-              const SizedBox(width: 10),
-            ],
-            Expanded(
-              child: Wrap(
-                spacing: 6,
-                runSpacing: 6,
+    return GamePanel(
+      padding: const EdgeInsets.all(8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          LayoutBuilder(
+            builder: (context, constraints) {
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _ActionChip(
-                    zh: '查看',
-                    en: 'look',
-                    onTap: () => controller.executeCommand('look'),
-                  ),
-                  _ActionChip(
-                    zh: '背包',
-                    en: 'inv',
-                    onTap: () => controller.executeCommand('inventory'),
-                  ),
-                  if (!inCombat)
-                    _ActionChip(zh: '拿起', en: 'take', onTap: _take),
-                  if (!inCombat)
-                    _ActionChip(zh: '丢弃', en: 'drop', onTap: _drop),
-                  if (!inCombat)
-                    _ActionChip(zh: '使用', en: 'use', onTap: _use),
-                  _ActionChip(
-                    zh: '对话',
-                    en: 'talk',
-                    onTap: () => controller.executeCommand('talk'),
-                  ),
-                  if (!inCombat)
-                    _ActionChip(
-                      zh: '商品',
-                      en: 'trade',
-                      onTap: () => controller.executeCommand('trade'),
+                  if (!inCombat) ...[
+                    DirectionPad(onMove: (dir) => controller.move(dir)),
+                    const SizedBox(width: 8),
+                  ],
+                  Expanded(
+                    child: SingleChildScrollView(
+                      scrollDirection: constraints.maxWidth < 360 ? Axis.vertical : Axis.horizontal,
+                      child: Wrap(
+                        spacing: 6,
+                        runSpacing: 6,
+                        children: _chips(inCombat),
+                      ),
                     ),
-                  if (!inCombat)
-                    _ActionChip(zh: '购买', en: 'buy', onTap: _buy),
-                  if (!inCombat)
-                    _ActionChip(zh: '出售', en: 'sell', onTap: _sell),
-                  if (!inCombat)
-                    _ActionChip(
-                      zh: '治疗',
-                      en: 'heal',
-                      onTap: () => controller.executeCommand('heal'),
-                    ),
-                  if (inCombat)
-                    _ActionChip(
-                      zh: '攻击',
-                      en: 'attack',
-                      onTap: () => controller.executeCommand('attack'),
-                    ),
-                  if (inCombat)
-                    _ActionChip(
-                      zh: '逃跑',
-                      en: 'flee',
-                      onTap: () => controller.executeCommand('flee'),
-                    ),
-                  _ActionChip(
-                    zh: '招募',
-                    en: 'recruit',
-                    onTap: () => controller.executeCommand('recruit'),
-                  ),
-                  _ActionChip(
-                    zh: '队伍',
-                    en: 'party',
-                    onTap: () => controller.executeCommand('party'),
-                  ),
-                  _ActionChip(
-                    zh: '得分',
-                    en: 'score',
-                    onTap: () => controller.executeCommand('score'),
-                  ),
-                  _ActionChip(
-                    zh: '帮助',
-                    en: 'help',
-                    onTap: () => controller.executeCommand('help'),
-                  ),
-                  _ActionChip(
-                    zh: '二周目',
-                    en: 'ng+',
-                    onTap: () => controller.executeCommand('ng+'),
                   ),
                 ],
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 4),
-        Text(
-          inCombat
-              ? '战斗中 · Combat: attack / flee'
-              : '提示 · Tips: n s e w u d · look · take 1 · inv',
-          style: const TextStyle(fontSize: 10, color: Color(0xFF7F8FA6)),
-        ),
-      ],
+              );
+            },
+          ),
+          const SizedBox(height: 4),
+          GameOutlinedText(
+            inCombat
+                ? '战斗中 · Combat: attack / flee'
+                : '提示 · Tips: n s e w u d · look · take 1 · inv',
+            fontSize: 10,
+            fontWeight: FontWeight.w500,
+            color: d.textMuted,
+            strokeWidth: 2.2,
+            textAlign: TextAlign.left,
+          ),
+        ],
+      ),
     );
+  }
+
+  List<Widget> _chips(bool inCombat) {
+    return [
+      GameButton(label: '查看', subLabel: 'look', height: 40, width: 72, onPressed: () => controller.executeCommand('look')),
+      GameButton(label: '背包', subLabel: 'inv', height: 40, width: 72, onPressed: () => controller.executeCommand('inventory')),
+      if (!inCombat) GameButton(label: '拿起', subLabel: 'take', height: 40, width: 72, onPressed: _take),
+      if (!inCombat) GameButton(label: '丢弃', subLabel: 'drop', height: 40, width: 72, onPressed: _drop),
+      if (!inCombat) GameButton(label: '使用', subLabel: 'use', height: 40, width: 72, onPressed: _use),
+      GameButton(label: '对话', subLabel: 'talk', height: 40, width: 72, onPressed: () => controller.executeCommand('talk')),
+      if (!inCombat) GameButton(label: '商品', subLabel: 'trade', height: 40, width: 72, onPressed: () => controller.executeCommand('trade')),
+      if (!inCombat) GameButton(label: '购买', subLabel: 'buy', height: 40, width: 72, onPressed: _buy),
+      if (!inCombat) GameButton(label: '出售', subLabel: 'sell', height: 40, width: 72, onPressed: _sell),
+      if (!inCombat) GameButton(label: '治疗', subLabel: 'heal', height: 40, width: 72, onPressed: () => controller.executeCommand('heal')),
+      if (inCombat) GameButton(label: '攻击', subLabel: 'attack', height: 40, width: 72, onPressed: () => controller.executeCommand('attack')),
+      if (inCombat) GameButton(label: '逃跑', subLabel: 'flee', height: 40, width: 72, accent: true, onPressed: () => controller.executeCommand('flee')),
+      GameButton(label: '招募', subLabel: 'recruit', height: 40, width: 72, onPressed: () => controller.executeCommand('recruit')),
+      GameButton(label: '队伍', subLabel: 'party', height: 40, width: 72, onPressed: () => controller.executeCommand('party')),
+      GameButton(label: '得分', subLabel: 'score', height: 40, width: 72, onPressed: () => controller.executeCommand('score')),
+      GameButton(label: '帮助', subLabel: 'help', height: 40, width: 72, onPressed: () => controller.executeCommand('help')),
+      GameButton(label: '二周目', subLabel: 'ng+', height: 40, width: 72, onPressed: () => controller.executeCommand('ng+')),
+    ];
   }
 
   void _take() {
@@ -199,40 +163,65 @@ class QuickCommandPanel extends StatelessWidget {
   }
 }
 
-/// Cross-shaped D-pad for discrete room exits (mobile-friendly).
+/// Cross-shaped D-pad using minimap ring + compass sprites.
 class DirectionPad extends StatelessWidget {
   const DirectionPad({super.key, required this.onMove});
 
   final void Function(Direction dir) onMove;
 
-  static const double _btn = 36;
+  static const double _size = 112;
 
   @override
   Widget build(BuildContext context) {
+    final d = GameUiTheme.of(context);
     return SizedBox(
-      width: _btn * 3 + 8,
+      width: _size,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          _padBtn(Icons.keyboard_arrow_up, 'N', () => onMove(Direction.north)),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _padBtn(Icons.keyboard_arrow_left, 'W', () => onMove(Direction.west)),
-              SizedBox(width: _btn, height: _btn),
-              _padBtn(Icons.keyboard_arrow_right, 'E', () => onMove(Direction.east)),
-            ],
+          SizedBox(
+            width: _size,
+            height: _size,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Image.asset(
+                  d.minimapRing,
+                  width: _size,
+                  height: _size,
+                  fit: BoxFit.contain,
+                  filterQuality: FilterQuality.none,
+                ),
+                Positioned(top: 4, child: _compassBtn(GameUiAssets.compassN, '北 N', () => onMove(Direction.north))),
+                Positioned(
+                  left: 4,
+                  child: _compassBtn(GameUiAssets.compassW, '西 W', () => onMove(Direction.west)),
+                ),
+                Positioned(
+                  right: 4,
+                  child: _compassBtn(GameUiAssets.compassE, '东 E', () => onMove(Direction.east)),
+                ),
+                Positioned(bottom: 4, child: _compassBtn(GameUiAssets.compassS, '南 S', () => onMove(Direction.south))),
+              ],
+            ),
           ),
-          _padBtn(Icons.keyboard_arrow_down, 'S', () => onMove(Direction.south)),
           const SizedBox(height: 4),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
             children: [
-              _smallPad('U', () => onMove(Direction.up)),
-              const SizedBox(width: 4),
-              _smallPad('D', () => onMove(Direction.down)),
+              GameIconButton(
+                size: 36,
+                semanticLabel: '上 U',
+                onPressed: () => onMove(Direction.up),
+                child: const GameOutlinedText('U', fontSize: 11, fontWeight: FontWeight.bold, strokeWidth: 2.4),
+              ),
+              const SizedBox(width: 6),
+              GameIconButton(
+                size: 36,
+                semanticLabel: '下 D',
+                onPressed: () => onMove(Direction.down),
+                child: const GameOutlinedText('D', fontSize: 11, fontWeight: FontWeight.bold, strokeWidth: 2.4),
+              ),
             ],
           ),
         ],
@@ -240,81 +229,20 @@ class DirectionPad extends StatelessWidget {
     );
   }
 
-  Widget _padBtn(IconData icon, String en, VoidCallback onTap) {
-    return Material(
-      color: const Color(0xFF1A1A2E),
-      borderRadius: BorderRadius.circular(8),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(8),
-        child: SizedBox(
-          width: _btn,
-          height: _btn,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(icon, color: GameConstants.hero, size: 18),
-              Text(en, style: const TextStyle(fontSize: 8, color: Color(0xFF7F8FA6), height: 1)),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _smallPad(String en, VoidCallback onTap) {
-    return Material(
-      color: const Color(0xFF1A1A2E),
-      borderRadius: BorderRadius.circular(6),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(6),
-        child: SizedBox(
-          width: (_btn * 3 + 8 - 4) / 2,
-          height: 28,
-          child: Center(
-            child: Text(
-              en,
-              style: const TextStyle(fontSize: 11, color: Colors.white70, fontWeight: FontWeight.w600),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _ActionChip extends StatelessWidget {
-  const _ActionChip({
-    required this.zh,
-    required this.en,
-    required this.onTap,
-  });
-
-  final String zh;
-  final String en;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: const Color(0xFF16162A),
-      borderRadius: BorderRadius.circular(8),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(8),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: const Color(0xFF3A3A5A)),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(zh, style: const TextStyle(fontSize: 12, color: Colors.white70, height: 1.1)),
-              Text(en, style: const TextStyle(fontSize: 9, color: Color(0xFF7F8FA6), height: 1.2)),
-            ],
+  Widget _compassBtn(String asset, String label, VoidCallback onTap) {
+    return Semantics(
+      button: true,
+      label: label,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          customBorder: const CircleBorder(),
+          child: Image.asset(
+            asset,
+            width: 28,
+            height: 28,
+            filterQuality: FilterQuality.none,
           ),
         ),
       ),

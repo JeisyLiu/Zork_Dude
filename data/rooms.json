@@ -317,7 +317,7 @@
       "lockpick",
       "goblin_ear"
     ],
-    "monster_id": "goblin"
+    "monster_ids": ["goblin", "goblin"]
   },
   {
     "id": "goblin_throne",

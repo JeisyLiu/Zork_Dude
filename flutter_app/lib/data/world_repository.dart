@@ -102,6 +102,7 @@ class WorldRepository {
         items: (json['items'] as List?)?.map((e) => e.toString()).toList() ?? [],
         npcId: json['npc_id'] as String?,
         monsterId: json['monster_id'] as String?,
+        monsterIds: (json['monster_ids'] as List?)?.map((e) => e.toString()).toList() ?? const [],
         mapMeta: RoomMapMeta.fromJson(mapJson, emoji: emoji),
       );
       rooms[room.id] = room;
@@ -139,6 +140,11 @@ class WorldRepository {
       }
       if (room.monsterId != null && !monsters.containsKey(room.monsterId)) {
         throw StateError('Room ${room.id} references unknown monster ${room.monsterId}');
+      }
+      for (final mid in room.monsterIds) {
+        if (!monsters.containsKey(mid)) {
+          throw StateError('Room ${room.id} references unknown monster $mid in monster_ids');
+        }
       }
       if (room.npcId != null && !npcs.containsKey(room.npcId)) {
         throw StateError('Room ${room.id} references unknown npc ${room.npcId}');

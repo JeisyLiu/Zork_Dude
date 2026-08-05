@@ -10,7 +10,7 @@ class GameOutlinedText extends StatelessWidget {
     this.fontWeight = FontWeight.w600,
     this.color = const Color(0xFF1A1208),
     this.strokeColor = Colors.white,
-    this.strokeWidth = 2.5,
+    this.strokeWidth = 1.4,
     this.height = 1.15,
     this.letterSpacing,
     this.textAlign,

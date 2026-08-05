@@ -4,63 +4,84 @@ import 'package:zork_dude/state/game_controller.dart';
 import 'package:zork_dude/ui/components/game_button.dart';
 import 'package:zork_dude/ui/components/game_outlined_text.dart';
 import 'package:zork_dude/ui/components/game_panel.dart';
+import 'package:zork_dude/ui/exploration/exploration_layout_constants.dart';
+import 'package:zork_dude/ui/game_skin_scope.dart';
 import 'package:zork_dude/ui/game_ui_assets.dart';
 import 'package:zork_dude/ui/game_ui_theme.dart';
 
-/// Exploration controls: D-pad + bilingual action chips.
+/// Exploration controls: fixed D-pad + grouped two-row action grid + more sheet.
 class QuickCommandPanel extends StatelessWidget {
   const QuickCommandPanel({
     super.key,
     required this.controller,
     required this.onPickTargets,
+    this.compact = false,
   });
 
   final GameController controller;
   final void Function(String title, List<({String label, String value})> options) onPickTargets;
+  final bool compact;
 
   @override
   Widget build(BuildContext context) {
     final s = controller.session;
     final inCombat = s?.inCombat ?? false;
     final d = GameUiTheme.of(context);
+    final room = s != null ? s.rooms[s.currentRoomId] : null;
+    final hasItems = room?.items.isNotEmpty ?? false;
+    final hasNpc = room?.npcId != null;
+    final hasInventory = s != null && s.inventory.isNotEmpty;
+    final npc = hasNpc && s != null ? s.npcs[room!.npcId] : null;
+    final hasTrade = npc != null && npc.tradeItems.isNotEmpty;
 
     return GamePanel(
-      padding: const EdgeInsets.all(8),
+      padding: GamePanel.compactPadding,
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           LayoutBuilder(
             builder: (context, constraints) {
+              final columns = ExplorationLayoutConstants.chipColumnsFor(constraints.maxWidth);
+              final primary = _primaryActions(
+                inCombat: inCombat,
+                hasItems: hasItems,
+                hasNpc: hasNpc,
+                hasInventory: hasInventory,
+                hasTrade: hasTrade,
+              );
+
               return Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   if (!inCombat) ...[
-                    DirectionPad(onMove: (dir) => controller.move(dir)),
-                    const SizedBox(width: 8),
+                    DirectionPad(
+                      onMove: (dir) => controller.move(dir),
+                      compact: compact,
+                    ),
+                    SizedBox(width: compact ? 8 : 12),
                   ],
                   Expanded(
-                    child: SingleChildScrollView(
-                      scrollDirection: constraints.maxWidth < 360 ? Axis.vertical : Axis.horizontal,
-                      child: Wrap(
-                        spacing: 6,
-                        runSpacing: 6,
-                        children: _chips(inCombat),
-                      ),
+                    child: _ActionGrid(
+                      columns: columns,
+                      actions: primary,
+                      onMore: () => _showMoreSheet(context, inCombat),
+                      compact: compact,
                     ),
                   ),
                 ],
               );
             },
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 8),
           GameOutlinedText(
             inCombat
                 ? '战斗中 · Combat: attack / flee'
-                : '提示 · Tips: n s e w u d · look · take 1 · inv',
+                : '提示 · Tips: ←↑↓→ / WASD · PgUp/PgDn · look · take 1',
             fontSize: 10,
             fontWeight: FontWeight.w500,
             color: d.textMuted,
-            strokeWidth: 2.2,
+            strokeWidth: 1.0,
             textAlign: TextAlign.left,
           ),
         ],
@@ -68,26 +89,122 @@ class QuickCommandPanel extends StatelessWidget {
     );
   }
 
-  List<Widget> _chips(bool inCombat) {
+  List<_QuickAction> _primaryActions({
+    required bool inCombat,
+    required bool hasItems,
+    required bool hasNpc,
+    required bool hasInventory,
+    required bool hasTrade,
+  }) {
+    if (inCombat) {
+      return [
+        _QuickAction(
+          label: '攻击',
+          subLabel: 'attack',
+          accent: true,
+          onPressed: () => controller.executeCommand('attack'),
+        ),
+        _QuickAction(
+          label: '逃跑',
+          subLabel: 'flee',
+          accent: true,
+          onPressed: () => controller.executeCommand('flee'),
+        ),
+        _QuickAction(label: '查看', subLabel: 'look', onPressed: () => controller.executeCommand('look')),
+        _QuickAction(label: '背包', subLabel: 'inv', onPressed: () => controller.executeCommand('inventory')),
+        _QuickAction(label: '对话', subLabel: 'talk', highlighted: hasNpc, onPressed: () => controller.executeCommand('talk')),
+        const _QuickAction(label: '更多', subLabel: 'more', isMore: true),
+      ];
+    }
+
     return [
-      GameButton(label: '查看', subLabel: 'look', height: 40, width: 72, onPressed: () => controller.executeCommand('look')),
-      GameButton(label: '背包', subLabel: 'inv', height: 40, width: 72, onPressed: () => controller.executeCommand('inventory')),
-      if (!inCombat) GameButton(label: '拿起', subLabel: 'take', height: 40, width: 72, onPressed: _take),
-      if (!inCombat) GameButton(label: '丢弃', subLabel: 'drop', height: 40, width: 72, onPressed: _drop),
-      if (!inCombat) GameButton(label: '使用', subLabel: 'use', height: 40, width: 72, onPressed: _use),
-      GameButton(label: '对话', subLabel: 'talk', height: 40, width: 72, onPressed: () => controller.executeCommand('talk')),
-      if (!inCombat) GameButton(label: '商品', subLabel: 'trade', height: 40, width: 72, onPressed: () => controller.executeCommand('trade')),
-      if (!inCombat) GameButton(label: '购买', subLabel: 'buy', height: 40, width: 72, onPressed: _buy),
-      if (!inCombat) GameButton(label: '出售', subLabel: 'sell', height: 40, width: 72, onPressed: _sell),
-      if (!inCombat) GameButton(label: '治疗', subLabel: 'heal', height: 40, width: 72, onPressed: () => controller.executeCommand('heal')),
-      if (inCombat) GameButton(label: '攻击', subLabel: 'attack', height: 40, width: 72, onPressed: () => controller.executeCommand('attack')),
-      if (inCombat) GameButton(label: '逃跑', subLabel: 'flee', height: 40, width: 72, accent: true, onPressed: () => controller.executeCommand('flee')),
-      GameButton(label: '招募', subLabel: 'recruit', height: 40, width: 72, onPressed: () => controller.executeCommand('recruit')),
-      GameButton(label: '队伍', subLabel: 'party', height: 40, width: 72, onPressed: () => controller.executeCommand('party')),
-      GameButton(label: '得分', subLabel: 'score', height: 40, width: 72, onPressed: () => controller.executeCommand('score')),
-      GameButton(label: '帮助', subLabel: 'help', height: 40, width: 72, onPressed: () => controller.executeCommand('help')),
-      GameButton(label: '二周目', subLabel: 'ng+', height: 40, width: 72, onPressed: () => controller.executeCommand('ng+')),
+      _QuickAction(label: '查看', subLabel: 'look', onPressed: () => controller.executeCommand('look')),
+      _QuickAction(label: '背包', subLabel: 'inv', onPressed: () => controller.executeCommand('inventory')),
+      _QuickAction(label: '拿起', subLabel: 'take', highlighted: hasItems, onPressed: _take),
+      _QuickAction(label: '使用', subLabel: 'use', highlighted: hasInventory, onPressed: _use),
+      _QuickAction(label: '对话', subLabel: 'talk', highlighted: hasNpc, onPressed: () => controller.executeCommand('talk')),
+      _QuickAction(label: '治疗', subLabel: 'heal', onPressed: () => controller.executeCommand('heal')),
+      const _QuickAction(label: '更多', subLabel: 'more', isMore: true),
     ];
+  }
+
+  List<_QuickAction> _moreActions(bool inCombat) {
+    if (inCombat) {
+      return [
+        _QuickAction(label: '招募', subLabel: 'recruit', onPressed: () => controller.executeCommand('recruit')),
+        _QuickAction(label: '队伍', subLabel: 'party', onPressed: () => controller.executeCommand('party')),
+        _QuickAction(label: '得分', subLabel: 'score', onPressed: () => controller.executeCommand('score')),
+        _QuickAction(label: '帮助', subLabel: 'help', onPressed: () => controller.executeCommand('help')),
+        _QuickAction(label: '二周目', subLabel: 'ng+', onPressed: () => controller.executeCommand('ng+')),
+      ];
+    }
+
+    return [
+      _QuickAction(label: '丢弃', subLabel: 'drop', onPressed: _drop),
+      _QuickAction(label: '商品', subLabel: 'trade', onPressed: () => controller.executeCommand('trade')),
+      _QuickAction(label: '购买', subLabel: 'buy', onPressed: _buy),
+      _QuickAction(label: '出售', subLabel: 'sell', onPressed: _sell),
+      _QuickAction(label: '招募', subLabel: 'recruit', onPressed: () => controller.executeCommand('recruit')),
+      _QuickAction(label: '队伍', subLabel: 'party', onPressed: () => controller.executeCommand('party')),
+      _QuickAction(label: '得分', subLabel: 'score', onPressed: () => controller.executeCommand('score')),
+      _QuickAction(label: '帮助', subLabel: 'help', onPressed: () => controller.executeCommand('help')),
+      _QuickAction(label: '二周目', subLabel: 'ng+', onPressed: () => controller.executeCommand('ng+')),
+    ];
+  }
+
+  void _showMoreSheet(BuildContext context, bool inCombat) {
+    final actions = _moreActions(inCombat);
+    final skin = GameUiTheme.skinForMapLayer(controller.mapLayer);
+
+    showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => GameSkinScope(
+        skin: skin,
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: GamePanel(
+              dark: true,
+              withBorder: true,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: GameOutlinedText(
+                      '更多命令 · More',
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: GameUiTheme.of(ctx).textPrimary,
+                      strokeWidth: 1.4,
+                    ),
+                  ),
+                  Wrap(
+                    spacing: 6,
+                    runSpacing: 6,
+                    children: [
+                      for (final action in actions)
+                        GameButton(
+                          label: action.label,
+                          subLabel: action.subLabel,
+                          height: ExplorationLayoutConstants.chipHeight,
+                          width: 88,
+                          accent: action.accent,
+                          onPressed: () {
+                            Navigator.pop(ctx);
+                            action.onPressed?.call();
+                          },
+                        ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   void _take() {
@@ -163,32 +280,125 @@ class QuickCommandPanel extends StatelessWidget {
   }
 }
 
+class _QuickAction {
+  const _QuickAction({
+    required this.label,
+    required this.subLabel,
+    this.onPressed,
+    this.accent = false,
+    this.highlighted = false,
+    this.isMore = false,
+  });
+
+  final String label;
+  final String subLabel;
+  final VoidCallback? onPressed;
+  final bool accent;
+  final bool highlighted;
+  final bool isMore;
+}
+
+class _ActionGrid extends StatelessWidget {
+  const _ActionGrid({
+    required this.columns,
+    required this.actions,
+    required this.onMore,
+    this.compact = false,
+  });
+
+  final int columns;
+  final List<_QuickAction> actions;
+  final VoidCallback onMore;
+  final bool compact;
+
+  double get _chipHeight =>
+      compact ? 34 : ExplorationLayoutConstants.chipHeight;
+
+  @override
+  Widget build(BuildContext context) {
+    final rows = <List<_QuickAction>>[];
+    for (var i = 0; i < actions.length; i += columns) {
+      final end = i + columns > actions.length ? actions.length : i + columns;
+      rows.add(actions.sublist(i, end));
+    }
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        for (var r = 0; r < rows.length; r++) ...[
+          Row(
+            children: [
+              for (var i = 0; i < columns; i++)
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      right: i < columns - 1 ? ExplorationLayoutConstants.chipSpacing : 0,
+                    ),
+                    child: i < rows[r].length
+                        ? _chipFor(context, rows[r][i])
+                        : SizedBox(height: _chipHeight),
+                  ),
+                ),
+            ],
+          ),
+          if (r < rows.length - 1) const SizedBox(height: ExplorationLayoutConstants.chipSpacing),
+        ],
+      ],
+    );
+  }
+
+  Widget _chipFor(BuildContext context, _QuickAction action) {
+    if (action.isMore) {
+      return GameButton(
+        label: action.label,
+        subLabel: action.subLabel,
+        height: _chipHeight,
+        width: double.infinity,
+        onPressed: onMore,
+        semanticLabel: '更多命令',
+      );
+    }
+
+    return Opacity(
+      opacity: action.highlighted ? 1 : 0.82,
+      child: GameButton(
+        label: action.label,
+        subLabel: action.subLabel,
+        height: _chipHeight,
+        width: double.infinity,
+        accent: action.accent || action.highlighted,
+        onPressed: action.onPressed,
+      ),
+    );
+  }
+}
+
 /// Cross-shaped D-pad using minimap ring + compass sprites.
 class DirectionPad extends StatelessWidget {
-  const DirectionPad({super.key, required this.onMove});
+  const DirectionPad({super.key, required this.onMove, this.compact = false});
 
   final void Function(Direction dir) onMove;
-
-  static const double _size = 112;
+  final bool compact;
 
   @override
   Widget build(BuildContext context) {
     final d = GameUiTheme.of(context);
+    final size = compact ? 96.0 : ExplorationLayoutConstants.directionPadWidth;
     return SizedBox(
-      width: _size,
+      width: size,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           SizedBox(
-            width: _size,
-            height: _size,
+            width: size,
+            height: size,
             child: Stack(
               alignment: Alignment.center,
               children: [
                 Image.asset(
                   d.minimapRing,
-                  width: _size,
-                  height: _size,
+                  width: size,
+                  height: size,
                   fit: BoxFit.contain,
                   filterQuality: FilterQuality.none,
                 ),
@@ -210,17 +420,17 @@ class DirectionPad extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               GameIconButton(
-                size: 36,
+                size: compact ? 30 : 36,
                 semanticLabel: '上 U',
                 onPressed: () => onMove(Direction.up),
-                child: const GameOutlinedText('U', fontSize: 11, fontWeight: FontWeight.bold, strokeWidth: 2.4),
+                child: const GameOutlinedText('U', fontSize: 11, fontWeight: FontWeight.bold, strokeWidth: 1.2),
               ),
               const SizedBox(width: 6),
               GameIconButton(
-                size: 36,
+                size: compact ? 30 : 36,
                 semanticLabel: '下 D',
                 onPressed: () => onMove(Direction.down),
-                child: const GameOutlinedText('D', fontSize: 11, fontWeight: FontWeight.bold, strokeWidth: 2.4),
+                child: const GameOutlinedText('D', fontSize: 11, fontWeight: FontWeight.bold, strokeWidth: 1.2),
               ),
             ],
           ),

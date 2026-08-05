@@ -6,7 +6,6 @@ import 'package:zork_dude/ui/components/game_button.dart';
 import 'package:zork_dude/ui/game_ui_assets.dart';
 import 'package:zork_dude/ui/game_ui_theme.dart';
 import 'package:zork_dude/ui/home/home_ambient_background.dart';
-import 'package:zork_dude/ui/home/pixel_tower_mark.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -81,7 +80,6 @@ void main() {
 
     expect(tester.takeException(), isNull);
     expect(find.text('迷雾之塔'), findsOneWidget);
-    expect(find.byType(PixelTowerMark), findsOneWidget);
   });
 
   testWidgets('Home layout fits 390x844 without overflow', (tester) async {

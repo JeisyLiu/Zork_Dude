@@ -73,7 +73,7 @@ class GameButton extends StatelessWidget {
                             fontSize: compact ? 14 : 12,
                             fontWeight: FontWeight.w700,
                             color: d.textPrimary,
-                            strokeWidth: useOutline ? 2.8 : 0,
+                            strokeWidth: useOutline ? 1.4 : 0,
                             shadowColor: useOutline
                                 ? null
                                 : Colors.black.withValues(alpha: 0.35),
@@ -86,7 +86,7 @@ class GameButton extends StatelessWidget {
                               fontSize: compact ? 10 : 9,
                               fontWeight: FontWeight.w500,
                               color: d.textMuted,
-                              strokeWidth: useOutline ? 2.2 : 0,
+                              strokeWidth: useOutline ? 1.0 : 0,
                               shadowColor: useOutline
                                   ? null
                                   : Colors.black.withValues(alpha: 0.25),

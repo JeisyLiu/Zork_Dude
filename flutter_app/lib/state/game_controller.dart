@@ -1,5 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:zork_dude/data/world_repository.dart';
+import 'package:zork_dude/domain/combat/combat_action_step.dart';
+import 'package:zork_dude/domain/combat/combat_command.dart';
+import 'package:zork_dude/domain/combat/combat_encounter.dart';
+import 'package:zork_dude/domain/combat/combat_types.dart';
 import 'package:zork_dude/domain/command_result.dart';
 import 'package:zork_dude/domain/game_session.dart';
 import 'package:zork_dude/domain/models/enums.dart';
@@ -123,6 +127,39 @@ class GameController extends ChangeNotifier {
 
   void applyCombatResult(CommandResult result) {
     _handleResult(result);
+  }
+
+  CombatEncounter? get activeEncounter => session?.activeEncounter;
+
+  bool submitCombatCommand(String actorInstanceId, CombatCommand command) {
+    final s = session;
+    if (s == null) return false;
+    final ok = s.submitCombatCommand(actorInstanceId, command);
+    if (ok) notifyListeners();
+    return ok;
+  }
+
+  CombatRoundResult? resolveCombatRound() {
+    final s = session;
+    if (s == null) return null;
+    final result = s.resolveCombatRound();
+    if (result != null) notifyListeners();
+    return result;
+  }
+
+  void finishCombat(CombatOutcome outcome) {
+    final s = session;
+    if (s == null) return;
+    applyCombatResult(s.finishEncounter(outcome));
+  }
+
+  List<({String id, String label, int heal})> combatUsableItems() {
+    return session?.combatUsableItems() ?? const [];
+  }
+
+  void consumeCombatItem(String itemId) {
+    session?.consumeCombatItem(itemId);
+    notifyListeners();
   }
 
   void _append(String text, {bool isCommand = false}) {

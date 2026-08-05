@@ -129,6 +129,7 @@
     "hp": 10,
     "atk": 3,
     "defense": 0,
+    "speed": 5,
     "exp": 8,
     "gold": 5,
     "loot": [
@@ -253,6 +254,8 @@
     "atk": 10,
     "defense": 3,
     "rank": "BOSS",
+    "speed": 7,
+    "ai": "boss",
     "exp": 80,
     "gold": 80,
     "loot": [

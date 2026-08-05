@@ -32,7 +32,7 @@ class _MistMapPanelState extends State<MistMapPanel> {
     return GamePanel(
       dark: true,
       withBorder: true,
-      padding: const EdgeInsets.all(6),
+      padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -42,7 +42,7 @@ class _MistMapPanelState extends State<MistMapPanel> {
               children: [
                 for (final layer in MapLayer.values)
                   Padding(
-                    padding: const EdgeInsets.only(right: 4),
+                    padding: const EdgeInsets.only(right: 6),
                     child: GameButton(
                       label: mapLayerLabels[layer]!,
                       height: 32,
@@ -55,12 +55,12 @@ class _MistMapPanelState extends State<MistMapPanel> {
                   '已探索 ${vm.visitedCount}',
                   fontSize: 11,
                   color: d.textMuted,
-                  strokeWidth: 2.2,
+                  strokeWidth: 1.0,
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 8),
           Expanded(
             child: Stack(
               alignment: Alignment.center,
@@ -103,7 +103,7 @@ class _MistMapPanelState extends State<MistMapPanel> {
               _detail,
               fontSize: 11,
               color: d.textPrimary,
-              strokeWidth: 2.4,
+              strokeWidth: 1.1,
               textAlign: TextAlign.left,
             ),
           ),

@@ -1,3 +1,4 @@
+import 'package:zork_dude/domain/combat/combat_types.dart';
 import 'package:zork_dude/domain/models/enums.dart';
 import 'package:zork_dude/domain/models/map_meta.dart';
 import 'package:zork_dude/domain/dice.dart';
@@ -102,6 +103,8 @@ class MonsterState {
   int hp;
   int attack;
   int defense;
+  int speed;
+  EnemyAiType aiType;
   MonsterRank rank;
   List<String> loot;
   int exp;
@@ -119,6 +122,8 @@ class MonsterState {
     required this.hp,
     required this.attack,
     this.defense = 0,
+    this.speed = 5,
+    this.aiType = EnemyAiType.normal,
     this.rank = MonsterRank.normal,
     this.loot = const [],
     this.exp = 10,
@@ -158,6 +163,8 @@ class MonsterState {
       hp: hp,
       attack: (json['atk'] as num).toInt(),
       defense: (json['defense'] as num?)?.toInt() ?? 0,
+      speed: (json['speed'] as num?)?.toInt() ?? _defaultSpeed(json),
+      aiType: _parseAiType(json['ai'] as String?),
       rank: MonsterRank.fromString(json['rank'] as String? ?? 'NORMAL'),
       loot: (json['loot'] as List?)?.map((e) => e.toString()).toList() ?? [],
       exp: (json['exp'] as num?)?.toInt() ?? 10,
@@ -177,6 +184,30 @@ class MonsterState {
     return {};
   }
 
+  static int _defaultSpeed(Map<String, dynamic> json) {
+    final rank = MonsterRank.fromString(json['rank'] as String? ?? 'NORMAL');
+    switch (rank) {
+      case MonsterRank.boss:
+        return 7;
+      case MonsterRank.elite:
+        return 6;
+      case MonsterRank.normal:
+        return 5;
+    }
+  }
+
+  static EnemyAiType _parseAiType(String? raw) {
+    switch (raw?.toLowerCase()) {
+      case 'low_hp':
+      case 'lowhp':
+        return EnemyAiType.lowHpTarget;
+      case 'boss':
+        return EnemyAiType.boss;
+      default:
+        return EnemyAiType.normal;
+    }
+  }
+
   MonsterState clone() => MonsterState(
         id: id,
         name: name,
@@ -185,6 +216,8 @@ class MonsterState {
         hp: hp,
         attack: attack,
         defense: defense,
+        speed: speed,
+        aiType: aiType,
         rank: rank,
         loot: List.from(loot),
         exp: exp,
@@ -268,6 +301,7 @@ class CompanionState {
   int hp;
   final int attack;
   final int defense;
+  final int speed;
   final String abilityDesc;
   final String? recruitItem;
   final String recruitMsg;
@@ -283,6 +317,7 @@ class CompanionState {
     required this.hp,
     required this.attack,
     this.defense = 2,
+    this.speed = 6,
     this.abilityDesc = '',
     this.recruitItem,
     this.recruitMsg = '加入了你的队伍！',
@@ -339,6 +374,7 @@ class CompanionState {
       hp: hp,
       attack: (json['atk'] as num?)?.toInt() ?? 8,
       defense: (json['defense'] as num?)?.toInt() ?? 2,
+      speed: (json['speed'] as num?)?.toInt() ?? 6,
       abilityDesc: json['ability_desc'] as String? ?? '',
       recruitItem: json['recruit_item'] as String?,
       recruitMsg: json['recruit_msg'] as String? ?? '加入了你的队伍！',
@@ -359,6 +395,7 @@ class RoomState {
   List<String> items;
   String? npcId;
   final String? monsterId;
+  final List<String> monsterIds;
   bool visited;
   RoomEnterHandler? onEnter;
   final RoomMapMeta mapMeta;
@@ -373,11 +410,20 @@ class RoomState {
     List<String>? items,
     this.npcId,
     this.monsterId,
+    List<String>? monsterIds,
     this.visited = false,
     this.onEnter,
     RoomMapMeta? mapMeta,
   })  : items = items ?? [],
+        monsterIds = monsterIds ?? const [],
         mapMeta = mapMeta ?? const RoomMapMeta();
+
+  /// Encounter monster template ids for this room (supports multi-enemy).
+  List<String> resolveMonsterIds() {
+    if (monsterIds.isNotEmpty) return List<String>.from(monsterIds);
+    if (monsterId != null) return [monsterId!];
+    return const [];
+  }
 
   String description(GameSessionRef g, {NpcState? npc, MonsterState? monster}) {
     final lines = <String>[name, desc];

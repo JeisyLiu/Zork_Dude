@@ -42,6 +42,10 @@ abstract final class GameUiAssets {
   static const compassE = '$base/minimap_compass_toon_e.png';
   static const compassS = '$base/minimap_compass_toon_s.png';
   static const compassW = '$base/minimap_compass_toon_w.png';
+  static const arrowNorth = '$base/minimap_arrow_a.png';
+  static const arrowEast = '$base/minimap_arrow_b.png';
+  static const arrowSouth = '$base/minimap_arrow_c.png';
+  static const arrowWest = '$base/minimap_arrow_d.png';
   static const iconStarYellow = '$base/minimap_icon_star_yellow.png';
   static const iconJewelGreen = '$base/minimap_icon_jewel_white.png';
   static const iconExclamation = '$base/minimap_icon_exclamation_yellow.png';

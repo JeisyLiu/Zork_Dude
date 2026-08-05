@@ -54,7 +54,7 @@ class GameBanner extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                       color: d.textPrimary,
                       letterSpacing: 2,
-                      strokeWidth: titleSize > 22 ? 4.0 : 3.2,
+                      strokeWidth: titleSize > 22 ? 2.2 : 1.6,
                     ),
                     if (subtitle != null) ...[
                       const SizedBox(height: 2),
@@ -63,7 +63,7 @@ class GameBanner extends StatelessWidget {
                         fontSize: subtitleSize,
                         fontWeight: FontWeight.w500,
                         color: d.textMuted,
-                        strokeWidth: 2.6,
+                        strokeWidth: 1.2,
                       ),
                     ],
                   ],

@@ -1,6 +1,7 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:zork_dude/domain/models/entities.dart';
 import 'package:zork_dude/game/enemies/mist_slime.dart';
 import 'package:zork_dude/game/interface/player_interface.dart';
@@ -68,6 +69,17 @@ class _CombatArenaScreenState extends State<CombatArenaScreen> {
                       color: const Color(0xFFE67E22).withValues(alpha: 0.75),
                     ),
                   ],
+                ),
+                Keyboard(
+                  config: KeyboardConfig(
+                    directionalKeys: [
+                      KeyboardDirectionalKeys.arrows(),
+                      KeyboardDirectionalKeys.wasd(),
+                    ],
+                    acceptedKeys: [
+                      LogicalKeyboardKey.space,
+                    ],
+                  ),
                 ),
               ],
               map: ArenaMap.build(),
@@ -239,7 +251,7 @@ class _CombatHud extends StatelessWidget {
         child: GamePanel(
           dark: true,
           withBorder: true,
-          padding: const EdgeInsets.all(10),
+          padding: GamePanel.borderedPadding,
           skin: GameUiTheme.dataFor(GameUiSkin.combat),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -253,7 +265,7 @@ class _CombatHud extends StatelessWidget {
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
                       color: d.textPrimary,
-                      strokeWidth: 2.8,
+                      strokeWidth: 1.4,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                       textAlign: TextAlign.left,
@@ -271,7 +283,7 @@ class _CombatHud extends StatelessWidget {
                     '${session.playerHp}/${session.playerMaxHp}',
                     fontSize: 11,
                     color: d.textMuted,
-                    strokeWidth: 2.2,
+                    strokeWidth: 1.0,
                   ),
                   const SizedBox(width: 8),
                   GameButton(
@@ -286,10 +298,10 @@ class _CombatHud extends StatelessWidget {
               ),
               const SizedBox(height: 6),
               GameOutlinedText(
-                '左摇杆移动 · Joystick · 右键攻击 Attack',
+                '方向键/WASD 移动 · 空格攻击 · Joystick',
                 fontSize: 10,
                 color: d.textMuted,
-                strokeWidth: 2.2,
+                strokeWidth: 1.0,
                 textAlign: TextAlign.left,
               ),
             ],

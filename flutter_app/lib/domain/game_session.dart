@@ -1,6 +1,13 @@
 import 'dart:math';
 
 import 'package:zork_dude/data/world_repository.dart';
+import 'package:zork_dude/domain/combat/combat_action_step.dart';
+import 'package:zork_dude/domain/combat/combat_actor.dart';
+import 'package:zork_dude/domain/combat/combat_command.dart';
+import 'package:zork_dude/domain/combat/combat_encounter.dart';
+import 'package:zork_dude/domain/combat/combat_encounter_factory.dart';
+import 'package:zork_dude/domain/combat/combat_engine.dart';
+import 'package:zork_dude/domain/combat/combat_types.dart';
 import 'package:zork_dude/domain/command_result.dart';
 import 'package:zork_dude/domain/dice.dart';
 import 'package:zork_dude/domain/models/entities.dart';
@@ -64,6 +71,8 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
   bool inCombat = false;
   @override
   String currentEnemy = '';
+  CombatEncounter? activeEncounter;
+  final CombatEngine combatEngine = CombatEngine();
   String equippedBag = 'bag_starter';
 
   static Future<GameSession> create(WorldRepository repo, {bool starterItems = true}) async {
@@ -117,6 +126,7 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
         items: List.from(r.items),
         npcId: r.npcId,
         monsterId: r.monsterId,
+        monsterIds: List.from(r.monsterIds),
         mapMeta: r.mapMeta,
       );
     }
@@ -401,14 +411,171 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
 
   String? checkCombat() {
     final rm = rooms[currentRoomId]!;
-    if (rm.monsterId == null) return null;
-    final m = monsters[rm.monsterId];
-    if (m != null && m.alive && m.hostile && !inCombat) {
-      inCombat = true;
-      currentEnemy = m.id;
-      return '⚔️ ${m.name} 出现了！';
+    final ids = rm.resolveMonsterIds();
+    if (ids.isEmpty) return null;
+
+    final living = <MonsterState>[];
+    for (final id in ids) {
+      final m = monsters[id];
+      if (m != null && m.alive && m.hostile) living.add(m);
     }
-    return null;
+    if (living.isEmpty || inCombat) return null;
+
+    inCombat = true;
+    currentEnemy = living.first.id;
+    activeEncounter = _buildEncounter(living);
+    final names = living.map((m) => m.name).join('、');
+    return '⚔️ $names 出现了！';
+  }
+
+  CombatEncounter _buildEncounter(List<MonsterState> enemyTemplates) {
+    final party = companionList
+        .map((id) => companions[id])
+        .whereType<CompanionState>()
+        .where((c) => c.recruited)
+        .toList();
+    return CombatEncounterFactory.build(
+      roomId: currentRoomId,
+      playerHp: playerHp,
+      playerMaxHp: playerMaxHp,
+      playerAttack: totalAtk,
+      playerDefense: totalDef,
+      playerSpeed: 6,
+      party: party,
+      enemyTemplates: enemyTemplates.map((m) => m.clone()).toList(),
+    );
+  }
+
+  void syncCombatHpFromEncounter() {
+    final enc = activeEncounter;
+    if (enc == null) return;
+    CombatEncounterFactory.syncAllyHpToSession(enc, this, companions);
+  }
+
+  bool submitCombatCommand(String actorInstanceId, CombatCommand command) {
+    final enc = activeEncounter;
+    if (enc == null || enc.phase != CombatPhase.command) return false;
+    combatEngine.submitAllyCommand(enc, actorInstanceId, command);
+    return true;
+  }
+
+  CombatRoundResult? resolveCombatRound() {
+    final enc = activeEncounter;
+    if (enc == null || !enc.allAlliesCommanded) return null;
+    final result = combatEngine.resolveRound(enc);
+    syncCombatHpFromEncounter();
+    return result;
+  }
+
+  List<({String id, String label, int heal})> combatUsableItems() {
+    final usable = <({String id, String label, int heal})>[];
+    for (final e in inventory.entries) {
+      final it = items[e.key];
+      if (it == null) continue;
+      if (it.heal > 0 || it.type == ItemType.potion || it.type == ItemType.food) {
+        usable.add((id: e.key, label: it.label, heal: it.heal > 0 ? it.heal : 10));
+      }
+    }
+    return usable;
+  }
+
+  void consumeCombatItem(String itemId) {
+    if (inventory.containsKey(itemId)) invRemove(itemId);
+  }
+
+  CommandResult finishEncounter(CombatOutcome outcome) {
+    switch (outcome) {
+      case CombatOutcome.victory:
+        return resolveEncounterVictory();
+      case CombatOutcome.defeat:
+        return resolveCombatDefeat();
+      case CombatOutcome.fled:
+        return resolveCombatFleeSuccess();
+    }
+  }
+
+  CommandResult resolveEncounterVictory() {
+    final enc = activeEncounter;
+    syncCombatHpFromEncounter();
+    var defeated = enc?.defeatedEnemies() ?? <CombatActor>[];
+
+    final lines = <String>[];
+    var totalGold = 0;
+    var totalExp = 0;
+    final rewardedInstances = <String>{};
+
+    if (defeated.isEmpty && currentEnemy.isNotEmpty) {
+      final m = monsters[currentEnemy];
+      if (m != null) {
+        defeated = [
+          CombatActor(
+            instanceId: '${m.id}#0',
+            templateId: m.id,
+            side: CombatSide.enemy,
+            name: m.name,
+            maxHp: m.maxHp,
+            hp: 0,
+            attack: m.attack,
+          ),
+        ];
+      }
+    }
+
+    for (final enemy in defeated) {
+      if (rewardedInstances.contains(enemy.instanceId)) continue;
+      rewardedInstances.add(enemy.instanceId);
+      final m = monsters[enemy.templateId];
+      if (m == null) continue;
+      m.alive = false;
+      m.hp = 0;
+      lines.add('🎉 击败了 ${m.name}！');
+      for (final li in m.loot) {
+        if (items.containsKey(li)) {
+          invAdd(li);
+          lines.add('🏆 战利品：${items[li]!.name}');
+        }
+      }
+      totalGold += m.gold;
+      totalExp += m.exp;
+    }
+
+    gold += totalGold;
+    score += totalExp;
+    if (totalGold > 0 || totalExp > 0) {
+      lines.add('💰 +${totalGold}金币 +${totalExp}经验');
+    }
+
+    _applyBossVictoryFlags(lines);
+    inCombat = false;
+    currentEnemy = '';
+    activeEncounter = null;
+
+    if (companionList.isNotEmpty) {
+      final c = companions[companionList.first];
+      if (c != null) lines.add('\n${c.banter()}');
+    }
+
+    return CommandResult.ok(
+      lines.isEmpty ? '战斗胜利！' : lines.join('\n'),
+      events: const [GameEvent(type: GameEventType.battleEnded)],
+    );
+  }
+
+  void _applyBossVictoryFlags(List<String> lines) {
+    for (final m in monsters.values) {
+      if (!m.alive && m.id == 'scp_breach_core' && hasItem('containment_box')) {
+        score += 50;
+        lines.add('\n📦 你用收容箱稳定了异常核心，获得额外 50 分！');
+      }
+      if (!m.alive && m.id == 'scp_001') {
+        siteWon = true;
+        score += 100;
+        lines.add('\n☢️ 站点最终威胁已被压制！站点行动告一段落（+100 分）。');
+      }
+      if (!m.alive && m.rank == MonsterRank.boss) {
+        lines.add('\n💀 BOSS【${m.name}】被击败！');
+      }
+    }
   }
 
   String doInventory() {
@@ -728,16 +895,27 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
   }
 
   String doAttackText() {
-    if (!inCombat) return '没有敌人。进入战斗后使用动作场景攻击，或在此输入 attack。';
-    return '⚔️ 已进入战斗！在动作场景中攻击，或输入 flee 逃跑。';
+    if (!inCombat) return '没有敌人。进入战斗后使用回合指令攻击，或在此输入 attack。';
+    return '⚔️ 已进入回合战斗！在战斗界面选择指令，或输入 flee 逃跑。';
   }
 
   CommandResult doFlee() {
     if (!inCombat) return CommandResult.ok('没有战斗。');
+    final enc = activeEncounter;
+    if (enc != null) {
+      final hero = enc.allies.firstWhere((a) => a.isHero, orElse: () => enc.allies.first);
+      submitCombatCommand(hero.instanceId, const CombatCommand.flee());
+      if (enc.allAlliesCommanded) {
+        final result = resolveCombatRound();
+        if (result != null && result.fled) {
+          return finishEncounter(CombatOutcome.fled);
+        }
+        return CommandResult.ok('逃跑失败！');
+      }
+      return CommandResult.ok('已下达逃跑指令，请在战斗界面确认回合。');
+    }
     if (Random().nextDouble() < 0.5) {
-      inCombat = false;
-      currentEnemy = '';
-      return CommandResult.ok('你逃跑了！', events: [const GameEvent(type: GameEventType.battleEnded)]);
+      return resolveCombatFleeSuccess();
     }
     final m = monsters[currentEnemy];
     return CommandResult.ok('逃跑失败！${m?.name ?? '敌人'} 挡住了路。');
@@ -893,6 +1071,7 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
         items: List.from(r.items),
         npcId: r.npcId,
         monsterId: r.monsterId,
+        monsterIds: List.from(r.monsterIds),
         mapMeta: r.mapMeta,
       );
     }
@@ -915,9 +1094,13 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
     }
   }
 
-  /// Combat arena victory — authoritative settlement.
+  /// Combat arena victory — authoritative settlement (legacy single-enemy API).
   CommandResult resolveCombatVictory({required int remainingPlayerHp}) {
     playerHp = remainingPlayerHp.clamp(0, playerMaxHp);
+    syncCombatHpFromEncounter();
+    if (activeEncounter != null) {
+      return resolveEncounterVictory();
+    }
     final m = monsters[currentEnemy];
     if (m == null || !m.alive) {
       inCombat = false;
@@ -938,16 +1121,7 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
     lines.add('💰 +${m.gold}金币 +${m.exp}经验');
     inCombat = false;
     currentEnemy = '';
-    if (m.id == 'scp_breach_core' && hasItem('containment_box')) {
-      score += 50;
-      lines.add('\n📦 你用收容箱稳定了异常核心，获得额外 50 分！');
-    }
-    if (m.id == 'scp_001') {
-      siteWon = true;
-      score += 100;
-      lines.add('\n☢️ 站点最终威胁已被压制！站点行动告一段落（+100 分）。');
-    }
-    if (m.rank == MonsterRank.boss) lines.add('\n💀 BOSS【${m.name}】被击败！');
+    _applyBossVictoryFlags(lines);
     if (companionList.isNotEmpty) {
       final c = companions[companionList.first];
       if (c != null) lines.add('\n${c.banter()}');
@@ -959,6 +1133,7 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
     gameOver = true;
     inCombat = false;
     currentEnemy = '';
+    activeEncounter = null;
     return CommandResult.ok(
       '\n💀 你被击败了……',
       events: const [GameEvent(type: GameEventType.gameOver), GameEvent(type: GameEventType.battleEnded)],
@@ -968,6 +1143,7 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
   CommandResult resolveCombatFleeSuccess() {
     inCombat = false;
     currentEnemy = '';
+    activeEncounter = null;
     return CommandResult.ok('你逃跑了！', events: [const GameEvent(type: GameEventType.battleEnded)]);
   }
 

@@ -24,7 +24,7 @@ class StatusBar extends StatelessWidget {
     return GamePanel(
       dark: true,
       withBorder: true,
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      padding: GamePanel.borderedPadding,
       child: Wrap(
         spacing: 10,
         runSpacing: 6,
@@ -64,7 +64,7 @@ class StatusBar extends StatelessWidget {
           fontSize: 12,
           fontWeight: FontWeight.bold,
           color: d.textPrimary,
-          strokeWidth: 2.4,
+          strokeWidth: 1.2,
         ),
       ],
     );

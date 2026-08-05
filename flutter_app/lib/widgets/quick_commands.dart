@@ -205,19 +205,22 @@ class DirectionPad extends StatelessWidget {
 
   final void Function(Direction dir) onMove;
 
+  static const double _btn = 36;
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 118,
+      width: _btn * 3 + 8,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           _padBtn(Icons.keyboard_arrow_up, 'N', () => onMove(Direction.north)),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
             children: [
               _padBtn(Icons.keyboard_arrow_left, 'W', () => onMove(Direction.west)),
-              const SizedBox(width: 36, height: 36),
+              SizedBox(width: _btn, height: _btn),
               _padBtn(Icons.keyboard_arrow_right, 'E', () => onMove(Direction.east)),
             ],
           ),
@@ -225,10 +228,11 @@ class DirectionPad extends StatelessWidget {
           const SizedBox(height: 4),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              _smallPad('上', 'U', () => onMove(Direction.up)),
-              const SizedBox(width: 6),
-              _smallPad('下', 'D', () => onMove(Direction.down)),
+              _smallPad('U', () => onMove(Direction.up)),
+              const SizedBox(width: 4),
+              _smallPad('D', () => onMove(Direction.down)),
             ],
           ),
         ],
@@ -237,42 +241,42 @@ class DirectionPad extends StatelessWidget {
   }
 
   Widget _padBtn(IconData icon, String en, VoidCallback onTap) {
-    return Padding(
-      padding: const EdgeInsets.all(2),
-      child: Material(
-        color: const Color(0xFF1A1A2E),
+    return Material(
+      color: const Color(0xFF1A1A2E),
+      borderRadius: BorderRadius.circular(8),
+      child: InkWell(
+        onTap: onTap,
         borderRadius: BorderRadius.circular(8),
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(8),
-          child: SizedBox(
-            width: 40,
-            height: 40,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(icon, color: GameConstants.hero, size: 20),
-                Text(en, style: const TextStyle(fontSize: 9, color: Color(0xFF7F8FA6), height: 1)),
-              ],
-            ),
+        child: SizedBox(
+          width: _btn,
+          height: _btn,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon, color: GameConstants.hero, size: 18),
+              Text(en, style: const TextStyle(fontSize: 8, color: Color(0xFF7F8FA6), height: 1)),
+            ],
           ),
         ),
       ),
     );
   }
 
-  Widget _smallPad(String zh, String en, VoidCallback onTap) {
+  Widget _smallPad(String en, VoidCallback onTap) {
     return Material(
       color: const Color(0xFF1A1A2E),
       borderRadius: BorderRadius.circular(6),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(6),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-          child: Text(
-            '$zh $en',
-            style: const TextStyle(fontSize: 11, color: Colors.white70),
+        child: SizedBox(
+          width: (_btn * 3 + 8 - 4) / 2,
+          height: 28,
+          child: Center(
+            child: Text(
+              en,
+              style: const TextStyle(fontSize: 11, color: Colors.white70, fontWeight: FontWeight.w600),
+            ),
           ),
         ),
       ),

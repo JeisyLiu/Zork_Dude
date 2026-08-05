@@ -154,8 +154,14 @@ class CombatEnemy extends MistSlime {
   })  : _monster = monster,
         super(
           position: position,
+          emoji: monster.emoji.isNotEmpty
+              ? monster.emoji
+              : GameConstants.defaultEnemyEmoji,
           customLife: monster.hp.toDouble(),
-          customSpeed: (monster.attack * 3).toDouble(),
+          customSpeed: (8 + monster.attack * 2.5).clamp(20, 90).toDouble(),
+          size: monster.rank.name == 'boss'
+              ? Vector2.all(GameConstants.combatSpriteSize * 1.35)
+              : null,
         );
 
   final MonsterState _monster;

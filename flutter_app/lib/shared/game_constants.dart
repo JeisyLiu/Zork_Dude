@@ -5,6 +5,13 @@ abstract final class GameConstants {
   static const double tileSize = 16;
   static Vector2 get tileVector => Vector2.all(tileSize);
 
+  /// Larger emoji sprites for combat readability (still grid-aligned enough).
+  static const double combatSpriteSize = 24;
+  static Vector2 get combatSpriteVector => Vector2.all(combatSpriteSize);
+
+  static const String playerEmoji = '🧙';
+  static const String defaultEnemyEmoji = '👾';
+
   static const double playerSpeed = 80;
   static const double playerLife = 100;
   static const double enemyLife = 40;

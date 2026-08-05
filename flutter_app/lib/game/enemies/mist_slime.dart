@@ -3,21 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:zork_dude/shared/game_constants.dart';
 import 'package:zork_dude/shared/sprite_sheet_factory.dart';
 
-/// Placeholder mist slime — chases the player and deals melee damage.
+/// Enemy using JSON emoji as placeholder sprite (Web-style).
 class MistSlime extends SimpleEnemy
     with BlockMovementCollision, UseLifeBar, RandomMovement {
   MistSlime({
     required super.position,
+    this.emoji = GameConstants.defaultEnemyEmoji,
     double? customLife,
     double? customSpeed,
+    Vector2? size,
   }) : super(
-          size: GameConstants.tileVector,
+          size: size ?? GameConstants.combatSpriteVector,
           speed: customSpeed ?? GameConstants.enemySpeed,
           life: customLife ?? GameConstants.enemyLife,
           initDirection: Direction.left,
         ) {
     setupLifeBar(
-      size: Vector2(14, 2),
+      size: Vector2(16, 2),
       barLifeDrawPosition: BarLifeDrawPosition.top,
       borderWidth: 1,
       borderColor: Colors.white24,
@@ -27,17 +29,19 @@ class MistSlime extends SimpleEnemy
     );
   }
 
+  final String emoji;
+
   @override
   Future<void> onLoad() async {
-    animation = await SpriteSheetFactory.characterAnimation(
-      color: GameConstants.slime,
-      size: GameConstants.tileVector,
-      borderColor: const Color(0xFF1B5E20),
+    animation = await SpriteSheetFactory.emojiCharacterAnimation(
+      emoji: emoji.isNotEmpty ? emoji : GameConstants.defaultEnemyEmoji,
+      size: size,
+      background: const Color(0x331A2A1A),
     );
     add(
       RectangleHitbox(
-        size: Vector2(10, 10),
-        position: Vector2(3, 4),
+        size: Vector2(size.x * 0.55, size.y * 0.55),
+        position: Vector2(size.x * 0.22, size.y * 0.28),
       ),
     );
     return super.onLoad();
@@ -50,7 +54,7 @@ class MistSlime extends SimpleEnemy
       closePlayer: (player) {
         simpleAttackMelee(
           damage: 8,
-          size: Vector2.all(GameConstants.tileSize * 0.8),
+          size: Vector2.all(size.x * 0.8),
           interval: 1200,
           withPush: false,
         );

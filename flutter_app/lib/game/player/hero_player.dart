@@ -6,15 +6,18 @@ import 'package:zork_dude/shared/sprite_sheet_factory.dart';
 
 /// The amnesiac traveler — controlled by joystick / keyboard.
 class HeroPlayer extends SimplePlayer with BlockMovementCollision, UseLifeBar {
-  HeroPlayer({required super.position})
-      : super(
-          size: GameConstants.tileVector,
+  HeroPlayer({
+    required super.position,
+    this.emoji = GameConstants.playerEmoji,
+    Vector2? size,
+  }) : super(
+          size: size ?? GameConstants.combatSpriteVector,
           speed: GameConstants.playerSpeed,
           life: GameConstants.playerLife,
           initDirection: Direction.down,
         ) {
     setupLifeBar(
-      size: Vector2(18, 3),
+      size: Vector2(20, 3),
       barLifeDrawPosition: BarLifeDrawPosition.top,
       borderWidth: 1,
       borderColor: Colors.white24,
@@ -24,17 +27,19 @@ class HeroPlayer extends SimplePlayer with BlockMovementCollision, UseLifeBar {
     );
   }
 
+  final String emoji;
+
   @override
   Future<void> onLoad() async {
-    animation = await SpriteSheetFactory.characterAnimation(
-      color: GameConstants.hero,
-      size: GameConstants.tileVector,
-      borderColor: Colors.white70,
+    animation = await SpriteSheetFactory.emojiCharacterAnimation(
+      emoji: emoji,
+      size: size,
+      background: const Color(0x332A4A6A),
     );
     add(
       RectangleHitbox(
-        size: Vector2(10, 10),
-        position: Vector2(3, 5),
+        size: Vector2(size.x * 0.55, size.y * 0.55),
+        position: Vector2(size.x * 0.22, size.y * 0.3),
       ),
     );
     return super.onLoad();
@@ -55,10 +60,10 @@ class HeroPlayer extends SimplePlayer with BlockMovementCollision, UseLifeBar {
   void _meleeAttack() {
     simpleAttackMelee(
       damage: 15,
-      size: Vector2.all(GameConstants.tileSize * 0.9),
-      animationRight: SpriteSheetFactory.solidAnimation(
-        color: const Color(0x88FFFFFF),
-        size: Vector2.all(GameConstants.tileSize),
+      size: Vector2.all(size.x * 0.9),
+      animationRight: SpriteSheetFactory.emojiAnimation(
+        emoji: '⚔️',
+        size: Vector2.all(size.x),
       ),
       withPush: true,
     );

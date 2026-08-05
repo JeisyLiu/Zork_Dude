@@ -46,6 +46,19 @@ python -m http.server 8080
 python zork_game.py
 ```
 
+### Flutter 原生移动端（Zork 探索 + Bonfire 战斗）
+
+原生 App 在 `flutter_app/`（与 `mobile/` 移动 Web 版独立）。主界面为 **Zork 指令探索 + 迷雾残页地图**，遇敌时进入 **Bonfire 动作战斗**：
+
+```bash
+cd flutter_app
+dart run tool/sync_game_data.dart   # 同步根目录 data/*.json
+flutter pub get
+flutter run
+```
+
+详见 [flutter_app/README.md](flutter_app/README.md)。
+
 ## 常用命令
 
 | 类别 | 命令 | 说明 |
@@ -76,6 +89,7 @@ zork-dude/
 ├── index.html          # 桌面 Web 版
 ├── mobile/
 │   └── index.html      # 移动 Web 版
+├── flutter_app/        # Flutter + Flame + Bonfire 原生移动端
 ├── zork_game.py        # 命令行完整版
 └── data/
     ├── rooms.json      # 场景

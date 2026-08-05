@@ -69,25 +69,25 @@ void main() {
       expect(tester.takeException(), isNull);
       expect(find.byType(ExplorationScreen), findsOneWidget);
       expect(find.byType(DirectionPad), findsOneWidget);
-      expect(find.text('更多'), findsWidgets);
+      expect(find.text('查看'), findsWidgets);
+      expect(find.text('丢弃'), findsWidgets);
+      expect(find.text('队伍'), findsWidgets);
       expect(find.text('发送'), findsNothing);
     });
   }
 
-  testWidgets('More sheet exposes low-frequency commands', (tester) async {
+  testWidgets('Primary panel exposes former more-sheet commands', (tester) async {
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
     await pumpExplorationScreen(tester, const Size(1280, 720));
-    final more = find.byKey(const Key('quick-command-more'));
-    await tester.ensureVisible(more);
-    await tester.tap(more);
-    for (var i = 0; i < 10; i++) {
-      await tester.pump(const Duration(milliseconds: 100));
-    }
 
-    expect(find.text('帮助'), findsWidgets);
-    expect(find.text('二周目'), findsWidgets);
+    expect(find.text('治疗'), findsWidgets);
     expect(find.text('丢弃'), findsWidgets);
+    expect(find.text('商品'), findsWidgets);
+    expect(find.text('购买'), findsWidgets);
+    expect(find.text('出售'), findsWidgets);
+    expect(find.text('招募'), findsWidgets);
+    expect(find.text('队伍'), findsWidgets);
   });
 
   testWidgets('Story log scrolls to latest entry after command', (tester) async {

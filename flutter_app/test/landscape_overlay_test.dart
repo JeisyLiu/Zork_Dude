@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:zork_dude/screens/exploration_screen.dart';
 import 'package:zork_dude/ui/components/game_button.dart';
+import 'package:zork_dude/ui/components/game_outlined_text.dart';
 import 'package:zork_dude/state/game_controller.dart';
 import 'package:zork_dude/ui/components/landscape_overlay.dart';
 import 'package:zork_dude/ui/game_skin_scope.dart';
@@ -46,10 +47,35 @@ void main() {
     const size = Size(667, 375);
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
-    await pumpExploration(tester, size);
-    final more = find.byKey(const Key('quick-command-more'));
-    await tester.ensureVisible(more);
-    await tester.tap(more);
+    await tester.binding.setSurfaceSize(size);
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: GameUiTheme.appTheme(),
+        home: MediaQuery(
+          data: MediaQueryData(size: size, disableAnimations: true),
+          child: GameSkinScope(
+            skin: GameUiSkin.fantasy,
+            child: Builder(
+              builder: (context) => Scaffold(
+                body: Center(
+                  child: ElevatedButton(
+                    key: const Key('open-more-overlay'),
+                    onPressed: () => LandscapeOverlay.show<void>(
+                      context: context,
+                      title: '更多命令 · More',
+                      child: const Text('帮助'),
+                    ),
+                    child: const Text('打开浮层'),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.tap(find.byKey(const Key('open-more-overlay')));
     for (var i = 0; i < 10; i++) {
       await tester.pump(const Duration(milliseconds: 50));
     }
@@ -135,10 +161,35 @@ void main() {
     const size = Size(1280, 720);
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
-    await pumpExploration(tester, size);
-    final more = find.byKey(const Key('quick-command-more'));
-    await tester.ensureVisible(more);
-    await tester.tap(more);
+    await tester.binding.setSurfaceSize(size);
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: GameUiTheme.appTheme(),
+        home: MediaQuery(
+          data: MediaQueryData(size: size, disableAnimations: true),
+          child: GameSkinScope(
+            skin: GameUiSkin.fantasy,
+            child: Builder(
+              builder: (context) => Scaffold(
+                body: Center(
+                  child: ElevatedButton(
+                    key: const Key('open-more-overlay'),
+                    onPressed: () => LandscapeOverlay.show<void>(
+                      context: context,
+                      title: '更多命令 · More',
+                      child: const Text('帮助'),
+                    ),
+                    child: const Text('打开浮层'),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.tap(find.byKey(const Key('open-more-overlay')));
     for (var i = 0; i < 10; i++) {
       await tester.pump(const Duration(milliseconds: 50));
     }

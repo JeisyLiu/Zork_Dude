@@ -13,14 +13,12 @@ abstract final class ExplorationLayoutConstants {
   static const double bannerHeight = 44;
   static const double bannerHeightShort = 42;
 
-  /// Preferred golden-ratio chip widths (height = width × 0.618).
+  /// Fixed golden-ratio chip widths (height = width × 0.618). No runtime rescale.
   static const double chipWidth = 96;
   static const double chipWidthShort = 80;
-  static const double chipWidthMin = 64;
-  static const double chipWidthMinShort = 56;
 
-  /// Primary action grid always uses 3 columns → even 3+3 rows for 6 actions.
-  static const int primaryColumns = 3;
+  /// Primary action grid: 6 columns × 2 rows.
+  static const int primaryColumns = 6;
 
   static bool isLandscape(Size size) => LandscapeLayout.isLandscape(size);
 
@@ -45,33 +43,20 @@ abstract final class ExplorationLayoutConstants {
 
   static double panelPadV({required bool short}) => short ? 12.0 : 18.0;
 
-  /// Dock height that neatly fits the 3×2 golden button grid (+ optional tips).
+  /// Dock height that neatly fits the 6×2 golden button grid (+ optional tips).
   static double dockMinHeight({required bool short, bool showTips = true}) {
     final chipW = preferredChipWidth(short: short);
     final tips = (!short && showTips) ? 20.0 : 0.0;
     return gridContentHeight(chipW) + panelPadV(short: short) + tips;
   }
 
-  /// Fit preferred golden chips into [availableWidth], scaling down uniformly if needed.
-  static double chipWidthFor(double availableWidth, {required bool short}) {
-    final preferred = preferredChipWidth(short: short);
-    final minW = short ? chipWidthMinShort : chipWidthMin;
-    final spacing = chipSpacing * (primaryColumns - 1);
-    final ideal = (availableWidth - spacing) / primaryColumns;
-    return ideal.clamp(minW, preferred);
-  }
+  /// Fixed chip width (no scaling) — layout spreads buttons to fill the panel.
+  static double chipWidthFor(double availableWidth, {required bool short}) =>
+      preferredChipWidth(short: short);
 
   static double dockMaxHeight(Size size) {
-    // Allow dock to grow to preferred grid; slight headroom only.
     return dockMinHeight(short: isShort(size), showTips: !isShort(size)) + 8;
   }
 
-  static int chipColumnsFor(double width, {bool short = false}) {
-    if (short) {
-      if (width >= 360) return 3;
-      return 2;
-    }
-    if (width >= 480) return 4;
-    return 3;
-  }
+  static int chipColumnsFor(double width, {bool short = false}) => primaryColumns;
 }

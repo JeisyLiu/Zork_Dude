@@ -183,10 +183,52 @@ class QuickCommandPanel extends StatelessWidget {
           enabled: panelEnabled && hasNpc,
           onPressed: () => controller.executeCommand('talk'),
         ),
-        _QuickAction(label: '更多', subLabel: 'more', isMore: true, enabled: panelEnabled),
+        _QuickAction(
+          label: '治疗',
+          subLabel: 'heal',
+          enabled: panelEnabled,
+          onPressed: () => controller.executeCommand('heal'),
+        ),
+        _QuickAction(
+          label: '招募',
+          subLabel: 'recruit',
+          enabled: panelEnabled,
+          onPressed: () => controller.executeCommand('recruit'),
+        ),
+        _QuickAction(
+          label: '队伍',
+          subLabel: 'party',
+          enabled: panelEnabled,
+          onPressed: () => controller.executeCommand('party'),
+        ),
+        _QuickAction(
+          label: '得分',
+          subLabel: 'score',
+          enabled: panelEnabled,
+          onPressed: () => controller.executeCommand('score'),
+        ),
+        _QuickAction(
+          label: '帮助',
+          subLabel: 'help',
+          enabled: panelEnabled,
+          onPressed: () => controller.executeCommand('help'),
+        ),
+        _QuickAction(
+          label: '二周目',
+          subLabel: 'ng+',
+          enabled: panelEnabled,
+          onPressed: () => controller.executeCommand('ng+'),
+        ),
+        _QuickAction(
+          label: '更多',
+          subLabel: 'more',
+          isMore: true,
+          enabled: panelEnabled,
+        ),
       ];
     }
 
+    // 6×2: 查看/背包/拿起/使用/对话/治疗 + 丢弃/商品/购买/出售/招募/队伍
     return [
       _QuickAction(
         label: '查看',
@@ -221,30 +263,54 @@ class QuickCommandPanel extends StatelessWidget {
         enabled: panelEnabled && hasNpc,
         onPressed: () => controller.executeCommand('talk'),
       ),
-      _QuickAction(label: '更多', subLabel: 'more', isMore: true, enabled: panelEnabled),
+      _QuickAction(
+        label: '治疗',
+        subLabel: 'heal',
+        enabled: panelEnabled,
+        onPressed: () => controller.executeCommand('heal'),
+      ),
+      _QuickAction(
+        label: '丢弃',
+        subLabel: 'drop',
+        enabled: panelEnabled && hasInventory,
+        onPressed: _drop,
+      ),
+      _QuickAction(
+        label: '商品',
+        subLabel: 'trade',
+        enabled: panelEnabled,
+        onPressed: () => controller.executeCommand('trade'),
+      ),
+      _QuickAction(
+        label: '购买',
+        subLabel: 'buy',
+        enabled: panelEnabled,
+        onPressed: _buy,
+      ),
+      _QuickAction(
+        label: '出售',
+        subLabel: 'sell',
+        enabled: panelEnabled && hasInventory,
+        onPressed: _sell,
+      ),
+      _QuickAction(
+        label: '招募',
+        subLabel: 'recruit',
+        enabled: panelEnabled,
+        onPressed: () => controller.executeCommand('recruit'),
+      ),
+      _QuickAction(
+        label: '队伍',
+        subLabel: 'party',
+        enabled: panelEnabled,
+        onPressed: () => controller.executeCommand('party'),
+      ),
     ];
   }
 
   List<_QuickAction> _moreActions(bool inCombat) {
-    if (inCombat) {
-      return [
-        _QuickAction(label: '治疗', subLabel: 'heal', onPressed: () => controller.executeCommand('heal')),
-        _QuickAction(label: '招募', subLabel: 'recruit', onPressed: () => controller.executeCommand('recruit')),
-        _QuickAction(label: '队伍', subLabel: 'party', onPressed: () => controller.executeCommand('party')),
-        _QuickAction(label: '得分', subLabel: 'score', onPressed: () => controller.executeCommand('score')),
-        _QuickAction(label: '帮助', subLabel: 'help', onPressed: () => controller.executeCommand('help')),
-        _QuickAction(label: '二周目', subLabel: 'ng+', onPressed: () => controller.executeCommand('ng+')),
-      ];
-    }
-
+    // Leftover low-frequency commands (opened only in combat via 更多).
     return [
-      _QuickAction(label: '治疗', subLabel: 'heal', onPressed: () => controller.executeCommand('heal')),
-      _QuickAction(label: '丢弃', subLabel: 'drop', onPressed: _drop),
-      _QuickAction(label: '商品', subLabel: 'trade', onPressed: () => controller.executeCommand('trade')),
-      _QuickAction(label: '购买', subLabel: 'buy', onPressed: _buy),
-      _QuickAction(label: '出售', subLabel: 'sell', onPressed: _sell),
-      _QuickAction(label: '招募', subLabel: 'recruit', onPressed: () => controller.executeCommand('recruit')),
-      _QuickAction(label: '队伍', subLabel: 'party', onPressed: () => controller.executeCommand('party')),
       _QuickAction(label: '得分', subLabel: 'score', onPressed: () => controller.executeCommand('score')),
       _QuickAction(label: '帮助', subLabel: 'help', onPressed: () => controller.executeCommand('help')),
       _QuickAction(label: '二周目', subLabel: 'ng+', onPressed: () => controller.executeCommand('ng+')),
@@ -407,7 +473,7 @@ class _ActionGrid extends StatelessWidget {
       children: [
         for (var r = 0; r < rows.length; r++) ...[
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               for (var i = 0; i < columns; i++)
                 SizedBox(

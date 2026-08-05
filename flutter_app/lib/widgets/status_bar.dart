@@ -40,8 +40,8 @@ class StatusBar extends StatelessWidget {
           GameButton(
             label: controller.mapVisible ? '地图' : '地图·关',
             subLabel: 'map',
-            height: 32,
-            width: 72,
+            height: 36,
+            width: 76,
             onPressed: controller.toggleMap,
             semanticLabel: '切换地图',
           ),

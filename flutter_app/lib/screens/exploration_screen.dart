@@ -150,7 +150,7 @@ class _ExplorationScreenState extends State<ExplorationScreen> {
                   const GameBanner(
                     title: '迷雾之塔',
                     subtitle: 'Exploration · ←↑↓→ / WASD',
-                    height: 48,
+                    height: 56,
                   ),
                   const SizedBox(height: 6),
                   StatusBar(controller: c),

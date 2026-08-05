@@ -312,7 +312,7 @@ class _ActionGrid extends StatelessWidget {
   final bool compact;
 
   double get _chipHeight =>
-      compact ? 34 : ExplorationLayoutConstants.chipHeight;
+      compact ? 38 : ExplorationLayoutConstants.chipHeight;
 
   @override
   Widget build(BuildContext context) {

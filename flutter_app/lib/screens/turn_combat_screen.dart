@@ -299,7 +299,7 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
           GameBanner(
             title: '回合战斗',
             subtitle: 'Turn Battle',
-            height: tight ? 40 : 56,
+            height: tight ? 48 : 56,
           ),
           SizedBox(height: tight ? 4 : 8),
           if (_activeActor != null && _phase == CombatUiPhase.pickingCommand && !tight)

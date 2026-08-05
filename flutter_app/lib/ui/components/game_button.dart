@@ -64,36 +64,50 @@ class GameButton extends StatelessWidget {
                     gaplessPlayback: true,
                   ),
                   if (label != null)
-                    Center(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          GameOutlinedText(
-                            label!,
-                            fontSize: compact ? 14 : 12,
-                            fontWeight: FontWeight.w700,
-                            color: d.textPrimary,
-                            strokeWidth: useOutline ? 1.4 : 0,
-                            shadowColor: useOutline
-                                ? null
-                                : Colors.black.withValues(alpha: 0.35),
-                            shadowOffset: const Offset(0, 1),
-                            shadowBlurRadius: 1.5,
+                    Padding(
+                      // Kenney button bevels (~8px); keep glyphs inside the fill.
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: height >= 36 ? 6 : 4,
+                      ),
+                      child: Center(
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              GameOutlinedText(
+                                label!,
+                                fontSize: compact
+                                    ? 14
+                                    : (subLabel != null ? 11 : 12),
+                                fontWeight: FontWeight.w700,
+                                color: d.textPrimary,
+                                height: 1.05,
+                                strokeWidth: useOutline ? 1.2 : 0,
+                                shadowColor: useOutline
+                                    ? null
+                                    : Colors.black.withValues(alpha: 0.35),
+                                shadowOffset: const Offset(0, 1),
+                                shadowBlurRadius: 1.5,
+                              ),
+                              if (subLabel != null)
+                                GameOutlinedText(
+                                  subLabel!,
+                                  fontSize: compact ? 9 : 8,
+                                  fontWeight: FontWeight.w500,
+                                  color: d.textMuted,
+                                  height: 1.0,
+                                  strokeWidth: useOutline ? 0.9 : 0,
+                                  shadowColor: useOutline
+                                      ? null
+                                      : Colors.black.withValues(alpha: 0.25),
+                                  shadowOffset: const Offset(0, 1),
+                                  shadowBlurRadius: 1,
+                                ),
+                            ],
                           ),
-                          if (subLabel != null)
-                            GameOutlinedText(
-                              subLabel!,
-                              fontSize: compact ? 10 : 9,
-                              fontWeight: FontWeight.w500,
-                              color: d.textMuted,
-                              strokeWidth: useOutline ? 1.0 : 0,
-                              shadowColor: useOutline
-                                  ? null
-                                  : Colors.black.withValues(alpha: 0.25),
-                              shadowOffset: const Offset(0, 1),
-                              shadowBlurRadius: 1,
-                            ),
-                        ],
+                        ),
                       ),
                     ),
                 ],

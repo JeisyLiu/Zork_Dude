@@ -27,6 +27,10 @@ class GameBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final d = skin ?? GameUiTheme.of(context);
+    // Keep text inside the banner's painted fill (nine-patch borders + curve).
+    final hasSubtitle = subtitle != null;
+    final effectiveTitleSize = hasSubtitle && height < 56 ? titleSize - 2 : titleSize;
+    final effectiveSubtitleSize = height < 56 ? subtitleSize - 1 : subtitleSize;
     return SizedBox(
       height: height,
       width: double.infinity,
@@ -42,7 +46,11 @@ class GameBanner extends StatelessWidget {
           ),
           Center(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 4),
+              // Horizontal: stay inside white frame; vertical: clear bevel/curve.
+              padding: EdgeInsets.symmetric(
+                horizontal: 36,
+                vertical: height >= 56 ? 10 : 8,
+              ),
               child: FittedBox(
                 fit: BoxFit.scaleDown,
                 child: Column(
@@ -50,20 +58,22 @@ class GameBanner extends StatelessWidget {
                   children: [
                     GameOutlinedText(
                       title,
-                      fontSize: titleSize,
+                      fontSize: effectiveTitleSize,
                       fontWeight: FontWeight.bold,
                       color: d.textPrimary,
                       letterSpacing: 2,
-                      strokeWidth: titleSize > 22 ? 2.2 : 1.6,
+                      height: 1.05,
+                      strokeWidth: effectiveTitleSize > 22 ? 2.0 : 1.4,
                     ),
-                    if (subtitle != null) ...[
-                      const SizedBox(height: 2),
+                    if (hasSubtitle) ...[
+                      const SizedBox(height: 1),
                       GameOutlinedText(
                         subtitle!,
-                        fontSize: subtitleSize,
+                        fontSize: effectiveSubtitleSize,
                         fontWeight: FontWeight.w500,
                         color: d.textMuted,
-                        strokeWidth: 1.2,
+                        height: 1.0,
+                        strokeWidth: 1.0,
                       ),
                     ],
                   ],

@@ -28,8 +28,13 @@ class CombatTurnOrderBar extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          GameOutlinedText('行动顺序 Initiative', fontSize: 10, color: d.textMuted, strokeWidth: 0.8),
-          const SizedBox(height: 4),
+          GameOutlinedText(
+            '行动顺序 Initiative',
+            fontSize: compact ? 12 : 14,
+            color: d.textMuted,
+            strokeWidth: 0.8,
+          ),
+          const SizedBox(height: 6),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
@@ -63,11 +68,19 @@ class CombatTurnOrderBar extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            GameOutlinedText('#$index', fontSize: 7, color: d.textMuted, strokeWidth: 0),
-            Text(entry.emoji.isNotEmpty ? entry.emoji : '👤', style: TextStyle(fontSize: compact ? 14 : 16)),
+            GameOutlinedText(
+              '#$index',
+              fontSize: compact ? 9 : 10,
+              color: d.textMuted,
+              strokeWidth: 0,
+            ),
+            Text(
+              entry.emoji.isNotEmpty ? entry.emoji : '👤',
+              style: TextStyle(fontSize: compact ? 16 : 20),
+            ),
             GameOutlinedText(
               entry.actorName,
-              fontSize: compact ? 7 : 8,
+              fontSize: compact ? 10 : 12,
               color: d.textPrimary,
               strokeWidth: 0,
               maxLines: 1,
@@ -75,7 +88,7 @@ class CombatTurnOrderBar extends StatelessWidget {
             ),
             GameOutlinedText(
               '💨${entry.speed} ${CombatCommandLabels.shortLabel(entry.command.type)}',
-              fontSize: 7,
+              fontSize: compact ? 9 : 11,
               color: d.textMuted,
               strokeWidth: 0,
             ),

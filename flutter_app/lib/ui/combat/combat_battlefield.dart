@@ -67,75 +67,78 @@ class CombatUnitCard extends StatelessWidget {
                     ? const Color(0x5544FF88)
                     : const Color(0x22000000),
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Stack(
-                clipBehavior: Clip.none,
-                alignment: Alignment.center,
-                children: [
-                  Text(
-                    actor.emoji.isNotEmpty ? actor.emoji : (actor.isEnemy ? '👾' : '🧙'),
-                    style: TextStyle(fontSize: compact ? 26 : 34),
-                  ),
-                  if (commandBadge != null)
-                    Positioned(
-                      right: -2,
-                      top: -2,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 1),
-                        decoration: BoxDecoration(
-                          color: const Color(0xCC1A1208),
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: GameOutlinedText(
-                          CombatCommandLabels.shortLabel(commandBadge!.type),
-                          fontSize: 7,
-                          color: const Color(0xFFE8B84A),
-                          strokeWidth: 0,
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Stack(
+                  clipBehavior: Clip.none,
+                  alignment: Alignment.center,
+                  children: [
+                    Text(
+                      actor.emoji.isNotEmpty ? actor.emoji : (actor.isEnemy ? '👾' : '🧙'),
+                      style: TextStyle(fontSize: compact ? 26 : 34),
+                    ),
+                    if (commandBadge != null)
+                      Positioned(
+                        right: -2,
+                        top: -2,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 1),
+                          decoration: BoxDecoration(
+                            color: const Color(0xCC1A1208),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: GameOutlinedText(
+                            CombatCommandLabels.shortLabel(commandBadge!.type),
+                            fontSize: 7,
+                            color: const Color(0xFFE8B84A),
+                            strokeWidth: 0,
+                          ),
                         ),
                       ),
-                    ),
-                ],
-              ),
-              const SizedBox(height: 2),
-              GameOutlinedText(
-                actor.name,
-                fontSize: compact ? 10 : 12,
-                color: d.textPrimary,
-                strokeWidth: 0.8,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 3),
-              LayoutBuilder(
-                builder: (context, constraints) {
-                  return GameProgressBar(
-                    value: actor.maxHp > 0 ? actor.hp / actor.maxHp : 0,
-                    height: compact ? 8 : 10,
-                    width: constraints.maxWidth.clamp(24, 120),
-                  );
-                },
-              ),
-              GameOutlinedText(
-                '${actor.hp}/${actor.maxHp}',
-                fontSize: compact ? 8 : 9,
-                color: d.textPrimary,
-                strokeWidth: 0,
-              ),
-              const SizedBox(height: 2),
-              GameOutlinedText(
-                '⚔$atk 🛡$def 💨$spd',
-                fontSize: compact ? 7 : 8,
-                color: d.textMuted,
-                strokeWidth: 0,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-              CombatStatusChips(actor: actor, registry: statusRegistry, compact: compact),
-            ],
+                  ],
+                ),
+                const SizedBox(height: 2),
+                GameOutlinedText(
+                  actor.name,
+                  fontSize: compact ? 10 : 12,
+                  color: d.textPrimary,
+                  strokeWidth: 0.8,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 3),
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    return GameProgressBar(
+                      value: actor.maxHp > 0 ? actor.hp / actor.maxHp : 0,
+                      height: compact ? 8 : 10,
+                      width: constraints.maxWidth.clamp(24, 120),
+                    );
+                  },
+                ),
+                GameOutlinedText(
+                  '${actor.hp}/${actor.maxHp}',
+                  fontSize: compact ? 8 : 9,
+                  color: d.textPrimary,
+                  strokeWidth: 0,
+                ),
+                const SizedBox(height: 2),
+                GameOutlinedText(
+                  '⚔$atk 🛡$def 💨$spd',
+                  fontSize: compact ? 7 : 8,
+                  color: d.textMuted,
+                  strokeWidth: 0,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                CombatStatusChips(actor: actor, registry: statusRegistry, compact: compact),
+              ],
+            ),
           ),
         ),
       ),

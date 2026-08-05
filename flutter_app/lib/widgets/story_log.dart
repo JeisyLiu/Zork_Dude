@@ -13,13 +13,21 @@ class StoryLogView extends StatefulWidget {
   State<StoryLogView> createState() => _StoryLogViewState();
 }
 
-class _StoryLogViewState extends State<StoryLogView> {
+class _StoryLogViewState extends State<StoryLogView>
+    with SingleTickerProviderStateMixin {
   late final ScrollController _scroll;
+  late final AnimationController _entryFade;
+  int _prevLogLength = 0;
 
   @override
   void initState() {
     super.initState();
     _scroll = ScrollController();
+    _entryFade = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 180),
+    )..value = 1.0;
+    _prevLogLength = widget.controller.log.length;
     widget.controller.addListener(_onLogChanged);
     _scheduleScrollToBottom();
   }
@@ -30,11 +38,28 @@ class _StoryLogViewState extends State<StoryLogView> {
     if (oldWidget.controller != widget.controller) {
       oldWidget.controller.removeListener(_onLogChanged);
       widget.controller.addListener(_onLogChanged);
+      _prevLogLength = widget.controller.log.length;
       _scheduleScrollToBottom();
     }
   }
 
-  void _onLogChanged() => _scheduleScrollToBottom();
+  void _onLogChanged() {
+    final len = widget.controller.log.length;
+    if (len > _prevLogLength) {
+      _prevLogLength = len;
+      if (mounted) {
+        final disable = MediaQuery.disableAnimationsOf(context);
+        if (disable) {
+          _entryFade.value = 1.0;
+        } else {
+          _entryFade
+            ..value = 0.0
+            ..forward();
+        }
+      }
+    }
+    _scheduleScrollToBottom();
+  }
 
   void _scheduleScrollToBottom() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -49,13 +74,42 @@ class _StoryLogViewState extends State<StoryLogView> {
   @override
   void dispose() {
     widget.controller.removeListener(_onLogChanged);
+    _entryFade.dispose();
     _scroll.dispose();
     super.dispose();
+  }
+
+  Widget _logLine(GameUiSkinData d, LogEntry entry, {required bool isLatest}) {
+    final text = entry.isCommand
+        ? '> ${entry.text.replaceFirst('> ', '')}'
+        : entry.text;
+    final line = Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: GameOutlinedText(
+          text,
+          fontSize: 13,
+          fontWeight: entry.isCommand ? FontWeight.w600 : FontWeight.w500,
+          color: entry.isCommand ? const Color(0xFF5C4018) : d.textPrimary,
+          strokeWidth: entry.isCommand ? 1.0 : 0,
+          shadowColor:
+              entry.isCommand ? null : Colors.black.withValues(alpha: 0.28),
+          shadowOffset: const Offset(0, 1),
+          shadowBlurRadius: 1.5,
+          height: 1.5,
+          textAlign: TextAlign.left,
+        ),
+      ),
+    );
+    if (!isLatest) return line;
+    return FadeTransition(opacity: _entryFade, child: line);
   }
 
   @override
   Widget build(BuildContext context) {
     final d = GameUiTheme.of(context);
+    final log = widget.controller.log;
     return GamePanel(
       dark: true,
       withBorder: true,
@@ -70,31 +124,12 @@ class _StoryLogViewState extends State<StoryLogView> {
           controller: _scroll,
           primary: false,
           padding: const EdgeInsets.fromLTRB(6, 4, 10, 8),
-          itemCount: widget.controller.log.length,
+          itemCount: log.length,
           itemBuilder: (context, i) {
-            final entry = widget.controller.log[i];
-            final text = entry.isCommand
-                ? '> ${entry.text.replaceFirst('> ', '')}'
-                : entry.text;
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: GameOutlinedText(
-                  text,
-                  fontSize: 13,
-                  fontWeight: entry.isCommand ? FontWeight.w600 : FontWeight.w500,
-                  color: entry.isCommand ? const Color(0xFF5C4018) : d.textPrimary,
-                  strokeWidth: entry.isCommand ? 1.0 : 0,
-                  shadowColor: entry.isCommand
-                      ? null
-                      : Colors.black.withValues(alpha: 0.28),
-                  shadowOffset: const Offset(0, 1),
-                  shadowBlurRadius: 1.5,
-                  height: 1.5,
-                  textAlign: TextAlign.left,
-                ),
-              ),
+            return _logLine(
+              d,
+              log[i],
+              isLatest: i == log.length - 1,
             );
           },
         ),

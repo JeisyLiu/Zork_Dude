@@ -10,6 +10,7 @@ import 'package:zork_dude/ui/home/home_ambient_background.dart';
 import 'package:zork_dude/ui/home/home_constants.dart';
 import 'package:zork_dude/ui/home/home_hero_art.dart';
 import 'package:zork_dude/ui/layout/landscape_layout.dart';
+import 'package:zork_dude/ui/navigation/landscape_page_route.dart';
 
 /// Launch screen before entering the Zork exploration world.
 class HomeScreen extends StatefulWidget {
@@ -40,8 +41,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _enterGame(BuildContext context) {
     Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (_) => ExplorationScreen(controller: _controller),
+      LandscapePageRoute.of<void>(
+        context,
+        ExplorationScreen(controller: _controller),
       ),
     );
   }

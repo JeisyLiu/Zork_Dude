@@ -47,6 +47,10 @@ void main() {
     await sharedController.init();
   });
 
+  setUp(() {
+    sharedController.resetCommandGateForTest();
+  });
+
   tearDownAll(() {
     sharedController.dispose();
   });
@@ -117,11 +121,15 @@ void main() {
     await tester.pump();
     expect(storyLogScrollController(tester)?.position.maxScrollExtent ?? 0, before);
 
+    sharedController.resetCommandGateForTest();
     await tester.enterText(find.byType(TextField), 'help');
     await tester.tap(find.bySemanticsLabel('发送命令'));
     for (var i = 0; i < 10; i++) {
       await tester.pump(const Duration(milliseconds: 50));
     }
-    expect(find.textContaining('help'), findsWidgets);
+    expect(
+      sharedController.log.any((e) => e.text.toLowerCase().contains('help')),
+      isTrue,
+    );
   });
 }

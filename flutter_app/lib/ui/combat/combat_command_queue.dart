@@ -28,8 +28,13 @@ class CombatCommandQueue extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          GameOutlinedText('指令队列 Commands', fontSize: 10, color: d.textMuted, strokeWidth: 0.8),
-          const SizedBox(height: 4),
+          GameOutlinedText(
+            '指令队列 Commands',
+            fontSize: compact ? 12 : 14,
+            color: d.textMuted,
+            strokeWidth: 0.8,
+          ),
+          const SizedBox(height: 6),
           if (compact)
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
@@ -59,12 +64,15 @@ class CombatCommandQueue extends StatelessWidget {
     return Row(
       mainAxisSize: compact ? MainAxisSize.min : MainAxisSize.max,
       children: [
-        Text(ally.emoji.isNotEmpty ? ally.emoji : '🧙', style: const TextStyle(fontSize: 12)),
-        const SizedBox(width: 4),
+        Text(
+          ally.emoji.isNotEmpty ? ally.emoji : '🧙',
+          style: TextStyle(fontSize: compact ? 14 : 16),
+        ),
+        const SizedBox(width: 6),
         Flexible(
           child: GameOutlinedText(
             '${ally.name}: $text',
-            fontSize: compact ? 8 : 9,
+            fontSize: compact ? 11 : 13,
             color: waiting ? const Color(0xFFE8B84A) : d.textPrimary,
             strokeWidth: 0,
             maxLines: 1,

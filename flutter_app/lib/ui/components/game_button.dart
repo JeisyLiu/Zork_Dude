@@ -1,10 +1,12 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:zork_dude/ui/game_ui_assets.dart';
 import 'package:zork_dude/ui/game_ui_theme.dart';
 import 'package:zork_dude/ui/components/game_outlined_text.dart';
 
 /// Kenney button with optional bilingual label.
-class GameButton extends StatelessWidget {
+class GameButton extends StatefulWidget {
   const GameButton({
     super.key,
     required this.onPressed,
@@ -35,30 +37,52 @@ class GameButton extends StatelessWidget {
   final bool useOutline;
 
   @override
+  State<GameButton> createState() => _GameButtonState();
+}
+
+class _GameButtonState extends State<GameButton> {
+  bool _pressed = false;
+
+  bool get _active => widget.enabled && widget.onPressed != null;
+
+  void _handleTap() {
+    if (!_active) return;
+    if (!kIsWeb) {
+      HapticFeedback.selectionClick();
+    }
+    widget.onPressed?.call();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final d = GameUiTheme.of(context);
-    final img = asset ?? (accent ? d.buttonAccent : d.button);
-    final active = enabled && onPressed != null;
-    final labelSize = compact
-        ? (height * 0.34).clamp(11.0, 14.0)
-        : (height * 0.34).clamp(9.0, 14.0);
-    final subSize = (height * 0.22).clamp(7.0, 10.0);
-    final padH = height >= 36 ? 8.0 : (height >= 28 ? 6.0 : 4.0);
-    final padV = height >= 36 ? 6.0 : (height >= 28 ? 4.0 : 2.0);
+    final img = widget.asset ?? (widget.accent ? d.buttonAccent : d.button);
+    final labelSize = widget.compact
+        ? (widget.height * 0.34).clamp(11.0, 16.0)
+        : (widget.height * 0.34).clamp(10.0, 18.0);
+    final subSize = (widget.height * 0.22).clamp(8.0, 12.0);
+    final padH = widget.height >= 36 ? 8.0 : (widget.height >= 28 ? 6.0 : 4.0);
+    final padV = widget.height >= 36 ? 6.0 : (widget.height >= 28 ? 4.0 : 2.0);
 
     return Semantics(
       button: true,
-      label: semanticLabel ?? label,
-      enabled: active,
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: active ? onPressed : null,
+      label: widget.semanticLabel ?? widget.label,
+      enabled: _active,
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTapDown: _active ? (_) => setState(() => _pressed = true) : null,
+        onTapUp: _active ? (_) => setState(() => _pressed = false) : null,
+        onTapCancel: _active ? () => setState(() => _pressed = false) : null,
+        onTap: _active ? _handleTap : null,
+        child: AnimatedScale(
+          scale: _pressed ? 0.96 : 1.0,
+          duration: const Duration(milliseconds: 80),
+          curve: Curves.easeOut,
           child: Opacity(
-            opacity: active ? 1 : 0.5,
+            opacity: _active ? 1 : 0.5,
             child: SizedBox(
-              width: width,
-              height: height,
+              width: widget.width,
+              height: widget.height,
               child: Stack(
                 fit: StackFit.expand,
                 children: [
@@ -69,9 +93,15 @@ class GameButton extends StatelessWidget {
                     centerSlice: GameUiAssets.sliceButton,
                     gaplessPlayback: true,
                   ),
-                  if (label != null)
+                  if (_pressed && _active)
+                    DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: Colors.black.withValues(alpha: 0.18),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    ),
+                  if (widget.label != null)
                     Padding(
-                      // Kenney button bevels (~8px); keep glyphs inside the fill.
                       padding: EdgeInsets.symmetric(
                         horizontal: padH,
                         vertical: padV,
@@ -83,27 +113,27 @@ class GameButton extends StatelessWidget {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               GameOutlinedText(
-                                label!,
+                                widget.label!,
                                 fontSize: labelSize,
                                 fontWeight: FontWeight.w700,
                                 color: d.textPrimary,
                                 height: 1.05,
-                                strokeWidth: useOutline ? 1.2 : 0,
-                                shadowColor: useOutline
+                                strokeWidth: widget.useOutline ? 1.2 : 0,
+                                shadowColor: widget.useOutline
                                     ? null
                                     : Colors.black.withValues(alpha: 0.35),
                                 shadowOffset: const Offset(0, 1),
                                 shadowBlurRadius: 1.5,
                               ),
-                              if (subLabel != null)
+                              if (widget.subLabel != null)
                                 GameOutlinedText(
-                                  subLabel!,
+                                  widget.subLabel!,
                                   fontSize: subSize,
                                   fontWeight: FontWeight.w500,
                                   color: d.textMuted,
                                   height: 1.0,
-                                  strokeWidth: useOutline ? 0.9 : 0,
-                                  shadowColor: useOutline
+                                  strokeWidth: widget.useOutline ? 0.9 : 0,
+                                  shadowColor: widget.useOutline
                                       ? null
                                       : Colors.black.withValues(alpha: 0.25),
                                   shadowOffset: const Offset(0, 1),
@@ -125,7 +155,7 @@ class GameButton extends StatelessWidget {
 }
 
 /// Fixed-size icon button on round/hex asset.
-class GameIconButton extends StatelessWidget {
+class GameIconButton extends StatefulWidget {
   const GameIconButton({
     super.key,
     required this.onPressed,
@@ -133,6 +163,7 @@ class GameIconButton extends StatelessWidget {
     this.asset,
     this.child,
     this.semanticLabel,
+    this.enabled = true,
   });
 
   final VoidCallback? onPressed;
@@ -140,32 +171,66 @@ class GameIconButton extends StatelessWidget {
   final String? asset;
   final Widget? child;
   final String? semanticLabel;
+  final bool enabled;
+
+  @override
+  State<GameIconButton> createState() => _GameIconButtonState();
+}
+
+class _GameIconButtonState extends State<GameIconButton> {
+  bool _pressed = false;
+
+  bool get _active => widget.enabled && widget.onPressed != null;
+
+  void _handleTap() {
+    if (!_active) return;
+    if (!kIsWeb) {
+      HapticFeedback.selectionClick();
+    }
+    widget.onPressed?.call();
+  }
 
   @override
   Widget build(BuildContext context) {
     final d = GameUiTheme.of(context);
     return Semantics(
       button: true,
-      label: semanticLabel,
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: onPressed,
-          customBorder: const CircleBorder(),
-          child: SizedBox(
-            width: size,
-            height: size,
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                Image.asset(
-                  asset ?? d.roundButton,
-                  fit: BoxFit.contain,
-                  filterQuality: FilterQuality.none,
-                  gaplessPlayback: true,
-                ),
-                if (child != null) Center(child: child),
-              ],
+      label: widget.semanticLabel,
+      enabled: _active,
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTapDown: _active ? (_) => setState(() => _pressed = true) : null,
+        onTapUp: _active ? (_) => setState(() => _pressed = false) : null,
+        onTapCancel: _active ? () => setState(() => _pressed = false) : null,
+        onTap: _active ? _handleTap : null,
+        child: AnimatedScale(
+          scale: _pressed ? 0.96 : 1.0,
+          duration: const Duration(milliseconds: 80),
+          curve: Curves.easeOut,
+          child: Opacity(
+            opacity: _active ? 1 : 0.5,
+            child: SizedBox(
+              width: widget.size,
+              height: widget.size,
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  Image.asset(
+                    widget.asset ?? d.roundButton,
+                    fit: BoxFit.contain,
+                    filterQuality: FilterQuality.none,
+                    gaplessPlayback: true,
+                  ),
+                  if (_pressed && _active)
+                    DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: Colors.black.withValues(alpha: 0.18),
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                  if (widget.child != null) Center(child: widget.child),
+                ],
+              ),
             ),
           ),
         ),

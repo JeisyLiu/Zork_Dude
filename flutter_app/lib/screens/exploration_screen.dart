@@ -9,6 +9,7 @@ import 'package:zork_dude/ui/components/landscape_scaffold.dart';
 import 'package:zork_dude/ui/exploration/exploration_layout_constants.dart';
 import 'package:zork_dude/ui/game_skin_scope.dart';
 import 'package:zork_dude/ui/game_ui_theme.dart';
+import 'package:zork_dude/ui/navigation/landscape_page_route.dart';
 import 'package:zork_dude/widgets/command_input.dart';
 import 'package:zork_dude/widgets/exploration_keyboard_scope.dart';
 import 'package:zork_dude/widgets/mist_map_panel.dart';
@@ -45,8 +46,9 @@ class _ExplorationScreenState extends State<ExplorationScreen> {
     if (widget.controller.battleNavigationPending && mounted) {
       widget.controller.battleNavigationPending = false;
       Navigator.of(context).push(
-        MaterialPageRoute<void>(
-          builder: (_) => TurnCombatScreen(controller: widget.controller),
+        LandscapePageRoute.of<void>(
+          context,
+          TurnCombatScreen(controller: widget.controller),
         ),
       );
     }
@@ -61,7 +63,8 @@ class _ExplorationScreenState extends State<ExplorationScreen> {
       skin: skin,
       child: Builder(
         builder: (context) {
-          final btnH = ExplorationLayoutConstants.chipHeight;
+          final btnW = ExplorationLayoutConstants.moreChipWidth;
+          final btnH = ExplorationLayoutConstants.chipHeightForWidth(btnW);
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -118,6 +121,9 @@ class _ExplorationScreenState extends State<ExplorationScreen> {
     final bannerH = short
         ? ExplorationLayoutConstants.bannerHeightShort
         : ExplorationLayoutConstants.bannerHeight;
+    final motionDuration = MediaQuery.disableAnimationsOf(context)
+        ? Duration.zero
+        : const Duration(milliseconds: 180);
 
     return GameSkinScope(
       skin: skin,
@@ -143,21 +149,37 @@ class _ExplorationScreenState extends State<ExplorationScreen> {
                     ? Row(
                         children: [
                           Expanded(flex: 3, child: StoryLogView(controller: c)),
-                          if (c.mapVisible) ...[
-                            const SizedBox(width: 6),
-                            Expanded(flex: 2, child: MistMapPanel(controller: c)),
-                          ],
+                          if (c.mapVisible) const SizedBox(width: 6),
+                          Expanded(
+                            flex: c.mapVisible ? 2 : 0,
+                            child: AnimatedOpacity(
+                              opacity: c.mapVisible ? 1 : 0,
+                              duration: motionDuration,
+                              child: IgnorePointer(
+                                ignoring: !c.mapVisible,
+                                child: c.mapVisible
+                                    ? MistMapPanel(controller: c)
+                                    : const SizedBox.shrink(),
+                              ),
+                            ),
+                          ),
                         ],
                       )
                     : Column(
                         children: [
-                          if (c.mapVisible) ...[
-                            SizedBox(
-                              height: short ? 100.0 : 140.0,
-                              child: MistMapPanel(controller: c),
-                            ),
-                            const SizedBox(height: 4),
-                          ],
+                          AnimatedSwitcher(
+                            duration: motionDuration,
+                            switchInCurve: Curves.easeOut,
+                            switchOutCurve: Curves.easeIn,
+                            child: c.mapVisible
+                                ? SizedBox(
+                                    key: const ValueKey('map-panel'),
+                                    height: short ? 100.0 : 140.0,
+                                    child: MistMapPanel(controller: c),
+                                  )
+                                : const SizedBox.shrink(key: ValueKey('map-hidden')),
+                          ),
+                          if (c.mapVisible) const SizedBox(height: 4),
                           Expanded(child: StoryLogView(controller: c)),
                         ],
                       ),

@@ -373,19 +373,23 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
                               CombatCommandQueue(
                                 encounter: enc,
                                 activeActorId: _activeActorId,
-                                compact: true,
+                                compact: false,
                               ),
                             if (!short) const SizedBox(height: 4),
                             if (turnOrder.isNotEmpty) ...[
                               CombatTurnOrderBar(
                                 entries: turnOrder,
                                 highlightActorId: _animatingActorId,
-                                compact: true,
+                                compact: short,
                               ),
                               const SizedBox(height: 4),
                             ],
                             Expanded(
-                              child: CombatRoundLog(messages: _log, steps: _stepLog),
+                              child: CombatRoundLog(
+                                messages: _log,
+                                steps: _stepLog,
+                                compact: short,
+                              ),
                             ),
                           ],
                         ),
@@ -409,7 +413,11 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
                       const SizedBox(height: 2),
                       Expanded(
                         flex: 1,
-                        child: CombatRoundLog(messages: _log, steps: _stepLog),
+                        child: CombatRoundLog(
+                          messages: _log,
+                          steps: _stepLog,
+                          compact: true,
+                        ),
                       ),
                     ],
                   ),
@@ -430,31 +438,48 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
             ),
           ],
           SizedBox(height: short ? 2 : 4),
-          // Commands + execute on one row to save vertical space.
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Expanded(
-                child: CombatCommandMenu(
-                  highlightIndex:
-                      CombatCommandMenu.options.indexWhere((o) => o.$1 == _cmdHighlight),
-                  enabled: _phase == CombatUiPhase.pickingCommand && !_animating,
-                  hasItems: hasItems,
-                  compact: true,
-                  onSelect: _selectCommand,
-                ),
-              ),
-              const SizedBox(width: 6),
-              CombatExecuteBar(
-                ready: ready,
-                highlighted: _phase == CombatUiPhase.readyToExecute,
-                onExecute: _executeRound,
-                compact: true,
-                width: short
+          SizedBox(
+            height: CombatLayoutConstants.commandDockHeight(short: short),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final execPreferred = short
                     ? CombatLayoutConstants.executeButtonWidthShort
-                    : CombatLayoutConstants.executeButtonWidth,
-              ),
-            ],
+                    : CombatLayoutConstants.executeButtonWidth;
+                final execW = CombatLayoutConstants.executeWidthFor(
+                  availableWidth: (constraints.maxWidth * 0.22).clamp(
+                    72.0,
+                    execPreferred,
+                  ),
+                  short: short,
+                );
+                return Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Expanded(
+                      child: CombatCommandMenu(
+                        highlightIndex: CombatCommandMenu.options
+                            .indexWhere((o) => o.$1 == _cmdHighlight),
+                        enabled:
+                            _phase == CombatUiPhase.pickingCommand && !_animating,
+                        hasItems: hasItems,
+                        compact: short,
+                        onSelect: _selectCommand,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Center(
+                      child: CombatExecuteBar(
+                        ready: ready,
+                        highlighted: _phase == CombatUiPhase.readyToExecute,
+                        onExecute: _executeRound,
+                        compact: short,
+                        width: execW,
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
           ),
         ],
     );

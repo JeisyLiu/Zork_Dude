@@ -10,14 +10,18 @@ class CombatRoundLog extends StatelessWidget {
     super.key,
     required this.messages,
     this.steps = const [],
+    this.compact = false,
   });
 
   final List<String> messages;
   final List<CombatActionStep> steps;
+  final bool compact;
 
   @override
   Widget build(BuildContext context) {
     final d = GameUiTheme.of(context);
+    final titleSize = compact ? 12.0 : 14.0;
+    final bodySize = compact ? 12.0 : 14.0;
     final lines = <_LogLine>[
       for (final m in messages) _LogLine(text: m),
       for (final s in steps)
@@ -32,16 +36,21 @@ class CombatRoundLog extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            GameOutlinedText('战报 Log', fontSize: 10, color: d.textMuted, strokeWidth: 0.8),
+            GameOutlinedText(
+              '战报 Log',
+              fontSize: titleSize,
+              color: d.textMuted,
+              strokeWidth: 0.8,
+            ),
             const SizedBox(height: 6),
             Expanded(
               child: ListView.builder(
                 itemCount: lines.length,
                 itemBuilder: (_, i) => Padding(
-                  padding: const EdgeInsets.only(bottom: 3),
+                  padding: const EdgeInsets.only(bottom: 4),
                   child: GameOutlinedText(
                     lines[i].text,
-                    fontSize: 10,
+                    fontSize: bodySize,
                     color: _colorFor(lines[i].kind, d),
                     strokeWidth: 0,
                     textAlign: TextAlign.left,
@@ -58,7 +67,10 @@ class CombatRoundLog extends StatelessWidget {
   Color _colorFor(CombatActionKind? kind, GameUiSkinData d) {
     if (kind == null) return d.textPrimary;
     return switch (kind) {
-      CombatActionKind.attack || CombatActionKind.skill || CombatActionKind.statusTick => const Color(0xFFFF8888),
+      CombatActionKind.attack ||
+      CombatActionKind.skill ||
+      CombatActionKind.statusTick =>
+        const Color(0xFFFF8888),
       CombatActionKind.heal => const Color(0xFF88FFAA),
       CombatActionKind.statusApply => const Color(0xFF88CCFF),
       CombatActionKind.statusExpire || CombatActionKind.statusResist => d.textMuted,
@@ -71,6 +83,7 @@ class CombatRoundLog extends StatelessWidget {
 
 class _LogLine {
   const _LogLine({required this.text, this.kind});
+
   final String text;
   final CombatActionKind? kind;
 }

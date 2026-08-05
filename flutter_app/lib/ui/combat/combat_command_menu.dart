@@ -34,44 +34,61 @@ class CombatCommandMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final d = GameUiTheme.of(context);
-    final btnW = compact
+    final preferredW = compact
         ? CombatLayoutConstants.commandButtonWidthShort
         : CombatLayoutConstants.commandButtonWidth;
-    final btnH = CombatLayoutConstants.commandButtonHeightForWidth(btnW);
 
     return GamePanel(
       withBorder: true,
       padding: EdgeInsets.symmetric(
         horizontal: compact ? 6 : 10,
-        vertical: compact ? 2 : 6,
+        vertical: compact ? 6 : 8,
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (showTitle) ...[
-            GameOutlinedText('指令 Commands', fontSize: 10, color: d.textMuted, strokeWidth: 0.8),
-            const SizedBox(height: 4),
-          ],
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          const count = 5;
+          final gap = compact ? 4.0 : 6.0;
+          final maxEach =
+              (constraints.maxWidth - gap * (count - 1)) / count;
+          final btnW = maxEach < preferredW ? maxEach.clamp(52.0, preferredW) : preferredW;
+          final btnH = CombatLayoutConstants.commandButtonHeightForWidth(btnW);
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              for (var i = 0; i < options.length; i++)
-                _optionButton(
-                  context,
-                  index: i,
-                  option: options[i].$1,
-                  label: options[i].$2,
-                  sub: options[i].$3,
-                  width: btnW,
-                  height: btnH,
-                  highlighted: i == highlightIndex,
-                  disabled: !enabled ||
-                      (options[i].$1 == CombatCommandOption.item && !hasItems),
+              if (showTitle) ...[
+                GameOutlinedText(
+                  '指令 Commands',
+                  fontSize: 13,
+                  color: d.textMuted,
+                  strokeWidth: 0.8,
                 ),
+                const SizedBox(height: 6),
+              ],
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  for (var i = 0; i < options.length; i++)
+                    _optionButton(
+                      context,
+                      index: i,
+                      option: options[i].$1,
+                      label: options[i].$2,
+                      sub: options[i].$3,
+                      width: btnW,
+                      height: btnH,
+                      highlighted: i == highlightIndex,
+                      disabled: !enabled ||
+                          (options[i].$1 == CombatCommandOption.item &&
+                              !hasItems),
+                    ),
+                ],
+              ),
             ],
-          ),
-        ],
+          );
+        },
       ),
     );
   }
@@ -144,6 +161,7 @@ class CombatExecuteBar extends StatelessWidget {
         subLabel: 'Go',
         height: h,
         width: w,
+        accent: true,
         onPressed: ready ? onExecute : null,
         semanticLabel: '执行回合',
       ),

@@ -31,70 +31,112 @@ class QuickCommandPanel extends StatelessWidget {
     final hasItems = room?.items.isNotEmpty ?? false;
     final hasNpc = room?.npcId != null;
     final hasInventory = s != null && s.inventory.isNotEmpty;
-    final npc = hasNpc && s != null ? s.npcs[room!.npcId] : null;
-    final hasTrade = npc != null && npc.tradeItems.isNotEmpty;
+    final panelEnabled = !controller.commandBusy;
+
+    final padV = ExplorationLayoutConstants.panelPadV(short: compact);
+    final dockH = ExplorationLayoutConstants.dockMinHeight(
+      short: compact,
+      showTips: !compact,
+    );
 
     return GamePanel(
       padding: EdgeInsets.fromLTRB(
-        compact ? 6 : 12,
-        compact ? 4 : 10,
-        compact ? 6 : 12,
-        compact ? 4 : 10,
+        compact ? 8 : 12,
+        padV / 2,
+        compact ? 8 : 12,
+        padV / 2,
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          LayoutBuilder(
-            builder: (context, constraints) {
-              final columns = ExplorationLayoutConstants.chipColumnsFor(
-                constraints.maxWidth,
-                short: compact,
-              );
-              final primary = _primaryActions(
-                inCombat: inCombat,
-                hasItems: hasItems,
-                hasNpc: hasNpc,
-                hasInventory: hasInventory,
-                hasTrade: hasTrade,
-              );
+      child: ConstrainedBox(
+        constraints: BoxConstraints(minHeight: dockH - padV),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            LayoutBuilder(
+              builder: (context, constraints) {
+                final columns = ExplorationLayoutConstants.primaryColumns;
+                final primary = _primaryActions(
+                  inCombat: inCombat,
+                  hasItems: hasItems,
+                  hasNpc: hasNpc,
+                  hasInventory: hasInventory,
+                  panelEnabled: panelEnabled,
+                );
 
-              return Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (!inCombat) ...[
-                    DirectionPad(
-                      onMove: (dir) => controller.move(dir),
-                      compact: compact,
+                return Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    if (!inCombat) ...[
+                      Builder(
+                        builder: (context) {
+                          final prefW =
+                              ExplorationLayoutConstants.preferredChipWidth(
+                            short: compact,
+                          );
+                          final gridH =
+                              ExplorationLayoutConstants.gridContentHeight(
+                            prefW,
+                          );
+                          final dpadBase = compact
+                              ? ExplorationLayoutConstants
+                                  .directionPadWidthShort
+                              : ExplorationLayoutConstants.directionPadWidth;
+                          final dpadSize =
+                              (gridH - (compact ? 30 : 40)).clamp(56.0, dpadBase);
+                          return DirectionPad(
+                            onMove: (dir) => controller.move(dir),
+                            compact: compact,
+                            enabled: panelEnabled,
+                            size: dpadSize,
+                          );
+                        },
+                      ),
+                      SizedBox(width: compact ? 8 : 12),
+                    ],
+                    Expanded(
+                      child: LayoutBuilder(
+                        builder: (context, gridConstraints) {
+                          final chipW = ExplorationLayoutConstants.chipWidthFor(
+                            gridConstraints.maxWidth,
+                            short: compact,
+                          );
+                          final chipH =
+                              ExplorationLayoutConstants.chipHeightForWidth(
+                            chipW,
+                          );
+                          return _ActionGrid(
+                            columns: columns,
+                            actions: primary,
+                            chipWidth: chipW,
+                            chipHeight: chipH,
+                            onMore: panelEnabled
+                                ? () => _showMoreSheet(context, inCombat)
+                                : () {},
+                            panelEnabled: panelEnabled,
+                          );
+                        },
+                      ),
                     ),
-                    SizedBox(width: compact ? 8 : 12),
                   ],
-                  Expanded(
-                    child: _ActionGrid(
-                      columns: columns,
-                      actions: primary,
-                      onMore: () => _showMoreSheet(context, inCombat),
-                      compact: compact,
-                    ),
-                  ),
-                ],
-              );
-            },
-          ),
-          if (!compact) ...[
-            const SizedBox(height: 6),
-            GameOutlinedText(
-              inCombat
-                  ? '战斗中 · Combat: attack / flee'
-                  : '提示 · Tips: ←↑↓→ / WASD · PgUp/PgDn · look · take 1',
-              fontSize: 10,
-              fontWeight: FontWeight.w500,
-              color: d.textMuted,
-              strokeWidth: 1.0,
-              textAlign: TextAlign.left,
+                );
+              },
             ),
+            if (!compact) ...[
+              const SizedBox(height: 6),
+              GameOutlinedText(
+                inCombat
+                    ? '战斗中 · Combat: attack / flee'
+                    : '提示 · Tips: ←↑↓→ / WASD · PgUp/PgDn · look · take 1',
+                fontSize: 10,
+                fontWeight: FontWeight.w500,
+                color: d.textMuted,
+                strokeWidth: 1.0,
+                textAlign: TextAlign.left,
+              ),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }
@@ -104,7 +146,7 @@ class QuickCommandPanel extends StatelessWidget {
     required bool hasItems,
     required bool hasNpc,
     required bool hasInventory,
-    required bool hasTrade,
+    required bool panelEnabled,
   }) {
     if (inCombat) {
       return [
@@ -112,35 +154,81 @@ class QuickCommandPanel extends StatelessWidget {
           label: '攻击',
           subLabel: 'attack',
           accent: true,
+          enabled: panelEnabled,
           onPressed: () => controller.executeCommand('attack'),
         ),
         _QuickAction(
           label: '逃跑',
           subLabel: 'flee',
           accent: true,
+          enabled: panelEnabled,
           onPressed: () => controller.executeCommand('flee'),
         ),
-        _QuickAction(label: '查看', subLabel: 'look', onPressed: () => controller.executeCommand('look')),
-        _QuickAction(label: '背包', subLabel: 'inv', onPressed: () => controller.executeCommand('inventory')),
-        _QuickAction(label: '对话', subLabel: 'talk', highlighted: hasNpc, onPressed: () => controller.executeCommand('talk')),
-        const _QuickAction(label: '更多', subLabel: 'more', isMore: true),
+        _QuickAction(
+          label: '查看',
+          subLabel: 'look',
+          enabled: panelEnabled,
+          onPressed: () => controller.executeCommand('look'),
+        ),
+        _QuickAction(
+          label: '背包',
+          subLabel: 'inv',
+          enabled: panelEnabled,
+          onPressed: () => controller.executeCommand('inventory'),
+        ),
+        _QuickAction(
+          label: '对话',
+          subLabel: 'talk',
+          highlighted: hasNpc,
+          enabled: panelEnabled && hasNpc,
+          onPressed: () => controller.executeCommand('talk'),
+        ),
+        _QuickAction(label: '更多', subLabel: 'more', isMore: true, enabled: panelEnabled),
       ];
     }
 
     return [
-      _QuickAction(label: '查看', subLabel: 'look', onPressed: () => controller.executeCommand('look')),
-      _QuickAction(label: '背包', subLabel: 'inv', onPressed: () => controller.executeCommand('inventory')),
-      _QuickAction(label: '拿起', subLabel: 'take', highlighted: hasItems, onPressed: _take),
-      _QuickAction(label: '使用', subLabel: 'use', highlighted: hasInventory, onPressed: _use),
-      _QuickAction(label: '对话', subLabel: 'talk', highlighted: hasNpc, onPressed: () => controller.executeCommand('talk')),
-      _QuickAction(label: '治疗', subLabel: 'heal', onPressed: () => controller.executeCommand('heal')),
-      const _QuickAction(label: '更多', subLabel: 'more', isMore: true),
+      _QuickAction(
+        label: '查看',
+        subLabel: 'look',
+        enabled: panelEnabled,
+        onPressed: () => controller.executeCommand('look'),
+      ),
+      _QuickAction(
+        label: '背包',
+        subLabel: 'inv',
+        enabled: panelEnabled,
+        onPressed: () => controller.executeCommand('inventory'),
+      ),
+      _QuickAction(
+        label: '拿起',
+        subLabel: 'take',
+        highlighted: hasItems,
+        enabled: panelEnabled && hasItems,
+        onPressed: _take,
+      ),
+      _QuickAction(
+        label: '使用',
+        subLabel: 'use',
+        highlighted: hasInventory,
+        enabled: panelEnabled && hasInventory,
+        onPressed: _use,
+      ),
+      _QuickAction(
+        label: '对话',
+        subLabel: 'talk',
+        highlighted: hasNpc,
+        enabled: panelEnabled && hasNpc,
+        onPressed: () => controller.executeCommand('talk'),
+      ),
+      _QuickAction(label: '更多', subLabel: 'more', isMore: true, enabled: panelEnabled),
     ];
   }
 
   List<_QuickAction> _moreActions(bool inCombat) {
     if (inCombat) {
       return [
+        _QuickAction(label: '治疗', subLabel: 'heal', onPressed: () => controller.executeCommand('heal')),
         _QuickAction(label: '招募', subLabel: 'recruit', onPressed: () => controller.executeCommand('recruit')),
         _QuickAction(label: '队伍', subLabel: 'party', onPressed: () => controller.executeCommand('party')),
         _QuickAction(label: '得分', subLabel: 'score', onPressed: () => controller.executeCommand('score')),
@@ -150,6 +238,7 @@ class QuickCommandPanel extends StatelessWidget {
     }
 
     return [
+      _QuickAction(label: '治疗', subLabel: 'heal', onPressed: () => controller.executeCommand('heal')),
       _QuickAction(label: '丢弃', subLabel: 'drop', onPressed: _drop),
       _QuickAction(label: '商品', subLabel: 'trade', onPressed: () => controller.executeCommand('trade')),
       _QuickAction(label: '购买', subLabel: 'buy', onPressed: _buy),
@@ -179,7 +268,9 @@ class QuickCommandPanel extends StatelessWidget {
               label: action.label,
               subLabel: action.subLabel,
               width: ExplorationLayoutConstants.moreChipWidth,
-              height: ExplorationLayoutConstants.chipHeight,
+              height: ExplorationLayoutConstants.chipHeightForWidth(
+                ExplorationLayoutConstants.moreChipWidth,
+              ),
               accent: action.accent,
               onPressed: () {
                 Navigator.pop(context);
@@ -272,6 +363,7 @@ class _QuickAction {
     this.accent = false,
     this.highlighted = false,
     this.isMore = false,
+    this.enabled = true,
   });
 
   final String label;
@@ -280,6 +372,7 @@ class _QuickAction {
   final bool accent;
   final bool highlighted;
   final bool isMore;
+  final bool enabled;
 }
 
 class _ActionGrid extends StatelessWidget {
@@ -287,13 +380,17 @@ class _ActionGrid extends StatelessWidget {
     required this.columns,
     required this.actions,
     required this.onMore,
-    this.compact = false,
+    required this.chipWidth,
+    required this.chipHeight,
+    this.panelEnabled = true,
   });
 
   final int columns;
   final List<_QuickAction> actions;
   final VoidCallback onMore;
-  final bool compact;
+  final double chipWidth;
+  final double chipHeight;
+  final bool panelEnabled;
 
   @override
   Widget build(BuildContext context) {
@@ -303,7 +400,6 @@ class _ActionGrid extends StatelessWidget {
       rows.add(actions.sublist(i, end));
     }
 
-    final chipH = ExplorationLayoutConstants.chipHeightFor(short: compact);
     final spacing = ExplorationLayoutConstants.chipSpacing;
 
     return Column(
@@ -311,17 +407,15 @@ class _ActionGrid extends StatelessWidget {
       children: [
         for (var r = 0; r < rows.length; r++) ...[
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               for (var i = 0; i < columns; i++)
-                Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      right: i < columns - 1 ? spacing : 0,
-                    ),
-                    child: i < rows[r].length
-                        ? _chipFor(rows[r][i], chipH)
-                        : SizedBox(height: chipH),
-                  ),
+                SizedBox(
+                  width: chipWidth,
+                  height: chipHeight,
+                  child: i < rows[r].length
+                      ? _chipFor(rows[r][i])
+                      : const SizedBox.shrink(),
                 ),
             ],
           ),
@@ -331,15 +425,17 @@ class _ActionGrid extends StatelessWidget {
     );
   }
 
-  Widget _chipFor(_QuickAction action, double chipH) {
+  Widget _chipFor(_QuickAction action) {
+    final active = panelEnabled && action.enabled;
     if (action.isMore) {
       return GameButton(
         key: const Key('quick-command-more'),
         label: action.label,
         subLabel: action.subLabel,
-        height: chipH,
-        width: double.infinity,
-        onPressed: onMore,
+        height: chipHeight,
+        width: chipWidth,
+        enabled: active,
+        onPressed: active ? onMore : null,
         semanticLabel: '更多命令',
       );
     }
@@ -349,10 +445,11 @@ class _ActionGrid extends StatelessWidget {
       child: GameButton(
         label: action.label,
         subLabel: action.subLabel,
-        height: chipH,
-        width: double.infinity,
+        height: chipHeight,
+        width: chipWidth,
         accent: action.accent || action.highlighted,
-        onPressed: action.onPressed,
+        enabled: active,
+        onPressed: active ? action.onPressed : null,
       ),
     );
   }
@@ -360,43 +457,77 @@ class _ActionGrid extends StatelessWidget {
 
 /// Cross-shaped D-pad using minimap ring + compass sprites.
 class DirectionPad extends StatelessWidget {
-  const DirectionPad({super.key, required this.onMove, this.compact = false});
+  const DirectionPad({
+    super.key,
+    required this.onMove,
+    this.compact = false,
+    this.enabled = true,
+    this.size,
+  });
 
   final void Function(Direction dir) onMove;
   final bool compact;
+  final bool enabled;
+  final double? size;
 
   @override
   Widget build(BuildContext context) {
     final d = GameUiTheme.of(context);
-    final size = compact ? 64.0 : ExplorationLayoutConstants.directionPadWidth;
+    final ring = size ??
+        (compact
+            ? ExplorationLayoutConstants.directionPadWidthShort
+            : ExplorationLayoutConstants.directionPadWidth);
+    final upDown = compact ? 26.0 : 36.0;
     return SizedBox(
-      width: size,
+      width: ring,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           SizedBox(
-            width: size,
-            height: size,
+            width: ring,
+            height: ring,
             child: Stack(
               alignment: Alignment.center,
               children: [
                 Image.asset(
                   d.minimapRing,
-                  width: size,
-                  height: size,
+                  width: ring,
+                  height: ring,
                   fit: BoxFit.contain,
                   filterQuality: FilterQuality.none,
                 ),
-                Positioned(top: 4, child: _compassBtn(GameUiAssets.compassN, '北 N', () => onMove(Direction.north))),
+                Positioned(
+                  top: 4,
+                  child: _compassBtn(
+                    GameUiAssets.compassN,
+                    '北 N',
+                    enabled ? () => onMove(Direction.north) : null,
+                  ),
+                ),
                 Positioned(
                   left: 4,
-                  child: _compassBtn(GameUiAssets.compassW, '西 W', () => onMove(Direction.west)),
+                  child: _compassBtn(
+                    GameUiAssets.compassW,
+                    '西 W',
+                    enabled ? () => onMove(Direction.west) : null,
+                  ),
                 ),
                 Positioned(
                   right: 4,
-                  child: _compassBtn(GameUiAssets.compassE, '东 E', () => onMove(Direction.east)),
+                  child: _compassBtn(
+                    GameUiAssets.compassE,
+                    '东 E',
+                    enabled ? () => onMove(Direction.east) : null,
+                  ),
                 ),
-                Positioned(bottom: 4, child: _compassBtn(GameUiAssets.compassS, '南 S', () => onMove(Direction.south))),
+                Positioned(
+                  bottom: 4,
+                  child: _compassBtn(
+                    GameUiAssets.compassS,
+                    '南 S',
+                    enabled ? () => onMove(Direction.south) : null,
+                  ),
+                ),
               ],
             ),
           ),
@@ -405,16 +536,18 @@ class DirectionPad extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               GameIconButton(
-                size: compact ? 26 : 36,
+                size: upDown,
                 semanticLabel: '上 U',
-                onPressed: () => onMove(Direction.up),
+                enabled: enabled,
+                onPressed: enabled ? () => onMove(Direction.up) : null,
                 child: const GameOutlinedText('U', fontSize: 11, fontWeight: FontWeight.bold, strokeWidth: 1.2),
               ),
-              const SizedBox(width: 6),
+              SizedBox(width: compact ? 4 : 6),
               GameIconButton(
-                size: compact ? 26 : 36,
+                size: upDown,
                 semanticLabel: '下 D',
-                onPressed: () => onMove(Direction.down),
+                enabled: enabled,
+                onPressed: enabled ? () => onMove(Direction.down) : null,
                 child: const GameOutlinedText('D', fontSize: 11, fontWeight: FontWeight.bold, strokeWidth: 1.2),
               ),
             ],
@@ -424,20 +557,24 @@ class DirectionPad extends StatelessWidget {
     );
   }
 
-  Widget _compassBtn(String asset, String label, VoidCallback onTap) {
+  Widget _compassBtn(String asset, String label, VoidCallback? onTap) {
     return Semantics(
       button: true,
       label: label,
+      enabled: onTap != null,
       child: Material(
         color: Colors.transparent,
         child: InkWell(
           onTap: onTap,
           customBorder: const CircleBorder(),
-          child: Image.asset(
-            asset,
-            width: 28,
-            height: 28,
-            filterQuality: FilterQuality.none,
+          child: Opacity(
+            opacity: onTap != null ? 1 : 0.45,
+            child: Image.asset(
+              asset,
+              width: 28,
+              height: 28,
+              filterQuality: FilterQuality.none,
+            ),
           ),
         ),
       ),

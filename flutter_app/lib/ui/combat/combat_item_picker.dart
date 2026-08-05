@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zork_dude/ui/combat/combat_layout_constants.dart';
 import 'package:zork_dude/ui/components/game_button.dart';
 import 'package:zork_dude/ui/components/game_outlined_text.dart';
 import 'package:zork_dude/ui/components/game_panel.dart';
@@ -27,12 +28,15 @@ class CombatItemPicker extends StatelessWidget {
         padding: GamePanel.compactPadding,
         child: GameOutlinedText(
           '背包中没有可用战斗道具',
-          fontSize: 10,
+          fontSize: 12,
           color: d.textMuted,
           strokeWidth: 0,
         ),
       );
     }
+
+    final btnW = compact ? 100.0 : 112.0;
+    final btnH = CombatLayoutConstants.commandButtonHeightForWidth(btnW);
 
     return GamePanel(
       withBorder: true,
@@ -40,7 +44,7 @@ class CombatItemPicker extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          GameOutlinedText('选择道具 Items', fontSize: 10, color: d.textMuted, strokeWidth: 0.8),
+          GameOutlinedText('选择道具 Items', fontSize: 12, color: d.textMuted, strokeWidth: 0.8),
           const SizedBox(height: 6),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
@@ -48,7 +52,7 @@ class CombatItemPicker extends StatelessWidget {
               children: [
                 for (final item in items) ...[
                   Padding(
-                    padding: const EdgeInsets.only(right: 6),
+                    padding: const EdgeInsets.only(right: 8),
                     child: GameButton(
                       label: item.label,
                       subLabel: item.count > 1
@@ -56,8 +60,8 @@ class CombatItemPicker extends StatelessWidget {
                           : item.effectHint.isNotEmpty
                               ? item.effectHint
                               : (item.heal > 0 ? '+${item.heal}HP' : 'use'),
-                      height: compact ? 40 : 44,
-                      width: compact ? 96 : 108,
+                      height: btnH,
+                      width: btnW,
                       accent: item.id == selectedId,
                       onPressed: () => onSelect(item.id),
                     ),

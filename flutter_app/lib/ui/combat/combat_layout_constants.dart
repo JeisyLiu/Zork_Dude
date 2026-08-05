@@ -15,16 +15,35 @@ abstract final class CombatLayoutConstants {
   static const unitGap = 6.0;
   static const bannerHeight = 40.0;
   static const bannerHeightShort = 36.0;
-  static const executeButtonWidth = 64.0;
-  static const executeButtonWidthShort = 56.0;
-  static const commandButtonWidth = 64.0;
-  static const commandButtonWidthShort = 52.0;
+
+  /// Golden-ratio action / execute buttons (height = width × 0.618).
+  static const executeButtonWidth = 140.0;
+  static const executeButtonWidthShort = 112.0;
+  static const commandButtonWidth = 96.0;
+  static const commandButtonWidthShort = 80.0;
 
   static double commandButtonHeightForWidth(double width) =>
       LandscapeLayout.heightFromWidth(width);
 
   static double executeButtonHeightForWidth(double width) =>
       LandscapeLayout.heightFromWidth(width);
+
+  /// Bottom command dock height: execute button + panel vertical padding.
+  static double commandDockHeight({required bool short}) {
+    final execW = short ? executeButtonWidthShort : executeButtonWidth;
+    final execH = executeButtonHeightForWidth(execW);
+    final padV = short ? 12.0 : 16.0;
+    return execH + padV;
+  }
+
+  /// Scale execute width down when remaining space after command buttons is tight.
+  static double executeWidthFor({
+    required double availableWidth,
+    required bool short,
+  }) {
+    final preferred = short ? executeButtonWidthShort : executeButtonWidth;
+    return availableWidth.clamp(72.0, preferred);
+  }
 
   static bool isLandscape(Size size) => LandscapeLayout.isLandscape(size);
 

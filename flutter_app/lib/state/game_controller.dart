@@ -22,6 +22,8 @@ class LogEntry {
 class GameController extends ChangeNotifier {
   GameController();
 
+  static const _commandThrottle = Duration(milliseconds: 280);
+
   GameSession? session;
   final List<LogEntry> log = [];
   bool mapVisible = true;
@@ -30,6 +32,17 @@ class GameController extends ChangeNotifier {
   bool loading = true;
   String? error;
   bool battleNavigationPending = false;
+  bool _commandBusy = false;
+  DateTime? _lastCommandAt;
+
+  bool get commandBusy => _commandBusy;
+
+  /// Clears throttle/busy state for widget tests (real-time clock vs fake pump).
+  @visibleForTesting
+  void resetCommandGateForTest() {
+    _commandBusy = false;
+    _lastCommandAt = null;
+  }
 
   Future<void> init() async {
     try {
@@ -48,6 +61,8 @@ class GameController extends ChangeNotifier {
   }
 
   void toggleMap() {
+    if (!_canAcceptCommand()) return;
+    _lastCommandAt = DateTime.now();
     mapVisible = !mapVisible;
     notifyListeners();
   }
@@ -68,17 +83,37 @@ class GameController extends ChangeNotifier {
     mapLayer = mapLayerOfRoom(s.currentRoomId, s.mapMeta);
   }
 
-  Future<void> executeCommand(String raw, {bool echo = true}) async {
+  bool _canAcceptCommand() {
     final s = session;
-    if (s == null || s.gameOver) return;
-    if (echo) _append('> $raw', isCommand: true);
-    if (raw.trim().toLowerCase() == 'map' || raw.trim().toLowerCase() == 'm') {
-      toggleMap();
-      _append(mapVisible ? '已显示迷雾残页。' : '已隐藏迷雾残页。');
-      return;
+    if (loading || s == null || s.gameOver || battleNavigationPending || _commandBusy) {
+      return false;
     }
-    final result = s.processCommand(raw);
-    _handleResult(result);
+    final last = _lastCommandAt;
+    if (last != null && DateTime.now().difference(last) < _commandThrottle) {
+      return false;
+    }
+    return true;
+  }
+
+  Future<void> executeCommand(String raw, {bool echo = true}) async {
+    if (!_canAcceptCommand()) return;
+    final s = session!;
+    _commandBusy = true;
+    _lastCommandAt = DateTime.now();
+    notifyListeners();
+    try {
+      if (echo) _append('> $raw', isCommand: true);
+      if (raw.trim().toLowerCase() == 'map' || raw.trim().toLowerCase() == 'm') {
+        mapVisible = !mapVisible;
+        _append(mapVisible ? '已显示迷雾残页。' : '已隐藏迷雾残页。');
+        return;
+      }
+      final result = s.processCommand(raw);
+      _handleResult(result);
+    } finally {
+      _commandBusy = false;
+      notifyListeners();
+    }
   }
 
   Future<void> move(Direction dir) async {

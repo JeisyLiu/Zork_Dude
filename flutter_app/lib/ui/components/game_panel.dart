@@ -22,6 +22,9 @@ class GamePanel extends StatelessWidget {
   /// Compact dock / toolbar panels.
   static const EdgeInsets compactPadding = EdgeInsets.fromLTRB(12, 10, 12, 10);
 
+  /// Kenney 64x64 panels use 16px borders; destination must be ≥ this per axis.
+  static const double minNinePatchExtent = 32;
+
   final Widget child;
   final EdgeInsets? padding;
   final bool dark;
@@ -48,13 +51,26 @@ class GamePanel extends StatelessWidget {
     );
   }
 
+  /// Uses centerSlice only when the laid-out size can fit the nine-patch
+  /// borders; otherwise falls back to a stretched fill (avoids Flutter paint
+  /// assertion when height/width is below corner size).
   static Widget _ninePatch(String asset, Rect slice) {
-    return Image.asset(
-      asset,
-      fit: BoxFit.fill,
-      filterQuality: FilterQuality.none,
-      centerSlice: slice,
-      gaplessPlayback: true,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final w = constraints.maxWidth;
+        final h = constraints.maxHeight;
+        final canSlice = w.isFinite &&
+            h.isFinite &&
+            w >= minNinePatchExtent &&
+            h >= minNinePatchExtent;
+        return Image.asset(
+          asset,
+          fit: BoxFit.fill,
+          filterQuality: FilterQuality.none,
+          centerSlice: canSlice ? slice : null,
+          gaplessPlayback: true,
+        );
+      },
     );
   }
 }

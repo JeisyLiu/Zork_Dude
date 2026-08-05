@@ -5,6 +5,8 @@ class CombatLayoutConstants {
   static const unitSlotCompact = 60.0;
   static const commandButtonHeight = 34.0;
   static const logMaxLines = 6;
+  static const battlefieldGap = 6.0;
+  static const unitGap = 6.0;
 }
 
 enum CombatUiPhase {

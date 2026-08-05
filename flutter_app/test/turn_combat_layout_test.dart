@@ -24,6 +24,8 @@ void main() {
         MaterialApp(home: TurnCombatScreen(controller: controller)),
       );
       await tester.pump();
+      expect(find.textContaining('回合'), findsWidgets);
+      expect(find.textContaining('/'), findsWidgets);
       expect(tester.takeException(), isNull, reason: 'overflow at $size');
       await tester.pumpWidget(const SizedBox.shrink());
       await tester.pump();

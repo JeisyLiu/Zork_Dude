@@ -11,8 +11,6 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.8
-  bonfire: ^3.17.2
-  flame: 1.37.0
 
 dev_dependencies:
   flutter_test:
@@ -25,13 +23,10 @@ flutter:
   assets:
     - assets/images/
     - assets/images/home/
-    - assets/images/player/
-    - assets/images/enemies/
-    - assets/images/tiles/
-    - assets/maps/
     - assets/ui/
     - assets/data/items.json
     - assets/data/monsters.json
     - assets/data/npcs.json
     - assets/data/companions.json
     - assets/data/rooms.json
+    - assets/data/status_effects.json

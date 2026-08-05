@@ -1,4 +1,5 @@
 import 'package:zork_dude/domain/combat/combat_types.dart';
+import 'package:zork_dude/domain/combat/status_effect.dart';
 import 'package:zork_dude/domain/models/enums.dart';
 
 class CombatActor {
@@ -38,16 +39,30 @@ class CombatActor {
 
   bool defending = false;
   bool alive = true;
+  final List<ActiveStatusEffect> statuses = [];
 
   String get label => emoji.isNotEmpty ? '$emoji $name' : name;
 
   bool get isAlly => side == CombatSide.ally;
   bool get isEnemy => side == CombatSide.enemy;
 
+  int effectiveAttack(StatusEffectRegistry registry) =>
+      CombatStats.effectiveAttack(this, registry);
+
+  int effectiveDefense(StatusEffectRegistry registry) =>
+      CombatStats.effectiveDefense(this, registry);
+
+  int effectiveSpeed(StatusEffectRegistry registry) =>
+      CombatStats.effectiveSpeed(this, registry);
+
+  bool isStunned(StatusEffectRegistry registry) =>
+      CombatStats.isStunned(this, registry);
+
   CombatActor copyWith({
     int? hp,
     bool? defending,
     bool? alive,
+    List<ActiveStatusEffect>? statuses,
   }) {
     final copy = CombatActor(
       instanceId: instanceId,
@@ -67,6 +82,18 @@ class CombatActor {
     );
     copy.defending = defending ?? this.defending;
     copy.alive = alive ?? this.alive;
+    if (statuses != null) {
+      copy.statuses.addAll(statuses);
+    } else {
+      for (final s in this.statuses) {
+        copy.statuses.add(ActiveStatusEffect(
+          specId: s.specId,
+          sourceInstanceId: s.sourceInstanceId,
+          remainingRounds: s.remainingRounds,
+          stacks: s.stacks,
+        ));
+      }
+    }
     return copy;
   }
 }

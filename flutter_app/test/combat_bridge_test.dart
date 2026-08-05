@@ -25,10 +25,13 @@ void main() {
       expect(result.events.any((e) => e.type == GameEventType.battleEnded), isTrue);
     });
 
-    test('legacy victory API still works', () {
-      final result = session.resolveCombatVictory(remainingPlayerHp: 40);
-      expect(session.inCombat, isFalse);
-      expect(result.events.any((e) => e.type == GameEventType.battleEnded), isTrue);
+    test('round number increments after full round', () {
+      final enc = session.activeEncounter!;
+      final hero = enc.allies.firstWhere((a) => a.isHero);
+      final startRound = enc.roundNumber;
+      session.submitCombatCommand(hero.instanceId, const CombatCommand.defend());
+      session.resolveCombatRound();
+      expect(enc.roundNumber, startRound + 1);
     });
 
     test('defeat sets game over', () {

@@ -28,4 +28,9 @@ enum CombatActionKind {
   fleeFail,
   miss,
   death,
+  statusApply,
+  statusTick,
+  statusExpire,
+  statusResist,
+  actionSkipped,
 }

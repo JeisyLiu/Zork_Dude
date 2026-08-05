@@ -1,13 +1,13 @@
 # 迷雾之塔 · Flutter 移动端
 
-基于 **Flutter + Flame + Bonfire** 的原生移动客户端。
+基于 **Flutter** 的原生移动客户端。
 
 > 仓库里已有的 `mobile/` 是 **移动 Web 版**（HTML）。本目录 `flutter_app/` 是独立的原生 App。
 
 ## 架构
 
 - **探索主界面**：Zork 指令系统 + 迷雾残页小地图（移植自 Web 版）
-- **战斗场景**：仅当 `inCombat=true` 时进入 Bonfire 动作 Arena
+- **战斗场景**：遇敌时进入 `TurnCombatScreen` 回合制战斗
 - **数据**：读取 `assets/data/*.json`（与根目录 `data/` 同步）
 - **UI**：Kenney UI Pack Adventure 像素风资源（棕木幻想 / 灰铆钉站点 / 战斗 HUD）
 
@@ -37,7 +37,7 @@ flutter run
 |------|------|
 | 探索 | 指令输入框 / 快捷按钮 / 地图点击相邻节点 |
 | 移动 | n/s/e/w/u/d 或方向按钮 |
-| 战斗 | 遇敌自动进入动作场景；摇杆移动 + 攻击按钮；可逃跑 |
+| 战斗 | 遇敌进入回合战；为队友选择指令后执行回合；可逃跑、使用道具 |
 
 ## UI 皮肤
 
@@ -53,13 +53,12 @@ flutter run
 
 ```
 lib/
-├── domain/           # GameSession、地图算法、指令处理
+├── domain/           # GameSession、回合战斗引擎、地图算法、指令处理
 ├── data/             # JSON 加载
 ├── state/            # GameController
 ├── ui/               # 主题、资源路径、Kenney 组件
-├── screens/          # Home、Exploration、CombatArena
-├── widgets/          # 状态栏、日志、地图、快捷指令
-└── game/             # Bonfire 战斗层（Arena、Player、Enemy）
+├── screens/          # Home、Exploration、TurnCombat
+└── widgets/          # 状态栏、日志、地图、快捷指令
 ```
 
 ## 构建

@@ -8,6 +8,9 @@ class CombatActionStep {
     this.amount = 0,
     this.message = '',
     this.itemId,
+    this.statusEffectId,
+    this.stacks,
+    this.remainingRounds,
   });
 
   final CombatActionKind kind;
@@ -16,6 +19,9 @@ class CombatActionStep {
   final int amount;
   final String message;
   final String? itemId;
+  final String? statusEffectId;
+  final int? stacks;
+  final int? remainingRounds;
 }
 
 class CombatRoundResult {

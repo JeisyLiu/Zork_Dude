@@ -120,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         SizedBox(height: gapM),
                         GameOutlinedText(
-                          '指令探索 · 迷雾地图 · 遇敌进入动作战斗',
+                          '指令探索 · 迷雾地图 · 遇敌进入回合战斗',
                           fontSize: 10,
                           fontWeight: FontWeight.w500,
                           color: HomeConstants.hintColor,

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/services.dart';
+import 'package:zork_dude/domain/combat/status_effect.dart';
 import 'package:zork_dude/domain/models/entities.dart';
 import 'package:zork_dude/domain/models/enums.dart';
 import 'package:zork_dude/domain/models/map_meta.dart';
@@ -12,6 +13,7 @@ class WorldDefinition {
   final Map<String, CompanionState> companions;
   final Map<String, RoomState> rooms;
   final Map<String, RoomMapMeta> mapMeta;
+  final StatusEffectRegistry statusEffects;
 
   const WorldDefinition({
     required this.items,
@@ -20,6 +22,7 @@ class WorldDefinition {
     required this.companions,
     required this.rooms,
     required this.mapMeta,
+    required this.statusEffects,
   });
 
   int get roomCount => rooms.length;
@@ -109,7 +112,8 @@ class WorldRepository {
     }
 
     final mapMeta = buildMapMetaFromRooms(mapMetaList);
-    _validate(items, monsters, npcs, companions, rooms);
+    final statusEffects = await StatusEffectRegistry.loadFromAssets();
+    _validate(items, monsters, npcs, companions, rooms, statusEffects);
     return WorldDefinition(
       items: items,
       monsters: monsters,
@@ -117,6 +121,7 @@ class WorldRepository {
       companions: companions,
       rooms: rooms,
       mapMeta: mapMeta,
+      statusEffects: statusEffects,
     );
   }
 
@@ -126,6 +131,7 @@ class WorldRepository {
     Map<String, NpcState> npcs,
     Map<String, CompanionState> companions,
     Map<String, RoomState> rooms,
+    StatusEffectRegistry statusEffects,
   ) {
     for (final room in rooms.values) {
       for (final target in room.exits.values) {
@@ -160,6 +166,21 @@ class WorldRepository {
     for (final c in companions.values) {
       if (c.recruitItem != null && !items.containsKey(c.recruitItem)) {
         throw StateError('Companion ${c.id} recruit_item unknown ${c.recruitItem}');
+      }
+    }
+    for (final item in items.values) {
+      for (final effect in item.combatEffects) {
+        if (effect.cleanse != null) continue;
+        if (statusEffects.spec(effect.effectId) == null) {
+          throw StateError('Item ${item.id} references unknown effect ${effect.effectId}');
+        }
+      }
+    }
+    for (final m in monsters.values) {
+      for (final effect in [...m.onHitEffects, ...m.combatSkillEffects]) {
+        if (statusEffects.spec(effect.effectId) == null) {
+          throw StateError('Monster ${m.id} references unknown effect ${effect.effectId}');
+        }
       }
     }
   }

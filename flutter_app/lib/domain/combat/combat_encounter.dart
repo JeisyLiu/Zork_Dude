@@ -16,6 +16,7 @@ class CombatEncounter {
 
   CombatPhase phase = CombatPhase.command;
   CombatOutcome? outcome;
+  int roundNumber = 1;
   final Map<String, CombatCommand> pendingAllyCommands = {};
   final Map<String, CombatCommand> pendingEnemyCommands = {};
   final List<String> defeatedEnemyInstances = [];

@@ -46,9 +46,9 @@ python -m http.server 8080
 python zork_game.py
 ```
 
-### Flutter 原生移动端（Zork 探索 + Bonfire 战斗）
+### Flutter 原生移动端（Zork 探索 + 回合战斗）
 
-原生 App 在 `flutter_app/`（与 `mobile/` 移动 Web 版独立）。主界面为 **Zork 指令探索 + 迷雾残页地图**，遇敌时进入 **Bonfire 动作战斗**：
+原生 App 在 `flutter_app/`（与 `mobile/` 移动 Web 版独立）。主界面为 **Zork 指令探索 + 迷雾残页地图**，遇敌时进入 **回合制战斗**：
 
 ```bash
 cd flutter_app
@@ -89,7 +89,7 @@ zork-dude/
 ├── index.html          # 桌面 Web 版
 ├── mobile/
 │   └── index.html      # 移动 Web 版
-├── flutter_app/        # Flutter + Flame + Bonfire 原生移动端
+├── flutter_app/        # Flutter 原生移动端
 ├── zork_game.py        # 命令行完整版
 └── data/
     ├── rooms.json      # 场景

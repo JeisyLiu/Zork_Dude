@@ -7,6 +7,7 @@ import 'package:zork_dude/domain/combat/combat_command.dart';
 import 'package:zork_dude/domain/combat/combat_encounter.dart';
 import 'package:zork_dude/domain/combat/combat_encounter_factory.dart';
 import 'package:zork_dude/domain/combat/combat_engine.dart';
+import 'package:zork_dude/domain/combat/status_effect.dart';
 import 'package:zork_dude/domain/combat/combat_types.dart';
 import 'package:zork_dude/domain/command_result.dart';
 import 'package:zork_dude/domain/dice.dart';
@@ -40,6 +41,9 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
   late Map<String, RoomState> rooms;
   late Map<String, RoomMapMeta> mapMeta;
   WorldDefinition? _worldDef;
+
+  StatusEffectRegistry get statusEffects =>
+      _worldDef?.statusEffects ?? StatusEffectRegistry.fromSpecs(const []);
 
   @override
   final Map<String, int> inventory = {};
@@ -131,6 +135,9 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
       );
     }
     s.mapMeta = Map.from(def.mapMeta);
+    s.combatEngine.statusRegistry = def.statusEffects;
+    s.combatEngine.monsters = s.monsters;
+    s.combatEngine.items = s.items;
     SpecialBehaviorRegistry.apply(s);
     s.currentRoomId = 'forest_entrance';
     s.rooms['forest_entrance']!.visited = true;
@@ -157,6 +164,7 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
         defenseBonus: i.defenseBonus,
         emoji: i.emoji,
         capacity: i.capacity,
+        combatEffects: List.from(i.combatEffects),
       );
 
   // --- Computed ---
@@ -467,16 +475,38 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
     return result;
   }
 
-  List<({String id, String label, int heal})> combatUsableItems() {
-    final usable = <({String id, String label, int heal})>[];
+  List<({String id, String label, int heal, int count, String effectHint})> combatUsableItems() {
+    final usable = <({String id, String label, int heal, int count, String effectHint})>[];
     for (final e in inventory.entries) {
       final it = items[e.key];
-      if (it == null) continue;
-      if (it.heal > 0 || it.type == ItemType.potion || it.type == ItemType.food) {
-        usable.add((id: e.key, label: it.label, heal: it.heal > 0 ? it.heal : 10));
+      if (it == null || e.value <= 0) continue;
+      final hasHeal = it.heal > 0 || it.type == ItemType.potion || it.type == ItemType.food;
+      final hasEffects = it.combatEffects.isNotEmpty;
+      if (!hasHeal && !hasEffects) continue;
+      final hints = <String>[];
+      if (it.heal > 0) hints.add('HP+${it.heal}');
+      for (final fx in it.combatEffects) {
+        if (fx.cleanse != null) {
+          hints.add('净化');
+        } else {
+          hints.add(fx.effectId);
+        }
       }
+      usable.add((
+        id: e.key,
+        label: it.label,
+        heal: it.heal > 0 ? it.heal : (hasHeal ? 10 : 0),
+        count: e.value,
+        effectHint: hints.join(' · '),
+      ));
     }
     return usable;
+  }
+
+  List<TurnOrderEntry> previewCombatTurnOrder() {
+    final enc = activeEncounter;
+    if (enc == null || !enc.allAlliesCommanded) return const [];
+    return combatEngine.previewTurnOrder(enc);
   }
 
   void consumeCombatItem(String itemId) {
@@ -1092,41 +1122,6 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
       invAdd('lesser_potion');
       invAdd('bread');
     }
-  }
-
-  /// Combat arena victory — authoritative settlement (legacy single-enemy API).
-  CommandResult resolveCombatVictory({required int remainingPlayerHp}) {
-    playerHp = remainingPlayerHp.clamp(0, playerMaxHp);
-    syncCombatHpFromEncounter();
-    if (activeEncounter != null) {
-      return resolveEncounterVictory();
-    }
-    final m = monsters[currentEnemy];
-    if (m == null || !m.alive) {
-      inCombat = false;
-      currentEnemy = '';
-      return CommandResult.ok('敌人已死。', events: [const GameEvent(type: GameEventType.battleEnded)]);
-    }
-    m.alive = false;
-    m.hp = 0;
-    final lines = <String>['\n🎉 击败了 ${m.name}！'];
-    for (final li in m.loot) {
-      if (items.containsKey(li)) {
-        invAdd(li);
-        lines.add('🏆 战利品：${items[li]!.name}');
-      }
-    }
-    gold += m.gold;
-    score += m.exp;
-    lines.add('💰 +${m.gold}金币 +${m.exp}经验');
-    inCombat = false;
-    currentEnemy = '';
-    _applyBossVictoryFlags(lines);
-    if (companionList.isNotEmpty) {
-      final c = companions[companionList.first];
-      if (c != null) lines.add('\n${c.banter()}');
-    }
-    return CommandResult.ok(lines.join('\n'), events: [const GameEvent(type: GameEventType.battleEnded)]);
   }
 
   CommandResult resolveCombatDefeat() {

@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:zork_dude/data/world_repository.dart';
 import 'package:zork_dude/domain/combat/combat_action_step.dart';
 import 'package:zork_dude/domain/combat/combat_command.dart';
+import 'package:zork_dude/domain/combat/combat_engine.dart';
+import 'package:zork_dude/domain/combat/status_effect.dart';
 import 'package:zork_dude/domain/combat/combat_encounter.dart';
 import 'package:zork_dude/domain/combat/combat_types.dart';
 import 'package:zork_dude/domain/command_result.dart';
@@ -153,9 +155,16 @@ class GameController extends ChangeNotifier {
     applyCombatResult(s.finishEncounter(outcome));
   }
 
-  List<({String id, String label, int heal})> combatUsableItems() {
+  List<({String id, String label, int heal, int count, String effectHint})> combatUsableItems() {
     return session?.combatUsableItems() ?? const [];
   }
+
+  List<TurnOrderEntry> previewCombatTurnOrder() {
+    return session?.previewCombatTurnOrder() ?? const [];
+  }
+
+  StatusEffectRegistry get statusEffectRegistry =>
+      session?.statusEffects ?? StatusEffectRegistry.fromSpecs(const []);
 
   void consumeCombatItem(String itemId) {
     session?.consumeCombatItem(itemId);

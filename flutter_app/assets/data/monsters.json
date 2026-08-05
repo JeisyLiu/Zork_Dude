@@ -39,6 +39,9 @@
     "loot": [
       "spider_silk"
     ],
+    "on_hit_effects": [
+      { "effect": "poison", "duration": 3, "potency": 1, "chance": 0.35 }
+    ],
     "emoji": "🕷️"
   },
   {

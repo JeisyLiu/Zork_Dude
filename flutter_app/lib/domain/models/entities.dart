@@ -1,4 +1,5 @@
 import 'package:zork_dude/domain/combat/combat_types.dart';
+import 'package:zork_dude/domain/models/combat_effects.dart';
 import 'package:zork_dude/domain/models/enums.dart';
 import 'package:zork_dude/domain/models/map_meta.dart';
 import 'package:zork_dude/domain/dice.dart';
@@ -51,6 +52,7 @@ class ItemDefinition {
   final int defenseBonus;
   final String emoji;
   final int capacity;
+  final List<CombatEffectApplication> combatEffects;
   ItemUseHandler? onUse;
 
   ItemDefinition({
@@ -68,6 +70,7 @@ class ItemDefinition {
     this.defenseBonus = 0,
     this.emoji = '',
     this.capacity = 0,
+    this.combatEffects = const [],
     this.onUse,
   });
 
@@ -91,8 +94,11 @@ class ItemDefinition {
       defenseBonus: (json['def_bonus'] as num?)?.toInt() ?? 0,
       emoji: json['emoji'] as String? ?? '',
       capacity: (json['capacity'] as num?)?.toInt() ?? 0,
+      combatEffects: CombatEffectApplication.listFromJson(json['combat_effects']),
     );
   }
+
+  bool get hasCombatUse => heal > 0 || combatEffects.isNotEmpty;
 }
 
 class MonsterState {
@@ -113,6 +119,8 @@ class MonsterState {
   Map<String, String> dialog;
   String emoji;
   bool alive;
+  final List<CombatEffectApplication> onHitEffects;
+  final List<CombatEffectApplication> combatSkillEffects;
 
   MonsterState({
     required this.id,
@@ -132,6 +140,8 @@ class MonsterState {
     this.dialog = const {},
     this.emoji = '',
     this.alive = true,
+    this.onHitEffects = const [],
+    this.combatSkillEffects = const [],
   });
 
   String get label => emoji.isNotEmpty ? '$emoji $name' : name;
@@ -172,6 +182,10 @@ class MonsterState {
       hostile: json['hostile'] as bool? ?? true,
       dialog: _parseDialog(json['dialog']),
       emoji: json['emoji'] as String? ?? '',
+      onHitEffects: CombatEffectApplication.listFromJson(json['on_hit_effects']),
+      combatSkillEffects: CombatEffectApplication.listFromJson(
+        (json['combat_skill'] as Map<String, dynamic>?)?['effects'],
+      ),
     );
   }
 
@@ -226,6 +240,8 @@ class MonsterState {
         dialog: dialog,
         emoji: emoji,
         alive: alive,
+        onHitEffects: List.from(onHitEffects),
+        combatSkillEffects: List.from(combatSkillEffects),
       );
 }
 

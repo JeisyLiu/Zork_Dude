@@ -225,6 +225,9 @@
     "usable": true,
     "heal": 10,
     "use_msg": "你喝下火焰药剂，身体变得滚烫！对冰系敌人造成额外伤害！",
+    "combat_effects": [
+      { "effect": "attackUp", "duration": 2, "potency": 1, "chance": 1.0 }
+    ],
     "value": 16,
     "emoji": "🔥"
   },

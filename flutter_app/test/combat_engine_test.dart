@@ -291,5 +291,43 @@ void main() {
       final result = engine.resolveRound(encounter);
       expect(result.steps, isNotEmpty);
     });
+
+    test('preview turn order lists commanded allies first by speed', () {
+      final encounter = CombatEncounter(
+        roomId: 't',
+        allies: [
+          CombatActor(
+            instanceId: 'player#0',
+            templateId: 'player',
+            side: CombatSide.ally,
+            name: 'Hero',
+            maxHp: 50,
+            hp: 50,
+            attack: 1,
+            speed: 8,
+            isHero: true,
+            commandOrder: 0,
+          ),
+        ],
+        enemies: [
+          CombatActor(
+            instanceId: 'rat#0',
+            templateId: 'rat',
+            side: CombatSide.enemy,
+            name: 'Rat',
+            maxHp: 50,
+            hp: 50,
+            attack: 1,
+            speed: 4,
+            commandOrder: 0,
+          ),
+        ],
+      );
+      final engine = CombatEngine(random: ScriptedCombatRandom(diceRolls: [1, 1, 1]));
+      engine.submitAllyCommand(encounter, 'player#0', const CombatCommand.attack('rat#0'));
+      final preview = engine.previewTurnOrder(encounter);
+      expect(preview, isNotEmpty);
+      expect(preview.first.actorId, 'player#0');
+    });
   });
 }

@@ -4,8 +4,8 @@ import 'package:zork_dude/state/game_controller.dart';
 import 'package:zork_dude/ui/components/game_button.dart';
 import 'package:zork_dude/ui/components/game_outlined_text.dart';
 import 'package:zork_dude/ui/components/game_panel.dart';
+import 'package:zork_dude/ui/components/landscape_overlay.dart';
 import 'package:zork_dude/ui/exploration/exploration_layout_constants.dart';
-import 'package:zork_dude/ui/game_skin_scope.dart';
 import 'package:zork_dude/ui/game_ui_assets.dart';
 import 'package:zork_dude/ui/game_ui_theme.dart';
 
@@ -35,14 +35,22 @@ class QuickCommandPanel extends StatelessWidget {
     final hasTrade = npc != null && npc.tradeItems.isNotEmpty;
 
     return GamePanel(
-      padding: GamePanel.compactPadding,
+      padding: EdgeInsets.fromLTRB(
+        compact ? 6 : 12,
+        compact ? 4 : 10,
+        compact ? 6 : 12,
+        compact ? 4 : 10,
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           LayoutBuilder(
             builder: (context, constraints) {
-              final columns = ExplorationLayoutConstants.chipColumnsFor(constraints.maxWidth);
+              final columns = ExplorationLayoutConstants.chipColumnsFor(
+                constraints.maxWidth,
+                short: compact,
+              );
               final primary = _primaryActions(
                 inCombat: inCombat,
                 hasItems: hasItems,
@@ -73,17 +81,19 @@ class QuickCommandPanel extends StatelessWidget {
               );
             },
           ),
-          const SizedBox(height: 8),
-          GameOutlinedText(
-            inCombat
-                ? '战斗中 · Combat: attack / flee'
-                : '提示 · Tips: ←↑↓→ / WASD · PgUp/PgDn · look · take 1',
-            fontSize: 10,
-            fontWeight: FontWeight.w500,
-            color: d.textMuted,
-            strokeWidth: 1.0,
-            textAlign: TextAlign.left,
-          ),
+          if (!compact) ...[
+            const SizedBox(height: 6),
+            GameOutlinedText(
+              inCombat
+                  ? '战斗中 · Combat: attack / flee'
+                  : '提示 · Tips: ←↑↓→ / WASD · PgUp/PgDn · look · take 1',
+              fontSize: 10,
+              fontWeight: FontWeight.w500,
+              color: d.textMuted,
+              strokeWidth: 1.0,
+              textAlign: TextAlign.left,
+            ),
+          ],
         ],
       ),
     );
@@ -156,53 +166,27 @@ class QuickCommandPanel extends StatelessWidget {
     final actions = _moreActions(inCombat);
     final skin = GameUiTheme.skinForMapLayer(controller.mapLayer);
 
-    showModalBottomSheet<void>(
+    LandscapeOverlay.show<void>(
       context: context,
-      backgroundColor: Colors.transparent,
-      builder: (ctx) => GameSkinScope(
-        skin: skin,
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: GamePanel(
-              dark: true,
-              withBorder: true,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: GameOutlinedText(
-                      '更多命令 · More',
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: GameUiTheme.of(ctx).textPrimary,
-                      strokeWidth: 1.4,
-                    ),
-                  ),
-                  Wrap(
-                    spacing: 6,
-                    runSpacing: 6,
-                    children: [
-                      for (final action in actions)
-                        GameButton(
-                          label: action.label,
-                          subLabel: action.subLabel,
-                          height: ExplorationLayoutConstants.chipHeight,
-                          width: 88,
-                          accent: action.accent,
-                          onPressed: () {
-                            Navigator.pop(ctx);
-                            action.onPressed?.call();
-                          },
-                        ),
-                    ],
-                  ),
-                ],
-              ),
+      title: '更多命令 · More',
+      skin: skin,
+      child: Wrap(
+        spacing: 6,
+        runSpacing: 6,
+        children: [
+          for (final action in actions)
+            GameButton(
+              label: action.label,
+              subLabel: action.subLabel,
+              width: ExplorationLayoutConstants.moreChipWidth,
+              height: ExplorationLayoutConstants.chipHeight,
+              accent: action.accent,
+              onPressed: () {
+                Navigator.pop(context);
+                action.onPressed?.call();
+              },
             ),
-          ),
-        ),
+        ],
       ),
     );
   }
@@ -311,9 +295,6 @@ class _ActionGrid extends StatelessWidget {
   final VoidCallback onMore;
   final bool compact;
 
-  double get _chipHeight =>
-      compact ? 38 : ExplorationLayoutConstants.chipHeight;
-
   @override
   Widget build(BuildContext context) {
     final rows = <List<_QuickAction>>[];
@@ -321,6 +302,9 @@ class _ActionGrid extends StatelessWidget {
       final end = i + columns > actions.length ? actions.length : i + columns;
       rows.add(actions.sublist(i, end));
     }
+
+    final chipH = ExplorationLayoutConstants.chipHeightFor(short: compact);
+    final spacing = ExplorationLayoutConstants.chipSpacing;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -332,27 +316,28 @@ class _ActionGrid extends StatelessWidget {
                 Expanded(
                   child: Padding(
                     padding: EdgeInsets.only(
-                      right: i < columns - 1 ? ExplorationLayoutConstants.chipSpacing : 0,
+                      right: i < columns - 1 ? spacing : 0,
                     ),
                     child: i < rows[r].length
-                        ? _chipFor(context, rows[r][i])
-                        : SizedBox(height: _chipHeight),
+                        ? _chipFor(rows[r][i], chipH)
+                        : SizedBox(height: chipH),
                   ),
                 ),
             ],
           ),
-          if (r < rows.length - 1) const SizedBox(height: ExplorationLayoutConstants.chipSpacing),
+          if (r < rows.length - 1) SizedBox(height: spacing),
         ],
       ],
     );
   }
 
-  Widget _chipFor(BuildContext context, _QuickAction action) {
+  Widget _chipFor(_QuickAction action, double chipH) {
     if (action.isMore) {
       return GameButton(
+        key: const Key('quick-command-more'),
         label: action.label,
         subLabel: action.subLabel,
-        height: _chipHeight,
+        height: chipH,
         width: double.infinity,
         onPressed: onMore,
         semanticLabel: '更多命令',
@@ -364,7 +349,7 @@ class _ActionGrid extends StatelessWidget {
       child: GameButton(
         label: action.label,
         subLabel: action.subLabel,
-        height: _chipHeight,
+        height: chipH,
         width: double.infinity,
         accent: action.accent || action.highlighted,
         onPressed: action.onPressed,
@@ -383,7 +368,7 @@ class DirectionPad extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final d = GameUiTheme.of(context);
-    final size = compact ? 96.0 : ExplorationLayoutConstants.directionPadWidth;
+    final size = compact ? 64.0 : ExplorationLayoutConstants.directionPadWidth;
     return SizedBox(
       width: size,
       child: Column(
@@ -420,14 +405,14 @@ class DirectionPad extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               GameIconButton(
-                size: compact ? 30 : 36,
+                size: compact ? 26 : 36,
                 semanticLabel: '上 U',
                 onPressed: () => onMove(Direction.up),
                 child: const GameOutlinedText('U', fontSize: 11, fontWeight: FontWeight.bold, strokeWidth: 1.2),
               ),
               const SizedBox(width: 6),
               GameIconButton(
-                size: compact ? 30 : 36,
+                size: compact ? 26 : 36,
                 semanticLabel: '下 D',
                 onPressed: () => onMove(Direction.down),
                 child: const GameOutlinedText('D', fontSize: 11, fontWeight: FontWeight.bold, strokeWidth: 1.2),

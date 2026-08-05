@@ -7,6 +7,7 @@ import 'package:zork_dude/ui/components/game_button.dart';
 import 'package:zork_dude/ui/components/game_outlined_text.dart';
 import 'package:zork_dude/ui/components/game_panel.dart';
 import 'package:zork_dude/ui/game_ui_theme.dart';
+import 'package:zork_dude/ui/layout/landscape_layout.dart';
 
 class MistMapPanel extends StatefulWidget {
   const MistMapPanel({super.key, required this.controller});
@@ -45,8 +46,8 @@ class _MistMapPanelState extends State<MistMapPanel> {
                     padding: const EdgeInsets.only(right: 6),
                     child: GameButton(
                       label: mapLayerLabels[layer]!,
-                      height: 32,
                       width: 56,
+                      height: LandscapeLayout.heightFromWidth(56),
                       onPressed: () => widget.controller.setMapLayer(layer),
                     ),
                   ),

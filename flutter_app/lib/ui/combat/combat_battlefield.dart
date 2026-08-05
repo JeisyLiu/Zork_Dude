@@ -6,7 +6,6 @@ import 'package:zork_dude/ui/components/game_outlined_text.dart';
 import 'package:zork_dude/ui/components/game_panel.dart';
 import 'package:zork_dude/ui/components/game_progress_bar.dart';
 import 'package:zork_dude/ui/combat/combat_command_labels.dart';
-import 'package:zork_dude/ui/combat/combat_layout_constants.dart';
 import 'package:zork_dude/ui/combat/combat_status_chips.dart';
 import 'package:zork_dude/ui/game_ui_theme.dart';
 

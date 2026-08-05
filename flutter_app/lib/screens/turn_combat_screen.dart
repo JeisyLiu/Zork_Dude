@@ -17,11 +17,11 @@ import 'package:zork_dude/ui/components/game_outlined_text.dart';
 import 'package:zork_dude/ui/combat/combat_battlefield.dart';
 import 'package:zork_dude/ui/combat/combat_command_menu.dart';
 import 'package:zork_dude/ui/combat/combat_command_queue.dart';
-import 'package:zork_dude/ui/combat/combat_header_bar.dart';
 import 'package:zork_dude/ui/combat/combat_item_picker.dart';
 import 'package:zork_dude/ui/combat/combat_layout_constants.dart';
 import 'package:zork_dude/ui/combat/combat_round_log.dart';
 import 'package:zork_dude/ui/combat/combat_turn_order_bar.dart';
+import 'package:zork_dude/ui/components/landscape_scaffold.dart';
 import 'package:zork_dude/ui/game_skin_scope.dart';
 import 'package:zork_dude/ui/game_ui_theme.dart';
 import 'package:zork_dude/widgets/combat_keyboard_scope.dart';
@@ -324,9 +324,9 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
       );
     }
 
-    final compact = MediaQuery.sizeOf(context).width < CombatLayoutConstants.narrowWidth;
-    final tight = compact || MediaQuery.sizeOf(context).height < 640;
-    final wide = MediaQuery.sizeOf(context).width >= 900;
+    final size = MediaQuery.sizeOf(context);
+    final short = CombatLayoutConstants.isShort(size);
+    final sideBySide = CombatLayoutConstants.useSideBySide(size);
     final targetId = _highlightedTargetId();
     final items = widget.controller.combatUsableItems();
     final hasItems = items.isNotEmpty;
@@ -335,51 +335,58 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
         ready ? widget.controller.previewCombatTurnOrder() : const [];
     final registry = widget.controller.statusEffectRegistry;
 
-    final content = Padding(
-      padding: EdgeInsets.all(tight ? 4 : 8),
-      child: Column(
-        children: [
+    final phaseHint = switch (_phase) {
+      CombatUiPhase.pickingCommand =>
+        _activeActor != null ? '选择：${_activeActor!.name}' : '选择指令',
+      CombatUiPhase.pickingTarget => '选择目标',
+      CombatUiPhase.pickingItem => '选择道具',
+      CombatUiPhase.readyToExecute => '准备执行',
+      CombatUiPhase.animating => '进行中…',
+    };
+
+    final content = Column(
+      children: [
+          // Merged banner + round/phase — one thin bar for 16:9 height budget.
           GameBanner(
             title: '回合战斗',
-            subtitle: 'Round ${enc.roundNumber} · Turn Battle',
-            height: tight ? 44 : 52,
+            subtitle: 'R${enc.roundNumber} · $phaseHint',
+            height: short
+                ? CombatLayoutConstants.bannerHeightShort
+                : CombatLayoutConstants.bannerHeight,
           ),
-          SizedBox(height: tight ? 3 : 4),
-          CombatHeaderBar(
-            encounter: enc,
-            phase: _phase,
-            activeActorName: _activeActor?.name,
-            compact: tight,
-          ),
-          SizedBox(height: tight ? 3 : 4),
+          SizedBox(height: short ? 2 : 4),
           Expanded(
-            child: wide
+            child: sideBySide
                 ? Row(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Expanded(
                         flex: 3,
-                        child: _battleColumn(enc, compact || tight, targetId, registry),
+                        child: _battleColumn(enc, short, targetId, registry),
                       ),
                       const SizedBox(width: 6),
                       Expanded(
                         flex: 2,
                         child: Column(
                           children: [
-                            CombatCommandQueue(
-                              encounter: enc,
-                              activeActorId: _activeActorId,
-                              compact: tight,
-                            ),
-                            const SizedBox(height: 4),
-                            if (turnOrder.isNotEmpty)
+                            if (!short)
+                              CombatCommandQueue(
+                                encounter: enc,
+                                activeActorId: _activeActorId,
+                                compact: true,
+                              ),
+                            if (!short) const SizedBox(height: 4),
+                            if (turnOrder.isNotEmpty) ...[
                               CombatTurnOrderBar(
                                 entries: turnOrder,
                                 highlightActorId: _animatingActorId,
-                                compact: tight,
+                                compact: true,
                               ),
-                            if (turnOrder.isNotEmpty) const SizedBox(height: 4),
-                            Expanded(child: CombatRoundLog(messages: _log, steps: _stepLog)),
+                              const SizedBox(height: 4),
+                            ],
+                            Expanded(
+                              child: CombatRoundLog(messages: _log, steps: _stepLog),
+                            ),
                           ],
                         ),
                       ),
@@ -389,17 +396,17 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
                     children: [
                       Expanded(
                         flex: 3,
-                        child: _battleColumn(enc, compact || tight, targetId, registry),
+                        child: _battleColumn(enc, short, targetId, registry),
                       ),
                       if (turnOrder.isNotEmpty) ...[
-                        const SizedBox(height: 3),
+                        const SizedBox(height: 2),
                         CombatTurnOrderBar(
                           entries: turnOrder,
                           highlightActorId: _animatingActorId,
                           compact: true,
                         ),
                       ],
-                      const SizedBox(height: 3),
+                      const SizedBox(height: 2),
                       Expanded(
                         flex: 1,
                         child: CombatRoundLog(messages: _log, steps: _stepLog),
@@ -408,11 +415,11 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
                   ),
           ),
           if (_phase == CombatUiPhase.pickingItem) ...[
-            const SizedBox(height: 3),
+            const SizedBox(height: 2),
             CombatItemPicker(
               items: items,
               selectedId: _pendingItemId,
-              compact: tight,
+              compact: true,
               onSelect: (id) {
                 final idx = items.indexWhere((e) => e.id == id);
                 setState(() {
@@ -422,44 +429,44 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
               },
             ),
           ],
-          SizedBox(height: tight ? 3 : 4),
-          CombatCommandMenu(
-            highlightIndex: CombatCommandMenu.options.indexWhere((o) => o.$1 == _cmdHighlight),
-            enabled: _phase == CombatUiPhase.pickingCommand && !_animating,
-            hasItems: hasItems,
-            compact: compact || tight,
-            onSelect: _selectCommand,
-          ),
-          SizedBox(height: tight ? 3 : 4),
-          CombatExecuteBar(
-            ready: ready,
-            highlighted: _phase == CombatUiPhase.readyToExecute,
-            onExecute: _executeRound,
-          ),
-          if (!compact && !tight)
-            Padding(
-              padding: const EdgeInsets.only(top: 4),
-              child: GameOutlinedText(
-                '方向键选择 · 空格确认 · Esc 返回 · 道具阶段 ←→ 切换',
-                fontSize: 9,
-                color: GameUiTheme.of(context).textMuted,
-                strokeWidth: 0,
+          SizedBox(height: short ? 2 : 4),
+          // Commands + execute on one row to save vertical space.
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: CombatCommandMenu(
+                  highlightIndex:
+                      CombatCommandMenu.options.indexWhere((o) => o.$1 == _cmdHighlight),
+                  enabled: _phase == CombatUiPhase.pickingCommand && !_animating,
+                  hasItems: hasItems,
+                  compact: true,
+                  onSelect: _selectCommand,
+                ),
               ),
-            ),
+              const SizedBox(width: 6),
+              CombatExecuteBar(
+                ready: ready,
+                highlighted: _phase == CombatUiPhase.readyToExecute,
+                onExecute: _executeRound,
+                compact: true,
+                width: short
+                    ? CombatLayoutConstants.executeButtonWidthShort
+                    : CombatLayoutConstants.executeButtonWidth,
+              ),
+            ],
+          ),
         ],
-      ),
     );
 
     return GameSkinScope(
       skin: GameUiSkin.combat,
-      child: Scaffold(
+      child: LandscapeScaffold(
         backgroundColor: GameConstants.bgDeep,
-        body: SafeArea(
-          child: CombatKeyboardScope(
-            enabled: !_animating && !_finished,
-            onKey: _onCombatKey,
-            child: content,
-          ),
+        body: CombatKeyboardScope(
+          enabled: !_animating && !_finished,
+          onKey: _onCombatKey,
+          child: content,
         ),
       ),
     );

@@ -6,12 +6,12 @@ import 'package:zork_dude/state/game_controller.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('turn combat renders common sizes without overflow', (tester) async {
+  testWidgets('turn combat renders landscape 16:9 sizes without overflow', (tester) async {
     final sizes = [
-      const Size(390, 844),
-      const Size(320, 568),
-      const Size(1024, 576),
+      const Size(667, 375),
+      const Size(854, 480),
       const Size(1280, 720),
+      const Size(1920, 1080),
     ];
 
     for (final size in sizes) {

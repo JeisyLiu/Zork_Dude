@@ -13,6 +13,7 @@ class CombatCommandMenu extends StatelessWidget {
     this.enabled = true,
     this.hasItems = false,
     this.compact = false,
+    this.showTitle = false,
   });
 
   final int highlightIndex;
@@ -20,6 +21,7 @@ class CombatCommandMenu extends StatelessWidget {
   final bool enabled;
   final bool hasItems;
   final bool compact;
+  final bool showTitle;
 
   static const options = [
     (CombatCommandOption.attack, '攻击', 'Atk'),
@@ -32,19 +34,27 @@ class CombatCommandMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final d = GameUiTheme.of(context);
-    final h = compact ? 28.0 : CombatLayoutConstants.commandButtonHeight;
+    final btnW = compact
+        ? CombatLayoutConstants.commandButtonWidthShort
+        : CombatLayoutConstants.commandButtonWidth;
+    final btnH = CombatLayoutConstants.commandButtonHeightForWidth(btnW);
 
     return GamePanel(
       withBorder: true,
-      padding: GamePanel.compactPadding,
+      padding: EdgeInsets.symmetric(
+        horizontal: compact ? 6 : 10,
+        vertical: compact ? 2 : 6,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          GameOutlinedText('指令 Commands', fontSize: 10, color: d.textMuted, strokeWidth: 0.8),
-          const SizedBox(height: 6),
-          Wrap(
-            spacing: 6,
-            runSpacing: 6,
+          if (showTitle) ...[
+            GameOutlinedText('指令 Commands', fontSize: 10, color: d.textMuted, strokeWidth: 0.8),
+            const SizedBox(height: 4),
+          ],
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               for (var i = 0; i < options.length; i++)
                 _optionButton(
@@ -53,7 +63,8 @@ class CombatCommandMenu extends StatelessWidget {
                   option: options[i].$1,
                   label: options[i].$2,
                   sub: options[i].$3,
-                  height: h,
+                  width: btnW,
+                  height: btnH,
                   highlighted: i == highlightIndex,
                   disabled: !enabled ||
                       (options[i].$1 == CombatCommandOption.item && !hasItems),
@@ -71,6 +82,7 @@ class CombatCommandMenu extends StatelessWidget {
     required CombatCommandOption option,
     required String label,
     required String sub,
+    required double width,
     required double height,
     required bool highlighted,
     required bool disabled,
@@ -88,7 +100,7 @@ class CombatCommandMenu extends StatelessWidget {
           label: label,
           subLabel: sub,
           height: height,
-          width: compact ? 64 : 72,
+          width: width,
           onPressed: disabled ? null : () => onSelect(option),
           semanticLabel: label,
         ),
@@ -103,14 +115,23 @@ class CombatExecuteBar extends StatelessWidget {
     required this.ready,
     required this.onExecute,
     this.highlighted = false,
+    this.compact = false,
+    this.width,
   });
 
   final bool ready;
   final VoidCallback? onExecute;
   final bool highlighted;
+  final bool compact;
+  final double? width;
 
   @override
   Widget build(BuildContext context) {
+    final w = width ??
+        (compact
+            ? CombatLayoutConstants.executeButtonWidthShort
+            : CombatLayoutConstants.executeButtonWidth);
+    final h = CombatLayoutConstants.executeButtonHeightForWidth(w);
     return DecoratedBox(
       decoration: highlighted
           ? BoxDecoration(
@@ -119,9 +140,10 @@ class CombatExecuteBar extends StatelessWidget {
             )
           : const BoxDecoration(),
       child: GameButton(
-        label: '执行回合',
-        subLabel: 'Execute',
-        height: 38,
+        label: '执行',
+        subLabel: 'Go',
+        height: h,
+        width: w,
         onPressed: ready ? onExecute : null,
         semanticLabel: '执行回合',
       ),

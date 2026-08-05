@@ -4,8 +4,8 @@ import 'package:zork_dude/shared/game_constants.dart';
 import 'package:zork_dude/state/game_controller.dart';
 import 'package:zork_dude/ui/components/game_banner.dart';
 import 'package:zork_dude/ui/components/game_button.dart';
-import 'package:zork_dude/ui/components/game_outlined_text.dart';
-import 'package:zork_dude/ui/components/game_panel.dart';
+import 'package:zork_dude/ui/components/landscape_overlay.dart';
+import 'package:zork_dude/ui/components/landscape_scaffold.dart';
 import 'package:zork_dude/ui/exploration/exploration_layout_constants.dart';
 import 'package:zork_dude/ui/game_skin_scope.dart';
 import 'package:zork_dude/ui/game_ui_theme.dart';
@@ -54,56 +54,43 @@ class _ExplorationScreenState extends State<ExplorationScreen> {
   }
 
   void _showTargetPicker(String title, List<({String label, String value})> options) {
-    showModalBottomSheet<void>(
+    final skin = GameUiTheme.skinForMapLayer(widget.controller.mapLayer);
+    LandscapeOverlay.show<void>(
       context: context,
-      backgroundColor: Colors.transparent,
-      builder: (ctx) => GameSkinScope(
-        skin: GameUiTheme.skinForMapLayer(widget.controller.mapLayer),
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: GamePanel(
-              dark: true,
-              withBorder: true,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: GameOutlinedText(
-                      title,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: GameUiTheme.of(ctx).textPrimary,
-                      strokeWidth: 1.4,
-                    ),
+      title: title,
+      skin: skin,
+      child: Builder(
+        builder: (context) {
+          final btnH = ExplorationLayoutConstants.chipHeight;
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              for (final o in options)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 6),
+                  child: GameButton(
+                    width: double.infinity,
+                    height: btnH,
+                    label: o.label,
+                    onPressed: () {
+                      Navigator.pop(context);
+                      final lower = title.toLowerCase();
+                      final cmd = lower.contains('drop') || title.contains('丢弃')
+                          ? 'drop ${o.value}'
+                          : lower.contains('use') || title.contains('使用')
+                              ? 'use ${o.value}'
+                              : lower.contains('buy') || title.contains('购买')
+                                  ? 'buy ${o.value}'
+                                  : lower.contains('sell') || title.contains('出售')
+                                      ? 'sell ${o.value}'
+                                      : 'take ${o.value}';
+                      widget.controller.executeCommand(cmd);
+                    },
                   ),
-                  ...options.map((o) => Padding(
-                        padding: const EdgeInsets.only(bottom: 6),
-                        child: GameButton(
-                          width: double.infinity,
-                          label: o.label,
-                          onPressed: () {
-                            Navigator.pop(ctx);
-                            final lower = title.toLowerCase();
-                            final cmd = lower.contains('drop') || title.contains('丢弃')
-                                ? 'drop ${o.value}'
-                                : lower.contains('use') || title.contains('使用')
-                                    ? 'use ${o.value}'
-                                    : lower.contains('buy') || title.contains('购买')
-                                        ? 'buy ${o.value}'
-                                        : lower.contains('sell') || title.contains('出售')
-                                            ? 'sell ${o.value}'
-                                            : 'take ${o.value}';
-                            widget.controller.executeCommand(cmd);
-                          },
-                        ),
-                      )),
-                ],
-              ),
-            ),
-          ),
-        ),
+                ),
+            ],
+          );
+        },
       ),
     );
   }
@@ -124,77 +111,69 @@ class _ExplorationScreenState extends State<ExplorationScreen> {
       );
     }
 
-    final wide = MediaQuery.sizeOf(context).width > ExplorationLayoutConstants.wideBreakpoint;
-    final compact = MediaQuery.sizeOf(context).height < 640;
+    final size = MediaQuery.sizeOf(context);
+    final sideBySide = ExplorationLayoutConstants.useSideBySide(size);
+    final short = ExplorationLayoutConstants.isShort(size);
     final skin = GameUiTheme.skinForMapLayer(c.mapLayer);
-    final mapHeight = compact ? 120.0 : 180.0;
-    final dockMaxHeight = compact
-        ? 210.0
-        : wide
-            ? ExplorationLayoutConstants.commandDockMaxHeightWide
-            : ExplorationLayoutConstants.commandDockMaxHeightNarrow;
-    final outerPadding = compact ? 4.0 : 8.0;
+    final bannerH = short
+        ? ExplorationLayoutConstants.bannerHeightShort
+        : ExplorationLayoutConstants.bannerHeight;
 
     return GameSkinScope(
       skin: skin,
       child: ExplorationKeyboardScope(
         controller: c,
         commandFocus: _commandFocus,
-        child: Scaffold(
+        child: LandscapeScaffold(
           backgroundColor: GameConstants.bgDeep,
-          body: SafeArea(
-            child: Padding(
-              padding: EdgeInsets.all(outerPadding),
-              child: Column(
-                children: [
-                  const GameBanner(
-                    title: '迷雾之塔',
-                    subtitle: 'Exploration · ←↑↓→ / WASD',
-                    height: 56,
-                  ),
-                  const SizedBox(height: 6),
-                  StatusBar(controller: c),
-                  const SizedBox(height: 6),
-                  Expanded(
-                    child: wide
-                        ? Row(
-                            children: [
-                              Expanded(flex: 3, child: StoryLogView(controller: c)),
-                              if (c.mapVisible) ...[
-                                const SizedBox(width: 8),
-                                Expanded(flex: 2, child: MistMapPanel(controller: c)),
-                              ],
-                            ],
-                          )
-                        : Column(
-                            children: [
-                              if (c.mapVisible) ...[
-                                SizedBox(height: mapHeight, child: MistMapPanel(controller: c)),
-                                const SizedBox(height: 4),
-                              ],
-                              Expanded(child: StoryLogView(controller: c)),
-                            ],
-                          ),
-                  ),
-                  const SizedBox(height: 4),
-                  ConstrainedBox(
-                    constraints: BoxConstraints(maxHeight: dockMaxHeight),
-                    child: SingleChildScrollView(
-                      child: QuickCommandPanel(
-                        controller: c,
-                        onPickTargets: _showTargetPicker,
-                        compact: compact,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  CommandInputRow(
-                    controller: c,
-                    focusNode: _commandFocus,
-                  ),
-                ],
+          body: Column(
+            children: [
+              GameBanner(
+                title: '迷雾之塔',
+                subtitle: short ? '←↑↓→ / WASD' : 'Exploration · ←↑↓→ / WASD',
+                height: bannerH,
+                titleSize: short ? 14 : 16,
+                subtitleSize: short ? 9 : 10,
               ),
-            ),
+              SizedBox(height: short ? 3 : 4),
+              StatusBar(controller: c),
+              SizedBox(height: short ? 3 : 4),
+              Expanded(
+                child: sideBySide
+                    ? Row(
+                        children: [
+                          Expanded(flex: 3, child: StoryLogView(controller: c)),
+                          if (c.mapVisible) ...[
+                            const SizedBox(width: 6),
+                            Expanded(flex: 2, child: MistMapPanel(controller: c)),
+                          ],
+                        ],
+                      )
+                    : Column(
+                        children: [
+                          if (c.mapVisible) ...[
+                            SizedBox(
+                              height: short ? 100.0 : 140.0,
+                              child: MistMapPanel(controller: c),
+                            ),
+                            const SizedBox(height: 4),
+                          ],
+                          Expanded(child: StoryLogView(controller: c)),
+                        ],
+                      ),
+              ),
+              SizedBox(height: short ? 2 : 4),
+              QuickCommandPanel(
+                controller: c,
+                onPickTargets: _showTargetPicker,
+                compact: short,
+              ),
+              SizedBox(height: short ? 2 : 4),
+              CommandInputRow(
+                controller: c,
+                focusNode: _commandFocus,
+              ),
+            ],
           ),
         ),
       ),

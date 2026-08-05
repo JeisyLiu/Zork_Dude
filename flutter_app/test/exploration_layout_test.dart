@@ -52,10 +52,10 @@ void main() {
   });
 
   for (final size in const [
-    Size(320, 568),
-    Size(390, 844),
-    Size(1024, 576),
+    Size(667, 375),
+    Size(854, 480),
     Size(1280, 720),
+    Size(1920, 1080),
   ]) {
     testWidgets('Exploration layout fits ${size.width.toInt()}x${size.height.toInt()}', (tester) async {
       addTearDown(() => tester.binding.setSurfaceSize(null));
@@ -74,7 +74,9 @@ void main() {
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
     await pumpExplorationScreen(tester, const Size(1280, 720));
-    await tester.tap(find.text('更多').last);
+    final more = find.byKey(const Key('quick-command-more'));
+    await tester.ensureVisible(more);
+    await tester.tap(more);
     for (var i = 0; i < 10; i++) {
       await tester.pump(const Duration(milliseconds: 100));
     }

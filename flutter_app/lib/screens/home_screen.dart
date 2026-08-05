@@ -3,11 +3,13 @@ import 'package:zork_dude/screens/exploration_screen.dart';
 import 'package:zork_dude/state/game_controller.dart';
 import 'package:zork_dude/ui/components/game_button.dart';
 import 'package:zork_dude/ui/components/game_outlined_text.dart';
+import 'package:zork_dude/ui/components/landscape_scaffold.dart';
 import 'package:zork_dude/ui/game_skin_scope.dart';
 import 'package:zork_dude/ui/game_ui_theme.dart';
 import 'package:zork_dude/ui/home/home_ambient_background.dart';
 import 'package:zork_dude/ui/home/home_constants.dart';
 import 'package:zork_dude/ui/home/home_hero_art.dart';
+import 'package:zork_dude/ui/layout/landscape_layout.dart';
 
 /// Launch screen before entering the Zork exploration world.
 class HomeScreen extends StatefulWidget {
@@ -48,23 +50,32 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return GameSkinScope(
       skin: GameUiSkin.fantasy,
-      child: Scaffold(
+      child: LandscapeScaffold(
         backgroundColor: HomeConstants.bgMid,
-        body: Stack(
-          fit: StackFit.expand,
-          children: [
-            const HomeAmbientBackground(),
-            SafeArea(
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  final screen = MediaQuery.sizeOf(context);
-                  final heroSize = HomeConstants.heroSizeFor(screen);
-                  final tight = screen.height < 520;
-                  final gapL = tight ? 10.0 : 16.0;
-                  final gapM = tight ? 8.0 : 12.0;
-                  final gapS = tight ? 6.0 : 10.0;
+        background: const HomeAmbientBackground(),
+        body: LayoutBuilder(
+          builder: (context, constraints) {
+            final screen = MediaQuery.sizeOf(context);
+            final heroSize = HomeConstants.heroSizeFor(screen);
+            final short = LandscapeLayout.isShort(screen);
+            final tight = screen.height < 520;
+            final gapL = short ? 6.0 : (tight ? 10.0 : 16.0);
+            final gapM = short ? 4.0 : (tight ? 8.0 : 12.0);
+            final gapS = short ? 3.0 : (tight ? 6.0 : 10.0);
+            final btnW = short ? HomeConstants.buttonWidthShort : HomeConstants.buttonWidth;
+            final btnH = HomeConstants.buttonHeightFor(btnW);
 
-                  final content = ConstrainedBox(
+            return Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(
+                  maxWidth: LandscapeLayout.maxContentWidth,
+                ),
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: short ? 8 : 12,
+                  ),
+                  child: ConstrainedBox(
                     constraints: const BoxConstraints(
                       maxWidth: HomeConstants.maxContentWidth,
                     ),
@@ -75,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         SizedBox(height: gapL),
                         GameOutlinedText(
                           '迷雾之塔',
-                          fontSize: tight ? 26 : 30,
+                          fontSize: short ? 22 : (tight ? 26 : 30),
                           fontWeight: FontWeight.w700,
                           color: HomeConstants.titleColor,
                           strokeWidth: 0,
@@ -87,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         SizedBox(height: gapS),
                         GameOutlinedText(
                           'MIST TOWER',
-                          fontSize: tight ? 11 : 12,
+                          fontSize: short ? 10 : (tight ? 11 : 12),
                           fontWeight: FontWeight.w500,
                           color: HomeConstants.subtitleColor,
                           strokeWidth: 0,
@@ -97,25 +108,28 @@ class _HomeScreenState extends State<HomeScreen> {
                         const _PixelDivider(),
                         SizedBox(height: gapM),
                         GameOutlinedText(
-                          '你从迷雾森林中醒来，失去记忆。\n探索、收集、对话、战斗——找回失落的真相。',
+                          short
+                              ? '探索、收集、对话、战斗——找回失落的真相。'
+                              : '你从迷雾森林中醒来，失去记忆。\n探索、收集、对话、战斗——找回失落的真相。',
                           textAlign: TextAlign.center,
-                          fontSize: tight ? 13 : 14,
+                          fontSize: short ? 12 : (tight ? 13 : 14),
                           fontWeight: FontWeight.w500,
                           color: HomeConstants.bodyColor,
                           strokeWidth: 0,
-                          height: 1.55,
+                          height: 1.45,
                         ),
-                        SizedBox(height: gapL + 4),
+                        SizedBox(height: gapL),
                         GameButton(
-                          width: HomeConstants.buttonWidth,
-                          height: HomeConstants.buttonHeight,
+                          width: btnW,
+                          height: btnH,
                           compact: true,
                           useOutline: false,
                           label: _controller.loading ? '加载中…' : '进入迷雾',
                           subLabel: 'enter',
                           enabled: !_controller.loading,
-                          onPressed:
-                              _controller.loading ? null : () => _enterGame(context),
+                          onPressed: _controller.loading
+                              ? null
+                              : () => _enterGame(context),
                           semanticLabel: '进入迷雾',
                         ),
                         SizedBox(height: gapM),
@@ -128,27 +142,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ],
                     ),
-                  );
-
-                  if (tight) {
-                    return Center(
-                      child: SingleChildScrollView(
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                        child: content,
-                      ),
-                    );
-                  }
-
-                  return Center(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: content,
-                    ),
-                  );
-                },
+                  ),
+                ),
               ),
-            ),
-          ],
+            );
+          },
         ),
       ),
     );

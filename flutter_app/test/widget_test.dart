@@ -71,8 +71,8 @@ void main() {
     );
   });
 
-  testWidgets('Home layout fits 320x568 without overflow', (tester) async {
-    await tester.binding.setSurfaceSize(const Size(320, 568));
+  testWidgets('Home layout fits 667x375 without overflow', (tester) async {
+    await tester.binding.setSurfaceSize(const Size(667, 375));
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
     await tester.pumpWidget(const MistTowerApp());
@@ -82,8 +82,8 @@ void main() {
     expect(find.text('迷雾之塔'), findsOneWidget);
   });
 
-  testWidgets('Home layout fits 390x844 without overflow', (tester) async {
-    await tester.binding.setSurfaceSize(const Size(390, 844));
+  testWidgets('Home layout fits 854x480 without overflow', (tester) async {
+    await tester.binding.setSurfaceSize(const Size(854, 480));
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
     await tester.pumpWidget(const MistTowerApp());

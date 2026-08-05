@@ -4,6 +4,7 @@ import 'package:zork_dude/ui/components/game_panel.dart';
 import 'package:zork_dude/ui/components/game_progress_bar.dart';
 import 'package:zork_dude/ui/components/game_button.dart';
 import 'package:zork_dude/ui/components/game_outlined_text.dart';
+import 'package:zork_dude/ui/exploration/exploration_layout_constants.dart';
 import 'package:zork_dude/ui/game_ui_theme.dart';
 
 class StatusBar extends StatelessWidget {
@@ -20,51 +21,86 @@ class StatusBar extends StatelessWidget {
         .map((c) => s.companions[c]?.name)
         .whereType<String>()
         .join(', ');
+    final short = ExplorationLayoutConstants.isShort(MediaQuery.sizeOf(context));
+    final mapBtnH = short ? 26.0 : 32.0;
+    final mapBtnW = short ? 56.0 : 68.0;
 
     return GamePanel(
       dark: true,
       withBorder: true,
-      padding: GamePanel.borderedPadding,
-      child: Wrap(
-        spacing: 10,
-        runSpacing: 6,
-        crossAxisAlignment: WrapCrossAlignment.center,
-        children: [
-          _stat(context, '❤️', '${s.playerHp}/${s.playerMaxHp}', child: GameProgressBar(value: ratio, width: 64)),
-          _stat(context, '⚔️', '${s.totalAtk}'),
-          _stat(context, '🛡️', '${s.totalDef}'),
-          _stat(context, '💰', '${s.gold}'),
-          _stat(context, '🏆', '${s.score}'),
-          _stat(context, '🎒', '${s.totalWeight()}/${s.bagCapacity()}'),
-          if (companions.isNotEmpty) _stat(context, '👥', companions),
-          GameButton(
-            label: controller.mapVisible ? '地图' : '地图·关',
-            subLabel: 'map',
-            height: 36,
-            width: 76,
-            onPressed: controller.toggleMap,
-            semanticLabel: '切换地图',
-          ),
-        ],
+      padding: EdgeInsets.symmetric(
+        horizontal: short ? 6 : 10,
+        vertical: short ? 3 : 6,
+      ),
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        alignment: Alignment.centerLeft,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _stat(context, '❤️', '${s.playerHp}/${s.playerMaxHp}',
+                child: GameProgressBar(
+                  value: ratio,
+                  width: short ? 44 : 56,
+                  height: short ? 7 : 9,
+                ),
+                compact: short),
+            SizedBox(width: short ? 6 : 8),
+            _stat(context, '⚔️', '${s.totalAtk}', compact: short),
+            SizedBox(width: short ? 6 : 8),
+            _stat(context, '🛡️', '${s.totalDef}', compact: short),
+            SizedBox(width: short ? 6 : 8),
+            _stat(context, '💰', '${s.gold}', compact: short),
+            SizedBox(width: short ? 6 : 8),
+            _stat(context, '🏆', '${s.score}', compact: short),
+            SizedBox(width: short ? 6 : 8),
+            _stat(context, '🎒', '${s.totalWeight()}/${s.bagCapacity()}', compact: short),
+            if (companions.isNotEmpty) ...[
+              SizedBox(width: short ? 6 : 8),
+              _stat(
+                context,
+                '👥',
+                companions.length > 8 ? '${companions.substring(0, 8)}…' : companions,
+                compact: short,
+              ),
+            ],
+            SizedBox(width: short ? 6 : 8),
+            GameButton(
+              label: controller.mapVisible ? '地图' : '地图·关',
+              subLabel: 'map',
+              height: mapBtnH,
+              width: mapBtnW,
+              onPressed: controller.toggleMap,
+              semanticLabel: '切换地图',
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _stat(BuildContext context, String icon, String value, {Widget? child}) {
+  Widget _stat(
+    BuildContext context,
+    String icon,
+    String value, {
+    Widget? child,
+    bool compact = false,
+  }) {
     final d = GameUiTheme.of(context);
+    final fontSize = compact ? 10.0 : 11.0;
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(icon, style: const TextStyle(fontSize: 12)),
-        const SizedBox(width: 3),
-        if (child != null) child,
-        if (child != null) const SizedBox(width: 4),
+        Text(icon, style: TextStyle(fontSize: fontSize)),
+        const SizedBox(width: 2),
+        ?child,
+        if (child != null) const SizedBox(width: 3),
         GameOutlinedText(
           value,
-          fontSize: 12,
+          fontSize: fontSize,
           fontWeight: FontWeight.bold,
           color: d.textPrimary,
-          strokeWidth: 1.2,
+          strokeWidth: 1.0,
         ),
       ],
     );

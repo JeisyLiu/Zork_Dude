@@ -39,6 +39,12 @@ class GameButton extends StatelessWidget {
     final d = GameUiTheme.of(context);
     final img = asset ?? (accent ? d.buttonAccent : d.button);
     final active = enabled && onPressed != null;
+    final labelSize = compact
+        ? (height * 0.34).clamp(11.0, 14.0)
+        : (height * 0.34).clamp(9.0, 14.0);
+    final subSize = (height * 0.22).clamp(7.0, 10.0);
+    final padH = height >= 36 ? 8.0 : (height >= 28 ? 6.0 : 4.0);
+    final padV = height >= 36 ? 6.0 : (height >= 28 ? 4.0 : 2.0);
 
     return Semantics(
       button: true,
@@ -67,8 +73,8 @@ class GameButton extends StatelessWidget {
                     Padding(
                       // Kenney button bevels (~8px); keep glyphs inside the fill.
                       padding: EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: height >= 36 ? 6 : 4,
+                        horizontal: padH,
+                        vertical: padV,
                       ),
                       child: Center(
                         child: FittedBox(
@@ -78,9 +84,7 @@ class GameButton extends StatelessWidget {
                             children: [
                               GameOutlinedText(
                                 label!,
-                                fontSize: compact
-                                    ? 14
-                                    : (subLabel != null ? 11 : 12),
+                                fontSize: labelSize,
                                 fontWeight: FontWeight.w700,
                                 color: d.textPrimary,
                                 height: 1.05,
@@ -94,7 +98,7 @@ class GameButton extends StatelessWidget {
                               if (subLabel != null)
                                 GameOutlinedText(
                                   subLabel!,
-                                  fontSize: compact ? 9 : 8,
+                                  fontSize: subSize,
                                   fontWeight: FontWeight.w500,
                                   color: d.textMuted,
                                   height: 1.0,

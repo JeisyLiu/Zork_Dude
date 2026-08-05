@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zork_dude/ui/layout/landscape_layout.dart';
 
 /// Palette and layout constants for the minimalist pixel home screen.
 abstract final class HomeConstants {
@@ -27,14 +28,18 @@ abstract final class HomeConstants {
   static const Color towerRune = Color(0xFF8A7A50);
 
   static const double maxContentWidth = 520;
-  static const double buttonWidth = 240;
-  static const double buttonHeight = 50;
+  static const double buttonWidth = 180;
+  static const double buttonWidthShort = 148;
+
+  static double buttonHeightFor(double width) => width * LandscapeLayout.goldenRatio;
 
   static double heroSizeFor(Size screen) {
-    final shortest = screen.shortestSide;
     final height = screen.height;
-    if (height < 520 || shortest < 340) return 112;
-    if (shortest >= 720 || screen.width >= 900) return 176;
-    return 152;
+    final width = screen.width;
+    // Top-stacked hero: size by vertical budget, keep presence on landscape.
+    if (height < 400) return 88;
+    if (height < 520) return 120;
+    if (width >= 900 || height >= 720) return 168;
+    return 140;
   }
 }

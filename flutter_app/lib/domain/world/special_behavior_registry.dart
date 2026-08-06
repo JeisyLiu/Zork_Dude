@@ -51,10 +51,10 @@ class SpecialBehaviorRegistry {
     rooms['goblin_throne']!.onEnter = (_) => '哥布林王咆哮着站起来！地面都在震动！';
 
     rooms['haunted_graveyard']!.onEnter = (session) {
-      if (session.hasItem('keycard_lvl2') && !session.flags.containsKey('grave_site_open')) {
+      if (session.hasItem('magic_gem') && !session.flags.containsKey('grave_site_open')) {
         session.room('haunted_graveyard').exits[Direction.east] = 'scp_site_gate';
         session.flags['grave_site_open'] = true;
-        return '你用二级钥匙卡刷开了藤蔓缠绕的石门，一条向下的通道显露出来……';
+        return '魔法宝石与石门上的凹槽共鸣，藤蔓退散，一条向下的通道显露出来……';
       }
       return null;
     };

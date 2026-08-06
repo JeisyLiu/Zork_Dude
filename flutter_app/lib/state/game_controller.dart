@@ -11,6 +11,7 @@ import 'package:zork_dude/domain/game_session.dart';
 import 'package:zork_dude/domain/models/enums.dart';
 import 'package:zork_dude/domain/models/map_meta.dart';
 import 'package:zork_dude/domain/map_service.dart';
+import 'package:zork_dude/state/ending_kind.dart';
 
 class LogEntry {
   final String text;
@@ -32,6 +33,7 @@ class GameController extends ChangeNotifier {
   bool loading = true;
   String? error;
   bool battleNavigationPending = false;
+  EndingKind pendingEnding = EndingKind.none;
   bool _commandBusy = false;
   DateTime? _lastCommandAt;
 
@@ -42,6 +44,11 @@ class GameController extends ChangeNotifier {
   void resetCommandGateForTest() {
     _commandBusy = false;
     _lastCommandAt = null;
+  }
+
+  void consumePendingEnding() {
+    pendingEnding = EndingKind.none;
+    notifyListeners();
   }
 
   Future<void> init() async {
@@ -108,8 +115,9 @@ class GameController extends ChangeNotifier {
         _append(mapVisible ? '已显示迷雾残页。' : '已隐藏迷雾残页。');
         return;
       }
+      final wasWon = s.won;
       final result = s.processCommand(raw);
-      _handleResult(result);
+      _handleResult(result, wasWonBefore: wasWon);
     } finally {
       _commandBusy = false;
       notifyListeners();
@@ -127,7 +135,7 @@ class GameController extends ChangeNotifier {
     if (dir != null) await move(dir);
   }
 
-  void _handleResult(CommandResult result) {
+  void _handleResult(CommandResult result, {bool wasWonBefore = false}) {
     if (result.text.isNotEmpty) _append(result.text);
     for (final event in result.events) {
       switch (event.type) {
@@ -138,13 +146,16 @@ class GameController extends ChangeNotifier {
         case GameEventType.newVisit:
           syncMapLayerToPlayer();
         case GameEventType.gameOver:
-          break;
+          pendingEnding = EndingKind.gameOver;
         case GameEventType.mainWinAnnounced:
         case GameEventType.siteWinAnnounced:
           break;
       }
     }
     final s = session!;
+    if (s.won && !wasWonBefore && pendingEnding != EndingKind.mainClear) {
+      pendingEnding = EndingKind.mainClear;
+    }
     if (s.won && !s.flags.containsKey('main_win_announced')) {
       s.flags['main_win_announced'] = true;
       _append('\n🎉 主线通关！你找回了所有记忆，打破了迷雾诅咒！');
@@ -157,13 +168,15 @@ class GameController extends ChangeNotifier {
     }
     if (s.playerHp <= 0 && !s.gameOver) {
       s.gameOver = true;
+      pendingEnding = EndingKind.gameOver;
       _append('\n💀 你死了……');
     }
     notifyListeners();
   }
 
   void applyCombatResult(CommandResult result) {
-    _handleResult(result);
+    final wasWon = session?.won ?? false;
+    _handleResult(result, wasWonBefore: wasWon);
   }
 
   CombatEncounter? get activeEncounter => session?.activeEncounter;
@@ -187,7 +200,76 @@ class GameController extends ChangeNotifier {
   void finishCombat(CombatOutcome outcome) {
     final s = session;
     if (s == null) return;
+    final defeatedIds = _collectDefeatedMonsterIds(s, outcome);
     applyCombatResult(s.finishEncounter(outcome));
+    _classifyCombatEnding(outcome, defeatedIds);
+  }
+
+  List<String> _collectDefeatedMonsterIds(GameSession s, CombatOutcome outcome) {
+    if (outcome != CombatOutcome.victory) return const [];
+    final enc = s.activeEncounter;
+    final ids = <String>{};
+    if (enc != null) {
+      for (final e in enc.defeatedEnemies()) {
+        ids.add(e.templateId);
+      }
+      for (final e in enc.enemies.where((e) => !e.alive)) {
+        ids.add(e.templateId);
+      }
+    }
+    if (ids.isEmpty && s.currentEnemy.isNotEmpty) {
+      ids.add(s.currentEnemy);
+    }
+    return ids.toList();
+  }
+
+  void _classifyCombatEnding(CombatOutcome outcome, List<String> defeatedIds) {
+    if (outcome == CombatOutcome.defeat) {
+      pendingEnding = EndingKind.gameOver;
+      notifyListeners();
+      return;
+    }
+    if (outcome != CombatOutcome.victory) return;
+    if (defeatedIds.contains('scp_001')) {
+      pendingEnding = EndingKind.siteClear;
+    } else if (defeatedIds.contains('dragon_whelp')) {
+      pendingEnding = EndingKind.dragonClear;
+    }
+    notifyListeners();
+  }
+
+  void completeMainJourney() {
+    final s = session;
+    if (s == null) return;
+    s.currentRoomId = 'tower_top';
+    final tower = s.rooms['tower_top'];
+    if (tower != null) tower.visited = true;
+    syncMapLayerToPlayer();
+    final dragon = s.monster('dragon_whelp');
+    if (s.hasItem('magic_gem') && dragon != null && !dragon.alive) {
+      s.won = true;
+      pendingEnding = EndingKind.mainClear;
+      if (!s.flags.containsKey('main_win_announced')) {
+        s.flags['main_win_announced'] = true;
+        _append('\n🎉 宝石在塔顶共鸣，记忆涌回——迷雾诅咒随之消散！');
+        _append('可继续探索基金会收容站点，或使用 ng+ 开启二周目。');
+      }
+    } else {
+      _append('你回到了塔顶。宝石仍在手中，等待被嵌入书桌凹槽。');
+    }
+    notifyListeners();
+  }
+
+  void restartGame() {
+    final s = session;
+    if (s == null) return;
+    s.populateWorld(starterItems: true);
+    log.clear();
+    pendingEnding = EndingKind.none;
+    battleNavigationPending = false;
+    mapLayer = MapLayer.surface;
+    _append(s.roomDescription(s.currentRoomId));
+    notifyListeners();
   }
 
   List<({String id, String label, int heal, int count, String effectHint})> combatUsableItems() {

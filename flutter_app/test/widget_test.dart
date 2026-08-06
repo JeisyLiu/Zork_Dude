@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:zork_dude/domain/models/enums.dart';
 import 'package:zork_dude/main.dart';
 import 'package:zork_dude/screens/exploration_screen.dart';
 import 'package:zork_dude/ui/components/game_button.dart';
@@ -62,8 +63,19 @@ void main() {
         home: Builder(
           builder: (context) {
             final fantasy = GameUiTheme.dataFor(GameUiSkin.fantasy);
+            final cave = GameUiTheme.dataFor(GameUiSkin.cave);
+            final tower = GameUiTheme.dataFor(GameUiSkin.tower);
             final site = GameUiTheme.dataFor(GameUiSkin.site);
             expect(fantasy.panel, isNot(equals(site.panelDark)));
+            expect(GameUiTheme.skinForMapLayer(MapLayer.surface), GameUiSkin.fantasy);
+            expect(GameUiTheme.skinForMapLayer(MapLayer.cave), GameUiSkin.cave);
+            expect(GameUiTheme.skinForMapLayer(MapLayer.tower), GameUiSkin.tower);
+            expect(GameUiTheme.skinForMapLayer(MapLayer.site), GameUiSkin.site);
+            expect(cave.scaffoldBg, isNot(equals(tower.scaffoldBg)));
+            expect(
+              GameUiTheme.combatDataForMapLayer(MapLayer.tower).progressFill,
+              contains('progress_red'),
+            );
             return const SizedBox();
           },
         ),

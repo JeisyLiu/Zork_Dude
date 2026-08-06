@@ -216,6 +216,19 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
   @override
   bool hasItem(String id) => inventory.containsKey(id);
 
+  /// Opens the haunted graveyard east exit when the player holds the magic gem.
+  String _tryOpenGraveSiteGate() {
+    if (currentRoomId != 'haunted_graveyard' || flags.containsKey('grave_site_open')) {
+      return '';
+    }
+    if (!hasItem('magic_gem')) return '';
+    final rm = rooms['haunted_graveyard'];
+    if (rm == null) return '';
+    rm.exits[Direction.east] = 'scp_site_gate';
+    flags['grave_site_open'] = true;
+    return '\n魔法宝石与石门共鸣，藤蔓退散，通道打开了！';
+  }
+
   @override
   void invAdd(String id, [int count = 1]) {
     final it = items[id];
@@ -673,12 +686,7 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
     rm.items.remove(found);
     invAdd(found);
     score += 5;
-    var extra = '';
-    if (currentRoomId == 'haunted_graveyard' && found == 'keycard_lvl2' && !flags.containsKey('grave_site_open')) {
-      rm.exits[Direction.east] = 'scp_site_gate';
-      flags['grave_site_open'] = true;
-      extra = '\n你用钥匙卡刷开了藤蔓缠绕的石门！';
-    }
+    final extra = _tryOpenGraveSiteGate();
     return CommandResult.ok('拾起了 ${it.name}。$extra');
   }
 

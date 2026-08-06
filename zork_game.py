@@ -650,10 +650,10 @@ class Game:
         self._inv_add(found)
         self.score += 5
         extra = ""
-        if self.current_room_id == "haunted_graveyard" and found == "keycard_lvl2" and "grave_site_open" not in self.flags:
+        if self.current_room_id == "haunted_graveyard" and self.has_item("magic_gem") and "grave_site_open" not in self.flags:
             self.rooms["haunted_graveyard"].exits[Direction.EAST] = "scp_site_gate"
             self.flags["grave_site_open"] = True
-            extra = "\n你用钥匙卡刷开了藤蔓缠绕的石门！"
+            extra = "\n魔法宝石与石门共鸣，藤蔓退散，通道打开了！"
         return f"拾起了 {it.name}。{extra}"
 
     def do_drop(self, args) -> str:
@@ -1210,12 +1210,12 @@ def _apply_special_behaviors(g: Game):
     # 哥布林王座：BOSS 咆哮
     g.rooms["goblin_throne"].on_enter = lambda g: "哥布林王咆哮着站起来！地面都在震动！"
 
-    # 被诅咒的墓地：二级钥匙卡打开石门通往收容站点
+    # 被诅咒的墓地：魔法宝石打开石门通往收容站点
     def grave_enter(g):
-        if g.has_item("keycard_lvl2") and "grave_site_open" not in g.flags:
+        if g.has_item("magic_gem") and "grave_site_open" not in g.flags:
             g.rooms["haunted_graveyard"].exits[Direction.EAST] = "scp_site_gate"
             g.flags["grave_site_open"] = True
-            return "你用二级钥匙卡刷开了藤蔓缠绕的石门，一条向下的通道显露出来……"
+            return "魔法宝石与石门上的凹槽共鸣，藤蔓退散，一条向下的通道显露出来……"
         return None
     g.rooms["haunted_graveyard"].on_enter = grave_enter
 

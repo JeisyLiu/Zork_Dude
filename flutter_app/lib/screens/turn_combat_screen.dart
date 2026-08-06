@@ -10,7 +10,6 @@ import 'package:zork_dude/domain/combat/combat_engine.dart';
 import 'package:zork_dude/domain/combat/combat_types.dart';
 import 'package:zork_dude/domain/combat/status_effect.dart';
 import 'package:zork_dude/domain/models/enums.dart';
-import 'package:zork_dude/shared/game_constants.dart';
 import 'package:zork_dude/state/game_controller.dart';
 import 'package:zork_dude/ui/components/game_banner.dart';
 import 'package:zork_dude/ui/components/game_outlined_text.dart';
@@ -24,6 +23,7 @@ import 'package:zork_dude/ui/combat/combat_turn_order_bar.dart';
 import 'package:zork_dude/ui/components/landscape_scaffold.dart';
 import 'package:zork_dude/ui/game_skin_scope.dart';
 import 'package:zork_dude/ui/game_ui_theme.dart';
+import 'package:zork_dude/ui/ending/ending_flow.dart';
 import 'package:zork_dude/widgets/combat_keyboard_scope.dart';
 
 class TurnCombatScreen extends StatefulWidget {
@@ -170,7 +170,14 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
     if (result.combatEnded && result.outcome != null) {
       _finished = true;
       widget.controller.finishCombat(result.outcome!);
-      if (mounted) Navigator.pop(context);
+      if (!mounted) return;
+      await EndingFlow.presentIfNeeded(
+        context: context,
+        controller: widget.controller,
+        afterDismiss: () {
+          if (mounted) Navigator.pop(context);
+        },
+      );
       return;
     }
 
@@ -317,7 +324,9 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
     final session = widget.controller.session;
     if (enc == null || session == null || !session.inCombat) {
       return Scaffold(
-        backgroundColor: GameConstants.bgDeep,
+        backgroundColor: GameUiTheme.scaffoldBgForMapLayer(
+          widget.controller.mapLayer,
+        ),
         body: Center(
           child: GameOutlinedText('战斗已结束', fontSize: 16, color: Colors.white),
         ),
@@ -327,6 +336,9 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
     final size = MediaQuery.sizeOf(context);
     final short = CombatLayoutConstants.isShort(size);
     final sideBySide = CombatLayoutConstants.useSideBySide(size);
+    final layer = widget.controller.mapLayer;
+    final skin = GameUiTheme.skinForMapLayer(layer);
+    final bg = GameUiTheme.scaffoldBgForMapLayer(layer);
     final targetId = _highlightedTargetId();
     final items = widget.controller.combatUsableItems();
     final hasItems = items.isNotEmpty;
@@ -485,9 +497,10 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
     );
 
     return GameSkinScope(
-      skin: GameUiSkin.combat,
+      skin: skin,
+      combatBars: true,
       child: LandscapeScaffold(
-        backgroundColor: GameConstants.bgDeep,
+        backgroundColor: bg,
         body: CombatKeyboardScope(
           enabled: !_animating && !_finished,
           onKey: _onCombatKey,

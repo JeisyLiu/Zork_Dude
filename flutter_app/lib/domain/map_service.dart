@@ -9,7 +9,7 @@ const mapLayerLabels = {
   MapLayer.surface: '地表',
   MapLayer.cave: '洞穴',
   MapLayer.tower: '高塔',
-  MapLayer.site: '站点',
+  MapLayer.site: '设施',
 };
 
 const mapDirLabel = {

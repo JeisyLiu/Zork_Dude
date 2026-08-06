@@ -7,15 +7,20 @@ class GameSkinScope extends StatelessWidget {
     super.key,
     required this.skin,
     required this.child,
+    this.combatBars = false,
   });
 
   final GameUiSkin skin;
   final Widget child;
 
+  /// When true, swap progress fills to red combat bars while keeping panel look.
+  final bool combatBars;
+
   @override
   Widget build(BuildContext context) {
     final base = Theme.of(context);
-    final data = GameUiTheme.dataFor(skin);
+    var data = GameUiTheme.dataFor(skin);
+    if (combatBars) data = data.withCombatBars();
     return Theme(
       data: base.copyWith(
         extensions: [

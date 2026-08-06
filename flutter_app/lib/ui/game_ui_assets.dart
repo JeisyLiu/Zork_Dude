@@ -7,13 +7,18 @@ abstract final class GameUiAssets {
   // Panels
   static const panelBrown = '$base/panel_brown.png';
   static const panelBrownDark = '$base/panel_brown_dark.png';
+  static const panelBrownDamaged = '$base/panel_brown_damaged.png';
+  static const panelBrownDamagedDark = '$base/panel_brown_damaged_dark.png';
   static const panelBrownCorners = '$base/panel_brown_corners_a.png';
   static const panelGrey = '$base/panel_grey.png';
   static const panelGreyDark = '$base/panel_grey_dark.png';
+  static const panelGreyGreen = '$base/panel_grey_green.png';
   static const panelGreyBolts = '$base/panel_grey_bolts.png';
   static const panelGreyBoltsDark = '$base/panel_grey_bolts_dark.png';
+  static const panelGreyBoltsBlue = '$base/panel_grey_bolts_blue.png';
   static const panelBorderBrown = '$base/panel_border_brown.png';
   static const panelBorderGrey = '$base/panel_border_grey.png';
+  static const panelBlueprint = '$base/panel_grid_blueprint.png';
 
   // Buttons
   static const buttonBrown = '$base/button_brown.png';
@@ -30,6 +35,10 @@ abstract final class GameUiAssets {
   static const progressGreenBorder = '$base/progress_green_border.png';
   static const progressGreenSmall = '$base/progress_green_small.png';
   static const progressGreenSmallBorder = '$base/progress_green_small_border.png';
+  static const progressBlue = '$base/progress_blue.png';
+  static const progressBlueBorder = '$base/progress_blue_border.png';
+  static const progressBlueSmall = '$base/progress_blue_small.png';
+  static const progressBlueSmallBorder = '$base/progress_blue_small_border.png';
   static const progressRed = '$base/progress_red.png';
   static const progressRedBorder = '$base/progress_red_border.png';
   static const progressRedSmall = '$base/progress_red_small.png';
@@ -57,6 +66,8 @@ abstract final class GameUiAssets {
 
   // Patterns
   static const patternPaper = '$base/pattern_grid_paper.png';
+  static const patternBlueprint = '$base/pattern_grid_blueprint.png';
+  static const patternDiagonalGrey = '$base/pattern_diagonal_grey_small.png';
 
   // Scrollbars
   static const scrollbarBrown = '$base/scrollbar_brown.png';

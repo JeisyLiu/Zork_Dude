@@ -15,6 +15,8 @@ import 'package:zork_dude/widgets/exploration_keyboard_scope.dart';
 import 'package:zork_dude/widgets/mist_map_panel.dart';
 import 'package:zork_dude/widgets/quick_commands.dart';
 import 'package:zork_dude/widgets/status_bar.dart';
+import 'package:zork_dude/ui/ending/ending_flow.dart';
+import 'package:zork_dude/state/ending_kind.dart';
 import 'package:zork_dude/widgets/story_log.dart';
 
 class ExplorationScreen extends StatefulWidget {
@@ -28,6 +30,7 @@ class ExplorationScreen extends StatefulWidget {
 
 class _ExplorationScreenState extends State<ExplorationScreen> {
   final _commandFocus = FocusNode(debugLabel: 'command-input');
+  bool _endingPresenting = false;
 
   @override
   void initState() {
@@ -52,7 +55,27 @@ class _ExplorationScreenState extends State<ExplorationScreen> {
         ),
       );
     }
+    _presentEndingIfNeeded();
     setState(() {});
+  }
+
+  Future<void> _presentEndingIfNeeded() async {
+    if (_endingPresenting || !mounted) return;
+    final kind = widget.controller.pendingEnding;
+    if (kind == EndingKind.none) return;
+    // Combat-triggered endings are shown on the combat screen.
+    if (kind == EndingKind.dragonClear ||
+        kind == EndingKind.siteClear ||
+        kind == EndingKind.gameOver) {
+      return;
+    }
+    _endingPresenting = true;
+    await EndingFlow.presentIfNeeded(
+      context: context,
+      controller: widget.controller,
+    );
+    _endingPresenting = false;
+    if (mounted) setState(() {});
   }
 
   void _showTargetPicker(String title, List<({String label, String value})> options) {
@@ -131,7 +154,7 @@ class _ExplorationScreenState extends State<ExplorationScreen> {
         controller: c,
         commandFocus: _commandFocus,
         child: LandscapeScaffold(
-          backgroundColor: GameConstants.bgDeep,
+          backgroundColor: GameUiTheme.scaffoldBgForMapLayer(c.mapLayer),
           body: Column(
             children: [
               GameBanner(

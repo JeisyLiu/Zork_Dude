@@ -12,6 +12,7 @@ import 'package:zork_dude/domain/combat/status_effect.dart';
 import 'package:zork_dude/domain/models/enums.dart';
 import 'package:zork_dude/state/game_controller.dart';
 import 'package:zork_dude/ui/components/game_banner.dart';
+import 'package:zork_dude/ui/components/game_button.dart';
 import 'package:zork_dude/ui/components/game_outlined_text.dart';
 import 'package:zork_dude/ui/combat/combat_battlefield.dart';
 import 'package:zork_dude/ui/combat/combat_command_menu.dart';
@@ -23,8 +24,12 @@ import 'package:zork_dude/ui/combat/combat_turn_order_bar.dart';
 import 'package:zork_dude/ui/components/landscape_scaffold.dart';
 import 'package:zork_dude/ui/game_skin_scope.dart';
 import 'package:zork_dude/ui/game_ui_theme.dart';
+import 'package:zork_dude/ui/navigation/game_exit.dart';
 import 'package:zork_dude/ui/ending/ending_flow.dart';
+import 'package:zork_dude/ui/combat/combat_victory_overlay.dart';
 import 'package:zork_dude/widgets/combat_keyboard_scope.dart';
+import 'package:zork_dude/domain/combat/combat_reward.dart';
+import 'package:zork_dude/state/ending_kind.dart';
 
 class TurnCombatScreen extends StatefulWidget {
   const TurnCombatScreen({super.key, required this.controller});
@@ -48,6 +53,7 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
   String? _animatingActorId;
   bool _animating = false;
   bool _finished = false;
+  bool _pausePresenting = false;
 
   CombatEncounter? get _encounter => widget.controller.activeEncounter;
 
@@ -66,7 +72,63 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
   }
 
   void _onController() {
+    _presentReturnToTitleIfNeeded();
     if (mounted) setState(() {});
+  }
+
+  Future<void> _presentReturnToTitleIfNeeded() async {
+    if (!mounted) return;
+    if (!widget.controller.consumePendingReturnToTitle()) return;
+    await GameExit.returnToTitle(context, widget.controller);
+  }
+
+  Future<void> _presentCombatEnd(CombatOutcome outcome) async {
+    void leaveCombat() {
+      if (mounted) Navigator.pop(context);
+    }
+
+    if (outcome == CombatOutcome.victory) {
+      final reward = widget.controller.takeLastCombatReward() ??
+          const CombatReward(defeatedNames: ['敌人']);
+      await Navigator.of(context).push<void>(
+        PageRouteBuilder<void>(
+          opaque: false,
+          barrierDismissible: false,
+          pageBuilder: (_, __, ___) => CombatVictoryOverlay(
+            reward: reward,
+            onContinue: () {
+              if (Navigator.of(context).canPop()) {
+                Navigator.of(context).pop();
+              }
+            },
+          ),
+          transitionsBuilder: (_, anim, __, child) =>
+              FadeTransition(opacity: anim, child: child),
+          transitionDuration: const Duration(milliseconds: 200),
+          reverseTransitionDuration: const Duration(milliseconds: 160),
+        ),
+      );
+      if (!mounted) return;
+    }
+
+    final kind = widget.controller.pendingEnding;
+    if (kind != EndingKind.none) {
+      await EndingFlow.presentIfNeeded(
+        context: context,
+        controller: widget.controller,
+        afterDismiss: leaveCombat,
+      );
+      return;
+    }
+
+    leaveCombat();
+  }
+
+  Future<void> _showPauseMenu() async {
+    if (_pausePresenting || _finished || !mounted) return;
+    _pausePresenting = true;
+    await GameExit.showCombatPauseMenu(context, widget.controller);
+    _pausePresenting = false;
   }
 
   CombatActor? get _activeActor {
@@ -195,15 +257,10 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
       _finished = true;
       final encAfter = _encounter;
       encAfter?.meleeActive = false;
-      widget.controller.finishCombat(result.outcome!);
+      final outcome = result.outcome!;
+      widget.controller.finishCombat(outcome);
       if (!mounted) return;
-      await EndingFlow.presentIfNeeded(
-        context: context,
-        controller: widget.controller,
-        afterDismiss: () {
-          if (mounted) Navigator.pop(context);
-        },
-      );
+      await _presentCombatEnd(outcome);
       return;
     }
 
@@ -426,15 +483,35 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
 
     final content = Column(
       children: [
-          // Merged banner + round/phase — one thin bar for 16:9 height budget.
-          GameBanner(
-            title: '回合战斗',
-            subtitle: 'R${enc.roundNumber} · $phaseHint',
-            height: short
-                ? CombatLayoutConstants.bannerHeightShort
-                : CombatLayoutConstants.bannerHeight,
-            titleSize: short ? 15 : 17,
-            subtitleSize: short ? 10 : 11,
+          Stack(
+            children: [
+              GameBanner(
+                title: '回合战斗',
+                subtitle: 'R${enc.roundNumber} · $phaseHint',
+                height: short
+                    ? CombatLayoutConstants.bannerHeightShort
+                    : CombatLayoutConstants.bannerHeight,
+                titleSize: short ? 15 : 17,
+                subtitleSize: short ? 10 : 11,
+              ),
+              Positioned(
+                right: short ? 4 : 8,
+                top: 0,
+                bottom: 0,
+                child: Center(
+                  child: GameButton(
+                    label: '菜单',
+                    subLabel: 'menu',
+                    compact: true,
+                    height: short ? 28 : 32,
+                    width: short ? 56 : 64,
+                    enabled: !_finished,
+                    onPressed: _showPauseMenu,
+                    semanticLabel: '战斗菜单',
+                  ),
+                ),
+              ),
+            ],
           ),
           SizedBox(height: short ? 2 : 4),
           Expanded(
@@ -567,7 +644,13 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
         ],
     );
 
-    return GameSkinScope(
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) {
+        if (didPop) return;
+        _showPauseMenu();
+      },
+      child: GameSkinScope(
       skin: skin,
       combatBars: true,
       child: LandscapeScaffold(
@@ -578,6 +661,7 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
           child: content,
         ),
       ),
+    ),
     );
   }
 

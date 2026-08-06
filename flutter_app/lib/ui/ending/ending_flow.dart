@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:zork_dude/screens/home_screen.dart';
+import 'package:zork_dude/ui/navigation/game_exit.dart';
 import 'package:zork_dude/state/ending_kind.dart';
 import 'package:zork_dude/state/game_controller.dart';
 import 'package:zork_dude/ui/ending/credits_roll.dart';
@@ -79,7 +79,7 @@ abstract final class EndingFlow {
           onPrimary: () => Navigator.of(context).pop(),
           onSecondary: () {
             Navigator.of(context).pop();
-            _returnToTitle(context);
+            GameExit.returnToTitle(context, controller, confirm: false);
           },
         ),
         transitionsBuilder: (_, anim, __, child) =>
@@ -136,24 +136,17 @@ abstract final class EndingFlow {
           kind: EndingKind.gameOver,
           onPrimary: () {
             Navigator.of(context).pop();
-            controller.restartGame();
+            controller.reviveFromDeath();
             afterDismiss?.call();
           },
           onSecondary: () {
             Navigator.of(context).pop();
-            _returnToTitle(context);
+            GameExit.returnToTitle(context, controller, confirm: false);
           },
         ),
         transitionsBuilder: (_, anim, __, child) =>
             FadeTransition(opacity: anim, child: child),
       ),
-    );
-  }
-
-  static void _returnToTitle(BuildContext context) {
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute<void>(builder: (_) => const HomeScreen()),
-      (_) => false,
     );
   }
 }

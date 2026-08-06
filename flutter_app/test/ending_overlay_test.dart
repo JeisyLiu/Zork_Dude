@@ -22,7 +22,7 @@ void main() {
     );
     await tester.pump();
     expect(find.text('你倒下了'), findsOneWidget);
-    expect(find.text('重新开始'), findsWidgets);
+    expect(find.text('在上一地点醒来'), findsWidgets);
     expect(tester.takeException(), isNull);
   });
 

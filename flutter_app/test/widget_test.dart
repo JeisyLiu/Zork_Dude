@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zork_dude/domain/models/enums.dart';
 import 'package:zork_dude/main.dart';
 import 'package:zork_dude/screens/exploration_screen.dart';
@@ -10,6 +11,10 @@ import 'package:zork_dude/ui/home/home_ambient_background.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+
+  setUp(() {
+    SharedPreferences.setMockInitialValues({});
+  });
 
   Future<void> pumpUntilLoaded(WidgetTester tester) async {
     await tester.pump();
@@ -35,7 +40,7 @@ void main() {
     expect(find.textContaining('进入迷雾'), findsOneWidget);
 
     await tester.tap(find.text('进入迷雾'));
-    for (var i = 0; i < 20; i++) {
+    for (var i = 0; i < 40; i++) {
       await tester.pump(const Duration(milliseconds: 100));
       if (find.byType(ExplorationScreen).evaluate().isNotEmpty) break;
     }

@@ -14,7 +14,8 @@ class HomePointerSample {
   final bool down;
 }
 
-/// Animated soft fog bands, dense drifting particles, pointer-reactive mist for home.
+/// Animated soft fog bands and drifting particles for home.
+/// Pointer orbit / trail / rings live in [HomePointerFxOverlay] above UI.
 class HomeAmbientBackground extends StatefulWidget {
   const HomeAmbientBackground({
     super.key,
@@ -205,17 +206,9 @@ class _HomeAmbientPainter extends CustomPainter {
     canvas.drawRect(Offset.zero & canvasSize, bg);
 
     _drawFogBands(canvas, w, h);
-    if (pointer != null && pointerStrength > 0) {
-      _drawPointerAura(canvas, w, h, pointer!, pointerStrength, burst);
-    }
     _drawDustLayer(canvas, w, h);
     _drawSparkLayer(canvas, w, h);
     _drawEmberLayer(canvas, w, h);
-    if (pointer != null && pointerStrength > 0) {
-      _drawPointerOrbit(canvas, w, h, pointer!, pointerStrength, burst);
-      _drawPointerTrail(canvas, pointer!, velocity, pointerStrength, burst);
-      _drawPointerRings(canvas, pointer!, pointerStrength, burst);
-    }
     _drawGrain(canvas, w, h);
     _drawVignette(canvas, w, h);
   }
@@ -425,6 +418,196 @@ class _HomeAmbientPainter extends CustomPainter {
     return (1 - dist / radius) * pointerStrength;
   }
 
+  void _drawGrain(Canvas canvas, double w, double h) {
+    final rng = math.Random(_seed + 7 + (t * 10).floor());
+    final count = (w * h / 7000).clamp(100.0, 220.0).round();
+    final paint = Paint()..color = Colors.white.withValues(alpha: 0.025);
+
+    for (var i = 0; i < count; i++) {
+      final x = rng.nextDouble() * w;
+      final y = rng.nextDouble() * h;
+      canvas.drawRect(Rect.fromLTWH(x, y, 1, 1), paint);
+    }
+  }
+
+  void _drawVignette(Canvas canvas, double w, double h) {
+    final center = Offset(w / 2, h / 2);
+    final radius = math.max(w, h) * 0.72;
+    final paint = Paint()
+      ..shader = RadialGradient(
+        colors: [
+          Colors.transparent,
+          HomeConstants.vignetteColor.withValues(alpha: 0.18),
+          HomeConstants.vignetteColor.withValues(alpha: 0.58),
+        ],
+        stops: const [0.42, 0.76, 1.0],
+      ).createShader(Rect.fromCircle(center: center, radius: radius));
+    canvas.drawRect(Offset.zero & Size(w, h), paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant _HomeAmbientPainter oldDelegate) {
+    return oldDelegate.t != t ||
+        oldDelegate.pointer != pointer ||
+        oldDelegate.pointerStrength != pointerStrength ||
+        oldDelegate.velocity != velocity ||
+        oldDelegate.burst != burst;
+  }
+}
+
+/// Pointer-only FX drawn above home UI; wrap with [IgnorePointer].
+class HomePointerFxOverlay extends StatefulWidget {
+  const HomePointerFxOverlay({
+    super.key,
+    required this.pointerListenable,
+  });
+
+  final ValueNotifier<HomePointerSample?> pointerListenable;
+
+  @override
+  State<HomePointerFxOverlay> createState() => _HomePointerFxOverlayState();
+}
+
+class _HomePointerFxOverlayState extends State<HomePointerFxOverlay>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  Offset? _pointer;
+  Offset? _smoothed;
+  Offset _velocity = Offset.zero;
+  double _pointerStrength = 0;
+  double _burst = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 16),
+    )..addListener(_tickPointer);
+    widget.pointerListenable.addListener(_onExternalPointer);
+  }
+
+  @override
+  void didUpdateWidget(covariant HomePointerFxOverlay oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.pointerListenable != widget.pointerListenable) {
+      oldWidget.pointerListenable.removeListener(_onExternalPointer);
+      widget.pointerListenable.addListener(_onExternalPointer);
+    }
+  }
+
+  void _onExternalPointer() {
+    final sample = widget.pointerListenable.value;
+    if (sample == null) {
+      _pointer = null;
+      return;
+    }
+    if (sample.down && _burst < 0.9) _burst = 1.0;
+    _pointer = sample.position;
+    if (_pointerStrength <= 0) {
+      _pointerStrength = 0.35;
+      _burst = math.max(_burst, 0.85);
+    }
+  }
+
+  void _tickPointer() {
+    if (_pointer != null) {
+      final prev = _smoothed;
+      _smoothed = prev == null ? _pointer : Offset.lerp(prev, _pointer, 0.18);
+      if (prev != null && _smoothed != null) {
+        final delta = _smoothed! - prev;
+        _velocity = Offset.lerp(_velocity, delta * 18, 0.25)!;
+      }
+      _pointerStrength = math.min(1.0, _pointerStrength + 0.1);
+      _burst = math.min(1.0, _burst + 0.035);
+    } else if (_pointerStrength > 0) {
+      _pointerStrength = math.max(0.0, _pointerStrength - 0.035);
+      _burst = math.max(0.0, _burst - 0.05);
+      _velocity = Offset.lerp(_velocity, Offset.zero, 0.12)!;
+      if (_pointerStrength <= 0.01) {
+        _smoothed = null;
+        _pointerStrength = 0;
+        _burst = 0;
+        _velocity = Offset.zero;
+      }
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final disable = MediaQuery.disableAnimationsOf(context);
+    if (disable) {
+      _controller.stop();
+      _controller.value = 0;
+      _pointer = null;
+      _smoothed = null;
+      _pointerStrength = 0;
+      _burst = 0;
+      _velocity = Offset.zero;
+    } else if (!_controller.isAnimating) {
+      _controller.repeat();
+    }
+  }
+
+  @override
+  void dispose() {
+    widget.pointerListenable.removeListener(_onExternalPointer);
+    _controller.removeListener(_tickPointer);
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final disable = MediaQuery.disableAnimationsOf(context);
+    return RepaintBoundary(
+      child: AnimatedBuilder(
+        animation: _controller,
+        builder: (context, _) {
+          return CustomPaint(
+            painter: _HomePointerFxPainter(
+              t: disable ? 0 : _controller.value,
+              pointer: disable || _pointerStrength <= 0 ? null : _smoothed,
+              pointerStrength: disable ? 0 : _pointerStrength,
+              velocity: disable ? Offset.zero : _velocity,
+              burst: disable ? 0 : _burst,
+            ),
+            child: const SizedBox.expand(),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _HomePointerFxPainter extends CustomPainter {
+  _HomePointerFxPainter({
+    required this.t,
+    this.pointer,
+    this.pointerStrength = 0,
+    this.velocity = Offset.zero,
+    this.burst = 0,
+  });
+
+  final double t;
+  final Offset? pointer;
+  final double pointerStrength;
+  final Offset velocity;
+  final double burst;
+
+  @override
+  void paint(Canvas canvas, Size canvasSize) {
+    if (pointer == null || pointerStrength <= 0) return;
+    final w = canvasSize.width;
+    final h = canvasSize.height;
+    final p = pointer!;
+    _drawPointerAura(canvas, w, h, p, pointerStrength, burst);
+    _drawPointerOrbit(canvas, w, h, p, pointerStrength, burst);
+    _drawPointerTrail(canvas, p, velocity, pointerStrength, burst);
+    _drawPointerRings(canvas, p, pointerStrength, burst);
+  }
+
   void _drawPointerAura(
     Canvas canvas,
     double w,
@@ -540,35 +723,8 @@ class _HomeAmbientPainter extends CustomPainter {
     }
   }
 
-  void _drawGrain(Canvas canvas, double w, double h) {
-    final rng = math.Random(_seed + 7 + (t * 10).floor());
-    final count = (w * h / 7000).clamp(100.0, 220.0).round();
-    final paint = Paint()..color = Colors.white.withValues(alpha: 0.025);
-
-    for (var i = 0; i < count; i++) {
-      final x = rng.nextDouble() * w;
-      final y = rng.nextDouble() * h;
-      canvas.drawRect(Rect.fromLTWH(x, y, 1, 1), paint);
-    }
-  }
-
-  void _drawVignette(Canvas canvas, double w, double h) {
-    final center = Offset(w / 2, h / 2);
-    final radius = math.max(w, h) * 0.72;
-    final paint = Paint()
-      ..shader = RadialGradient(
-        colors: [
-          Colors.transparent,
-          HomeConstants.vignetteColor.withValues(alpha: 0.18),
-          HomeConstants.vignetteColor.withValues(alpha: 0.58),
-        ],
-        stops: const [0.42, 0.76, 1.0],
-      ).createShader(Rect.fromCircle(center: center, radius: radius));
-    canvas.drawRect(Offset.zero & Size(w, h), paint);
-  }
-
   @override
-  bool shouldRepaint(covariant _HomeAmbientPainter oldDelegate) {
+  bool shouldRepaint(covariant _HomePointerFxPainter oldDelegate) {
     return oldDelegate.t != t ||
         oldDelegate.pointer != pointer ||
         oldDelegate.pointerStrength != pointerStrength ||

@@ -1,8 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
+import 'package:zork_dude/data/save_repository.dart';
 import 'package:zork_dude/data/world_repository.dart';
 import 'package:zork_dude/domain/combat/combat_action_step.dart';
 import 'package:zork_dude/domain/combat/combat_command.dart';
 import 'package:zork_dude/domain/combat/combat_engine.dart';
+import 'package:zork_dude/domain/combat/combat_reward.dart';
 import 'package:zork_dude/domain/combat/status_effect.dart';
 import 'package:zork_dude/domain/combat/combat_encounter.dart';
 import 'package:zork_dude/domain/combat/combat_types.dart';
@@ -21,9 +25,13 @@ class LogEntry {
 }
 
 class GameController extends ChangeNotifier {
-  GameController();
+  GameController({SaveRepository? saveRepository})
+      : _saveRepo = saveRepository ?? SaveRepository();
 
   static const _commandThrottle = Duration(milliseconds: 280);
+
+  final SaveRepository _saveRepo;
+  bool hasSave = false;
 
   GameSession? session;
   final List<LogEntry> log = [];
@@ -34,6 +42,8 @@ class GameController extends ChangeNotifier {
   String? error;
   bool battleNavigationPending = false;
   EndingKind pendingEnding = EndingKind.none;
+  CombatReward? lastCombatReward;
+  bool pendingReturnToTitle = false;
   bool _commandBusy = false;
   DateTime? _lastCommandAt;
 
@@ -51,10 +61,36 @@ class GameController extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool consumePendingReturnToTitle() {
+    if (!pendingReturnToTitle) return false;
+    pendingReturnToTitle = false;
+    notifyListeners();
+    return true;
+  }
+
+  Future<void> prepareReturnToTitle() async {
+    final s = session;
+    if (s == null) return;
+    s.inCombat = false;
+    s.currentEnemy = '';
+    s.activeEncounter = null;
+    s.gameOver = false;
+    pendingEnding = EndingKind.none;
+    battleNavigationPending = false;
+    lastCombatReward = null;
+    await _persist();
+    notifyListeners();
+  }
+
   Future<void> init() async {
     try {
       loading = true;
       notifyListeners();
+      try {
+        hasSave = await _saveRepo.hasSave();
+      } catch (_) {
+        hasSave = false;
+      }
       session = await GameSession.create(WorldRepository());
       log.clear();
       _append(session!.roomDescription(session!.currentRoomId));
@@ -65,6 +101,81 @@ class GameController extends ChangeNotifier {
       loading = false;
       notifyListeners();
     }
+  }
+
+  Future<void> continueGame() async {
+    try {
+      loading = true;
+      notifyListeners();
+      final data = await _saveRepo.load();
+      if (data == null) {
+        hasSave = false;
+        loading = false;
+        notifyListeners();
+        return;
+      }
+      session = await GameSession.create(WorldRepository(), starterItems: false);
+      session!.applySaveJson(data);
+      log.clear();
+      pendingEnding = EndingKind.none;
+      battleNavigationPending = false;
+      lastCombatReward = null;
+      syncMapLayerToPlayer();
+      _append('═══ 继续旅程 ═══');
+      _append(session!.roomDescription(session!.currentRoomId));
+      hasSave = true;
+      loading = false;
+      notifyListeners();
+      unawaited(_persist());
+    } catch (e) {
+      error = e.toString();
+      loading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> startNewGame({bool wipeSave = true}) async {
+    try {
+      loading = true;
+      notifyListeners();
+      session = await GameSession.create(WorldRepository());
+      log.clear();
+      pendingEnding = EndingKind.none;
+      battleNavigationPending = false;
+      lastCombatReward = null;
+      mapLayer = MapLayer.surface;
+      _append(session!.roomDescription(session!.currentRoomId));
+      if (wipeSave) {
+        await _saveRepo.save(session!);
+        hasSave = true;
+      }
+      loading = false;
+      notifyListeners();
+    } catch (e) {
+      error = e.toString();
+      loading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> _persist() async {
+    final s = session;
+    if (s == null) return;
+    try {
+      await _saveRepo.save(s);
+      hasSave = true;
+    } catch (_) {
+      // Autosave unavailable (e.g. widget tests without platform plugins).
+    }
+  }
+
+  void reviveFromDeath() {
+    final s = session;
+    if (s == null) return;
+    if (s.gameOver || s.inCombat) {
+      s.reviveAfterDeath();
+    }
+    notifyListeners();
   }
 
   void toggleMap() {
@@ -110,7 +221,12 @@ class GameController extends ChangeNotifier {
     notifyListeners();
     try {
       if (echo) _append('> $raw', isCommand: true);
-      if (raw.trim().toLowerCase() == 'map' || raw.trim().toLowerCase() == 'm') {
+      final lowered = raw.trim().toLowerCase();
+      if (lowered == 'quit' || lowered == 'exit') {
+        pendingReturnToTitle = true;
+        return;
+      }
+      if (lowered == 'map' || lowered == 'm') {
         mapVisible = !mapVisible;
         _append(mapVisible ? '已显示迷雾残页。' : '已隐藏迷雾残页。');
         return;
@@ -147,6 +263,8 @@ class GameController extends ChangeNotifier {
           syncMapLayerToPlayer();
         case GameEventType.gameOver:
           pendingEnding = EndingKind.gameOver;
+        case GameEventType.returnToTitle:
+          pendingReturnToTitle = true;
         case GameEventType.mainWinAnnounced:
         case GameEventType.siteWinAnnounced:
           break;
@@ -166,10 +284,13 @@ class GameController extends ChangeNotifier {
       _append('\n☢️ 站点最终BOSS已击败！站点行动完成！');
       _append('可继续自由探索，或使用 ng+ 开启二周目。');
     }
-    if (s.playerHp <= 0 && !s.gameOver) {
-      s.gameOver = true;
+    if (s.playerHp <= 0) {
+      s.reviveAfterDeath();
       pendingEnding = EndingKind.gameOver;
-      _append('\n💀 你死了……');
+      _append('\n💀 你死了……得分 -${GameSession.deathScorePenalty}（不低于 0）');
+      unawaited(_persist());
+    } else {
+      unawaited(_persist());
     }
     notifyListeners();
   }
@@ -223,7 +344,17 @@ class GameController extends ChangeNotifier {
     if (s == null) return;
     final defeatedIds = _collectDefeatedMonsterIds(s, outcome);
     applyCombatResult(s.finishEncounter(outcome));
+    lastCombatReward =
+        outcome == CombatOutcome.victory ? s.lastCombatReward : null;
     _classifyCombatEnding(outcome, defeatedIds);
+    unawaited(_persist());
+  }
+
+  CombatReward? takeLastCombatReward() {
+    final reward = lastCombatReward;
+    lastCombatReward = null;
+    session?.lastCombatReward = null;
+    return reward;
   }
 
   List<String> _collectDefeatedMonsterIds(GameSession s, CombatOutcome outcome) {
@@ -288,8 +419,10 @@ class GameController extends ChangeNotifier {
     log.clear();
     pendingEnding = EndingKind.none;
     battleNavigationPending = false;
+    lastCombatReward = null;
     mapLayer = MapLayer.surface;
     _append(s.roomDescription(s.currentRoomId));
+    unawaited(_persist());
     notifyListeners();
   }
 

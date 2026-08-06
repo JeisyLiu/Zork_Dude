@@ -51,6 +51,7 @@ readable text, watermark, logo, HUD, thick frame border, collage, neon colors
 |------|------|----------------|
 | 探索底图 `bg_*.png` | 16:9 | 640×360 或 960×540（再 nearest-neighbor 放大） |
 | 结算插画 `ending/*.png` | 16:9 | 640×360 或 960×540 |
+| 战斗胜利侧图 | 3:4 竖向 | 360×480 或 480×640（贴右侧，左留文案区） |
 | 标题英雄图 | 1:1 | 256×256～512×512 |
 
 ---
@@ -244,6 +245,33 @@ no Chinese, no other words, no logo, widescreen 3:1, high contrast readable titl
 
 ---
 
+## 战斗胜利侧图
+
+路径：`fx/combat_victory.png`  
+用于普通战斗胜利结算页：**左侧程序叠文案**（击败 / 战利品 / 金币经验），**右侧放这张插画**，填掉横屏右侧大块死黑。
+
+**规格：** 竖向偏方；建议 **360×480** 或 **480×640**（3:4）；可 nearest-neighbor 放大。不要画字、不要画 UI 框。  
+**构图：** 主体偏右下或居中偏右，左侧可略留雾/暗部，方便将来若叠半透明也不抢字（当前字在左栏，图独占右栏）。  
+**风格参考：** `mist_tower_hero.png`
+
+```text
+vertical pixel art victory panel for a dark fantasy RPG battle result screen,
+tiny hooded adventurer standing after a won fight, sword tip resting on mossy stone,
+small pile of antique-gold coins and a glowing trinket at their feet as warm light source,
+broken enemy silhouette fading into mist behind them, two soft horizontal fog bands,
+distant tiny mist tower with a few lit windows, solemn quiet triumph not flashy,
+clear readable lighting, subjects lit by warm antique-gold treasure glow,
+composition weighted to the right half, left side softer darker fog margin,
+minimalist pixel art for a dark fantasy adventure game,
+muted charcoal brown, dark olive and desaturated antique gold palette,
+sparse tiny glowing accents, crisp 16-bit pixel edges, restrained detail,
+atmospheric, no text, no logo, no UI frame, portrait 3:4
+```
+
+负面追加：`pitch black void, underexposed, unreadable silhouette, busy loot HUD, inventory icons, health bar, celebration confetti, fireworks, anime pose, dual wield flash, readable text`
+
+---
+
 ## 文件对照
 
 | 文件 | 图层 / 结局 | 风格 |
@@ -252,6 +280,7 @@ no Chinese, no other words, no logo, widescreen 3:1, high contrast readable titl
 | `home/button_enter.png` | 封面进入按钮底板 | 统一风格句 + 无字底板 |
 | `fx/encounter_banner.png` | 遇敌转场 ENCOUNTER! | 像素英文特效字 |
 | `fx/battle_start_banner.png` | 开战 BATTLE START | 像素英文特效字 |
+| `fx/combat_victory.png` | 普通战斗胜利侧图 | 统一风格句 + 竖向胜利余韵 |
 | `exploration/bg_surface.png` | 地表 | 统一风格句 + 题材 |
 | `exploration/bg_cave.png` | 洞穴 | 同上 |
 | `exploration/bg_tower.png` | 高塔 | 同上 |

@@ -10,6 +10,7 @@ import 'package:zork_dude/ui/components/landscape_scaffold.dart';
 import 'package:zork_dude/ui/exploration/exploration_layout_constants.dart';
 import 'package:zork_dude/ui/game_skin_scope.dart';
 import 'package:zork_dude/ui/game_ui_theme.dart';
+import 'package:zork_dude/ui/navigation/game_exit.dart';
 import 'package:zork_dude/ui/navigation/landscape_page_route.dart';
 import 'package:zork_dude/widgets/command_input.dart';
 import 'package:zork_dude/widgets/exploration_keyboard_scope.dart';
@@ -54,7 +55,14 @@ class _ExplorationScreenState extends State<ExplorationScreen> {
       _showingEncounter = true;
     }
     _presentEndingIfNeeded();
+    _presentReturnToTitleIfNeeded();
     setState(() {});
+  }
+
+  Future<void> _presentReturnToTitleIfNeeded() async {
+    if (!mounted) return;
+    if (!widget.controller.consumePendingReturnToTitle()) return;
+    await GameExit.returnToTitle(context, widget.controller);
   }
 
   String _encounterEnemyLabel() {
@@ -166,7 +174,13 @@ class _ExplorationScreenState extends State<ExplorationScreen> {
         ? Duration.zero
         : const Duration(milliseconds: 180);
 
-    return GameSkinScope(
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) async {
+        if (didPop) return;
+        await GameExit.returnToTitle(context, c);
+      },
+      child: GameSkinScope(
       skin: skin,
       child: ExplorationKeyboardScope(
         controller: c,
@@ -250,6 +264,7 @@ class _ExplorationScreenState extends State<ExplorationScreen> {
           ),
         ),
       ),
+    ),
     );
   }
 }

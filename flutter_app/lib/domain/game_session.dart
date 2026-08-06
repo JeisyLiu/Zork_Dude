@@ -7,6 +7,7 @@ import 'package:zork_dude/domain/combat/combat_command.dart';
 import 'package:zork_dude/domain/combat/combat_encounter.dart';
 import 'package:zork_dude/domain/combat/combat_encounter_factory.dart';
 import 'package:zork_dude/domain/combat/combat_engine.dart';
+import 'package:zork_dude/domain/combat/combat_reward.dart';
 import 'package:zork_dude/domain/combat/status_effect.dart';
 import 'package:zork_dude/domain/combat/combat_types.dart';
 import 'package:zork_dude/domain/command_result.dart';
@@ -54,6 +55,7 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
 
   @override
   String currentRoomId = '';
+  String? previousRoomId;
   int turns = 0;
   @override
   int score = 0;
@@ -76,6 +78,7 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
   @override
   String currentEnemy = '';
   CombatEncounter? activeEncounter;
+  CombatReward? lastCombatReward;
   final CombatEngine combatEngine = CombatEngine();
   String equippedBag = 'bag_starter';
 
@@ -364,10 +367,11 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
     'score': (_) => CommandResult.ok(doScore()),
     'ng+': (_) => CommandResult.ok(doNewGamePlus()),
     'map': (_) => CommandResult.ok('切换地图显示。', incrementTurn: false),
-    'quit': (_) {
-      gameOver = true;
-      return CommandResult.ok('再见！');
-    },
+    'quit': (_) => CommandResult.ok(
+          '',
+          events: const [GameEvent(type: GameEventType.returnToTitle)],
+          incrementTurn: false,
+        ),
   };
 
   String roomDescription(String id) {
@@ -399,12 +403,20 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
     return text.toString();
   }
 
+  void _recordRoomChange(String nextRoomId) {
+    if (nextRoomId != currentRoomId) {
+      previousRoomId = currentRoomId;
+    }
+  }
+
   CommandResult doGo(Direction d) {
     if (inCombat) return CommandResult.ok('战斗中！(attack/flee)');
     final room = rooms[currentRoomId]!;
     if (!room.exits.containsKey(d)) return CommandResult.ok('不能往 ${d.value}。');
     if (room.dark && !hasLight()) return CommandResult.ok('🌑 太黑了不敢走。');
-    currentRoomId = room.exits[d]!;
+    final nextId = room.exits[d]!;
+    _recordRoomChange(nextId);
+    currentRoomId = nextId;
     final nr = rooms[currentRoomId]!;
     var extra = '';
     if (nr.onEnter != null) {
@@ -572,6 +584,9 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
     var defeated = enc?.defeatedEnemies() ?? <CombatActor>[];
 
     final lines = <String>[];
+    final defeatedNames = <String>[];
+    final lootLabels = <String>[];
+    final notes = <String>[];
     var totalGold = 0;
     var totalExp = 0;
     final rewardedInstances = <String>{};
@@ -600,10 +615,12 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
       if (m == null) continue;
       m.alive = false;
       m.hp = 0;
+      defeatedNames.add(m.label);
       lines.add('🎉 击败了 ${m.name}！');
       for (final li in m.loot) {
         if (items.containsKey(li)) {
           invAdd(li);
+          lootLabels.add(items[li]!.label);
           lines.add('🏆 战利品：${items[li]!.name}');
         }
       }
@@ -617,15 +634,28 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
       lines.add('💰 +${totalGold}金币 +${totalExp}经验');
     }
 
-    _applyBossVictoryFlags(lines);
+    _applyBossVictoryFlags(lines, notes);
     inCombat = false;
     currentEnemy = '';
     activeEncounter = null;
 
+    String? banter;
     if (companionList.isNotEmpty) {
       final c = companions[companionList.first];
-      if (c != null) lines.add('\n${c.banter()}');
+      if (c != null) {
+        banter = c.banter();
+        lines.add('\n$banter');
+      }
     }
+
+    lastCombatReward = CombatReward(
+      defeatedNames: defeatedNames,
+      lootLabels: lootLabels,
+      gold: totalGold,
+      exp: totalExp,
+      notes: notes,
+      banter: banter,
+    );
 
     return CommandResult.ok(
       lines.isEmpty ? '战斗胜利！' : lines.join('\n'),
@@ -633,19 +663,25 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
     );
   }
 
-  void _applyBossVictoryFlags(List<String> lines) {
+  void _applyBossVictoryFlags(List<String> lines, List<String> notes) {
     for (final m in monsters.values) {
       if (!m.alive && m.id == 'scp_breach_core' && hasItem('containment_box')) {
         score += 50;
-        lines.add('\n📦 你用收容箱稳定了异常核心，获得额外 50 分！');
+        const msg = '📦 你用收容箱稳定了异常核心，获得额外 50 分！';
+        lines.add('\n$msg');
+        notes.add(msg);
       }
       if (!m.alive && m.id == 'scp_001') {
         siteWon = true;
         score += 100;
-        lines.add('\n☢️ 站点最终威胁已被压制！站点行动告一段落（+100 分）。');
+        const msg = '☢️ 站点最终威胁已被压制！站点行动告一段落（+100 分）。';
+        lines.add('\n$msg');
+        notes.add(msg);
       }
       if (!m.alive && m.rank == MonsterRank.boss) {
-        lines.add('\n💀 BOSS【${m.name}】被击败！');
+        final msg = '💀 BOSS【${m.name}】被击败！';
+        lines.add('\n$msg');
+        notes.add(msg);
       }
     }
   }
@@ -742,8 +778,16 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
     if (['261', 'scp-261', 'scp_261', '贩卖机'].contains(t)) {
       return CommandResult.ok(doScp261());
     }
-    final found = resolveItemRef(t, inventory.keys);
-    if (found == null) return CommandResult.ok('没有 $t。');
+
+    final parsed = _resolveUseTarget(args);
+    if (parsed == null) return CommandResult.ok('没有 $t。');
+    final found = parsed.itemId;
+    final destArgs = parsed.rest;
+
+    if (found == 'magic_scroll') {
+      return _useTeleportScroll(destArgs);
+    }
+
     final it = items[found]!;
     if (it.type == ItemType.bag) return CommandResult.ok(equipBag(found));
     if (!it.usable) return CommandResult.ok('${it.name} 不能用。');
@@ -751,6 +795,109 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
     if (it.type == ItemType.potion || it.type == ItemType.food) invRemove(found);
     score += 2;
     return CommandResult.ok(msg.isNotEmpty ? msg : '使用了 ${it.name}。');
+  }
+
+  /// Resolves inventory item from [args], allowing trailing destination tokens.
+  ({String itemId, List<String> rest})? _resolveUseTarget(List<String> args) {
+    final keys = inventory.keys;
+    final whole = resolveItemRef(args.join(' '), keys);
+    if (whole != null) return (itemId: whole, rest: const <String>[]);
+
+    if (args.length > 1) {
+      final first = resolveItemRef(args.first, keys);
+      if (first != null) {
+        return (itemId: first, rest: args.sublist(1));
+      }
+      for (var take = args.length - 1; take >= 1; take--) {
+        final hit = resolveItemRef(args.sublist(0, take).join(' '), keys);
+        if (hit != null) {
+          return (itemId: hit, rest: args.sublist(take));
+        }
+      }
+    }
+    return null;
+  }
+
+  String? resolveRoomRef(String ref, Iterable<String> candidates) {
+    final list = candidates.toList();
+    final idx = int.tryParse(ref);
+    if (idx != null && idx >= 1 && idx <= list.length) return list[idx - 1];
+    final t = ref.toLowerCase().trim();
+    for (final id in list) {
+      if (id.toLowerCase() == t) return id;
+      final rm = rooms[id];
+      if (rm == null) continue;
+      final name = rm.name.toLowerCase();
+      if (name == t || name.contains(t) || t.contains(name)) return id;
+    }
+    return null;
+  }
+
+  List<String> visitedRoomIds() => rooms.entries
+      .where((e) => e.value.visited)
+      .map((e) => e.key)
+      .toList();
+
+  CommandResult _useTeleportScroll(List<String> destArgs) {
+    if (inCombat) {
+      return CommandResult.ok('战斗中无法展开传送卷轴！');
+    }
+    if (!hasItem('magic_scroll')) {
+      return CommandResult.ok('没有传送卷轴。');
+    }
+    final visited = visitedRoomIds();
+    if (destArgs.isEmpty) {
+      final lines = <String>[
+        '传送卷轴闪烁着符文。选择已探索地点：',
+        '  use 传送卷轴 <地点名或id>',
+      ];
+      for (var i = 0; i < visited.length; i++) {
+        final id = visited[i];
+        final name = rooms[id]?.name ?? id;
+        final here = id == currentRoomId ? ' ← 当前位置' : '';
+        lines.add('  ${i + 1}. $name ($id)$here');
+      }
+      return CommandResult.ok(lines.join('\n'));
+    }
+
+    final dest = resolveRoomRef(destArgs.join(' '), visited);
+    if (dest == null) {
+      return CommandResult.ok('无法传送到那里——只能前往已探索过的地点。');
+    }
+    if (dest == currentRoomId) {
+      return CommandResult.ok('你已经在 ${rooms[dest]!.name} 了。');
+    }
+
+    invRemove('magic_scroll');
+    _recordRoomChange(dest);
+    currentRoomId = dest;
+    final nr = rooms[dest]!;
+    if (!nr.visited) {
+      nr.visited = true;
+      visitOrder.add(dest);
+    }
+
+    var extra = '';
+    if (nr.onEnter != null) {
+      final r = nr.onEnter!(this);
+      if (r != null && r.isNotEmpty) extra += '\n\n$r';
+    }
+    final combat = checkCombat();
+    if (combat != null) extra += '\n\n$combat';
+
+    final events = <GameEvent>[];
+    if (inCombat) {
+      events.add(GameEvent(
+        type: GameEventType.battleRequested,
+        enemyId: currentEnemy,
+        roomId: currentRoomId,
+      ));
+    }
+    score += 5;
+    return CommandResult.ok(
+      '卷轴化为光芒！你传送到了 ${nr.name}。\n${roomDescription(currentRoomId)}$extra',
+      events: events,
+    );
   }
 
   String _defaultHeal(ItemDefinition it) {
@@ -1161,13 +1308,173 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
     }
   }
 
-  CommandResult resolveCombatDefeat() {
-    gameOver = true;
+  static const int deathScorePenalty = 100;
+  static const String defaultReviveRoomId = 'forest_entrance';
+  static const int saveVersion = 1;
+
+  /// Penalize score, return to [previousRoomId], restore HP, and clear combat.
+  void reviveAfterDeath() {
+    score = max(0, score - deathScorePenalty);
+    final dest = (previousRoomId != null && rooms.containsKey(previousRoomId))
+        ? previousRoomId!
+        : defaultReviveRoomId;
+    currentRoomId = dest;
+    playerHp = playerMaxHp;
     inCombat = false;
     currentEnemy = '';
     activeEncounter = null;
+    gameOver = false;
+  }
+
+  Map<String, dynamic> toSaveJson() {
+    return {
+      'version': saveVersion,
+      'currentRoomId': currentRoomId,
+      'previousRoomId': previousRoomId,
+      'turns': turns,
+      'score': score,
+      'gold': gold,
+      'playerHp': playerHp,
+      'playerMaxHp': playerMaxHp,
+      'playerAtkBonus': playerAtkBonus,
+      'playerDefBonus': playerDefBonus,
+      'gameOver': gameOver,
+      'won': won,
+      'siteWon': siteWon,
+      'ngCycle': ngCycle,
+      'equippedBag': equippedBag,
+      'flags': Map<String, dynamic>.from(flags),
+      'inventory': Map<String, int>.from(inventory),
+      'companionList': List<String>.from(companionList),
+      'visitOrder': List<String>.from(visitOrder),
+      'companions': {
+        for (final e in companions.entries)
+          e.key: {
+            'hp': e.value.hp,
+            'recruited': e.value.recruited,
+          },
+      },
+      'rooms': {
+        for (final e in rooms.entries)
+          e.key: {
+            'visited': e.value.visited,
+            'items': List<String>.from(e.value.items),
+            'exits': {
+              for (final ex in e.value.exits.entries) ex.key.value: ex.value,
+            },
+          },
+      },
+      'monsters': {
+        for (final e in monsters.entries)
+          e.key: {
+            'hp': e.value.hp,
+            'maxHp': e.value.maxHp,
+            'attack': e.value.attack,
+            'alive': e.value.alive,
+          },
+      },
+      'npcs': {
+        for (final e in npcs.entries)
+          e.key: {
+            'questDone': e.value.questDone,
+            'metBefore': e.value.metBefore,
+          },
+      },
+    };
+  }
+
+  void applySaveJson(Map<String, dynamic> json) {
+    if (json['version'] != saveVersion) {
+      throw StateError('Unsupported save version: ${json['version']}');
+    }
+    currentRoomId = json['currentRoomId'] as String;
+    previousRoomId = json['previousRoomId'] as String?;
+    turns = (json['turns'] as num?)?.toInt() ?? 0;
+    score = (json['score'] as num?)?.toInt() ?? 0;
+    gold = (json['gold'] as num?)?.toInt() ?? 0;
+    playerHp = (json['playerHp'] as num?)?.toInt() ?? playerMaxHp;
+    playerMaxHp = (json['playerMaxHp'] as num?)?.toInt() ?? playerMaxHp;
+    playerAtkBonus = (json['playerAtkBonus'] as num?)?.toInt() ?? 0;
+    playerDefBonus = (json['playerDefBonus'] as num?)?.toInt() ?? 0;
+    gameOver = json['gameOver'] as bool? ?? false;
+    won = json['won'] as bool? ?? false;
+    siteWon = json['siteWon'] as bool? ?? false;
+    ngCycle = (json['ngCycle'] as num?)?.toInt() ?? 0;
+    equippedBag = json['equippedBag'] as String? ?? equippedBag;
+
+    flags
+      ..clear()
+      ..addAll((json['flags'] as Map?)?.map(
+            (k, v) => MapEntry(k.toString(), v),
+          ) ??
+          {});
+
+    inventory
+      ..clear()
+      ..addAll((json['inventory'] as Map?)?.map(
+            (k, v) => MapEntry(k.toString(), (v as num).toInt()),
+          ) ??
+          {});
+
+    companionList
+      ..clear()
+      ..addAll((json['companionList'] as List?)?.map((e) => e.toString()) ?? []);
+
+    visitOrder
+      ..clear()
+      ..addAll((json['visitOrder'] as List?)?.map((e) => e.toString()) ?? []);
+
+    final companionData = json['companions'] as Map<String, dynamic>? ?? {};
+    for (final e in companionData.entries) {
+      final c = companions[e.key];
+      if (c == null) continue;
+      final m = e.value as Map<String, dynamic>;
+      c.hp = (m['hp'] as num?)?.toInt() ?? c.hp;
+      c.recruited = m['recruited'] as bool? ?? c.recruited;
+    }
+
+    final roomData = json['rooms'] as Map<String, dynamic>? ?? {};
+    for (final e in roomData.entries) {
+      final rm = rooms[e.key];
+      if (rm == null) continue;
+      final m = e.value as Map<String, dynamic>;
+      rm.visited = m['visited'] as bool? ?? rm.visited;
+      rm.items = List<String>.from((m['items'] as List?)?.map((i) => i.toString()) ?? rm.items);
+      final exitsRaw = m['exits'] as Map<String, dynamic>? ?? {};
+      rm.exits
+        ..clear()
+        ..addAll({
+          for (final ex in exitsRaw.entries)
+            if (Direction.fromString(ex.key) != null)
+              Direction.fromString(ex.key)!: ex.value.toString(),
+        });
+    }
+
+    final monsterData = json['monsters'] as Map<String, dynamic>? ?? {};
+    for (final e in monsterData.entries) {
+      final m = monsters[e.key];
+      if (m == null) continue;
+      final data = e.value as Map<String, dynamic>;
+      m.maxHp = (data['maxHp'] as num?)?.toInt() ?? m.maxHp;
+      m.hp = (data['hp'] as num?)?.toInt() ?? m.hp;
+      m.attack = (data['attack'] as num?)?.toInt() ?? m.attack;
+      m.alive = data['alive'] as bool? ?? m.alive;
+    }
+
+    final npcData = json['npcs'] as Map<String, dynamic>? ?? {};
+    for (final e in npcData.entries) {
+      final n = npcs[e.key];
+      if (n == null) continue;
+      final data = e.value as Map<String, dynamic>;
+      n.questDone = data['questDone'] as bool? ?? n.questDone;
+      n.metBefore = data['metBefore'] as bool? ?? n.metBefore;
+    }
+  }
+
+  CommandResult resolveCombatDefeat() {
+    reviveAfterDeath();
     return CommandResult.ok(
-      '\n💀 你被击败了……',
+      '\n💀 你被击败了……得分 -$deathScorePenalty（不低于 0）',
       events: const [GameEvent(type: GameEventType.gameOver), GameEvent(type: GameEventType.battleEnded)],
     );
   }

@@ -105,6 +105,10 @@ class _InventoryPanelState extends State<InventoryPanel> {
   }
 
   Future<void> _useItem(String id, int index) async {
+    if (id == 'magic_scroll') {
+      await _useTeleportScroll();
+      return;
+    }
     await _c.executeCommand('use $index');
     if (!mounted) return;
     final still = _c.session?.inventory.containsKey(id) ?? false;
@@ -113,6 +117,58 @@ class _InventoryPanelState extends State<InventoryPanel> {
     } else {
       setState(() => _selectedId = null);
     }
+  }
+
+  Future<void> _useTeleportScroll() async {
+    final s = _c.session;
+    if (s == null) return;
+    final visited = s.visitedRoomIds();
+    if (visited.isEmpty) {
+      await _c.executeCommand('use magic_scroll');
+      return;
+    }
+
+    final short = ExplorationLayoutConstants.isShort(MediaQuery.sizeOf(context));
+    final btnH = ExplorationLayoutConstants.chipHeightFor(short: short);
+    final skin = GameUiTheme.skinForMapLayer(_c.mapLayer);
+
+    await LandscapeOverlay.show<void>(
+      context: context,
+      title: '传送到 · Teleport',
+      skin: skin,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          for (final roomId in visited)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 6),
+              child: GameButton(
+                width: double.infinity,
+                height: btnH,
+                label: roomId == s.currentRoomId
+                    ? '${s.rooms[roomId]?.name ?? roomId}（此处）'
+                    : (s.rooms[roomId]?.name ?? roomId),
+                enabled: roomId != s.currentRoomId,
+                onPressed: roomId == s.currentRoomId
+                    ? null
+                    : () {
+                        Navigator.pop(context);
+                        _c.executeCommand('use magic_scroll $roomId').then((_) {
+                          if (!mounted) return;
+                          final still =
+                              _c.session?.inventory.containsKey('magic_scroll') ?? false;
+                          if (!still) {
+                            Navigator.of(context).maybePop();
+                          } else {
+                            setState(() => _selectedId = null);
+                          }
+                        });
+                      },
+              ),
+            ),
+        ],
+      ),
+    );
   }
 
   Future<void> _dropItem(String id, int index) async {

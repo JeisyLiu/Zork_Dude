@@ -231,5 +231,23 @@ class SpecialBehaviorRegistry {
       }
       return '现在没有战斗，药片只是让你短暂头晕了一下。';
     });
+
+    setUse('fishing_rod', (session) {
+      const waterRooms = {
+        'lake_shore',
+        'lake_island',
+        'underground_river',
+      };
+      if (!waterRooms.contains(session.currentRoomId)) {
+        return '这里没有水，没法钓鱼。';
+      }
+      if (session.item('fish') == null) {
+        return '鱼漂动了动……但你好像不知道该怎么把鱼收进包里。';
+      }
+      session.invAdd('fish');
+      session.score += 3;
+      final place = session.rooms[session.currentRoomId]?.name ?? '水边';
+      return '在$place，鱼漂猛地沉下去！你钓到了一条鱼！';
+    });
   }
 }

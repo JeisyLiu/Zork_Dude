@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zork_dude/domain/combat/combat_types.dart';
 import 'package:zork_dude/domain/game_session.dart';
 import 'package:zork_dude/domain/models/enums.dart';
@@ -8,6 +9,10 @@ import 'package:zork_dude/state/game_controller.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+
+  setUp(() {
+    SharedPreferences.setMockInitialValues({});
+  });
 
   group('SCP gate requires magic gem', () {
     late GameSession session;

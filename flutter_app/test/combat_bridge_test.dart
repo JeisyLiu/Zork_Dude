@@ -34,9 +34,14 @@ void main() {
       expect(enc.roundNumber, startRound + 1);
     });
 
-    test('defeat sets game over', () {
+    test('defeat revives player at previous room', () {
+      session.previousRoomId = 'forest_entrance';
+      session.currentRoomId = 'abandoned_hut';
+      session.score = 150;
       final result = session.resolveCombatDefeat();
-      expect(session.gameOver, isTrue);
+      expect(session.gameOver, isFalse);
+      expect(session.currentRoomId, 'forest_entrance');
+      expect(session.score, 50);
       expect(session.activeEncounter, isNull);
       expect(result.text, isNotEmpty);
     });

@@ -181,8 +181,8 @@ class _EndingOverlayState extends State<EndingOverlay>
       case EndingKind.gameOver:
         return const _EndingMeta(
           title: '你倒下了',
-          subtitle: '迷雾吞没了你的身影。\n塔与森林仍在等待下一次冒险。',
-          primaryLabel: '重新开始',
+          subtitle: '迷雾吞没了你的身影。\n你在上一处探索过的地点醒来，得分 -100（不低于 0）。',
+          primaryLabel: '在上一地点醒来',
           secondaryLabel: '回标题',
         );
       case EndingKind.none:

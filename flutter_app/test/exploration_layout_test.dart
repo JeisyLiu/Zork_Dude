@@ -71,7 +71,7 @@ void main() {
       expect(find.byType(DirectionPad), findsOneWidget);
       expect(find.text('查看'), findsWidgets);
       expect(find.text('丢弃'), findsWidgets);
-      expect(find.text('队伍'), findsWidgets);
+      expect(find.text('更多'), findsWidgets);
       expect(find.text('发送'), findsNothing);
     });
   }
@@ -87,7 +87,13 @@ void main() {
     expect(find.text('购买'), findsWidgets);
     expect(find.text('出售'), findsWidgets);
     expect(find.text('招募'), findsWidgets);
-    expect(find.text('队伍'), findsWidgets);
+    expect(find.text('更多'), findsWidgets);
+
+    await tester.tap(find.byKey(const Key('quick-command-more')));
+    await tester.pumpAndSettle();
+
+    expect(find.text('回标题'), findsOneWidget);
+    expect(find.text('队伍'), findsOneWidget);
   });
 
   testWidgets('Story log scrolls to latest entry after command', (tester) async {

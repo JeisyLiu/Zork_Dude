@@ -5,6 +5,7 @@ enum GameEventType {
   siteWinAnnounced,
   gameOver,
   newVisit,
+  returnToTitle,
 }
 
 class GameEvent {

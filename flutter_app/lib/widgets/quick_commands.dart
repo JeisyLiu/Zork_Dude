@@ -9,6 +9,7 @@ import 'package:zork_dude/ui/exploration/exploration_layout_constants.dart';
 import 'package:zork_dude/ui/exploration/inventory_panel.dart';
 import 'package:zork_dude/ui/game_ui_assets.dart';
 import 'package:zork_dude/ui/game_ui_theme.dart';
+import 'package:zork_dude/ui/navigation/game_exit.dart';
 
 /// Exploration controls: fixed D-pad + grouped two-row action grid + more sheet.
 class QuickCommandPanel extends StatelessWidget {
@@ -303,10 +304,10 @@ class QuickCommandPanel extends StatelessWidget {
         onPressed: () => controller.executeCommand('recruit'),
       ),
       _QuickAction(
-        label: '队伍',
-        subLabel: 'party',
+        label: '更多',
+        subLabel: 'more',
+        isMore: true,
         enabled: panelEnabled,
-        onPressed: () => controller.executeCommand('party'),
       ),
     ];
   }
@@ -321,17 +322,24 @@ class QuickCommandPanel extends StatelessWidget {
     );
   }
 
-  List<_QuickAction> _moreActions(bool inCombat) {
-    // Leftover low-frequency commands (opened only in combat via 更多).
+  List<_QuickAction> _moreActions(BuildContext context, bool inCombat) {
     return [
       _QuickAction(label: '得分', subLabel: 'score', onPressed: () => controller.executeCommand('score')),
       _QuickAction(label: '帮助', subLabel: 'help', onPressed: () => controller.executeCommand('help')),
-      _QuickAction(label: '二周目', subLabel: 'ng+', onPressed: () => controller.executeCommand('ng+')),
+      if (!inCombat)
+        _QuickAction(label: '二周目', subLabel: 'ng+', onPressed: () => controller.executeCommand('ng+')),
+      if (!inCombat)
+        _QuickAction(label: '队伍', subLabel: 'party', onPressed: () => controller.executeCommand('party')),
+      _QuickAction(
+        label: '回标题',
+        subLabel: 'title',
+        onPressed: () => GameExit.returnToTitle(context, controller),
+      ),
     ];
   }
 
   void _showMoreSheet(BuildContext context, bool inCombat) {
-    final actions = _moreActions(inCombat);
+    final actions = _moreActions(context, inCombat);
     final skin = GameUiTheme.skinForMapLayer(controller.mapLayer);
 
     LandscapeOverlay.show<void>(

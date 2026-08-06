@@ -505,10 +505,10 @@
   {
     "id": "magic_scroll",
     "name": "传送卷轴",
-    "desc": "记载传送咒语。",
+    "desc": "记载传送咒语。可传送到任意已探索地点（use 传送卷轴 <地点>）。",
     "type": "SCROLL",
     "usable": true,
-    "use_msg": "卷轴化为光芒！你被传送到森林入口。",
+    "use_msg": "传送卷轴闪烁。选择已探索地点：use 传送卷轴 <地点名或id>",
     "value": 15,
     "emoji": "📜"
   },
@@ -545,7 +545,7 @@
   {
     "id": "fishing_rod",
     "name": "鱼竿",
-    "desc": "一根细长的鱼竿。",
+    "desc": "一根细长的鱼竿。可在湖边、湖心岛或地下河钓鱼。",
     "type": "TOOL",
     "usable": true,
     "use_msg": "这里没有水，没法钓鱼。",

@@ -60,6 +60,41 @@ void main() {
       expect(result.text, contains('战斗中'));
     });
 
+    test('fishing rod catches fish at lake shore', () {
+      session.currentRoomId = 'lake_shore';
+      session.invAdd('fishing_rod');
+      final before = session.inventory['fish'] ?? 0;
+      final result = session.processCommand('use fishing_rod');
+      expect(result.text, contains('钓到'));
+      expect(session.inventory['fish'] ?? 0, before + 1);
+    });
+
+    test('fishing rod fails away from water', () {
+      session.currentRoomId = 'forest_entrance';
+      session.invAdd('fishing_rod');
+      final result = session.processCommand('use fishing_rod');
+      expect(result.text, contains('没法钓鱼'));
+      expect(session.hasItem('fish'), isFalse);
+    });
+
+    test('teleport scroll lists destinations without consuming', () {
+      session.invAdd('magic_scroll');
+      final result = session.processCommand('use magic_scroll');
+      expect(result.text, contains('已探索'));
+      expect(session.hasItem('magic_scroll'), isTrue);
+      expect(session.currentRoomId, 'forest_entrance');
+    });
+
+    test('teleport scroll moves to visited room and consumes', () {
+      session.rooms['crossroads']!.visited = true;
+      session.visitOrder.add('crossroads');
+      session.invAdd('magic_scroll');
+      final result = session.processCommand('use magic_scroll crossroads');
+      expect(session.currentRoomId, 'crossroads');
+      expect(session.hasItem('magic_scroll'), isFalse);
+      expect(result.text, contains('传送'));
+    });
+
     test('flee has fifty percent chance path', () {
       session.inCombat = true;
       session.currentEnemy = 'giant_rat';

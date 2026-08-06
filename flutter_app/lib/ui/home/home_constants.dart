@@ -36,10 +36,10 @@ abstract final class HomeConstants {
   static double heroSizeFor(Size screen) {
     final height = screen.height;
     final width = screen.width;
-    // Top-stacked hero: size by vertical budget, keep presence on landscape.
-    if (height < 400) return 88;
-    if (height < 520) return 120;
-    if (width >= 900 || height >= 720) return 168;
-    return 140;
+    // Top-stacked hero: dominate the first viewport while leaving room for CTA.
+    if (height < 400) return 112;
+    if (height < 520) return 168;
+    if (width >= 900 || height >= 720) return 228;
+    return 196;
   }
 }

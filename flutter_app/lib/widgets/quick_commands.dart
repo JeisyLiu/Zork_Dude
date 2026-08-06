@@ -6,6 +6,7 @@ import 'package:zork_dude/ui/components/game_outlined_text.dart';
 import 'package:zork_dude/ui/components/game_panel.dart';
 import 'package:zork_dude/ui/components/landscape_overlay.dart';
 import 'package:zork_dude/ui/exploration/exploration_layout_constants.dart';
+import 'package:zork_dude/ui/exploration/inventory_panel.dart';
 import 'package:zork_dude/ui/game_ui_assets.dart';
 import 'package:zork_dude/ui/game_ui_theme.dart';
 
@@ -57,6 +58,7 @@ class QuickCommandPanel extends StatelessWidget {
               builder: (context, constraints) {
                 final columns = ExplorationLayoutConstants.primaryColumns;
                 final primary = _primaryActions(
+                  context: context,
                   inCombat: inCombat,
                   hasItems: hasItems,
                   hasNpc: hasNpc,
@@ -142,6 +144,7 @@ class QuickCommandPanel extends StatelessWidget {
   }
 
   List<_QuickAction> _primaryActions({
+    required BuildContext context,
     required bool inCombat,
     required bool hasItems,
     required bool hasNpc,
@@ -174,7 +177,7 @@ class QuickCommandPanel extends StatelessWidget {
           label: '背包',
           subLabel: 'inv',
           enabled: panelEnabled,
-          onPressed: () => controller.executeCommand('inventory'),
+          onPressed: () => _openInventory(context, InventoryPanelMode.all),
         ),
         _QuickAction(
           label: '对话',
@@ -240,7 +243,7 @@ class QuickCommandPanel extends StatelessWidget {
         label: '背包',
         subLabel: 'inv',
         enabled: panelEnabled,
-        onPressed: () => controller.executeCommand('inventory'),
+        onPressed: () => _openInventory(context, InventoryPanelMode.all),
       ),
       _QuickAction(
         label: '拿起',
@@ -254,7 +257,7 @@ class QuickCommandPanel extends StatelessWidget {
         subLabel: 'use',
         highlighted: hasInventory,
         enabled: panelEnabled && hasInventory,
-        onPressed: _use,
+        onPressed: () => _openInventory(context, InventoryPanelMode.usable),
       ),
       _QuickAction(
         label: '对话',
@@ -273,7 +276,7 @@ class QuickCommandPanel extends StatelessWidget {
         label: '丢弃',
         subLabel: 'drop',
         enabled: panelEnabled && hasInventory,
-        onPressed: _drop,
+        onPressed: () => _openInventory(context, InventoryPanelMode.droppable),
       ),
       _QuickAction(
         label: '商品',
@@ -306,6 +309,16 @@ class QuickCommandPanel extends StatelessWidget {
         onPressed: () => controller.executeCommand('party'),
       ),
     ];
+  }
+
+  void _openInventory(BuildContext context, InventoryPanelMode mode) {
+    final skin = GameUiTheme.skinForMapLayer(controller.mapLayer);
+    InventoryPanel.show(
+      context: context,
+      controller: controller,
+      skin: skin,
+      mode: mode,
+    );
   }
 
   List<_QuickAction> _moreActions(bool inCombat) {
@@ -361,32 +374,6 @@ class QuickCommandPanel extends StatelessWidget {
         return (label: '(${e.key + 1}) ${it?.name ?? e.value}', value: '${e.key + 1}');
       }),
       (label: '全部 all', value: 'all'),
-    ]);
-  }
-
-  void _drop() {
-    final s = controller.session!;
-    final keys = s.inventory.keys.toList();
-    if (keys.isEmpty) {
-      controller.executeCommand('drop');
-      return;
-    }
-    onPickTargets('丢弃 drop', [
-      for (var i = 0; i < keys.length; i++)
-        (label: '(${i + 1}) ${s.items[keys[i]]?.name ?? keys[i]}', value: '${i + 1}'),
-    ]);
-  }
-
-  void _use() {
-    final s = controller.session!;
-    final keys = s.inventory.keys.toList();
-    if (keys.isEmpty) {
-      controller.executeCommand('use');
-      return;
-    }
-    onPickTargets('使用 use', [
-      for (var i = 0; i < keys.length; i++)
-        (label: '(${i + 1}) ${s.items[keys[i]]?.name ?? keys[i]}', value: '${i + 1}'),
     ]);
   }
 

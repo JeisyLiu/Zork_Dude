@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-/// Dark fill text with white outline for readability on light parchment UI art.
-/// When [strokeWidth] is 0, renders a single layer with optional soft shadow.
+/// Dark fill text for parchment UI art.
+/// Optional [strokeWidth] outline; default is plain fill (no outline).
 class GameOutlinedText extends StatelessWidget {
   const GameOutlinedText(
     this.text, {
@@ -10,7 +10,7 @@ class GameOutlinedText extends StatelessWidget {
     this.fontWeight = FontWeight.w600,
     this.color = const Color(0xFF1A1208),
     this.strokeColor = Colors.white,
-    this.strokeWidth = 1.4,
+    this.strokeWidth = 0,
     this.height = 1.15,
     this.letterSpacing,
     this.textAlign,

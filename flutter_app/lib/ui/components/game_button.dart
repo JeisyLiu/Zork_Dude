@@ -19,7 +19,7 @@ class GameButton extends StatefulWidget {
     this.enabled = true,
     this.semanticLabel,
     this.compact = false,
-    this.useOutline = true,
+    this.useOutline = false,
   });
 
   final VoidCallback? onPressed;
@@ -32,7 +32,7 @@ class GameButton extends StatefulWidget {
   final bool enabled;
   final String? semanticLabel;
 
-  /// Home-screen compact style: darker text, no white stroke, slightly larger labels.
+  /// Compact style: slightly larger labels. Outline is off by default.
   final bool compact;
   final bool useOutline;
 

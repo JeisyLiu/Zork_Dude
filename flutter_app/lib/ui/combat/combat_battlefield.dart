@@ -106,7 +106,7 @@ class CombatUnitCard extends StatelessWidget {
                   actor.name,
                   fontSize: compact ? 10 : 12,
                   color: d.textPrimary,
-                  strokeWidth: 0.8,
+                  strokeWidth: 0,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.center,
@@ -221,7 +221,7 @@ class CombatBattlefield extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        GameOutlinedText(label, fontSize: compact ? 9 : 10, color: d.textMuted, strokeWidth: 0.8),
+        GameOutlinedText(label, fontSize: compact ? 9 : 10, color: d.textMuted, strokeWidth: 0),
         const SizedBox(height: 2),
         Expanded(
           child: Row(

@@ -141,7 +141,6 @@ class _EndingOverlayState extends State<EndingOverlay>
                         width: btnW,
                         height: btnH,
                         compact: true,
-                        useOutline: true,
                         label: widget.secondaryLabel ?? meta.secondaryLabel,
                         onPressed: widget.onSecondary,
                       ),

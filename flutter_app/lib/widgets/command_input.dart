@@ -50,14 +50,6 @@ class _CommandInputRowState extends State<CommandInputRow> {
                 color: d.textPrimary,
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
-                shadows: const [
-                  Shadow(color: Colors.white, blurRadius: 0, offset: Offset(1, 0)),
-                  Shadow(color: Colors.white, blurRadius: 0, offset: Offset(-1, 0)),
-                  Shadow(color: Colors.white, blurRadius: 0, offset: Offset(0, 1)),
-                  Shadow(color: Colors.white, blurRadius: 0, offset: Offset(0, -1)),
-                  Shadow(color: Colors.white, blurRadius: 0, offset: Offset(1, 1)),
-                  Shadow(color: Colors.white, blurRadius: 0, offset: Offset(-1, -1)),
-                ],
               ),
               decoration: InputDecoration(
                 isDense: true,
@@ -65,12 +57,6 @@ class _CommandInputRowState extends State<CommandInputRow> {
                 hintText: '命令 cmd: look / take 1 / n …',
                 hintStyle: TextStyle(
                   color: d.textMuted,
-                  shadows: const [
-                    Shadow(color: Colors.white, blurRadius: 0, offset: Offset(1, 0)),
-                    Shadow(color: Colors.white, blurRadius: 0, offset: Offset(-1, 0)),
-                    Shadow(color: Colors.white, blurRadius: 0, offset: Offset(0, 1)),
-                    Shadow(color: Colors.white, blurRadius: 0, offset: Offset(0, -1)),
-                  ],
                 ),
               ),
               onSubmitted: (_) => _submit(),

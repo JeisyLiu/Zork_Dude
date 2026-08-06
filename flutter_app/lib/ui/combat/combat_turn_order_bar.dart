@@ -32,7 +32,7 @@ class CombatTurnOrderBar extends StatelessWidget {
             '行动顺序 Initiative',
             fontSize: compact ? 12 : 14,
             color: d.textMuted,
-            strokeWidth: 0.8,
+            strokeWidth: 0,
           ),
           const SizedBox(height: 6),
           SingleChildScrollView(

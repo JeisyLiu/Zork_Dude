@@ -46,7 +46,7 @@ class CombatHeaderBar extends StatelessWidget {
               fontSize: compact ? 10 : 11,
               fontWeight: FontWeight.bold,
               color: d.textPrimary,
-              strokeWidth: 1.0,
+              strokeWidth: 0,
             ),
             const SizedBox(width: 10),
             Expanded(

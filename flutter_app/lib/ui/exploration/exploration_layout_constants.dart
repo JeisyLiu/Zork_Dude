@@ -10,8 +10,8 @@ abstract final class ExplorationLayoutConstants {
   static const double directionPadWidthShort = 72;
   static const double chipSpacing = 8;
   static const double moreChipWidth = 96;
-  static const double bannerHeight = 44;
-  static const double bannerHeightShort = 42;
+  static const double bannerHeight = 60;
+  static const double bannerHeightShort = 54;
 
   /// Fixed golden-ratio chip widths (height = width × 0.618). No runtime rescale.
   static const double chipWidth = 96;

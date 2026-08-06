@@ -44,7 +44,7 @@ class CombatItemPicker extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          GameOutlinedText('选择道具 Items', fontSize: 12, color: d.textMuted, strokeWidth: 0.8),
+          GameOutlinedText('选择道具 Items', fontSize: 12, color: d.textMuted, strokeWidth: 0),
           const SizedBox(height: 6),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,

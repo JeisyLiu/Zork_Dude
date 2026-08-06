@@ -100,7 +100,7 @@ class StatusBar extends StatelessWidget {
           fontSize: fontSize,
           fontWeight: FontWeight.bold,
           color: d.textPrimary,
-          strokeWidth: 1.0,
+          strokeWidth: 0,
         ),
       ],
     );

@@ -32,7 +32,7 @@ class CombatCommandQueue extends StatelessWidget {
             '指令队列 Commands',
             fontSize: compact ? 12 : 14,
             color: d.textMuted,
-            strokeWidth: 0.8,
+            strokeWidth: 0,
           ),
           const SizedBox(height: 6),
           if (compact)

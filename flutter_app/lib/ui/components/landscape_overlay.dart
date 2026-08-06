@@ -83,7 +83,7 @@ class _LandscapeOverlayBody extends StatelessWidget {
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
                         color: GameUiTheme.of(context).textPrimary,
-                        strokeWidth: 1.4,
+                        strokeWidth: 0,
                       ),
                     ),
                     IconButton(

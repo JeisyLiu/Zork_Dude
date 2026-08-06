@@ -9,7 +9,7 @@ class GameBanner extends StatelessWidget {
     super.key,
     required this.title,
     this.subtitle,
-    this.height = 56,
+    this.height = 64,
     this.skin,
     this.titleSize = 18,
     this.subtitleSize = 10,
@@ -28,11 +28,12 @@ class GameBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     final d = skin ?? GameUiTheme.of(context);
     final hasSubtitle = subtitle != null;
-    final compact = height < 48;
+    final compact = height < 52;
     final effectiveTitleSize =
-        (compact ? titleSize.clamp(0, 14) : titleSize).toDouble();
+        (compact ? titleSize.clamp(0, 15) : titleSize).toDouble();
     final effectiveSubtitleSize =
-        (compact ? subtitleSize.clamp(0, 9) : subtitleSize).toDouble();
+        (compact ? subtitleSize.clamp(0, 10) : subtitleSize).toDouble();
+    final padV = compact ? 10.0 : (height >= 64 ? 14.0 : 12.0);
     return SizedBox(
       height: height,
       width: double.infinity,
@@ -50,7 +51,7 @@ class GameBanner extends StatelessWidget {
             child: Padding(
               padding: EdgeInsets.symmetric(
                 horizontal: compact ? 40 : 36,
-                vertical: compact ? 4 : (height >= 56 ? 10 : 8),
+                vertical: padV,
               ),
               child: FittedBox(
                 fit: BoxFit.scaleDown,
@@ -63,18 +64,18 @@ class GameBanner extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                       color: d.textPrimary,
                       letterSpacing: compact ? 1 : 2,
-                      height: 1.0,
-                      strokeWidth: effectiveTitleSize > 22 ? 2.0 : 1.2,
+                      height: 1.2,
+                      strokeWidth: 0,
                     ),
                     if (hasSubtitle) ...[
-                      const SizedBox(height: 1),
+                      SizedBox(height: compact ? 3 : 4),
                       GameOutlinedText(
                         subtitle!,
                         fontSize: effectiveSubtitleSize,
                         fontWeight: FontWeight.w500,
                         color: d.textMuted,
-                        height: 1.0,
-                        strokeWidth: 0.9,
+                        height: 1.15,
+                        strokeWidth: 0,
                       ),
                     ],
                   ],

@@ -67,7 +67,7 @@ class CombatCommandMenu extends StatelessWidget {
                   '指令 Commands',
                   fontSize: 13,
                   color: d.textMuted,
-                  strokeWidth: 0.8,
+                  strokeWidth: 0,
                 ),
                 const SizedBox(height: 6),
               ],

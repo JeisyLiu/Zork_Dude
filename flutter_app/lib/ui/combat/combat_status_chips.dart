@@ -49,7 +49,7 @@ class CombatStatusChips extends StatelessWidget {
       text,
       fontSize: compact ? 7 : 8,
       color: color,
-      strokeWidth: 0.6,
+      strokeWidth: 0,
       height: 1.0,
     );
   }

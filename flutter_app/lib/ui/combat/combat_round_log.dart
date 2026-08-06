@@ -40,7 +40,7 @@ class CombatRoundLog extends StatelessWidget {
               '战报 Log',
               fontSize: titleSize,
               color: d.textMuted,
-              strokeWidth: 0.8,
+              strokeWidth: 0,
             ),
             const SizedBox(height: 6),
             Expanded(

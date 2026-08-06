@@ -148,7 +148,6 @@ class _CreditsRollState extends State<CreditsRoll>
                       width: btnW,
                       height: btnH,
                       compact: true,
-                      useOutline: true,
                       label: '回标题',
                       onPressed: () {
                         Navigator.of(context).popUntil((route) => route.isFirst);

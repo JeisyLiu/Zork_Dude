@@ -5,6 +5,9 @@ import 'package:zork_dude/ui/layout/landscape_layout.dart';
 abstract final class HomeConstants {
   static const String heroImagePath = 'assets/images/home/mist_tower_hero.png';
 
+  /// Cover CTA plate (blank; label drawn in code). Falls back to Kenney if missing.
+  static const String enterButtonAsset = 'assets/images/home/button_enter.png';
+
   // Background gradient — dark olive-brown to charcoal.
   static const Color bgTop = Color(0xFF1E1C16);
   static const Color bgMid = Color(0xFF171711);

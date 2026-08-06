@@ -14,7 +14,7 @@ class HomePointerSample {
   final bool down;
 }
 
-/// Animated fog bands, dense drifting particles, pointer-reactive mist for home.
+/// Animated soft fog bands, dense drifting particles, pointer-reactive mist for home.
 class HomeAmbientBackground extends StatefulWidget {
   const HomeAmbientBackground({
     super.key,
@@ -221,11 +221,6 @@ class _HomeAmbientPainter extends CustomPainter {
   }
 
   void _drawFogBands(Canvas canvas, double w, double h) {
-    final fog1 = Paint()..color = HomeConstants.fogColor.withValues(alpha: 0.18);
-    final fog2 = Paint()..color = HomeConstants.fogColor.withValues(alpha: 0.14);
-    final fog3 = Paint()..color = HomeConstants.fogColor.withValues(alpha: 0.11);
-    final fog4 = Paint()..color = HomeConstants.fogColor.withValues(alpha: 0.08);
-
     final pointerPull = pointer == null
         ? 0.0
         : ((pointer!.dx / w) - 0.5) * 56 * pointerStrength;
@@ -242,14 +237,28 @@ class _HomeAmbientPainter extends CustomPainter {
     final shift3 = (t * w * 0.16 + pointerPull * 0.35) % w;
     final shift4 = (t * w * 0.28 - pointerPull * 0.25) % w;
 
-    void band(double shift, double y, double bandH, Paint paint) {
-      canvas.drawRect(Rect.fromLTWH(-w + shift, y, w * 2.5, bandH), paint);
+    // Soft vertical falloff so fog reads as mist, not hard pale stripes.
+    void softBand(double shift, double y, double bandH, double peakAlpha) {
+      final rect = Rect.fromLTWH(-w + shift, y, w * 2.5, bandH);
+      final paint = Paint()
+        ..shader = LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            HomeConstants.fogColor.withValues(alpha: 0),
+            HomeConstants.fogColor.withValues(alpha: peakAlpha),
+            HomeConstants.fogColor.withValues(alpha: peakAlpha * 0.85),
+            HomeConstants.fogColor.withValues(alpha: 0),
+          ],
+          stops: const [0.0, 0.35, 0.65, 1.0],
+        ).createShader(rect);
+      canvas.drawRect(rect, paint);
     }
 
-    band(shift1, y1, h * 0.12, fog1);
-    band(shift2, y2, h * 0.10, fog2);
-    band(shift3, y3, h * 0.09, fog3);
-    band(shift4, y4, h * 0.07, fog4);
+    softBand(shift1, y1, h * 0.14, 0.07);
+    softBand(shift2, y2, h * 0.12, 0.055);
+    softBand(shift3, y3, h * 0.11, 0.045);
+    softBand(shift4, y4, h * 0.09, 0.035);
   }
 
   Offset _react(double x, double y, double px, double py, double radius) {

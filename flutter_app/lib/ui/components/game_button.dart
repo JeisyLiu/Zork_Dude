@@ -20,6 +20,7 @@ class GameButton extends StatefulWidget {
     this.semanticLabel,
     this.compact = false,
     this.useOutline = false,
+    this.nineSlice = true,
   });
 
   final VoidCallback? onPressed;
@@ -35,6 +36,9 @@ class GameButton extends StatefulWidget {
   /// Compact style: slightly larger labels. Outline is off by default.
   final bool compact;
   final bool useOutline;
+
+  /// When false, stretches the whole asset (good for custom pixel plates).
+  final bool nineSlice;
 
   @override
   State<GameButton> createState() => _GameButtonState();
@@ -90,8 +94,15 @@ class _GameButtonState extends State<GameButton> {
                     img,
                     fit: BoxFit.fill,
                     filterQuality: FilterQuality.none,
-                    centerSlice: GameUiAssets.sliceButton,
+                    centerSlice: widget.nineSlice ? GameUiAssets.sliceButton : null,
                     gaplessPlayback: true,
+                    errorBuilder: (_, __, ___) => Image.asset(
+                      widget.accent ? d.buttonAccent : d.button,
+                      fit: BoxFit.fill,
+                      filterQuality: FilterQuality.none,
+                      centerSlice: GameUiAssets.sliceButton,
+                      gaplessPlayback: true,
+                    ),
                   ),
                   if (_pressed && _active)
                     DecoratedBox(

@@ -13,8 +13,8 @@ abstract final class CombatLayoutConstants {
   static const logMaxLines = 6;
   static const battlefieldGap = 6.0;
   static const unitGap = 6.0;
-  static const bannerHeight = 40.0;
-  static const bannerHeightShort = 36.0;
+  static const bannerHeight = 58.0;
+  static const bannerHeightShort = 52.0;
 
   /// Golden-ratio action / execute buttons (height = width × 0.618).
   static const executeButtonWidth = 140.0;

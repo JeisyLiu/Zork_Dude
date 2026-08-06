@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:zork_dude/ui/layout/landscape_layout.dart';
 
 /// Palette and layout constants for the minimalist pixel home screen.
 abstract final class HomeConstants {
@@ -31,10 +30,16 @@ abstract final class HomeConstants {
   static const Color towerRune = Color(0xFF8A7A50);
 
   static const double maxContentWidth = 520;
-  static const double buttonWidth = 180;
-  static const double buttonWidthShort = 148;
+  /// Cover CTA matches `button_enter.png` plate (≈3:1).
+  static const double buttonWidth = 216;
+  static const double buttonWidthShort = 180;
+  static const double buttonAspect = 3;
 
-  static double buttonHeightFor(double width) => width * LandscapeLayout.goldenRatio;
+  /// Light text on dark enter-plate.
+  static const Color buttonLabelColor = Color(0xFFE8DCC0);
+  static const Color buttonSubLabelColor = Color(0xFFC4B48A);
+
+  static double buttonHeightFor(double width) => width / buttonAspect;
 
   static double heroSizeFor(Size screen) {
     final height = screen.height;

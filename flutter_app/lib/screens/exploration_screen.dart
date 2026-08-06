@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:zork_dude/screens/turn_combat_screen.dart';
 import 'package:zork_dude/shared/game_constants.dart';
 import 'package:zork_dude/state/game_controller.dart';
+import 'package:zork_dude/ui/combat/encounter_transition.dart';
 import 'package:zork_dude/ui/components/game_banner.dart';
 import 'package:zork_dude/ui/components/game_button.dart';
 import 'package:zork_dude/ui/components/landscape_overlay.dart';
@@ -31,6 +32,7 @@ class ExplorationScreen extends StatefulWidget {
 class _ExplorationScreenState extends State<ExplorationScreen> {
   final _commandFocus = FocusNode(debugLabel: 'command-input');
   bool _endingPresenting = false;
+  bool _showingEncounter = false;
 
   @override
   void initState() {
@@ -46,17 +48,33 @@ class _ExplorationScreenState extends State<ExplorationScreen> {
   }
 
   void _onControllerChanged() {
-    if (widget.controller.battleNavigationPending && mounted) {
-      widget.controller.battleNavigationPending = false;
-      Navigator.of(context).push(
-        LandscapePageRoute.of<void>(
-          context,
-          TurnCombatScreen(controller: widget.controller),
-        ),
-      );
+    if (widget.controller.battleNavigationPending &&
+        !_showingEncounter &&
+        mounted) {
+      _showingEncounter = true;
     }
     _presentEndingIfNeeded();
     setState(() {});
+  }
+
+  String _encounterEnemyLabel() {
+    final enc = widget.controller.activeEncounter;
+    if (enc == null) return '';
+    final living = enc.livingEnemies();
+    if (living.isEmpty) return '';
+    return living.map((e) => e.name).join(' · ');
+  }
+
+  void _finishEncounterIntro() {
+    if (!mounted) return;
+    widget.controller.battleNavigationPending = false;
+    setState(() => _showingEncounter = false);
+    Navigator.of(context).push(
+      LandscapePageRoute.battle<void>(
+        context,
+        TurnCombatScreen(controller: widget.controller),
+      ),
+    );
   }
 
   Future<void> _presentEndingIfNeeded() async {
@@ -155,69 +173,79 @@ class _ExplorationScreenState extends State<ExplorationScreen> {
         commandFocus: _commandFocus,
         child: LandscapeScaffold(
           backgroundColor: GameUiTheme.scaffoldBgForMapLayer(c.mapLayer),
-          body: Column(
+          body: Stack(
+            fit: StackFit.expand,
             children: [
-              GameBanner(
-                title: '迷雾之塔',
-                subtitle: short ? '←↑↓→ / WASD' : 'Exploration · ←↑↓→ / WASD',
-                height: bannerH,
-                titleSize: short ? 15 : 17,
-                subtitleSize: short ? 10 : 11,
-              ),
-              SizedBox(height: short ? 3 : 4),
-              StatusBar(controller: c),
-              SizedBox(height: short ? 3 : 4),
-              Expanded(
-                child: sideBySide
-                    ? Row(
-                        children: [
-                          Expanded(flex: 3, child: StoryLogView(controller: c)),
-                          if (c.mapVisible) const SizedBox(width: 6),
-                          Expanded(
-                            flex: c.mapVisible ? 2 : 0,
-                            child: AnimatedOpacity(
-                              opacity: c.mapVisible ? 1 : 0,
-                              duration: motionDuration,
-                              child: IgnorePointer(
-                                ignoring: !c.mapVisible,
-                                child: c.mapVisible
-                                    ? MistMapPanel(controller: c)
-                                    : const SizedBox.shrink(),
+              Column(
+                children: [
+                  GameBanner(
+                    title: '迷雾之塔',
+                    subtitle: short ? '←↑↓→ / WASD' : 'Exploration · ←↑↓→ / WASD',
+                    height: bannerH,
+                    titleSize: short ? 15 : 17,
+                    subtitleSize: short ? 10 : 11,
+                  ),
+                  SizedBox(height: short ? 3 : 4),
+                  StatusBar(controller: c),
+                  SizedBox(height: short ? 3 : 4),
+                  Expanded(
+                    child: sideBySide
+                        ? Row(
+                            children: [
+                              Expanded(flex: 3, child: StoryLogView(controller: c)),
+                              if (c.mapVisible) const SizedBox(width: 6),
+                              Expanded(
+                                flex: c.mapVisible ? 2 : 0,
+                                child: AnimatedOpacity(
+                                  opacity: c.mapVisible ? 1 : 0,
+                                  duration: motionDuration,
+                                  child: IgnorePointer(
+                                    ignoring: !c.mapVisible,
+                                    child: c.mapVisible
+                                        ? MistMapPanel(controller: c)
+                                        : const SizedBox.shrink(),
+                                  ),
+                                ),
                               ),
-                            ),
+                            ],
+                          )
+                        : Column(
+                            children: [
+                              AnimatedSwitcher(
+                                duration: motionDuration,
+                                switchInCurve: Curves.easeOut,
+                                switchOutCurve: Curves.easeIn,
+                                child: c.mapVisible
+                                    ? SizedBox(
+                                        key: const ValueKey('map-panel'),
+                                        height: short ? 100.0 : 140.0,
+                                        child: MistMapPanel(controller: c),
+                                      )
+                                    : const SizedBox.shrink(key: ValueKey('map-hidden')),
+                              ),
+                              if (c.mapVisible) const SizedBox(height: 4),
+                              Expanded(child: StoryLogView(controller: c)),
+                            ],
                           ),
-                        ],
-                      )
-                    : Column(
-                        children: [
-                          AnimatedSwitcher(
-                            duration: motionDuration,
-                            switchInCurve: Curves.easeOut,
-                            switchOutCurve: Curves.easeIn,
-                            child: c.mapVisible
-                                ? SizedBox(
-                                    key: const ValueKey('map-panel'),
-                                    height: short ? 100.0 : 140.0,
-                                    child: MistMapPanel(controller: c),
-                                  )
-                                : const SizedBox.shrink(key: ValueKey('map-hidden')),
-                          ),
-                          if (c.mapVisible) const SizedBox(height: 4),
-                          Expanded(child: StoryLogView(controller: c)),
-                        ],
-                      ),
+                  ),
+                  SizedBox(height: short ? 2 : 4),
+                  QuickCommandPanel(
+                    controller: c,
+                    onPickTargets: _showTargetPicker,
+                    compact: short,
+                  ),
+                  SizedBox(height: short ? 2 : 4),
+                  CommandInputRow(
+                    controller: c,
+                    focusNode: _commandFocus,
+                  ),
+                ],
               ),
-              SizedBox(height: short ? 2 : 4),
-              QuickCommandPanel(
-                controller: c,
-                onPickTargets: _showTargetPicker,
-                compact: short,
-              ),
-              SizedBox(height: short ? 2 : 4),
-              CommandInputRow(
-                controller: c,
-                focusNode: _commandFocus,
-              ),
+              if (_showingEncounter)
+                EncounterTransition(
+                  enemyLabel: _encounterEnemyLabel(),
+                  onCompleted: _finishEncounterIntro,
+                ),
             ],
           ),
         ),

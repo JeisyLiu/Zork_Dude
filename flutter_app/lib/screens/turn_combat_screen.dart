@@ -433,6 +433,8 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
             height: short
                 ? CombatLayoutConstants.bannerHeightShort
                 : CombatLayoutConstants.bannerHeight,
+            titleSize: short ? 15 : 17,
+            subtitleSize: short ? 10 : 11,
           ),
           SizedBox(height: short ? 2 : 4),
           Expanded(

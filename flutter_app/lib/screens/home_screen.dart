@@ -159,6 +159,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               useOutline: false,
                               nineSlice: false,
                               asset: HomeConstants.enterButtonAsset,
+                              labelColor: HomeConstants.buttonLabelColor,
+                              subLabelColor: HomeConstants.buttonSubLabelColor,
                               label: _controller.loading ? '加载中…' : '进入迷雾',
                               subLabel: 'enter',
                               enabled: !_controller.loading && !_entering,

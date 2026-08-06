@@ -25,6 +25,7 @@ flutter:
     - assets/images/home/
     - assets/images/ending/
     - assets/images/exploration/
+    - assets/images/fx/
     - assets/ui/
     - assets/data/items.json
     - assets/data/monsters.json

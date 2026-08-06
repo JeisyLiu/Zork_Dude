@@ -1,3 +1,6 @@
+import 'dart:math' as math;
+
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:zork_dude/domain/map_service.dart';
 import 'package:zork_dude/domain/models/enums.dart';
@@ -9,6 +12,7 @@ import 'package:zork_dude/ui/components/game_panel.dart';
 import 'package:zork_dude/ui/game_ui_theme.dart';
 import 'package:zork_dude/ui/layout/landscape_layout.dart';
 
+/// Mist scrap map: free pan/zoom camera + tap adjacent node to move.
 class MistMapPanel extends StatefulWidget {
   const MistMapPanel({super.key, required this.controller});
 
@@ -19,15 +23,67 @@ class MistMapPanel extends StatefulWidget {
 }
 
 class _MistMapPanelState extends State<MistMapPanel> {
+  static const _minScale = 0.45;
+  static const _maxScale = 3.0;
+
   final _mapService = MapService();
-  String _detail = '点击节点查看详情';
+  final _transform = TransformationController();
+
+  String _detail = '拖拽平移 · 滚轮/双指缩放 · 点击相邻节点移动';
+  MapLayer? _boundLayer;
+
+  @override
+  void dispose() {
+    _transform.dispose();
+    super.dispose();
+  }
+
+  void _syncLayerCamera(MapLayer layer) {
+    if (_boundLayer == layer) return;
+    _boundLayer = layer;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || _boundLayer != layer) return;
+      _transform.value = Matrix4.identity();
+    });
+  }
+
+  Size _canvasSize(MapViewModel vm) {
+    if (vm.nodes.isEmpty) return const Size(400, 320);
+    var maxX = 0.0;
+    var maxY = 0.0;
+    for (final n in vm.nodes) {
+      if (n.cx > maxX) maxX = n.cx;
+      if (n.cy > maxY) maxY = n.cy;
+    }
+    return Size(
+      (maxX + mapPad + 28).clamp(400.0, 2400.0),
+      (maxY + mapPad + 28).clamp(320.0, 2400.0),
+    );
+  }
+
+  void _onScrollZoom(PointerScrollEvent event) {
+    final scale = _transform.value.getMaxScaleOnAxis();
+    final zoom = math.exp(-event.scrollDelta.dy * 0.0018);
+    final next = (scale * zoom).clamp(_minScale, _maxScale);
+    if ((next - scale).abs() < 1e-4) return;
+
+    final focal = _transform.toScene(event.localPosition);
+    final matrix = _transform.value.clone()
+      ..translate(focal.dx, focal.dy)
+      ..scale(next / scale)
+      ..translate(-focal.dx, -focal.dy);
+    _transform.value = matrix;
+  }
 
   @override
   Widget build(BuildContext context) {
     final s = widget.controller.session;
     if (s == null) return const SizedBox.shrink();
     widget.controller.syncMapLayerToPlayer();
-    final vm = _mapService.buildView(s, widget.controller.mapLayer);
+    final layer = widget.controller.mapLayer;
+    _syncLayerCamera(layer);
+    final vm = _mapService.buildView(s, layer);
+    final canvas = _canvasSize(vm);
     final d = GameUiTheme.of(context);
 
     return GamePanel(
@@ -42,14 +98,14 @@ class _MistMapPanelState extends State<MistMapPanel> {
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
-                for (final layer in MapLayer.values)
+                for (final l in MapLayer.values)
                   Padding(
                     padding: const EdgeInsets.only(right: 6),
                     child: GameButton(
-                      label: mapLayerLabels[layer]!,
+                      label: mapLayerLabels[l]!,
                       width: 56,
                       height: LandscapeLayout.heightFromWidth(56),
-                      onPressed: () => widget.controller.setMapLayer(layer),
+                      onPressed: () => widget.controller.setMapLayer(l),
                     ),
                   ),
                 const SizedBox(width: 8),
@@ -65,39 +121,51 @@ class _MistMapPanelState extends State<MistMapPanel> {
           ),
           const SizedBox(height: 8),
           Expanded(
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                Opacity(
-                  opacity: 0.28,
-                  child: Image.asset(
-                    d.minimapRing,
-                    fit: BoxFit.contain,
-                    filterQuality: FilterQuality.none,
-                  ),
-                ),
-                InteractiveViewer(
-                  minScale: 0.5,
-                  maxScale: 2.5,
-                  child: GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTapUp: (details) {
-                      final pos = details.localPosition;
-                      for (final n in vm.nodes) {
-                        final r = n.isHere ? 24.0 : (n.fog ? 17.0 : 20.0);
-                        if ((pos - Offset(n.cx, n.cy)).distance <= r + 10) {
-                          _onNodeTap(n);
-                          return;
-                        }
-                      }
-                    },
-                    child: CustomPaint(
-                      size: const Size(400, 320),
-                      painter: MapGraphPainter(vm: vm),
+            child: ClipRect(
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  IgnorePointer(
+                    child: Opacity(
+                      opacity: 0.22,
+                      child: Image.asset(
+                        d.minimapRing,
+                        fit: BoxFit.contain,
+                        filterQuality: FilterQuality.none,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                  Listener(
+                    onPointerSignal: (signal) {
+                      if (signal is PointerScrollEvent) {
+                        _onScrollZoom(signal);
+                      }
+                    },
+                    child: InteractiveViewer(
+                      transformationController: _transform,
+                      constrained: false,
+                      boundaryMargin: const EdgeInsets.all(180),
+                      minScale: _minScale,
+                      maxScale: _maxScale,
+                      panEnabled: true,
+                      scaleEnabled: true,
+                      clipBehavior: Clip.hardEdge,
+                      child: SizedBox(
+                        width: canvas.width,
+                        height: canvas.height,
+                        child: GestureDetector(
+                          behavior: HitTestBehavior.opaque,
+                          onTapUp: (details) => _onCanvasTap(vm, details.localPosition),
+                          child: CustomPaint(
+                            size: canvas,
+                            painter: MapGraphPainter(vm: vm),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           Padding(
@@ -114,6 +182,16 @@ class _MistMapPanelState extends State<MistMapPanel> {
         ],
       ),
     );
+  }
+
+  void _onCanvasTap(MapViewModel vm, Offset pos) {
+    for (final n in vm.nodes) {
+      final r = n.isHere ? 24.0 : (n.fog ? 17.0 : 20.0);
+      if ((pos - Offset(n.cx, n.cy)).distance <= r + 10) {
+        _onNodeTap(n);
+        return;
+      }
+    }
   }
 
   void _onNodeTap(MapNode node) {
@@ -193,5 +271,6 @@ class MapGraphPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant MapGraphPainter oldDelegate) => true;
+  bool shouldRepaint(covariant MapGraphPainter oldDelegate) =>
+      oldDelegate.vm != vm;
 }

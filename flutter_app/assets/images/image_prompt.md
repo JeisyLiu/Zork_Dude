@@ -210,12 +210,48 @@ landscape 3:1 composition
 
 ---
 
+## 遇敌转场特效字（英文）
+
+路径：`fx/encounter_banner.png`、`fx/battle_start_banner.png`  
+这是**标题字贴图 / UI 字效**，不是场景背景图。透明底上只有明亮英文大字；程序再叠敌人名。缺图时用程序字兜底。
+
+**规格：** 横向字效条；建议 **640×160** 或 **960×240**；**透明背景**；字要够亮、够清晰。  
+**风格参考：** 主图像素边，但色调用亮古董金/奶油色，不要整块暗底画面。
+
+### `encounter_banner.png` — ENCOUNTER!
+
+```text
+pixel art UI title lettering only, bright bold English word ENCOUNTER!,
+cream and bright antique-gold fill, thin dark outline for readability,
+small spark accents and short motion lines, crisp 16-bit pixel edges,
+clean transparent background, floating text graphic not a scene,
+no dark background plate, no landscape, no tower illustration, no UI frame,
+no Chinese, no other words, no logo, widescreen 3:1, high contrast readable title
+```
+
+### `battle_start_banner.png` — BATTLE START
+
+```text
+pixel art UI title lettering only, bright bold English words BATTLE START,
+light parchment cream and warm gold letters, thin dark charcoal outline,
+sharp impact lines and sparse sparks, crisp 16-bit pixel edges,
+clean transparent background, floating text graphic not a scene,
+no dark background plate, no dungeon backdrop, no UI frame,
+no Chinese, no other words, no logo, widescreen 3:1, high contrast readable title
+```
+
+负面追加：`dark background, black void scene, full-screen illustration, photorealistic, soft blur, busy background, subtitle, Japanese, Chinese characters, button, wooden panel, landscape, tower silhouette`
+
+---
+
 ## 文件对照
 
 | 文件 | 图层 / 结局 | 风格 |
 |------|-------------|------|
 | `home/mist_tower_hero.png` | 标题锚点 | 原始提示词（完整） |
 | `home/button_enter.png` | 封面进入按钮底板 | 统一风格句 + 无字底板 |
+| `fx/encounter_banner.png` | 遇敌转场 ENCOUNTER! | 像素英文特效字 |
+| `fx/battle_start_banner.png` | 开战 BATTLE START | 像素英文特效字 |
 | `exploration/bg_surface.png` | 地表 | 统一风格句 + 题材 |
 | `exploration/bg_cave.png` | 洞穴 | 同上 |
 | `exploration/bg_tower.png` | 高塔 | 同上 |

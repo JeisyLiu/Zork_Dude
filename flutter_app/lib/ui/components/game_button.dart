@@ -21,6 +21,8 @@ class GameButton extends StatefulWidget {
     this.compact = false,
     this.useOutline = false,
     this.nineSlice = true,
+    this.labelColor,
+    this.subLabelColor,
   });
 
   final VoidCallback? onPressed;
@@ -39,6 +41,10 @@ class GameButton extends StatefulWidget {
 
   /// When false, stretches the whole asset (good for custom pixel plates).
   final bool nineSlice;
+
+  /// Overrides theme text colors (e.g. light labels on a dark cover plate).
+  final Color? labelColor;
+  final Color? subLabelColor;
 
   @override
   State<GameButton> createState() => _GameButtonState();
@@ -127,12 +133,12 @@ class _GameButtonState extends State<GameButton> {
                                 widget.label!,
                                 fontSize: labelSize,
                                 fontWeight: FontWeight.w700,
-                                color: d.textPrimary,
+                                color: widget.labelColor ?? d.textPrimary,
                                 height: 1.05,
                                 strokeWidth: widget.useOutline ? 1.2 : 0,
                                 shadowColor: widget.useOutline
                                     ? null
-                                    : Colors.black.withValues(alpha: 0.35),
+                                    : Colors.black.withValues(alpha: 0.55),
                                 shadowOffset: const Offset(0, 1),
                                 shadowBlurRadius: 1.5,
                               ),
@@ -141,12 +147,12 @@ class _GameButtonState extends State<GameButton> {
                                   widget.subLabel!,
                                   fontSize: subSize,
                                   fontWeight: FontWeight.w500,
-                                  color: d.textMuted,
+                                  color: widget.subLabelColor ?? d.textMuted,
                                   height: 1.0,
                                   strokeWidth: widget.useOutline ? 0.9 : 0,
                                   shadowColor: widget.useOutline
                                       ? null
-                                      : Colors.black.withValues(alpha: 0.25),
+                                      : Colors.black.withValues(alpha: 0.45),
                                   shadowOffset: const Offset(0, 1),
                                   shadowBlurRadius: 1,
                                 ),

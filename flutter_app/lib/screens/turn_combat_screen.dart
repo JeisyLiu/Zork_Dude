@@ -106,9 +106,33 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
         });
       case CombatCommandOption.defend:
         _commitCommand(const CombatCommand.defend());
+      case CombatCommandOption.melee:
+        _startMelee();
       case CombatCommandOption.flee:
         _commitCommand(const CombatCommand.flee());
     }
+  }
+
+  void _startMelee() {
+    final enc = _encounter;
+    if (enc == null || !enc.canUseMelee) {
+      _log.add('⚠️ 主角血量过低，无法混战（需高于 1/4 生命）。');
+      setState(() {});
+      return;
+    }
+    final ok = widget.controller.beginMelee();
+    if (!ok) {
+      _log.add('⚠️ 无法进入混战。');
+      setState(() {});
+      return;
+    }
+    _log.add('⚔️ 混战开始！双方自由交锋，主角血量低于 1/4 时自动停止。');
+    setState(() {
+      _phase = CombatUiPhase.readyToExecute;
+      _activeActorId = null;
+    });
+    // Kick off immediately like Destiny of an Emperor melee.
+    _executeRound();
   }
 
   void _commitCommand(CombatCommand command) {
@@ -169,6 +193,8 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
 
     if (result.combatEnded && result.outcome != null) {
       _finished = true;
+      final encAfter = _encounter;
+      encAfter?.meleeActive = false;
       widget.controller.finishCombat(result.outcome!);
       if (!mounted) return;
       await EndingFlow.presentIfNeeded(
@@ -179,6 +205,37 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
         },
       );
       return;
+    }
+
+    final encNow = _encounter;
+    if (encNow != null && encNow.meleeActive) {
+      if (encNow.shouldStopMelee) {
+        encNow.meleeActive = false;
+        _log.add('💔 主角血量低于 1/4，混战中止。请手动下达指令。');
+        setState(() {
+          _animating = false;
+          _phase = CombatUiPhase.pickingCommand;
+          _activeActorId = encNow.nextAllyNeedingCommand()?.instanceId;
+          _animatingActorId = null;
+          _stepLog.clear();
+        });
+        return;
+      }
+      final continued = widget.controller.prepareNextMeleeRound();
+      if (continued && mounted) {
+        _log.add('— 混战继续 · 第 ${encNow.roundNumber} 回合 —');
+        setState(() {
+          _animating = false;
+          _phase = CombatUiPhase.readyToExecute;
+          _animatingActorId = null;
+          _stepLog.clear();
+        });
+        await Future<void>.delayed(const Duration(milliseconds: 120));
+        if (mounted && !_finished) await _executeRound();
+        return;
+      }
+      encNow.meleeActive = false;
+      _log.add('混战结束。');
     }
 
     setState(() {
@@ -221,6 +278,16 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
     if (_animating || _finished) return false;
 
     if (key == LogicalKeyboardKey.escape || key == LogicalKeyboardKey.backspace) {
+      final enc = _encounter;
+      if (enc != null && enc.meleeActive && !_animating) {
+        widget.controller.cancelMelee();
+        _log.add('已取消混战。');
+        setState(() {
+          _phase = CombatUiPhase.pickingCommand;
+          _activeActorId = enc.nextAllyNeedingCommand()?.instanceId;
+        });
+        return true;
+      }
       if (_phase == CombatUiPhase.pickingTarget || _phase == CombatUiPhase.pickingItem) {
         setState(() => _phase = CombatUiPhase.pickingCommand);
         return true;
@@ -347,13 +414,14 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
         ready ? widget.controller.previewCombatTurnOrder() : const [];
     final registry = widget.controller.statusEffectRegistry;
 
+    final meleeOn = enc.meleeActive;
     final phaseHint = switch (_phase) {
       CombatUiPhase.pickingCommand =>
         _activeActor != null ? '选择：${_activeActor!.name}' : '选择指令',
       CombatUiPhase.pickingTarget => '选择目标',
       CombatUiPhase.pickingItem => '选择道具',
-      CombatUiPhase.readyToExecute => '准备执行',
-      CombatUiPhase.animating => '进行中…',
+      CombatUiPhase.readyToExecute => meleeOn ? '混战中' : '准备执行',
+      CombatUiPhase.animating => meleeOn ? '混战交锋…' : '进行中…',
     };
 
     final content = Column(
@@ -474,6 +542,7 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
                         enabled:
                             _phase == CombatUiPhase.pickingCommand && !_animating,
                         hasItems: hasItems,
+                        meleeAvailable: enc.canUseMelee,
                         compact: short,
                         onSelect: _selectCommand,
                       ),

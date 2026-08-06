@@ -480,11 +480,40 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
     return true;
   }
 
+  /// Start Destiny-of-an-Emperor style melee. Returns false if unavailable.
+  bool beginMelee() {
+    final enc = activeEncounter;
+    if (enc == null || enc.phase != CombatPhase.command) return false;
+    if (!enc.canUseMelee) return false;
+    enc.meleeActive = true;
+    enc.pendingAllyCommands.clear();
+    return combatEngine.fillMeleeAllyCommands(enc);
+  }
+
+  /// Refill auto-attacks while melee continues. Clears melee if threshold hit.
+  bool prepareNextMeleeRound() {
+    final enc = activeEncounter;
+    if (enc == null || !enc.meleeActive) return false;
+    if (enc.shouldStopMelee || enc.livingEnemies().isEmpty) {
+      enc.meleeActive = false;
+      return false;
+    }
+    enc.pendingAllyCommands.clear();
+    return combatEngine.fillMeleeAllyCommands(enc);
+  }
+
+  void cancelMelee() {
+    activeEncounter?.meleeActive = false;
+  }
+
   CombatRoundResult? resolveCombatRound() {
     final enc = activeEncounter;
     if (enc == null || !enc.allAlliesCommanded) return null;
     final result = combatEngine.resolveRound(enc);
     syncCombatHpFromEncounter();
+    if (enc.meleeActive && enc.shouldStopMelee) {
+      enc.meleeActive = false;
+    }
     return result;
   }
 

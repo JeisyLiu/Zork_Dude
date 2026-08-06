@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zork_dude/domain/models/enums.dart';
+import 'package:zork_dude/ui/exploration/exploration_scene_assets.dart';
 import 'package:zork_dude/ui/game_ui_assets.dart';
 
 /// Per-region UI skins. [fantasy] is the village / surface look (kept for home).
@@ -24,6 +25,11 @@ class GameUiSkinData {
     required this.textPrimary,
     required this.textMuted,
     required this.scaffoldBg,
+    required this.sceneBg,
+    required this.sceneScrim,
+    required this.logText,
+    required this.logMuted,
+    required this.logCommand,
   });
 
   final String panel;
@@ -43,7 +49,18 @@ class GameUiSkinData {
   final Color textMuted;
   final Color scaffoldBg;
 
-  /// Village / mist forest surface — warm timber.
+  /// Full-bleed exploration panel backdrop.
+  final String sceneBg;
+
+  /// Dark veil over [sceneBg] so log / map chrome stay readable.
+  final Color sceneScrim;
+
+  /// Story-log body text (light on scenic panels).
+  final Color logText;
+  final Color logMuted;
+  final Color logCommand;
+
+  /// Village / mist forest surface — warm timber + sunlit grove.
   static const fantasy = GameUiSkinData(
     panel: GameUiAssets.panelBrown,
     panelDark: GameUiAssets.panelBrownDark,
@@ -60,10 +77,15 @@ class GameUiSkinData {
     pattern: GameUiAssets.patternPaper,
     textPrimary: Color(0xFF1A1208),
     textMuted: Color(0xFF3D2E1F),
-    scaffoldBg: Color(0xFF3A2E22),
+    scaffoldBg: Color(0xFF3A4230),
+    sceneBg: ExplorationSceneAssets.surface,
+    sceneScrim: Color(0xA318140E),
+    logText: Color(0xFFF0E6D0),
+    logMuted: Color(0xFFC8BAA0),
+    logCommand: Color(0xFFFFE6A8),
   );
 
-  /// Cave / underground — damp stone, moss green accents.
+  /// Cave / underground — damp stone, torch-warmed greens.
   static const cave = GameUiSkinData(
     panel: GameUiAssets.panelGreyGreen,
     panelDark: GameUiAssets.panelGreyDark,
@@ -80,10 +102,15 @@ class GameUiSkinData {
     pattern: GameUiAssets.patternDiagonalGrey,
     textPrimary: Color(0xFF0E1612),
     textMuted: Color(0xFF243028),
-    scaffoldBg: Color(0xFF1A221C),
+    scaffoldBg: Color(0xFF1C1812),
+    sceneBg: ExplorationSceneAssets.cave,
+    sceneScrim: Color(0xB214100C),
+    logText: Color(0xFFF2E4C8),
+    logMuted: Color(0xFFC4B090),
+    logCommand: Color(0xFFFFC878),
   );
 
-  /// Mist tower — deep timber, curtain banner, cool gold text.
+  /// Mist tower — deep timber, cool gold mist.
   static const tower = GameUiSkinData(
     panel: GameUiAssets.panelBrownDamaged,
     panelDark: GameUiAssets.panelBrownDamagedDark,
@@ -100,10 +127,15 @@ class GameUiSkinData {
     pattern: GameUiAssets.patternPaper,
     textPrimary: Color(0xFF16120C),
     textMuted: Color(0xFF3A3228),
-    scaffoldBg: Color(0xFF2A241C),
+    scaffoldBg: Color(0xFF1C1818),
+    sceneBg: ExplorationSceneAssets.tower,
+    sceneScrim: Color(0xB2100E12),
+    logText: Color(0xFFE8DCC0),
+    logMuted: Color(0xFFB8A890),
+    logCommand: Color(0xFFE8D090),
   );
 
-  /// Foundation site / facility — bolted steel.
+  /// Foundation site / facility — bolted steel, flashlight cone.
   static const site = GameUiSkinData(
     panel: GameUiAssets.panelGreyBolts,
     panelDark: GameUiAssets.panelGreyBoltsDark,
@@ -120,7 +152,12 @@ class GameUiSkinData {
     pattern: GameUiAssets.patternBlueprint,
     textPrimary: Color(0xFF101820),
     textMuted: Color(0xFF2A3540),
-    scaffoldBg: Color(0xFF1A2228),
+    scaffoldBg: Color(0xFF12161A),
+    sceneBg: ExplorationSceneAssets.site,
+    sceneScrim: Color(0xB80C1014),
+    logText: Color(0xFFD8E0E8),
+    logMuted: Color(0xFFA0AAB4),
+    logCommand: Color(0xFFB8D4F0),
   );
 
   /// Legacy combat look (bolted grey + red bars). Prefer [combatDataForLayer].
@@ -141,6 +178,11 @@ class GameUiSkinData {
     textPrimary: Color(0xFF101820),
     textMuted: Color(0xFF2A3540),
     scaffoldBg: Color(0xFF221A18),
+    sceneBg: ExplorationSceneAssets.site,
+    sceneScrim: Color(0xB80C1014),
+    logText: Color(0xFFD8E0E8),
+    logMuted: Color(0xFFA0AAB4),
+    logCommand: Color(0xFFFFB0A0),
   );
 
   GameUiSkinData copyWith({
@@ -160,6 +202,11 @@ class GameUiSkinData {
     Color? textPrimary,
     Color? textMuted,
     Color? scaffoldBg,
+    String? sceneBg,
+    Color? sceneScrim,
+    Color? logText,
+    Color? logMuted,
+    Color? logCommand,
   }) {
     return GameUiSkinData(
       panel: panel ?? this.panel,
@@ -178,6 +225,11 @@ class GameUiSkinData {
       textPrimary: textPrimary ?? this.textPrimary,
       textMuted: textMuted ?? this.textMuted,
       scaffoldBg: scaffoldBg ?? this.scaffoldBg,
+      sceneBg: sceneBg ?? this.sceneBg,
+      sceneScrim: sceneScrim ?? this.sceneScrim,
+      logText: logText ?? this.logText,
+      logMuted: logMuted ?? this.logMuted,
+      logCommand: logCommand ?? this.logCommand,
     );
   }
 

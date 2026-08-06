@@ -33,6 +33,7 @@ class _MistMapPanelState extends State<MistMapPanel> {
     return GamePanel(
       dark: true,
       withBorder: true,
+      sceneBackdrop: true,
       padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -55,8 +56,9 @@ class _MistMapPanelState extends State<MistMapPanel> {
                 GameOutlinedText(
                   '已探索 ${vm.visitedCount}',
                   fontSize: 11,
-                  color: d.textMuted,
+                  color: d.logMuted,
                   strokeWidth: 1.0,
+                  strokeColor: Colors.black.withValues(alpha: 0.75),
                 ),
               ],
             ),
@@ -67,7 +69,7 @@ class _MistMapPanelState extends State<MistMapPanel> {
               alignment: Alignment.center,
               children: [
                 Opacity(
-                  opacity: 0.35,
+                  opacity: 0.28,
                   child: Image.asset(
                     d.minimapRing,
                     fit: BoxFit.contain,
@@ -82,8 +84,8 @@ class _MistMapPanelState extends State<MistMapPanel> {
                     onTapUp: (details) {
                       final pos = details.localPosition;
                       for (final n in vm.nodes) {
-                        final r = n.isHere ? 16.0 : (n.fog ? 11.0 : 13.0);
-                        if ((pos - Offset(n.cx, n.cy)).distance <= r + 8) {
+                        final r = n.isHere ? 24.0 : (n.fog ? 17.0 : 20.0);
+                        if ((pos - Offset(n.cx, n.cy)).distance <= r + 10) {
                           _onNodeTap(n);
                           return;
                         }
@@ -103,8 +105,9 @@ class _MistMapPanelState extends State<MistMapPanel> {
             child: GameOutlinedText(
               _detail,
               fontSize: 11,
-              color: d.textPrimary,
-              strokeWidth: 1.1,
+              color: d.logText,
+              strokeWidth: 1.0,
+              strokeColor: Colors.black.withValues(alpha: 0.75),
               textAlign: TextAlign.left,
             ),
           ),
@@ -162,7 +165,7 @@ class MapGraphPainter extends CustomPainter {
     }
 
     for (final n in vm.nodes) {
-      final r = n.isHere ? 16.0 : (n.fog ? 11.0 : 13.0);
+      final r = n.isHere ? 24.0 : (n.fog ? 17.0 : 20.0);
       final fill = n.isHere
           ? const Color(0xFF3A2E1C)
           : (n.fog ? const Color(0xFF18140E) : const Color(0xFF2A2218));
@@ -176,10 +179,13 @@ class MapGraphPainter extends CustomPainter {
         Paint()
           ..color = stroke
           ..style = PaintingStyle.stroke
-          ..strokeWidth = 2,
+          ..strokeWidth = 2.5,
       );
       final tp = TextPainter(
-        text: TextSpan(text: n.shortLabel, style: const TextStyle(fontSize: 10, color: Colors.white)),
+        text: TextSpan(
+          text: n.shortLabel,
+          style: const TextStyle(fontSize: 16, color: Colors.white),
+        ),
         textDirection: TextDirection.ltr,
       )..layout();
       tp.paint(canvas, Offset(n.cx - tp.width / 2, n.cy - tp.height / 2));

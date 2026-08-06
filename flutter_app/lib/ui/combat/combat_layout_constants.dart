@@ -65,5 +65,6 @@ enum CombatCommandOption {
   skill,
   item,
   defend,
+  melee,
   flee,
 }

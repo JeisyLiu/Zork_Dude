@@ -21,6 +21,32 @@ class CombatEncounter {
   final Map<String, CombatCommand> pendingEnemyCommands = {};
   final List<String> defeatedEnemyInstances = [];
 
+  /// Destiny-of-an-Emperor style free melee auto-battle.
+  bool meleeActive = false;
+
+  /// Melee stops / locks when hero HP is strictly below 1/4 max.
+  static bool heroBelowMeleeThreshold(CombatActor hero) =>
+      hero.hp * 4 < hero.maxHp;
+
+  CombatActor? get hero {
+    for (final a in allies) {
+      if (a.isHero) return a;
+    }
+    return allies.isEmpty ? null : allies.first;
+  }
+
+  bool get canUseMelee {
+    final h = hero;
+    if (h == null || !h.alive) return false;
+    return !heroBelowMeleeThreshold(h);
+  }
+
+  bool get shouldStopMelee {
+    final h = hero;
+    if (h == null || !h.alive) return true;
+    return heroBelowMeleeThreshold(h);
+  }
+
   List<CombatActor> get allActors => [...allies, ...enemies];
 
   CombatActor? actorById(String id) {

@@ -91,12 +91,12 @@ class _StoryLogViewState extends State<StoryLogView>
           text,
           fontSize: 13,
           fontWeight: entry.isCommand ? FontWeight.w600 : FontWeight.w500,
-          color: entry.isCommand ? const Color(0xFF5C4018) : d.textPrimary,
-          strokeWidth: entry.isCommand ? 1.0 : 0,
-          shadowColor:
-              entry.isCommand ? null : Colors.black.withValues(alpha: 0.28),
+          color: entry.isCommand ? d.logCommand : d.logText,
+          strokeWidth: entry.isCommand ? 1.1 : 0.9,
+          strokeColor: Colors.black.withValues(alpha: 0.72),
+          shadowColor: Colors.black.withValues(alpha: 0.55),
           shadowOffset: const Offset(0, 1),
-          shadowBlurRadius: 1.5,
+          shadowBlurRadius: 2.5,
           height: 1.5,
           textAlign: TextAlign.left,
         ),
@@ -113,13 +113,14 @@ class _StoryLogViewState extends State<StoryLogView>
     return GamePanel(
       dark: true,
       withBorder: true,
+      sceneBackdrop: true,
       padding: const EdgeInsets.fromLTRB(14, 10, 8, 10),
       child: RawScrollbar(
         controller: _scroll,
         thumbVisibility: true,
         thickness: 8,
         radius: const Radius.circular(4),
-        thumbColor: d.textMuted.withValues(alpha: 0.6),
+        thumbColor: d.logMuted.withValues(alpha: 0.7),
         child: ListView.builder(
           controller: _scroll,
           primary: false,

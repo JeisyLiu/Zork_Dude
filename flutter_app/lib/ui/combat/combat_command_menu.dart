@@ -12,6 +12,7 @@ class CombatCommandMenu extends StatelessWidget {
     required this.onSelect,
     this.enabled = true,
     this.hasItems = false,
+    this.meleeAvailable = true,
     this.compact = false,
     this.showTitle = false,
   });
@@ -20,6 +21,7 @@ class CombatCommandMenu extends StatelessWidget {
   final void Function(CombatCommandOption option) onSelect;
   final bool enabled;
   final bool hasItems;
+  final bool meleeAvailable;
   final bool compact;
   final bool showTitle;
 
@@ -28,6 +30,7 @@ class CombatCommandMenu extends StatelessWidget {
     (CombatCommandOption.skill, '技能', 'Skill'),
     (CombatCommandOption.item, '道具', 'Item'),
     (CombatCommandOption.defend, '防御', 'Def'),
+    (CombatCommandOption.melee, '混战', 'Melee'),
     (CombatCommandOption.flee, '逃跑', 'Flee'),
   ];
 
@@ -46,11 +49,12 @@ class CombatCommandMenu extends StatelessWidget {
       ),
       child: LayoutBuilder(
         builder: (context, constraints) {
-          const count = 5;
-          final gap = compact ? 4.0 : 6.0;
+          final count = options.length;
+          final gap = compact ? 3.0 : 5.0;
           final maxEach =
               (constraints.maxWidth - gap * (count - 1)) / count;
-          final btnW = maxEach < preferredW ? maxEach.clamp(52.0, preferredW) : preferredW;
+          final btnW =
+              maxEach < preferredW ? maxEach.clamp(48.0, preferredW) : preferredW;
           final btnH = CombatLayoutConstants.commandButtonHeightForWidth(btnW);
 
           return Column(
@@ -82,7 +86,9 @@ class CombatCommandMenu extends StatelessWidget {
                       highlighted: i == highlightIndex,
                       disabled: !enabled ||
                           (options[i].$1 == CombatCommandOption.item &&
-                              !hasItems),
+                              !hasItems) ||
+                          (options[i].$1 == CombatCommandOption.melee &&
+                              !meleeAvailable),
                     ),
                 ],
               ),
@@ -134,6 +140,8 @@ class CombatExecuteBar extends StatelessWidget {
     this.highlighted = false,
     this.compact = false,
     this.width,
+    this.label = '执行',
+    this.subLabel = 'Go',
   });
 
   final bool ready;
@@ -141,6 +149,8 @@ class CombatExecuteBar extends StatelessWidget {
   final bool highlighted;
   final bool compact;
   final double? width;
+  final String label;
+  final String subLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -157,13 +167,13 @@ class CombatExecuteBar extends StatelessWidget {
             )
           : const BoxDecoration(),
       child: GameButton(
-        label: '执行',
-        subLabel: 'Go',
+        label: label,
+        subLabel: subLabel,
         height: h,
         width: w,
         accent: true,
         onPressed: ready ? onExecute : null,
-        semanticLabel: '执行回合',
+        semanticLabel: label,
       ),
     );
   }

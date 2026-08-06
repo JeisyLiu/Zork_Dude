@@ -54,6 +54,20 @@ class CombatEngine {
     encounter.pendingAllyCommands[actorId] = command;
   }
 
+  /// Auto-assign basic attacks for all living allies (Destiny-of-an-Emperor melee).
+  bool fillMeleeAllyCommands(CombatEncounter encounter) {
+    final enemies = encounter.livingEnemies();
+    if (enemies.isEmpty) return false;
+    encounter.pendingAllyCommands.clear();
+    for (final ally in encounter.livingAllies()) {
+      final target = enemies[
+          (enemies.length * _random.nextDouble()).floor().clamp(0, enemies.length - 1)];
+      encounter.pendingAllyCommands[ally.instanceId] =
+          CombatCommand.attack(target.instanceId);
+    }
+    return encounter.allAlliesCommanded;
+  }
+
   void generateEnemyCommands(CombatEncounter encounter) {
     encounter.pendingEnemyCommands.clear();
     for (final enemy in encounter.livingEnemies()) {

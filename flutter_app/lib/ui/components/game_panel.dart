@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:zork_dude/ui/game_ui_assets.dart';
 import 'package:zork_dude/ui/game_ui_theme.dart';
 
-/// Nine-patch panel background from Kenney UI assets.
+/// Nine-patch panel; optionally composites a scene backdrop for exploration.
 class GamePanel extends StatelessWidget {
   const GamePanel({
     super.key,
@@ -11,6 +11,8 @@ class GamePanel extends StatelessWidget {
     this.dark = false,
     this.withBorder = false,
     this.skin,
+    this.sceneBackdrop = false,
+    this.panelOpacity = 0.52,
   });
 
   /// Default inner content padding for a plain panel (avoids wooden rim).
@@ -31,17 +33,48 @@ class GamePanel extends StatelessWidget {
   final bool withBorder;
   final GameUiSkinData? skin;
 
+  /// When true, draw [GameUiSkinData.sceneBg] + scrim under a translucent panel.
+  final bool sceneBackdrop;
+
+  /// Opacity of the wooden/metal panel fill when [sceneBackdrop] is on.
+  final double panelOpacity;
+
   @override
   Widget build(BuildContext context) {
     final d = skin ?? GameUiTheme.of(context);
     final bg = dark ? d.panelDark : d.panel;
-    final resolvedPadding = padding ?? (withBorder ? borderedPadding : contentPadding);
+    final resolvedPadding =
+        padding ?? (withBorder ? borderedPadding : contentPadding);
     return Stack(
       fit: StackFit.passthrough,
       children: [
-        Positioned.fill(
-          child: _ninePatch(bg, GameUiAssets.slicePanel64),
-        ),
+        if (sceneBackdrop) ...[
+          Positioned.fill(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(4),
+              child: Image.asset(
+                d.sceneBg,
+                fit: BoxFit.cover,
+                alignment: Alignment.center,
+                filterQuality: FilterQuality.medium,
+                gaplessPlayback: true,
+                errorBuilder: (_, __, ___) => ColoredBox(color: d.scaffoldBg),
+              ),
+            ),
+          ),
+          Positioned.fill(
+            child: ColoredBox(color: d.sceneScrim),
+          ),
+          Positioned.fill(
+            child: Opacity(
+              opacity: panelOpacity,
+              child: _ninePatch(bg, GameUiAssets.slicePanel64),
+            ),
+          ),
+        ] else
+          Positioned.fill(
+            child: _ninePatch(bg, GameUiAssets.slicePanel64),
+          ),
         if (withBorder)
           Positioned.fill(
             child: _ninePatch(d.panelBorder, GameUiAssets.slicePanel64),

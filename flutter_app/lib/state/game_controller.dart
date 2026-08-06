@@ -189,6 +189,27 @@ class GameController extends ChangeNotifier {
     return ok;
   }
 
+  bool beginMelee() {
+    final s = session;
+    if (s == null) return false;
+    final ok = s.beginMelee();
+    if (ok) notifyListeners();
+    return ok;
+  }
+
+  bool prepareNextMeleeRound() {
+    final s = session;
+    if (s == null) return false;
+    final ok = s.prepareNextMeleeRound();
+    notifyListeners();
+    return ok;
+  }
+
+  void cancelMelee() {
+    session?.cancelMelee();
+    notifyListeners();
+  }
+
   CombatRoundResult? resolveCombatRound() {
     final s = session;
     if (s == null) return null;

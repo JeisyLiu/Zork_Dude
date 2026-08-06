@@ -28,6 +28,8 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        manifestPlaceholders["ADMOB_APP_ID"] =
+            providers.environmentVariable("ADMOB_APP_ID").orElse("unused").get()
     }
 
     buildTypes {

@@ -13,6 +13,8 @@ import 'package:zork_dude/domain/models/enums.dart';
 import 'package:zork_dude/state/game_controller.dart';
 import 'package:zork_dude/ui/components/game_banner.dart';
 import 'package:zork_dude/ui/components/game_button.dart';
+import 'package:zork_dude/services/offpack_ads.dart';
+import 'package:zork_dude/ui/ads/reward_offer_overlay.dart';
 import 'package:zork_dude/ui/components/game_outlined_text.dart';
 import 'package:zork_dude/ui/combat/combat_battlefield.dart';
 import 'package:zork_dude/ui/combat/combat_command_menu.dart';
@@ -84,13 +86,16 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
   }
 
   Future<void> _presentCombatEnd(CombatOutcome outcome) async {
+    var rewardGold = 0;
     void leaveCombat() {
       if (mounted) Navigator.pop(context);
     }
 
     if (outcome == CombatOutcome.victory) {
-      final reward = widget.controller.takeLastCombatReward() ??
+      final reward =
+          widget.controller.takeLastCombatReward() ??
           const CombatReward(defeatedNames: ['敌人']);
+      rewardGold = reward.gold;
       await Navigator.of(context).push<void>(
         PageRouteBuilder<void>(
           opaque: false,
@@ -110,6 +115,20 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
         ),
       );
       if (!mounted) return;
+      if (rewardGold > 0 &&
+          widget.controller.shouldOfferCombatGoldBonus() &&
+          OffpackAds.instance.rewardReady(OffpackRewardPlacement.loot)) {
+        widget.controller.markCombatGoldOfferShown();
+        final earned = await RewardOfferOverlay.show(context, rewardGold);
+        if (earned) {
+          widget.controller.grantCombatGoldBonus();
+        } else {
+          widget.controller.declineCombatGoldBonus();
+        }
+        if (!mounted) return;
+      } else {
+        widget.controller.declineCombatGoldBonus();
+      }
     }
 
     final kind = widget.controller.pendingEnding;
@@ -205,7 +224,9 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
     final enc = _encounter;
     final next = enc?.nextAllyNeedingCommand();
     setState(() {
-      _phase = next == null ? CombatUiPhase.readyToExecute : CombatUiPhase.pickingCommand;
+      _phase = next == null
+          ? CombatUiPhase.readyToExecute
+          : CombatUiPhase.pickingCommand;
       _activeActorId = next?.instanceId;
       _cmdHighlight = CombatCommandOption.attack;
       _targetHighlight = 0;
@@ -335,7 +356,8 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
   bool _onCombatKey(LogicalKeyboardKey key) {
     if (_animating || _finished) return false;
 
-    if (key == LogicalKeyboardKey.escape || key == LogicalKeyboardKey.backspace) {
+    if (key == LogicalKeyboardKey.escape ||
+        key == LogicalKeyboardKey.backspace) {
       final enc = _encounter;
       if (enc != null && enc.meleeActive && !_animating) {
         widget.controller.cancelMelee();
@@ -346,7 +368,8 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
         });
         return true;
       }
-      if (_phase == CombatUiPhase.pickingTarget || _phase == CombatUiPhase.pickingItem) {
+      if (_phase == CombatUiPhase.pickingTarget ||
+          _phase == CombatUiPhase.pickingItem) {
         setState(() => _phase = CombatUiPhase.pickingCommand);
         return true;
       }
@@ -365,14 +388,16 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
       final items = widget.controller.combatUsableItems();
       if (items.isEmpty) return false;
 
-      if (key == LogicalKeyboardKey.arrowLeft || key == LogicalKeyboardKey.keyA) {
+      if (key == LogicalKeyboardKey.arrowLeft ||
+          key == LogicalKeyboardKey.keyA) {
         setState(() {
           _itemHighlight = (_itemHighlight - 1).clamp(0, items.length - 1);
           _pendingItemId = items[_itemHighlight].id;
         });
         return true;
       }
-      if (key == LogicalKeyboardKey.arrowRight || key == LogicalKeyboardKey.keyD) {
+      if (key == LogicalKeyboardKey.arrowRight ||
+          key == LogicalKeyboardKey.keyD) {
         setState(() {
           _itemHighlight = (_itemHighlight + 1).clamp(0, items.length - 1);
           _pendingItemId = items[_itemHighlight].id;
@@ -381,19 +406,33 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
       }
     }
 
-    if (_phase == CombatUiPhase.pickingTarget || _phase == CombatUiPhase.pickingItem) {
-      final pool = (_phase == CombatUiPhase.pickingItem ||
+    if (_phase == CombatUiPhase.pickingTarget ||
+        _phase == CombatUiPhase.pickingItem) {
+      final pool =
+          (_phase == CombatUiPhase.pickingItem ||
               _activeActor?.role == CompanionRole.healer)
           ? _targetPool(enemies: false)
           : _targetPool(enemies: true);
       if (pool.isEmpty) return false;
 
-      if (key == LogicalKeyboardKey.arrowLeft || key == LogicalKeyboardKey.keyA) {
-        setState(() => _targetHighlight = (_targetHighlight - 1).clamp(0, pool.length - 1));
+      if (key == LogicalKeyboardKey.arrowLeft ||
+          key == LogicalKeyboardKey.keyA) {
+        setState(
+          () => _targetHighlight = (_targetHighlight - 1).clamp(
+            0,
+            pool.length - 1,
+          ),
+        );
         return true;
       }
-      if (key == LogicalKeyboardKey.arrowRight || key == LogicalKeyboardKey.keyD) {
-        setState(() => _targetHighlight = (_targetHighlight + 1).clamp(0, pool.length - 1));
+      if (key == LogicalKeyboardKey.arrowRight ||
+          key == LogicalKeyboardKey.keyD) {
+        setState(
+          () => _targetHighlight = (_targetHighlight + 1).clamp(
+            0,
+            pool.length - 1,
+          ),
+        );
         return true;
       }
       if (key == LogicalKeyboardKey.enter || key == LogicalKeyboardKey.space) {
@@ -407,18 +446,22 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
       final options = CombatCommandMenu.options;
       if (key == LogicalKeyboardKey.arrowUp || key == LogicalKeyboardKey.keyW) {
         setState(() {
-          _cmdHighlight = options[
-              (options.indexWhere((o) => o.$1 == _cmdHighlight) - 1 + options.length) %
-                  options.length]
-              .$1;
+          _cmdHighlight =
+              options[(options.indexWhere((o) => o.$1 == _cmdHighlight) -
+                          1 +
+                          options.length) %
+                      options.length]
+                  .$1;
         });
         return true;
       }
-      if (key == LogicalKeyboardKey.arrowDown || key == LogicalKeyboardKey.keyS) {
+      if (key == LogicalKeyboardKey.arrowDown ||
+          key == LogicalKeyboardKey.keyS) {
         setState(() {
-          _cmdHighlight = options[
-              (options.indexWhere((o) => o.$1 == _cmdHighlight) + 1) % options.length]
-              .$1;
+          _cmdHighlight =
+              options[(options.indexWhere((o) => o.$1 == _cmdHighlight) + 1) %
+                      options.length]
+                  .$1;
         });
         return true;
       }
@@ -432,10 +475,12 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
   }
 
   String? _highlightedTargetId() {
-    if (_phase != CombatUiPhase.pickingTarget && _phase != CombatUiPhase.pickingItem) {
+    if (_phase != CombatUiPhase.pickingTarget &&
+        _phase != CombatUiPhase.pickingItem) {
       return null;
     }
-    final pool = (_phase == CombatUiPhase.pickingItem ||
+    final pool =
+        (_phase == CombatUiPhase.pickingItem ||
             _activeActor?.role == CompanionRole.healer)
         ? _targetPool(enemies: false)
         : _targetPool(enemies: true);
@@ -469,174 +514,186 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
     final items = widget.controller.combatUsableItems();
     final hasItems = items.isNotEmpty;
     final ready = enc.allAlliesCommanded && !_animating;
-    final List<TurnOrderEntry> turnOrder =
-        ready ? widget.controller.previewCombatTurnOrder() : const [];
+    final List<TurnOrderEntry> turnOrder = ready
+        ? widget.controller.previewCombatTurnOrder()
+        : const [];
     final registry = widget.controller.statusEffectRegistry;
 
     final content = Column(
       children: [
-          Stack(
-            children: [
-              GameBanner(
-                title: '回合战斗',
-                height: CombatLayoutConstants.bannerHeightFor(
-                  short: short,
-                  phoneShort: phoneShort,
-                ),
-                titleSize: phoneShort ? 14 : (short ? 15 : 17),
+        Stack(
+          children: [
+            GameBanner(
+              title: '回合战斗',
+              height: CombatLayoutConstants.bannerHeightFor(
+                short: short,
+                phoneShort: phoneShort,
               ),
-              Positioned(
-                right: short ? 4 : 8,
-                top: 0,
-                bottom: 0,
-                child: Center(
-                  child: GameButton(
-                    label: '菜单',
-                    subLabel: 'menu',
-                    compact: true,
-                    height: phoneShort ? 26 : (short ? 28 : 32),
-                    width: phoneShort ? 52 : (short ? 56 : 64),
-                    enabled: !_finished,
-                    onPressed: _showPauseMenu,
-                    semanticLabel: '战斗菜单',
-                  ),
+              titleSize: phoneShort ? 14 : (short ? 15 : 17),
+            ),
+            Positioned(
+              right: short ? 4 : 8,
+              top: 0,
+              bottom: 0,
+              child: Center(
+                child: GameButton(
+                  label: '菜单',
+                  subLabel: 'menu',
+                  compact: true,
+                  height: phoneShort ? 26 : (short ? 28 : 32),
+                  width: phoneShort ? 52 : (short ? 56 : 64),
+                  enabled: !_finished,
+                  onPressed: _showPauseMenu,
+                  semanticLabel: '战斗菜单',
                 ),
               ),
-            ],
-          ),
-          SizedBox(height: phoneShort ? 2 : (short ? 2 : 4)),
-          Expanded(
-            child: sideBySide
-                ? Row(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Expanded(
-                        flex: 3,
-                        child: _battleColumn(enc, short || phoneShort, targetId, registry),
-                      ),
-                      const SizedBox(width: 6),
-                      Expanded(
-                        flex: 2,
-                        child: Column(
-                          children: [
-                            if (!short && !phoneShort)
-                              CombatCommandQueue(
-                                encounter: enc,
-                                activeActorId: _activeActorId,
-                                compact: false,
-                              ),
-                            if (!short && !phoneShort) const SizedBox(height: 4),
-                            if (turnOrder.isNotEmpty) ...[
-                              CombatTurnOrderBar(
-                                entries: turnOrder,
-                                highlightActorId: _animatingActorId,
-                                compact: short || phoneShort,
-                              ),
-                              const SizedBox(height: 4),
-                            ],
-                            Expanded(
-                              child: CombatRoundLog(
-                                messages: _log,
-                                steps: _stepLog,
-                                compact: short || phoneShort,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  )
-                : Column(
-                    children: [
-                      Expanded(
-                        flex: 3,
-                        child: _battleColumn(enc, short || phoneShort, targetId, registry),
-                      ),
-                      if (turnOrder.isNotEmpty) ...[
-                        const SizedBox(height: 2),
-                        CombatTurnOrderBar(
-                          entries: turnOrder,
-                          highlightActorId: _animatingActorId,
-                          compact: true,
-                        ),
-                      ],
-                      const SizedBox(height: 2),
-                      Expanded(
-                        flex: 1,
-                        child: CombatRoundLog(
-                          messages: _log,
-                          steps: _stepLog,
-                          compact: true,
-                        ),
-                      ),
-                    ],
-                  ),
-          ),
-          if (_phase == CombatUiPhase.pickingItem) ...[
-            const SizedBox(height: 2),
-            CombatItemPicker(
-              items: items,
-              selectedId: _pendingItemId,
-              compact: true,
-              onSelect: (id) {
-                final idx = items.indexWhere((e) => e.id == id);
-                setState(() {
-                  _pendingItemId = id;
-                  _itemHighlight = idx < 0 ? 0 : idx;
-                });
-              },
             ),
           ],
-          SizedBox(height: phoneShort ? 2 : (short ? 2 : 4)),
-          SizedBox(
-            height: CombatLayoutConstants.commandDockHeightFor(context),
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                final execPreferred = CombatLayoutConstants.executeButtonWidthFor(
-                  short: short,
-                  phoneShort: phoneShort,
-                );
-                final execW = CombatLayoutConstants.executeWidthFor(
-                  availableWidth: (constraints.maxWidth * 0.22).clamp(
-                    72.0,
-                    execPreferred,
-                  ),
-                  short: short,
-                  phoneShort: phoneShort,
-                );
-                return Row(
+        ),
+        SizedBox(height: phoneShort ? 2 : (short ? 2 : 4)),
+        Expanded(
+          child: sideBySide
+              ? Row(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Expanded(
-                      child: CombatCommandMenu(
-                        highlightIndex: CombatCommandMenu.options
-                            .indexWhere((o) => o.$1 == _cmdHighlight),
-                        enabled:
-                            _phase == CombatUiPhase.pickingCommand && !_animating,
-                        hasItems: hasItems,
-                        meleeAvailable: enc.canUseMelee,
-                        compact: short,
-                        phoneShort: phoneShort,
-                        onSelect: _selectCommand,
+                      flex: 3,
+                      child: _battleColumn(
+                        enc,
+                        short || phoneShort,
+                        targetId,
+                        registry,
                       ),
                     ),
-                    const SizedBox(width: 8),
-                    Center(
-                      child: CombatExecuteBar(
-                        ready: ready,
-                        highlighted: _phase == CombatUiPhase.readyToExecute,
-                        onExecute: _executeRound,
-                        compact: short,
-                        phoneShort: phoneShort,
-                        width: execW,
+                    const SizedBox(width: 6),
+                    Expanded(
+                      flex: 2,
+                      child: Column(
+                        children: [
+                          if (!short && !phoneShort)
+                            CombatCommandQueue(
+                              encounter: enc,
+                              activeActorId: _activeActorId,
+                              compact: false,
+                            ),
+                          if (!short && !phoneShort) const SizedBox(height: 4),
+                          if (turnOrder.isNotEmpty) ...[
+                            CombatTurnOrderBar(
+                              entries: turnOrder,
+                              highlightActorId: _animatingActorId,
+                              compact: short || phoneShort,
+                            ),
+                            const SizedBox(height: 4),
+                          ],
+                          Expanded(
+                            child: CombatRoundLog(
+                              messages: _log,
+                              steps: _stepLog,
+                              compact: short || phoneShort,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
-                );
-              },
-            ),
+                )
+              : Column(
+                  children: [
+                    Expanded(
+                      flex: 3,
+                      child: _battleColumn(
+                        enc,
+                        short || phoneShort,
+                        targetId,
+                        registry,
+                      ),
+                    ),
+                    if (turnOrder.isNotEmpty) ...[
+                      const SizedBox(height: 2),
+                      CombatTurnOrderBar(
+                        entries: turnOrder,
+                        highlightActorId: _animatingActorId,
+                        compact: true,
+                      ),
+                    ],
+                    const SizedBox(height: 2),
+                    Expanded(
+                      flex: 1,
+                      child: CombatRoundLog(
+                        messages: _log,
+                        steps: _stepLog,
+                        compact: true,
+                      ),
+                    ),
+                  ],
+                ),
+        ),
+        if (_phase == CombatUiPhase.pickingItem) ...[
+          const SizedBox(height: 2),
+          CombatItemPicker(
+            items: items,
+            selectedId: _pendingItemId,
+            compact: true,
+            onSelect: (id) {
+              final idx = items.indexWhere((e) => e.id == id);
+              setState(() {
+                _pendingItemId = id;
+                _itemHighlight = idx < 0 ? 0 : idx;
+              });
+            },
           ),
         ],
+        SizedBox(height: phoneShort ? 2 : (short ? 2 : 4)),
+        SizedBox(
+          height: CombatLayoutConstants.commandDockHeightFor(context),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final execPreferred = CombatLayoutConstants.executeButtonWidthFor(
+                short: short,
+                phoneShort: phoneShort,
+              );
+              final execW = CombatLayoutConstants.executeWidthFor(
+                availableWidth: (constraints.maxWidth * 0.22).clamp(
+                  72.0,
+                  execPreferred,
+                ),
+                short: short,
+                phoneShort: phoneShort,
+              );
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(
+                    child: CombatCommandMenu(
+                      highlightIndex: CombatCommandMenu.options.indexWhere(
+                        (o) => o.$1 == _cmdHighlight,
+                      ),
+                      enabled:
+                          _phase == CombatUiPhase.pickingCommand && !_animating,
+                      hasItems: hasItems,
+                      meleeAvailable: enc.canUseMelee,
+                      compact: short,
+                      phoneShort: phoneShort,
+                      onSelect: _selectCommand,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Center(
+                    child: CombatExecuteBar(
+                      ready: ready,
+                      highlighted: _phase == CombatUiPhase.readyToExecute,
+                      onExecute: _executeRound,
+                      compact: short,
+                      phoneShort: phoneShort,
+                      width: execW,
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+        ),
+      ],
     );
 
     return PopScope(
@@ -646,17 +703,17 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
         _showPauseMenu();
       },
       child: GameSkinScope(
-      skin: skin,
-      combatBars: true,
-      child: LandscapeScaffold(
-        backgroundColor: bg,
-        body: CombatKeyboardScope(
-          enabled: !_animating && !_finished,
-          onKey: _onCombatKey,
-          child: content,
+        skin: skin,
+        combatBars: true,
+        child: LandscapeScaffold(
+          backgroundColor: bg,
+          body: CombatKeyboardScope(
+            enabled: !_animating && !_finished,
+            onKey: _onCombatKey,
+            child: content,
+          ),
         ),
       ),
-    ),
     );
   }
 
@@ -667,9 +724,12 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
     StatusEffectRegistry registry,
   ) {
     final pickingTarget =
-        _phase == CombatUiPhase.pickingTarget || _phase == CombatUiPhase.pickingItem;
-    final healTarget = _phase == CombatUiPhase.pickingItem ||
-        (_phase == CombatUiPhase.pickingTarget && _activeActor?.role == CompanionRole.healer);
+        _phase == CombatUiPhase.pickingTarget ||
+        _phase == CombatUiPhase.pickingItem;
+    final healTarget =
+        _phase == CombatUiPhase.pickingItem ||
+        (_phase == CombatUiPhase.pickingTarget &&
+            _activeActor?.role == CompanionRole.healer);
 
     return CombatBattlefield(
       allies: enc.allies,
@@ -683,7 +743,9 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
       flashIds: _flashIds,
       onActorTap: pickingTarget
           ? (actor) {
-              final pool = healTarget ? enc.livingAllies() : enc.livingEnemies();
+              final pool = healTarget
+                  ? enc.livingAllies()
+                  : enc.livingEnemies();
               if (pool.any((a) => a.instanceId == actor.instanceId)) {
                 _confirmTarget(actor);
               }

@@ -15,6 +15,10 @@ class EndingOverlay extends StatefulWidget {
     this.onSecondary,
     this.primaryLabel,
     this.secondaryLabel,
+    this.onRewarded,
+    this.onRewardEarned,
+    this.rewardLabel,
+    this.rewardSubLabel,
   });
 
   final EndingKind kind;
@@ -22,6 +26,10 @@ class EndingOverlay extends StatefulWidget {
   final VoidCallback? onSecondary;
   final String? primaryLabel;
   final String? secondaryLabel;
+  final Future<bool> Function()? onRewarded;
+  final VoidCallback? onRewardEarned;
+  final String? rewardLabel;
+  final String? rewardSubLabel;
 
   @override
   State<EndingOverlay> createState() => _EndingOverlayState();
@@ -30,6 +38,26 @@ class EndingOverlay extends StatefulWidget {
 class _EndingOverlayState extends State<EndingOverlay>
     with SingleTickerProviderStateMixin {
   late final AnimationController _fade;
+  bool _rewardLoading = false;
+  bool _rewardFailed = false;
+
+  Future<void> _watchReward() async {
+    if (_rewardLoading || widget.onRewarded == null) return;
+    setState(() {
+      _rewardLoading = true;
+      _rewardFailed = false;
+    });
+    final earned = await widget.onRewarded!();
+    if (!mounted) return;
+    if (earned) {
+      widget.onRewardEarned?.call();
+      return;
+    }
+    setState(() {
+      _rewardLoading = false;
+      _rewardFailed = true;
+    });
+  }
 
   @override
   void initState() {
@@ -80,9 +108,8 @@ class _EndingOverlayState extends State<EndingOverlay>
                   fit: BoxFit.fitWidth,
                   alignment: Alignment.center,
                   filterQuality: FilterQuality.medium,
-                  errorBuilder: (_, __, ___) => const ColoredBox(
-                    color: Colors.black,
-                  ),
+                  errorBuilder: (_, __, ___) =>
+                      const ColoredBox(color: Colors.black),
                 ),
               ),
               SafeArea(
@@ -116,6 +143,32 @@ class _EndingOverlayState extends State<EndingOverlay>
                         shadowBlurRadius: 4,
                       ),
                       SizedBox(height: short ? 12 : 18),
+                      if (widget.onRewarded != null) ...[
+                        GameButton(
+                          width: btnW,
+                          height: btnH,
+                          compact: true,
+                          accent: true,
+                          enabled: !_rewardLoading,
+                          label: _rewardLoading
+                              ? '召唤微光中…'
+                              : widget.rewardLabel ?? '观看广告',
+                          subLabel: _rewardLoading
+                              ? null
+                              : widget.rewardSubLabel,
+                          onPressed: _rewardLoading ? null : _watchReward,
+                        ),
+                        if (_rewardFailed) ...[
+                          const SizedBox(height: 5),
+                          const GameOutlinedText(
+                            '微光暂未回应，请稍后再试',
+                            fontSize: 10,
+                            color: HomeConstants.hintColor,
+                            strokeWidth: 0,
+                          ),
+                        ],
+                        const SizedBox(height: 8),
+                      ],
                       GameButton(
                         width: btnW,
                         height: btnH,
@@ -155,7 +208,10 @@ class _EndingOverlayState extends State<EndingOverlay>
                 maxHeight: size.height * 0.92,
               ),
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 12,
+                ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -207,6 +263,30 @@ class _EndingOverlayState extends State<EndingOverlay>
                       height: 1.45,
                     ),
                     SizedBox(height: short ? 12 : 18),
+                    if (widget.onRewarded != null) ...[
+                      GameButton(
+                        width: btnW,
+                        height: btnH,
+                        compact: true,
+                        accent: true,
+                        enabled: !_rewardLoading,
+                        label: _rewardLoading
+                            ? '召唤微光中…'
+                            : widget.rewardLabel ?? '观看广告',
+                        subLabel: _rewardLoading ? null : widget.rewardSubLabel,
+                        onPressed: _rewardLoading ? null : _watchReward,
+                      ),
+                      if (_rewardFailed) ...[
+                        const SizedBox(height: 5),
+                        GameOutlinedText(
+                          '微光暂未回应，请稍后再试',
+                          fontSize: 10,
+                          color: HomeConstants.hintColor,
+                          strokeWidth: 0,
+                        ),
+                      ],
+                      const SizedBox(height: 8),
+                    ],
                     GameButton(
                       width: btnW,
                       height: btnH,

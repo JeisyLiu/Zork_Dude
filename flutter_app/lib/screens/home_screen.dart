@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:zork_dude/screens/exploration_screen.dart';
 import 'package:zork_dude/state/game_controller.dart';
 import 'package:zork_dude/ui/components/game_button.dart';
+import 'package:zork_dude/ui/ads/offpack_banner.dart';
 import 'package:zork_dude/ui/components/game_confirm_dialog.dart';
 import 'package:zork_dude/ui/components/game_outlined_text.dart';
 import 'package:zork_dude/ui/components/landscape_scaffold.dart';
@@ -113,17 +114,19 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _pushExploration(BuildContext context) {
     if (!mounted) return;
-    Navigator.of(context).push(
-      LandscapePageRoute.of<void>(
-        context,
-        ExplorationScreen(controller: _controller),
-      ),
-    ).then((_) async {
-      if (mounted) {
-        await _controller.refreshSlots();
-        setState(() => _entering = false);
-      }
-    });
+    Navigator.of(context)
+        .push(
+          LandscapePageRoute.of<void>(
+            context,
+            ExplorationScreen(controller: _controller),
+          ),
+        )
+        .then((_) async {
+          if (mounted) {
+            await _controller.refreshSlots();
+            setState(() => _entering = false);
+          }
+        });
   }
 
   @override
@@ -136,97 +139,140 @@ class _HomeScreenState extends State<HomeScreen> {
         if (ok) GameExit.quitApp();
       },
       child: GameSkinScope(
-      skin: GameUiSkin.fantasy,
-      child: Listener(
-        behavior: HitTestBehavior.translucent,
-        onPointerHover: (e) => _setPointer(e.localPosition),
-        onPointerMove: (e) => _setPointer(e.localPosition),
-        onPointerDown: (e) => _setPointer(e.localPosition, down: true),
-        onPointerUp: (_) => _clearPointer(),
-        onPointerCancel: (_) => _clearPointer(),
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            LandscapeScaffold(
-              backgroundColor: HomeConstants.bgMid,
-              background: HomeAmbientBackground(pointerListenable: _pointer),
-              body: LayoutBuilder(
-                builder: (context, constraints) {
-                  final screen = MediaQuery.sizeOf(context);
-                  final padding = MediaQuery.paddingOf(context);
-                  final short = LandscapeLayout.isShortPlayContext(context);
-                  final phoneShort = LandscapeLayout.isPhoneShortPlayContext(context);
-                  final usableH = LandscapeLayout.playUsableHeightOf(context);
-                  final heroSize = HomeConstants.heroSizeFor(screen, padding: padding);
-                  final tight = usableH < 520;
-                  final gapL = phoneShort ? 4.0 : (short ? 6.0 : (tight ? 10.0 : 16.0));
-                  final gapM = phoneShort ? 3.0 : (short ? 4.0 : (tight ? 8.0 : 12.0));
-                  final gapS = phoneShort ? 2.0 : (short ? 3.0 : (tight ? 6.0 : 10.0));
-                  final btnW = HomeConstants.buttonWidthFor(
-                    short: short,
-                    phoneShort: phoneShort,
-                  );
-                  final btnH = HomeConstants.buttonHeightFor(btnW);
+        skin: GameUiSkin.fantasy,
+        child: Listener(
+          behavior: HitTestBehavior.translucent,
+          onPointerHover: (e) => _setPointer(e.localPosition),
+          onPointerMove: (e) => _setPointer(e.localPosition),
+          onPointerDown: (e) => _setPointer(e.localPosition, down: true),
+          onPointerUp: (_) => _clearPointer(),
+          onPointerCancel: (_) => _clearPointer(),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              LandscapeScaffold(
+                backgroundColor: HomeConstants.bgMid,
+                background: HomeAmbientBackground(pointerListenable: _pointer),
+                body: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final screen = MediaQuery.sizeOf(context);
+                    final padding = MediaQuery.paddingOf(context);
+                    final short = LandscapeLayout.isShortPlayContext(context);
+                    final phoneShort = LandscapeLayout.isPhoneShortPlayContext(
+                      context,
+                    );
+                    final usableH = LandscapeLayout.playUsableHeightOf(context);
+                    final heroSize = HomeConstants.heroSizeFor(
+                      screen,
+                      padding: padding,
+                    );
+                    final tight = usableH < 520;
+                    final gapL = phoneShort
+                        ? 4.0
+                        : (short ? 6.0 : (tight ? 10.0 : 16.0));
+                    final gapM = phoneShort
+                        ? 3.0
+                        : (short ? 4.0 : (tight ? 8.0 : 12.0));
+                    final gapS = phoneShort
+                        ? 2.0
+                        : (short ? 3.0 : (tight ? 6.0 : 10.0));
+                    final btnW = HomeConstants.buttonWidthFor(
+                      short: short,
+                      phoneShort: phoneShort,
+                    );
+                    final btnH = HomeConstants.buttonHeightFor(btnW);
 
-                  return Stack(
-                    fit: StackFit.expand,
-                    children: [
-                      Center(
-                        child: ConstrainedBox(
-                          constraints: const BoxConstraints(
-                            maxWidth: LandscapeLayout.maxContentWidth,
-                          ),
-                          child: SingleChildScrollView(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: phoneShort ? 6 : (short ? 8 : 12),
+                    return Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        Center(
+                          child: ConstrainedBox(
+                            constraints: const BoxConstraints(
+                              maxWidth: LandscapeLayout.maxContentWidth,
                             ),
-                            child: ConstrainedBox(
-                              constraints: const BoxConstraints(
-                                maxWidth: HomeConstants.maxContentWidth,
+                            child: SingleChildScrollView(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: phoneShort ? 6 : (short ? 8 : 12),
                               ),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  HomeHeroArt(size: heroSize),
-                                  SizedBox(height: gapL),
-                                  GameOutlinedText(
-                                    '迷雾之塔',
-                                    fontSize: phoneShort ? 20 : (short ? 22 : (tight ? 26 : 30)),
-                                    fontWeight: FontWeight.w700,
-                                    color: HomeConstants.titleColor,
-                                    strokeWidth: 0,
-                                    letterSpacing: 2,
-                                    shadowColor:
-                                        Colors.black.withValues(alpha: 0.45),
-                                    shadowOffset: const Offset(0, 2),
-                                    shadowBlurRadius: 3,
-                                  ),
-                                  SizedBox(height: gapS),
-                                  GameOutlinedText(
-                                    'MIST TOWER',
-                                    fontSize: phoneShort ? 9 : (short ? 10 : (tight ? 11 : 12)),
-                                    fontWeight: FontWeight.w500,
-                                    color: HomeConstants.subtitleColor,
-                                    strokeWidth: 0,
-                                    letterSpacing: 4,
-                                  ),
-                                  SizedBox(height: gapM),
-                                  const _PixelDivider(),
-                                  SizedBox(height: gapM),
-                                  GameOutlinedText(
-                                    short || phoneShort
-                                        ? '探索、收集、对话、战斗——找回失落的真相。'
-                                        : '你从迷雾森林中醒来，失去记忆。\n探索、收集、对话、战斗——找回失落的真相。',
-                                    textAlign: TextAlign.center,
-                                    fontSize: phoneShort ? 11 : (short ? 12 : (tight ? 13 : 14)),
-                                    fontWeight: FontWeight.w500,
-                                    color: HomeConstants.bodyColor,
-                                    strokeWidth: 0,
-                                    height: 1.45,
-                                  ),
-                                  SizedBox(height: gapL),
-                                  if (_controller.hasSave) ...[
+                              child: ConstrainedBox(
+                                constraints: const BoxConstraints(
+                                  maxWidth: HomeConstants.maxContentWidth,
+                                ),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    HomeHeroArt(size: heroSize),
+                                    SizedBox(height: gapL),
+                                    GameOutlinedText(
+                                      '迷雾之塔',
+                                      fontSize: phoneShort
+                                          ? 20
+                                          : (short ? 22 : (tight ? 26 : 30)),
+                                      fontWeight: FontWeight.w700,
+                                      color: HomeConstants.titleColor,
+                                      strokeWidth: 0,
+                                      letterSpacing: 2,
+                                      shadowColor: Colors.black.withValues(
+                                        alpha: 0.45,
+                                      ),
+                                      shadowOffset: const Offset(0, 2),
+                                      shadowBlurRadius: 3,
+                                    ),
+                                    SizedBox(height: gapS),
+                                    GameOutlinedText(
+                                      'MIST TOWER',
+                                      fontSize: phoneShort
+                                          ? 9
+                                          : (short ? 10 : (tight ? 11 : 12)),
+                                      fontWeight: FontWeight.w500,
+                                      color: HomeConstants.subtitleColor,
+                                      strokeWidth: 0,
+                                      letterSpacing: 4,
+                                    ),
+                                    SizedBox(height: gapM),
+                                    const _PixelDivider(),
+                                    SizedBox(height: gapM),
+                                    GameOutlinedText(
+                                      short || phoneShort
+                                          ? '探索、收集、对话、战斗——找回失落的真相。'
+                                          : '你从迷雾森林中醒来，失去记忆。\n探索、收集、对话、战斗——找回失落的真相。',
+                                      textAlign: TextAlign.center,
+                                      fontSize: phoneShort
+                                          ? 11
+                                          : (short ? 12 : (tight ? 13 : 14)),
+                                      fontWeight: FontWeight.w500,
+                                      color: HomeConstants.bodyColor,
+                                      strokeWidth: 0,
+                                      height: 1.45,
+                                    ),
+                                    SizedBox(height: gapL),
+                                    if (_controller.hasSave) ...[
+                                      GameButton(
+                                        width: btnW,
+                                        height: btnH,
+                                        compact: true,
+                                        useOutline: false,
+                                        nineSlice: false,
+                                        asset: HomeConstants.enterButtonAsset,
+                                        labelColor:
+                                            HomeConstants.buttonLabelColor,
+                                        subLabelColor:
+                                            HomeConstants.buttonSubLabelColor,
+                                        label: _controller.loading
+                                            ? '加载中…'
+                                            : '继续旅程',
+                                        subLabel: 'continue',
+                                        enabled:
+                                            !_controller.loading && !_entering,
+                                        onPressed:
+                                            _controller.loading || _entering
+                                            ? null
+                                            : () => _continueGame(context),
+                                        semanticLabel: '继续旅程',
+                                      ),
+                                      SizedBox(height: gapS),
+                                    ],
                                     GameButton(
                                       width: btnW,
                                       height: btnH,
@@ -234,95 +280,80 @@ class _HomeScreenState extends State<HomeScreen> {
                                       useOutline: false,
                                       nineSlice: false,
                                       asset: HomeConstants.enterButtonAsset,
-                                      labelColor: HomeConstants.buttonLabelColor,
+                                      labelColor:
+                                          HomeConstants.buttonLabelColor,
                                       subLabelColor:
                                           HomeConstants.buttonSubLabelColor,
                                       label: _controller.loading
                                           ? '加载中…'
-                                          : '继续旅程',
-                                      subLabel: 'continue',
-                                      enabled: !_controller.loading &&
-                                          !_entering,
-                                      onPressed: _controller.loading ||
-                                              _entering
+                                          : '进入迷雾',
+                                      subLabel: 'enter',
+                                      enabled:
+                                          !_controller.loading && !_entering,
+                                      onPressed:
+                                          _controller.loading || _entering
                                           ? null
-                                          : () => _continueGame(context),
-                                      semanticLabel: '继续旅程',
+                                          : () => _enterGame(context),
+                                      semanticLabel: '进入迷雾',
                                     ),
-                                    SizedBox(height: gapS),
-                                  ],
-                                  GameButton(
-                                    width: btnW,
-                                    height: btnH,
-                                    compact: true,
-                                    useOutline: false,
-                                    nineSlice: false,
-                                    asset: HomeConstants.enterButtonAsset,
-                                    labelColor: HomeConstants.buttonLabelColor,
-                                    subLabelColor:
-                                        HomeConstants.buttonSubLabelColor,
-                                    label: _controller.loading
-                                        ? '加载中…'
-                                        : '进入迷雾',
-                                    subLabel: 'enter',
-                                    enabled:
-                                        !_controller.loading && !_entering,
-                                    onPressed: _controller.loading || _entering
-                                        ? null
-                                        : () => _enterGame(context),
-                                    semanticLabel: '进入迷雾',
-                                  ),
-                                  SizedBox(height: gapM),
-                                  if (GameExit.isDesktop) ...[
-                                    TextButton(
-                                      onPressed: _controller.loading || _entering
-                                          ? null
-                                          : () async {
-                                              final ok =
-                                                  await GameExit.confirmQuitApp(
-                                                      context);
-                                              if (ok) GameExit.quitApp();
-                                            },
-                                      child: GameOutlinedText(
-                                        '退出游戏',
-                                        fontSize: short ? 11 : 12,
-                                        fontWeight: FontWeight.w500,
-                                        color: HomeConstants.hintColor,
-                                        strokeWidth: 0,
+                                    SizedBox(height: gapM),
+                                    if (GameExit.isDesktop) ...[
+                                      TextButton(
+                                        onPressed:
+                                            _controller.loading || _entering
+                                            ? null
+                                            : () async {
+                                                final ok =
+                                                    await GameExit.confirmQuitApp(
+                                                      context,
+                                                    );
+                                                if (ok) GameExit.quitApp();
+                                              },
+                                        child: GameOutlinedText(
+                                          '退出游戏',
+                                          fontSize: short ? 11 : 12,
+                                          fontWeight: FontWeight.w500,
+                                          color: HomeConstants.hintColor,
+                                          strokeWidth: 0,
+                                        ),
                                       ),
+                                      SizedBox(height: gapS),
+                                    ],
+                                    GameOutlinedText(
+                                      '指令探索 · 迷雾地图 · 遇敌进入回合战斗',
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w500,
+                                      color: HomeConstants.hintColor,
+                                      strokeWidth: 0,
                                     ),
-                                    SizedBox(height: gapS),
+                                    if (!short) ...[
+                                      const SizedBox(height: 8),
+                                      const OffpackHomeBanner(),
+                                    ],
+                                    const OffpackPrivacyButton(),
                                   ],
-                                  GameOutlinedText(
-                                    '指令探索 · 迷雾地图 · 遇敌进入回合战斗',
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w500,
-                                    color: HomeConstants.hintColor,
-                                    strokeWidth: 0,
-                                  ),
-                                ],
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      if (_entering)
-                        HomeEnterTransition(
-                          onCompleted: () => _pushExploration(context),
-                        ),
-                    ],
-                  );
-                },
+                        if (_entering)
+                          HomeEnterTransition(
+                            onCompleted: () => _pushExploration(context),
+                          ),
+                      ],
+                    );
+                  },
+                ),
               ),
-            ),
-            if (!_entering)
-              IgnorePointer(
-                child: HomePointerFxOverlay(pointerListenable: _pointer),
-              ),
-          ],
+              if (!_entering)
+                IgnorePointer(
+                  child: HomePointerFxOverlay(pointerListenable: _pointer),
+                ),
+            ],
+          ),
         ),
       ),
-    ),
     );
   }
 }
@@ -335,9 +366,7 @@ class _PixelDivider extends StatelessWidget {
     return SizedBox(
       width: 120,
       height: 3,
-      child: CustomPaint(
-        painter: _PixelDividerPainter(),
-      ),
+      child: CustomPaint(painter: _PixelDividerPainter()),
     );
   }
 }
@@ -345,7 +374,8 @@ class _PixelDivider extends StatelessWidget {
 class _PixelDividerPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()..color = HomeConstants.subtitleColor.withValues(alpha: 0.55);
+    final paint = Paint()
+      ..color = HomeConstants.subtitleColor.withValues(alpha: 0.55);
     final mid = size.height / 2;
     canvas.drawRect(Rect.fromLTWH(0, mid, size.width * 0.38, 1), paint);
     canvas.drawRect(

@@ -24,12 +24,20 @@ android {
         applicationId = "com.zorkdude.zork_dude"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
+        // google_mobile_ads 9.x requires API 24+.
+        minSdk = maxOf(flutter.minSdkVersion, 24)
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        // AdMob App ID (ca-app-pub-xxxx~yyyy). Invalid values crash if the
+        // MobileAdsInitProvider is enabled; we remove that provider in the
+        // manifest and init from Dart only when unit IDs are configured.
+        // Default: Google sample App ID so the game runs without ads setup.
         manifestPlaceholders["ADMOB_APP_ID"] =
-            providers.environmentVariable("ADMOB_APP_ID").orElse("unused").get()
+            providers
+                .environmentVariable("ADMOB_APP_ID")
+                .orElse("ca-app-pub-3940256099942544~3347511713")
+                .get()
     }
 
     buildTypes {

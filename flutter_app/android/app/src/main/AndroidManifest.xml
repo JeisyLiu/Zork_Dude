@@ -1,11 +1,22 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:label="迷雾之塔"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <!-- Valid AdMob App ID required by the SDK. Overridable via ADMOB_APP_ID
+             (build.gradle.kts). Default is Google's sample ID so builds without
+             production ads still launch. -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="${ADMOB_APP_ID}" />
+        <!-- Auto ContentProvider init crashes before Dart on many devices
+             (missing/broken Google Play Services). Ads init from Dart instead. -->
+        <provider
+            android:name="com.google.android.gms.ads.MobileAdsInitProvider"
+            android:authorities="${applicationId}.mobileadsinitprovider"
+            tools:node="remove" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

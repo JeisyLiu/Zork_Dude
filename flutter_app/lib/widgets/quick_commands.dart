@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:zork_dude/domain/models/enums.dart';
 import 'package:zork_dude/state/game_controller.dart';
@@ -335,6 +336,14 @@ class QuickCommandPanel extends StatelessWidget {
         subLabel: 'title',
         onPressed: () => GameExit.returnToTitle(context, controller),
       ),
+      if (kDebugMode)
+        _QuickAction(
+          label: controller.developerMode ? '全图关' : '全图开',
+          subLabel: 'dev',
+          onPressed: () async {
+            await controller.toggleDeveloperMode();
+          },
+        ),
     ];
   }
 

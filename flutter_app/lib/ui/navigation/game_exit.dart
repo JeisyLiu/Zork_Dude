@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:zork_dude/screens/home_screen.dart';
 import 'package:zork_dude/state/game_controller.dart';
 import 'package:zork_dude/ui/components/game_button.dart';
+import 'package:zork_dude/ui/components/game_confirm_dialog.dart';
 import 'package:zork_dude/ui/components/landscape_overlay.dart';
 import 'package:zork_dude/ui/exploration/exploration_layout_constants.dart';
 import 'package:zork_dude/ui/game_ui_theme.dart';
@@ -17,46 +18,32 @@ abstract final class GameExit {
     return Platform.isWindows || Platform.isLinux || Platform.isMacOS;
   }
 
-  static Future<bool> confirmReturnToTitle(BuildContext context) async {
-    final result = await showDialog<bool>(
+  static Future<bool> confirmReturnToTitle(
+    BuildContext context, {
+    GameUiSkin skin = GameUiSkin.fantasy,
+  }) {
+    return GameConfirmDialog.show(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('返回标题？'),
-        content: const Text('当前进度已自动保存，可从标题页「继续旅程」恢复。'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('取消'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('返回标题'),
-          ),
-        ],
-      ),
+      title: '返回标题？',
+      message: '当前进度已自动保存，可从标题页「继续旅程」恢复。',
+      confirmLabel: '返回标题',
+      confirmSubLabel: 'title',
+      skin: skin,
     );
-    return result == true;
   }
 
-  static Future<bool> confirmQuitApp(BuildContext context) async {
-    final result = await showDialog<bool>(
+  static Future<bool> confirmQuitApp(
+    BuildContext context, {
+    GameUiSkin skin = GameUiSkin.fantasy,
+  }) {
+    return GameConfirmDialog.show(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('退出游戏？'),
-        content: const Text('将关闭迷雾之塔。'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('取消'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('退出'),
-          ),
-        ],
-      ),
+      title: '退出游戏？',
+      message: '将关闭迷雾之塔。',
+      confirmLabel: '退出',
+      confirmSubLabel: 'quit',
+      skin: skin,
     );
-    return result == true;
   }
 
   static void navigateHome(BuildContext context) {
@@ -72,7 +59,8 @@ abstract final class GameExit {
     bool confirm = true,
   }) async {
     if (confirm) {
-      final ok = await confirmReturnToTitle(context);
+      final skin = GameUiTheme.skinForMapLayer(controller.mapLayer);
+      final ok = await confirmReturnToTitle(context, skin: skin);
       if (!ok || !context.mounted) return;
     }
     await controller.prepareReturnToTitle();

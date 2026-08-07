@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zork_dude/data/save_repository.dart';
 import 'package:zork_dude/data/world_repository.dart';
 import 'package:zork_dude/domain/combat/combat_action_step.dart';
@@ -32,6 +33,8 @@ class GameController extends ChangeNotifier {
 
   final SaveRepository _saveRepo;
   bool hasSave = false;
+  int? activeSlot;
+  List<SaveSlotInfo?> slots = List<SaveSlotInfo?>.filled(SaveRepository.maxSlots, null);
 
   GameSession? session;
   final List<LogEntry> log = [];
@@ -44,6 +47,7 @@ class GameController extends ChangeNotifier {
   EndingKind pendingEnding = EndingKind.none;
   CombatReward? lastCombatReward;
   bool pendingReturnToTitle = false;
+  bool developerMode = false;
   bool _commandBusy = false;
   DateTime? _lastCommandAt;
 
@@ -82,14 +86,51 @@ class GameController extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> refreshSlots() async {
+    try {
+      await _saveRepo.migrateIfNeeded();
+      slots = await _saveRepo.listSlots();
+      hasSave = slots.any((s) => s != null);
+      activeSlot ??= await _saveRepo.getActiveSlot();
+    } catch (_) {
+      hasSave = false;
+    }
+    notifyListeners();
+  }
+
+  int get occupiedCount => slots.where((s) => s != null).length;
+
+  int? get soleOccupiedIndex {
+    int? found;
+    for (var i = 0; i < slots.length; i++) {
+      if (slots[i] == null) continue;
+      if (found != null) return null;
+      found = i;
+    }
+    return found;
+  }
+
+  int? get firstEmptyIndex {
+    for (var i = 0; i < slots.length; i++) {
+      if (slots[i] == null) return i;
+    }
+    return null;
+  }
+
   Future<void> init() async {
     try {
       loading = true;
       notifyListeners();
-      try {
-        hasSave = await _saveRepo.hasSave();
-      } catch (_) {
-        hasSave = false;
+      await refreshSlots();
+      if (kDebugMode) {
+        try {
+          final prefs = await SharedPreferences.getInstance();
+          developerMode = prefs.getBool('developer_mode') ?? false;
+        } catch (_) {
+          developerMode = false;
+        }
+      } else {
+        developerMode = false;
       }
       session = await GameSession.create(WorldRepository());
       log.clear();
@@ -103,17 +144,19 @@ class GameController extends ChangeNotifier {
     }
   }
 
-  Future<void> continueGame() async {
+  Future<void> continueGame({required int slot}) async {
     try {
       loading = true;
       notifyListeners();
-      final data = await _saveRepo.load();
+      final data = await _saveRepo.loadSlot(slot);
       if (data == null) {
-        hasSave = false;
+        await refreshSlots();
         loading = false;
         notifyListeners();
         return;
       }
+      activeSlot = slot;
+      await _saveRepo.setActiveSlot(slot);
       session = await GameSession.create(WorldRepository(), starterItems: false);
       session!.applySaveJson(data);
       log.clear();
@@ -123,7 +166,6 @@ class GameController extends ChangeNotifier {
       syncMapLayerToPlayer();
       _append('═══ 继续旅程 ═══');
       _append(session!.roomDescription(session!.currentRoomId));
-      hasSave = true;
       loading = false;
       notifyListeners();
       unawaited(_persist());
@@ -134,10 +176,11 @@ class GameController extends ChangeNotifier {
     }
   }
 
-  Future<void> startNewGame({bool wipeSave = true}) async {
+  Future<void> startNewGame({required int slot}) async {
     try {
       loading = true;
       notifyListeners();
+      activeSlot = slot;
       session = await GameSession.create(WorldRepository());
       log.clear();
       pendingEnding = EndingKind.none;
@@ -145,10 +188,8 @@ class GameController extends ChangeNotifier {
       lastCombatReward = null;
       mapLayer = MapLayer.surface;
       _append(session!.roomDescription(session!.currentRoomId));
-      if (wipeSave) {
-        await _saveRepo.save(session!);
-        hasSave = true;
-      }
+      await _saveRepo.saveSlot(slot, session!);
+      await refreshSlots();
       loading = false;
       notifyListeners();
     } catch (e) {
@@ -162,8 +203,11 @@ class GameController extends ChangeNotifier {
     final s = session;
     if (s == null) return;
     try {
-      await _saveRepo.save(s);
-      hasSave = true;
+      var slot = activeSlot;
+      slot ??= soleOccupiedIndex ?? firstEmptyIndex ?? 0;
+      activeSlot = slot;
+      await _saveRepo.saveSlot(slot, s);
+      await refreshSlots();
     } catch (_) {
       // Autosave unavailable (e.g. widget tests without platform plugins).
     }
@@ -213,6 +257,20 @@ class GameController extends ChangeNotifier {
     return true;
   }
 
+  Future<void> setDeveloperMode(bool value) async {
+    if (!kDebugMode) return;
+    developerMode = value;
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('developer_mode', value);
+    } catch (_) {}
+    notifyListeners();
+  }
+
+  Future<void> toggleDeveloperMode() async {
+    await setDeveloperMode(!developerMode);
+  }
+
   Future<void> executeCommand(String raw, {bool echo = true}) async {
     if (!_canAcceptCommand()) return;
     final s = session!;
@@ -229,6 +287,11 @@ class GameController extends ChangeNotifier {
       if (lowered == 'map' || lowered == 'm') {
         mapVisible = !mapVisible;
         _append(mapVisible ? '已显示迷雾残页。' : '已隐藏迷雾残页。');
+        return;
+      }
+      if (kDebugMode && (lowered == 'dev' || lowered == 'developer')) {
+        await toggleDeveloperMode();
+        _append('开发者模式：${developerMode ? '开' : '关'}');
         return;
       }
       final wasWon = s.won;

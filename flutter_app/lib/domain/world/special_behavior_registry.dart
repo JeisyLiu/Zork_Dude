@@ -24,28 +24,33 @@ class SpecialBehaviorRegistry {
 
     rooms['tower_base']!.onEnter = (session) {
       if (session.hasItem('silver_key') && !session.flags.containsKey('tower_unlocked')) {
-        session.room('tower_base').exits[Direction.up] = 'tower_middle';
+        session.room('tower_base').exits[Direction.up] = 'tower_foyer';
         session.flags['tower_unlocked'] = true;
         return '银钥匙打开了塔门！';
       }
       if (session.flags.containsKey('tower_unlocked')) return '门已经开了。';
+      if (!session.hasItem('silver_key')) return '塔门紧锁，需要银钥匙（洞穴中层可找到）。';
       return null;
     };
+
+    if (rooms.containsKey('tower_ritual')) {
+      rooms['tower_ritual']!.onEnter = (session) {
+        if (session.hasItem('crystal_key') && !session.flags.containsKey('ritual_unlocked')) {
+          session.room('tower_ritual').exits[Direction.up] = 'tower_top';
+          session.flags['ritual_unlocked'] = true;
+          return '水晶钥匙与锁孔共鸣，通往塔顶的门缓缓打开！';
+        }
+        if (session.flags.containsKey('ritual_unlocked')) return null;
+        if (!session.hasItem('crystal_key')) return '水晶锁孔冰冷无光，需要水晶钥匙。';
+        return null;
+      };
+    }
 
     rooms['tower_top']!.onEnter = (session) {
       final m = session.monster('dragon_whelp');
       return m != null && m.alive
           ? '一股强大的龙威扑面而来……'
           : '幼龙已经被击败，宝石唾手可得。';
-    };
-
-    rooms['lake_shore']!.onEnter = (session) {
-      if (!session.flags.containsKey('boat_taken')) {
-        session.room('lake_shore').exits[Direction.east] = 'lake_island';
-        session.flags['boat_taken'] = true;
-        return '你登上小船划向湖心岛……';
-      }
-      return '船已经在对岸了。';
     };
 
     rooms['goblin_throne']!.onEnter = (_) => '哥布林王咆哮着站起来！地面都在震动！';
@@ -140,6 +145,16 @@ class SpecialBehaviorRegistry {
           return '酸池暂时平静。东侧厚重金属门缓缓打开——通向001号终焉收容库。';
         }
         return '酸池平静。001号收容库的门仍开着。';
+      };
+    }
+
+    if (rooms.containsKey('bandit_hideout')) {
+      rooms['bandit_hideout']!.onEnter = (session) {
+        final m = session.monster('mimic');
+        if (m != null && !m.alive) {
+          session.flags['bandit_cleared'] = true;
+        }
+        return null;
       };
     }
 

@@ -76,8 +76,8 @@
     "type": "QUEST",
     "dialogs": {
       "greet": "陌生人，欢迎来到湖边村。",
-      "quest": "最近湖心岛出现异象……你能去看看吗？",
-      "extra": "小心湖中的生物。",
+      "quest": "银钥在洞穴中层，高塔里藏着你的记忆——先去洞里，再登塔。",
+      "extra": "清掉南边强盗营地后回来，村里有谢礼。",
       "farewell": "愿神保佑你。"
     },
     "quest_item": "sacred_water",
@@ -405,6 +405,32 @@
     },
     "give_item": "scp_500_pill",
     "emoji": "👴"
+  },
+  {
+    "id": "tower_librarian",
+    "name": "奥术师伊文",
+    "title": "高塔守书人",
+    "desc": "戴圆框眼镜的老学者，指尖沾满墨渍。",
+    "type": "WISEMAN",
+    "dialogs": {
+      "greet": "又有访客？楼上仪式间别乱闯。",
+      "extra": "水晶钥匙能打开塔顶前的最后一道门。",
+      "farewell": "愿知识护佑你。"
+    },
+    "emoji": "📖"
+  },
+  {
+    "id": "cave_hermit",
+    "name": "无尘",
+    "title": "修行武僧",
+    "desc": "身披破旧僧袍的老人，双目清明。",
+    "type": "WISEMAN",
+    "dialogs": {
+      "greet": "施主，此地魔气甚重。",
+      "extra": "持护戒者可随我修行。",
+      "farewell": "阿弥陀佛。"
+    },
+    "emoji": "🥋"
   },
   {
     "id": "scp_073",

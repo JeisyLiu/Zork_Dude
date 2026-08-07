@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zork_dude/data/world_repository.dart';
 import 'package:zork_dude/domain/command_result.dart';
 import 'package:zork_dude/domain/game_session.dart';
@@ -6,6 +7,10 @@ import 'package:zork_dude/state/game_controller.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+
+  setUp(() {
+    SharedPreferences.setMockInitialValues({});
+  });
 
   group('quit / return to title', () {
     test('quit command emits returnToTitle without gameOver', () async {
@@ -22,7 +27,7 @@ void main() {
     test('controller quit sets pendingReturnToTitle not gameOver', () async {
       final controller = GameController();
       await controller.init();
-      await controller.startNewGame();
+      await controller.startNewGame(slot: 0);
 
       await controller.executeCommand('quit');
 
@@ -34,7 +39,7 @@ void main() {
     test('controller exit alias sets pendingReturnToTitle', () async {
       final controller = GameController();
       await controller.init();
-      await controller.startNewGame();
+      await controller.startNewGame(slot: 0);
 
       await controller.executeCommand('exit');
 

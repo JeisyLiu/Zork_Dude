@@ -1,12 +1,18 @@
+import 'dart:convert';
+
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zork_dude/data/save_repository.dart';
 import 'package:zork_dude/data/world_repository.dart';
 import 'package:zork_dude/domain/combat/combat_types.dart';
 import 'package:zork_dude/domain/game_session.dart';
-import 'package:zork_dude/domain/models/enums.dart';
 import 'package:zork_dude/state/ending_kind.dart';
 import 'package:zork_dude/state/game_controller.dart';
+import 'package:zork_dude/ui/components/game_button.dart';
+import 'package:zork_dude/ui/components/landscape_overlay.dart';
+import 'package:zork_dude/ui/components/save_slot_picker.dart';
+import 'package:zork_dude/ui/game_ui_theme.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -16,6 +22,14 @@ void main() {
   });
 
   group('Save roundtrip', () {
+    test('toSaveJson includes savedAt and layersVisited', () async {
+      final session = await GameSession.create(WorldRepository());
+      session.rooms['crossroads']!.visited = true;
+      final json = session.toSaveJson();
+      expect(json['savedAt'], isNotNull);
+      expect(json['layersVisited'], isA<List>());
+    });
+
     test('toSaveJson and applySaveJson preserve progress', () async {
       final session = await GameSession.create(WorldRepository());
       session.processCommand('w');
@@ -43,20 +57,56 @@ void main() {
       expect(loaded.monsters['giant_rat']!.hp, 3);
     });
 
-    test('SaveRepository persists and loads', () async {
+    test('SaveRepository saveSlot and loadSlot', () async {
       final repo = SaveRepository();
       final session = await GameSession.create(WorldRepository());
       session.score = 120;
       session.currentRoomId = 'abandoned_hut';
       session.previousRoomId = 'forest_entrance';
 
-      await repo.save(session);
+      await repo.saveSlot(2, session);
       expect(await repo.hasSave(), isTrue);
+      expect(await repo.getActiveSlot(), 2);
 
-      final data = await repo.load();
+      final data = await repo.loadSlot(2);
       expect(data, isNotNull);
       expect(data!['score'], 120);
       expect(data['currentRoomId'], 'abandoned_hut');
+    });
+
+    test('legacy save migrates to slot 0', () async {
+      final legacy = {
+        'version': GameSession.saveVersion,
+        'score': 99,
+        'currentRoomId': 'forest_entrance',
+        'playerHp': 50,
+        'playerMaxHp': 50,
+      };
+      SharedPreferences.setMockInitialValues({
+        SaveRepository.legacySaveKey: jsonEncode(legacy),
+      });
+      final repo = SaveRepository();
+      await repo.migrateIfNeeded();
+      final data = await repo.loadSlot(0);
+      expect(data!['score'], 99);
+      expect(await repo.getActiveSlot(), 0);
+      final prefs = await SharedPreferences.getInstance();
+      expect(prefs.containsKey(SaveRepository.legacySaveKey), isFalse);
+    });
+
+    test('two slots yield null soleOccupiedIndex', () async {
+      final repo = SaveRepository();
+      final a = await GameSession.create(WorldRepository());
+      a.score = 10;
+      final b = await GameSession.create(WorldRepository());
+      b.score = 20;
+      await repo.saveSlot(0, a);
+      await repo.saveSlot(3, b);
+      expect(await repo.soleOccupiedIndex(), isNull);
+      expect(await repo.occupiedCount(), 2);
+      final slots = await repo.listSlots();
+      expect(slots[0]!.score, 10);
+      expect(slots[3]!.score, 20);
     });
   });
 
@@ -106,6 +156,7 @@ void main() {
 
       final controller = GameController(saveRepository: SaveRepository());
       controller.session = session;
+      controller.activeSlot = 0;
       controller.finishCombat(CombatOutcome.defeat);
 
       expect(session.gameOver, isFalse);

@@ -12,10 +12,10 @@ void main() {
     test('loads expected entity counts', () async {
       final repo = WorldRepository();
       final def = await repo.loadFromAssets();
-      expect(def.roomCount, 59);
+      expect(def.roomCount, 80);
       expect(def.itemCount, greaterThanOrEqualTo(100));
       expect(def.monsterCount, 34);
-      expect(def.npcCount, 21);
+      expect(def.npcCount, 23);
       expect(def.companionCount, 7);
     });
   });

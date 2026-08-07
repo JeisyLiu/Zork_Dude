@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:zork_dude/screens/exploration_screen.dart';
 import 'package:zork_dude/state/game_controller.dart';
 import 'package:zork_dude/ui/components/game_button.dart';
+import 'package:zork_dude/ui/components/game_confirm_dialog.dart';
 import 'package:zork_dude/ui/components/game_outlined_text.dart';
 import 'package:zork_dude/ui/components/landscape_scaffold.dart';
+import 'package:zork_dude/ui/components/save_slot_picker.dart';
 import 'package:zork_dude/ui/game_skin_scope.dart';
 import 'package:zork_dude/ui/game_ui_theme.dart';
 import 'package:zork_dude/ui/home/home_ambient_background.dart';
@@ -53,47 +55,58 @@ class _HomeScreenState extends State<HomeScreen> {
     _pointer.value = null;
   }
 
-  void _enterGame(BuildContext context) {
+  Future<void> _enterGame(BuildContext context) async {
     if (_entering || _controller.loading) return;
-    if (_controller.hasSave) {
-      _confirmNewGame(context);
+    if (_controller.occupiedCount == 0) {
+      final slot = _controller.firstEmptyIndex ?? 0;
+      await _startNewGameAndEnter(context, slot);
       return;
     }
-    _startNewGameAndEnter(context);
-  }
-
-  Future<void> _confirmNewGame(BuildContext context) async {
-    final confirmed = await showDialog<bool>(
+    final picked = await SaveSlotPicker.show(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('开始新旅程？'),
-        content: const Text('已有存档进度。开始新游戏将覆盖当前存档，是否继续？'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('取消'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('覆盖并开始'),
-          ),
-        ],
-      ),
+      mode: SaveSlotPickerMode.write,
+      slots: _controller.slots,
     );
-    if (confirmed == true && mounted) {
-      _startNewGameAndEnter(context);
+    if (!mounted || picked == null) return;
+    if (_controller.slots[picked] != null) {
+      final confirmed = await GameConfirmDialog.show(
+        context: context,
+        title: '开始新旅程？',
+        message: '该槽位已有进度，开始新游戏将覆盖此存档，是否继续？',
+        confirmLabel: '覆盖并开始',
+        confirmSubLabel: 'overwrite',
+        skin: GameUiSkin.fantasy,
+      );
+      if (!confirmed || !mounted) return;
     }
+    await _startNewGameAndEnter(context, picked);
   }
 
-  Future<void> _startNewGameAndEnter(BuildContext context) async {
-    await _controller.startNewGame();
+  Future<void> _startNewGameAndEnter(BuildContext context, int slot) async {
+    await _controller.startNewGame(slot: slot);
     if (!mounted || _controller.error != null) return;
     setState(() => _entering = true);
   }
 
   Future<void> _continueGame(BuildContext context) async {
     if (_entering || _controller.loading) return;
-    await _controller.continueGame();
+    final sole = _controller.soleOccupiedIndex;
+    if (sole != null) {
+      await _loadSlotAndEnter(context, sole);
+      return;
+    }
+    final picked = await SaveSlotPicker.show(
+      context: context,
+      mode: SaveSlotPickerMode.read,
+      slots: _controller.slots,
+    );
+    if (!mounted || picked == null) return;
+    if (_controller.slots[picked] == null) return;
+    await _loadSlotAndEnter(context, picked);
+  }
+
+  Future<void> _loadSlotAndEnter(BuildContext context, int slot) async {
+    await _controller.continueGame(slot: slot);
     if (!mounted || _controller.error != null) return;
     setState(() => _entering = true);
   }
@@ -105,8 +118,11 @@ class _HomeScreenState extends State<HomeScreen> {
         context,
         ExplorationScreen(controller: _controller),
       ),
-    ).then((_) {
-      if (mounted) setState(() => _entering = false);
+    ).then((_) async {
+      if (mounted) {
+        await _controller.refreshSlots();
+        setState(() => _entering = false);
+      }
     });
   }
 

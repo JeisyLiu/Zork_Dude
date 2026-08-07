@@ -98,6 +98,12 @@ class MapViewModel {
 }
 
 class MapService {
+  List<String> roomsOnLayer(GameSession session, MapLayer layer) {
+    return session.rooms.keys
+        .where((id) => mapPos(id, layer, session.mapMeta) != null)
+        .toList();
+  }
+
   List<String> visitedOnLayer(GameSession session, MapLayer layer) {
     return session.rooms.keys.where((id) {
       final rm = session.rooms[id];
@@ -129,13 +135,16 @@ class MapService {
 
   ({List<MapEdge> known, List<MapEdge> fog, List<MapPortal> portals}) mapEdgesForLayer(
     GameSession session,
-    MapLayer layer,
-  ) {
+    MapLayer layer, {
+    bool revealAll = false,
+  }) {
     final known = <MapEdge>[];
     final fog = <MapEdge>[];
     final portals = <MapPortal>[];
     final seen = <String>{};
-    for (final id in visitedOnLayer(session, layer)) {
+    final roomIds =
+        revealAll ? roomsOnLayer(session, layer) : visitedOnLayer(session, layer);
+    for (final id in roomIds) {
       final rm = session.rooms[id]!;
       final fromPos = mapPos(id, layer, session.mapMeta);
       if (fromPos == null) continue;
@@ -149,7 +158,7 @@ class MapService {
           final k = key.join('|');
           if (seen.contains(k)) continue;
           seen.add(k);
-          if (tr.visited) {
+          if (revealAll || tr.visited) {
             known.add(MapEdge(from: id, to: tid, kind: 'known'));
           } else {
             fog.add(MapEdge(from: id, to: tid, dir: e.key, kind: 'fog'));
@@ -163,7 +172,7 @@ class MapService {
             ox: off[0],
             oy: off[1],
             targetLayer: mapLayerOfRoom(tid, session.mapMeta),
-            visited: tr.visited,
+            visited: revealAll || tr.visited,
           ));
         }
       }
@@ -171,10 +180,14 @@ class MapService {
     return (known: known, fog: fog, portals: portals);
   }
 
-  MapViewModel buildView(GameSession session, MapLayer layer) {
-    final ids = visitedOnLayer(session, layer);
-    final edges = mapEdgesForLayer(session, layer);
-    final fogIds = edges.fog.map((e) => e.to).toSet();
+  MapViewModel buildView(
+    GameSession session,
+    MapLayer layer, {
+    bool revealAll = false,
+  }) {
+    final ids = revealAll ? roomsOnLayer(session, layer) : visitedOnLayer(session, layer);
+    final edges = mapEdgesForLayer(session, layer, revealAll: revealAll);
+    final fogIds = revealAll ? const <String>{} : edges.fog.map((e) => e.to).toSet();
     final pts = <String, MapNode>{};
     void addPt(String id, MapPosition p, {required bool fog}) {
       final cx = mapPad + p.x * mapCell;

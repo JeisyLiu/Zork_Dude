@@ -403,6 +403,20 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
     return text.toString();
   }
 
+  String? _movementBlocked(String targetRoomId) {
+    switch (targetRoomId) {
+      case 'scp_cell_block':
+        if (!hasItem('keycard_lvl2')) {
+          return '收容单元区气密门需要二级钥匙卡（可在墓地找到）。';
+        }
+      case 'scp_682_pit':
+        if (!hasItem('keycard_lvl3') && !flags.containsKey('scp_079_unlocked')) {
+          return '酸池隔离区需要三级钥匙卡（完成档案室与079任务可获得）。';
+        }
+    }
+    return null;
+  }
+
   void _recordRoomChange(String nextRoomId) {
     if (nextRoomId != currentRoomId) {
       previousRoomId = currentRoomId;
@@ -415,6 +429,8 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
     if (!room.exits.containsKey(d)) return CommandResult.ok('不能往 ${d.value}。');
     if (room.dark && !hasLight()) return CommandResult.ok('🌑 太黑了不敢走。');
     final nextId = room.exits[d]!;
+    final blocked = _movementBlocked(nextId);
+    if (blocked != null) return CommandResult.ok(blocked);
     _recordRoomChange(nextId);
     currentRoomId = nextId;
     final nr = rooms[currentRoomId]!;
@@ -1000,6 +1016,10 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
         }
         score += n.questScore;
         n.questDone = true;
+        if (n.id == 'scp_079') {
+          flags['scp_079_unlocked'] = true;
+          lines.add('\n079：酸池隔离权限已写入你的钥匙卡。');
+        }
       } else {
         final qi = items[n.questItem];
         if (qi != null) {
@@ -1007,16 +1027,51 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
         }
       }
     }
-    if (n.type == NpcType.merchant) lines.add('\n🛒 输入 trade / buy <物品> / sell <物品>');
+    if (n.id == 'dr_ellis' && n.questDone && !flags.containsKey('ellis_keycard')) {
+      if (inventory.containsKey('site_ration')) {
+        invRemove('site_ration');
+        invAdd('keycard_lvl3');
+        flags['ellis_keycard'] = true;
+        flags['scp_079_unlocked'] = true;
+        lines.add('\n埃利斯博士塞给你三级钥匙卡：「酸池那扇门……小心。」');
+        score += 15;
+      } else {
+        lines.add('\n埃利斯博士：再带一份站点口粮来，我把三级卡给你。');
+      }
+    }
+    if (n.id == 'wandering_merchant' && !flags.containsKey('merchant_favor')) {
+      if (hasItem('fish') || hasItem('magic_herb')) {
+        flags['merchant_favor'] = true;
+        score += 5;
+        lines.add('\n流浪商人笑道：「好货！银钥在洞穴中层，塔里藏着你的记忆。」');
+      }
+    }
+    if (n.id == 'village_elder' && flags.containsKey('bandit_cleared') && !flags.containsKey('elder_bandit_reward')) {
+      flags['elder_bandit_reward'] = true;
+      gold += 30;
+      score += 20;
+      lines.add('\n村长：强盗除尽了！这是村里的谢礼（+30 金）。');
+    }
+    if (n.id == 'hunter' && n.questDone && !flags.containsKey('hunter_tip')) {
+      flags['hunter_tip'] = true;
+      lines.add('\n猎人：哥布林王座在北边巢穴深处，小心。');
+    }
+    if (n.type == NpcType.merchant || n.type == NpcType.blacksmith) {
+      lines.add('\n🛒 输入 trade / buy <物品> / sell <物品>');
+    }
     if (n.type == NpcType.healer) lines.add('\n💚 我可以为你治疗 (输入 heal)');
     return lines.join('\n');
   }
+
+  bool _npcCanTrade(NpcState n) =>
+      (n.type == NpcType.merchant || n.type == NpcType.blacksmith) &&
+      n.tradeItems.isNotEmpty;
 
   String doTrade() {
     final rm = rooms[currentRoomId]!;
     if (rm.npcId == null) return '没有商人。';
     final n = npcs[rm.npcId]!;
-    if (n.type != NpcType.merchant || n.tradeItems.isEmpty) return '${n.name} 没有商品。';
+    if (!_npcCanTrade(n)) return '${n.name} 没有商品。';
     final lines = <String>['\n🛒 ${n.name} 的商品：'];
     for (var i = 0; i < n.tradeItems.length; i++) {
       final (iid, price) = n.tradeItems[i];
@@ -1032,7 +1087,7 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
     final rm = rooms[currentRoomId]!;
     if (rm.npcId == null) return CommandResult.ok('没有商人。');
     final n = npcs[rm.npcId]!;
-    if (n.type != NpcType.merchant) return CommandResult.ok('${n.name} 不是商人。');
+    if (!_npcCanTrade(n)) return CommandResult.ok('${n.name} 不是商人。');
     final name = args.join(' ');
     final idx = int.tryParse(name);
     if (idx != null && idx >= 1 && idx <= n.tradeItems.length) {
@@ -1065,7 +1120,7 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
     final rm = rooms[currentRoomId]!;
     if (rm.npcId == null) return CommandResult.ok('没有商人。');
     final n = npcs[rm.npcId]!;
-    if (n.type != NpcType.merchant) return CommandResult.ok('${n.name} 不是商人。');
+    if (!_npcCanTrade(n)) return CommandResult.ok('${n.name} 不是商人。');
     final name = args.join(' ');
     final invList = inventory.keys.toList();
     final idx = int.tryParse(name);
@@ -1144,6 +1199,8 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
       'priestess': 'companion_healer',
       'hunter': 'companion_scout',
       'bounty_hunter': 'companion_archer',
+      'tower_librarian': 'companion_mage',
+      'cave_hermit': 'companion_monk',
     };
     final cid = cm[rm.npcId];
     if (cid == null || !companions.containsKey(cid)) {
@@ -1326,9 +1383,35 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
     gameOver = false;
   }
 
+  /// Visited map layers for save-slot picker metadata.
+  List<String> _layersVisitedForSave() {
+    final layers = <MapLayer>{};
+    for (final entry in rooms.entries) {
+      if (!entry.value.visited) continue;
+      final meta = mapMeta[entry.key];
+      if (meta == null) continue;
+      if (meta.layers != null) {
+        layers.addAll(meta.layers!.keys);
+      } else if (meta.layer != null) {
+        layers.add(meta.layer!);
+      }
+    }
+    const order = [
+      MapLayer.surface,
+      MapLayer.cave,
+      MapLayer.tower,
+      MapLayer.site,
+    ];
+    return order.where(layers.contains).map((l) => l.name).toList();
+  }
+
   Map<String, dynamic> toSaveJson() {
+    final now = DateTime.now().toUtc().toIso8601String();
+    final layersVisited = _layersVisitedForSave();
     return {
       'version': saveVersion,
+      'savedAt': now,
+      'layersVisited': layersVisited,
       'currentRoomId': currentRoomId,
       'previousRoomId': previousRoomId,
       'turns': turns,

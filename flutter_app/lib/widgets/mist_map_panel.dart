@@ -79,10 +79,14 @@ class _MistMapPanelState extends State<MistMapPanel> {
   Widget build(BuildContext context) {
     final s = widget.controller.session;
     if (s == null) return const SizedBox.shrink();
-    widget.controller.syncMapLayerToPlayer();
+    // Do not sync layer here — setMapLayer must stick until the player moves.
     final layer = widget.controller.mapLayer;
     _syncLayerCamera(layer);
-    final vm = _mapService.buildView(s, layer);
+    final vm = _mapService.buildView(
+      s,
+      layer,
+      revealAll: widget.controller.developerMode,
+    );
     final canvas = _canvasSize(vm);
     final d = GameUiTheme.of(context);
 
@@ -109,8 +113,21 @@ class _MistMapPanelState extends State<MistMapPanel> {
                     ),
                   ),
                 const SizedBox(width: 8),
+                if (widget.controller.developerMode)
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: GameOutlinedText(
+                      'DEV · 全图',
+                      fontSize: 11,
+                      color: GameConstants.hero,
+                      strokeWidth: 1.0,
+                      strokeColor: Colors.black.withValues(alpha: 0.75),
+                    ),
+                  ),
                 GameOutlinedText(
-                  '已探索 ${vm.visitedCount}',
+                  widget.controller.developerMode
+                      ? '全图 ${vm.nodes.length}'
+                      : '已探索 ${vm.visitedCount}',
                   fontSize: 11,
                   color: d.logMuted,
                   strokeWidth: 1.0,

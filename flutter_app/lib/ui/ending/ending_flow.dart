@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:zork_dude/ui/navigation/game_exit.dart';
+import 'package:zork_dude/services/offpack_ads.dart';
 import 'package:zork_dude/state/ending_kind.dart';
 import 'package:zork_dude/state/game_controller.dart';
+import 'package:zork_dude/domain/game_session.dart';
 import 'package:zork_dude/ui/ending/credits_roll.dart';
 import 'package:zork_dude/ui/ending/ending_overlay.dart';
 
@@ -49,7 +51,8 @@ abstract final class EndingFlow {
           onSecondary: () {
             Navigator.of(context).pop();
             controller.completeMainJourney();
-            if (controller.pendingEnding == EndingKind.mainClear && context.mounted) {
+            if (controller.pendingEnding == EndingKind.mainClear &&
+                context.mounted) {
               _showMain(context, controller, afterDismiss);
             } else {
               afterDismiss?.call();
@@ -112,9 +115,8 @@ abstract final class EndingFlow {
       await Navigator.of(context).push<void>(
         PageRouteBuilder<void>(
           opaque: true,
-          pageBuilder: (_, __, ___) => CreditsRoll(
-            onFinished: () => Navigator.of(context).pop(),
-          ),
+          pageBuilder: (_, __, ___) =>
+              CreditsRoll(onFinished: () => Navigator.of(context).pop()),
           transitionsBuilder: (_, anim, __, child) =>
               FadeTransition(opacity: anim, child: child),
         ),
@@ -134,6 +136,20 @@ abstract final class EndingFlow {
         opaque: true,
         pageBuilder: (_, __, ___) => EndingOverlay(
           kind: EndingKind.gameOver,
+          rewardLabel: '观看广告 · 挽回损失',
+          rewardSubLabel: '返还 ${GameSession.deathScorePenalty} 分',
+          onRewarded:
+              !controller.rewardedReviveUsed &&
+                  OffpackAds.instance.rewardReady(OffpackRewardPlacement.revive)
+              ? () => OffpackAds.instance.showRewarded(
+                  OffpackRewardPlacement.revive,
+                )
+              : null,
+          onRewardEarned: () {
+            Navigator.of(context).pop();
+            controller.refundDeathPenaltyAfterReward();
+            afterDismiss?.call();
+          },
           onPrimary: () {
             Navigator.of(context).pop();
             controller.reviveFromDeath();

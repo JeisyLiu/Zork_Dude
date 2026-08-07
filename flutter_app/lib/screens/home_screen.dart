@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:zork_dude/screens/exploration_screen.dart';
 import 'package:zork_dude/state/game_controller.dart';
 import 'package:zork_dude/ui/components/game_button.dart';
+import 'package:zork_dude/ui/ads/offpack_banner.dart';
 import 'package:zork_dude/ui/components/game_confirm_dialog.dart';
 import 'package:zork_dude/ui/components/game_outlined_text.dart';
 import 'package:zork_dude/ui/components/landscape_scaffold.dart';
@@ -301,6 +302,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                     color: HomeConstants.hintColor,
                                     strokeWidth: 0,
                                   ),
+                                  if (!LandscapeLayout.isShortPlayContext(
+                                    context,
+                                  )) ...[
+                                    SizedBox(height: gapS),
+                                    const OffpackHomeBanner(),
+                                  ],
+                                  const OffpackPrivacyButton(),
                                 ],
                               ),
                             ),

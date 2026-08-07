@@ -27,14 +27,17 @@ class LogEntry {
 
 class GameController extends ChangeNotifier {
   GameController({SaveRepository? saveRepository})
-      : _saveRepo = saveRepository ?? SaveRepository();
+    : _saveRepo = saveRepository ?? SaveRepository();
 
   static const _commandThrottle = Duration(milliseconds: 280);
 
   final SaveRepository _saveRepo;
   bool hasSave = false;
   int? activeSlot;
-  List<SaveSlotInfo?> slots = List<SaveSlotInfo?>.filled(SaveRepository.maxSlots, null);
+  List<SaveSlotInfo?> slots = List<SaveSlotInfo?>.filled(
+    SaveRepository.maxSlots,
+    null,
+  );
 
   GameSession? session;
   final List<LogEntry> log = [];
@@ -46,6 +49,10 @@ class GameController extends ChangeNotifier {
   bool battleNavigationPending = false;
   EndingKind pendingEnding = EndingKind.none;
   CombatReward? lastCombatReward;
+  int pendingCombatGoldBonus = 0;
+  int combatVictoryCount = 0;
+  bool rewardedReviveUsed = false;
+  DateTime? _lastGoldOfferAt;
   bool pendingReturnToTitle = false;
   bool developerMode = false;
   bool _commandBusy = false;
@@ -157,7 +164,10 @@ class GameController extends ChangeNotifier {
       }
       activeSlot = slot;
       await _saveRepo.setActiveSlot(slot);
-      session = await GameSession.create(WorldRepository(), starterItems: false);
+      session = await GameSession.create(
+        WorldRepository(),
+        starterItems: false,
+      );
       session!.applySaveJson(data);
       log.clear();
       pendingEnding = EndingKind.none;
@@ -247,7 +257,11 @@ class GameController extends ChangeNotifier {
 
   bool _canAcceptCommand() {
     final s = session;
-    if (loading || s == null || s.gameOver || battleNavigationPending || _commandBusy) {
+    if (loading ||
+        s == null ||
+        s.gameOver ||
+        battleNavigationPending ||
+        _commandBusy) {
       return false;
     }
     final last = _lastCommandAt;
@@ -295,8 +309,12 @@ class GameController extends ChangeNotifier {
         return;
       }
       final wasWon = s.won;
+      final startsNewGamePlus =
+          (s.won || s.siteWon) &&
+          const {'ng+', 'newgame+', 'ngplus'}.contains(lowered);
       final result = s.processCommand(raw);
       _handleResult(result, wasWonBefore: wasWon);
+      if (startsNewGamePlus) _resetAdRunState();
     } finally {
       _commandBusy = false;
       notifyListeners();
@@ -407,10 +425,56 @@ class GameController extends ChangeNotifier {
     if (s == null) return;
     final defeatedIds = _collectDefeatedMonsterIds(s, outcome);
     applyCombatResult(s.finishEncounter(outcome));
-    lastCombatReward =
-        outcome == CombatOutcome.victory ? s.lastCombatReward : null;
+    lastCombatReward = outcome == CombatOutcome.victory
+        ? s.lastCombatReward
+        : null;
+    final defeatedBoss = defeatedIds.any(
+      (id) => s.monsters[id]?.rank == MonsterRank.boss,
+    );
+    if (outcome == CombatOutcome.victory) combatVictoryCount += 1;
+    pendingCombatGoldBonus = outcome == CombatOutcome.victory && !defeatedBoss
+        ? (lastCombatReward?.gold ?? 0)
+        : 0;
     _classifyCombatEnding(outcome, defeatedIds);
     unawaited(_persist());
+  }
+
+  bool shouldOfferCombatGoldBonus({DateTime? now}) {
+    if (pendingCombatGoldBonus <= 0 ||
+        combatVictoryCount <= 3 ||
+        combatVictoryCount % 3 != 0) {
+      return false;
+    }
+    final clock = now ?? DateTime.now();
+    return _lastGoldOfferAt == null ||
+        clock.difference(_lastGoldOfferAt!) >= const Duration(minutes: 10);
+  }
+
+  void markCombatGoldOfferShown({DateTime? now}) {
+    _lastGoldOfferAt = now ?? DateTime.now();
+  }
+
+  void grantCombatGoldBonus() {
+    final s = session;
+    if (s == null || pendingCombatGoldBonus <= 0) return;
+    final bonus = pendingCombatGoldBonus;
+    pendingCombatGoldBonus = 0;
+    s.gold += bonus;
+    _append('\n✨ 迷雾馈赠：额外获得 $bonus 金币。');
+    unawaited(_persist());
+    notifyListeners();
+  }
+
+  void declineCombatGoldBonus() => pendingCombatGoldBonus = 0;
+
+  void refundDeathPenaltyAfterReward() {
+    final s = session;
+    if (s == null || rewardedReviveUsed) return;
+    rewardedReviveUsed = true;
+    s.score += GameSession.deathScorePenalty;
+    _append('\n🔥 微光挽回了本次死亡损失，返还 ${GameSession.deathScorePenalty} 分。');
+    unawaited(_persist());
+    notifyListeners();
   }
 
   CombatReward? takeLastCombatReward() {
@@ -420,7 +484,10 @@ class GameController extends ChangeNotifier {
     return reward;
   }
 
-  List<String> _collectDefeatedMonsterIds(GameSession s, CombatOutcome outcome) {
+  List<String> _collectDefeatedMonsterIds(
+    GameSession s,
+    CombatOutcome outcome,
+  ) {
     if (outcome != CombatOutcome.victory) return const [];
     final enc = s.activeEncounter;
     final ids = <String>{};
@@ -483,13 +550,22 @@ class GameController extends ChangeNotifier {
     pendingEnding = EndingKind.none;
     battleNavigationPending = false;
     lastCombatReward = null;
+    _resetAdRunState();
     mapLayer = MapLayer.surface;
     _append(s.roomDescription(s.currentRoomId));
     unawaited(_persist());
     notifyListeners();
   }
 
-  List<({String id, String label, int heal, int count, String effectHint})> combatUsableItems() {
+  void _resetAdRunState() {
+    pendingCombatGoldBonus = 0;
+    combatVictoryCount = 0;
+    rewardedReviveUsed = false;
+    _lastGoldOfferAt = null;
+  }
+
+  List<({String id, String label, int heal, int count, String effectHint})>
+  combatUsableItems() {
     return session?.combatUsableItems() ?? const [];
   }
 

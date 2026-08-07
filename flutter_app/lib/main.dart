@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:zork_dude/services/offpack_ads.dart';
 import 'package:zork_dude/screens/home_screen.dart';
 import 'package:zork_dude/ui/game_ui_theme.dart';
 
@@ -14,6 +17,8 @@ Future<void> main() async {
     ]);
     await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   }
+
+  unawaited(OffpackAds.instance.initialize());
 
   runApp(const MistTowerApp());
 }

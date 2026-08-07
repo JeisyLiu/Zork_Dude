@@ -13,6 +13,8 @@ import 'package:zork_dude/domain/models/enums.dart';
 import 'package:zork_dude/state/game_controller.dart';
 import 'package:zork_dude/ui/components/game_banner.dart';
 import 'package:zork_dude/ui/components/game_button.dart';
+import 'package:zork_dude/services/offpack_ads.dart';
+import 'package:zork_dude/ui/ads/reward_offer_overlay.dart';
 import 'package:zork_dude/ui/components/game_outlined_text.dart';
 import 'package:zork_dude/ui/combat/combat_battlefield.dart';
 import 'package:zork_dude/ui/combat/combat_command_menu.dart';
@@ -84,6 +86,7 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
   }
 
   Future<void> _presentCombatEnd(CombatOutcome outcome) async {
+    var rewardGold = 0;
     void leaveCombat() {
       if (mounted) Navigator.pop(context);
     }
@@ -91,6 +94,7 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
     if (outcome == CombatOutcome.victory) {
       final reward = widget.controller.takeLastCombatReward() ??
           const CombatReward(defeatedNames: ['敌人']);
+      rewardGold = reward.gold;
       await Navigator.of(context).push<void>(
         PageRouteBuilder<void>(
           opaque: false,
@@ -110,6 +114,20 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
         ),
       );
       if (!mounted) return;
+      if (rewardGold > 0 &&
+          widget.controller.shouldOfferCombatGoldBonus() &&
+          OffpackAds.instance.rewardReady(OffpackRewardPlacement.loot)) {
+        widget.controller.markCombatGoldOfferShown();
+        final earned = await RewardOfferOverlay.show(context, rewardGold);
+        if (earned) {
+          widget.controller.grantCombatGoldBonus();
+        } else {
+          widget.controller.declineCombatGoldBonus();
+        }
+        if (!mounted) return;
+      } else {
+        widget.controller.declineCombatGoldBonus();
+      }
     }
 
     final kind = widget.controller.pendingEnding;

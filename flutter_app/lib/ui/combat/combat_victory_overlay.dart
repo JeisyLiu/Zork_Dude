@@ -4,7 +4,7 @@ import 'package:zork_dude/ui/combat/encounter_assets.dart';
 import 'package:zork_dude/ui/components/game_outlined_text.dart';
 import 'package:zork_dude/ui/layout/landscape_layout.dart';
 
-/// Victory loot summary. Tap anywhere to continue — left text, right art.
+/// Victory loot summary. Tap anywhere to continue — left art, right text.
 class CombatVictoryOverlay extends StatefulWidget {
   const CombatVictoryOverlay({
     super.key,
@@ -79,14 +79,30 @@ class _CombatVictoryOverlayState extends State<CombatVictoryOverlay>
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Expanded(
-                    flex: short ? 5 : 4,
+                    flex: short ? 5 : 6,
                     child: Align(
                       alignment: Alignment.centerLeft,
+                      child: AspectRatio(
+                        aspectRatio: 3 / 4,
+                        child: Image.asset(
+                          EncounterAssets.combatVictory,
+                          fit: BoxFit.contain,
+                          filterQuality: FilterQuality.none,
+                          errorBuilder: (_, __, ___) => const SizedBox.shrink(),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: short ? 10 : 16),
+                  Expanded(
+                    flex: short ? 5 : 4,
+                    child: Align(
+                      alignment: Alignment.centerRight,
                       child: ConstrainedBox(
                         constraints: const BoxConstraints(maxWidth: 360),
                         child: SingleChildScrollView(
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.end,
                             mainAxisAlignment: MainAxisAlignment.center,
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -96,6 +112,7 @@ class _CombatVictoryOverlayState extends State<CombatVictoryOverlay>
                                 fontWeight: FontWeight.w700,
                                 color: titleColor,
                                 letterSpacing: 2,
+                                textAlign: TextAlign.right,
                               ),
                               SizedBox(height: short ? 2 : 4),
                               const GameOutlinedText(
@@ -104,6 +121,7 @@ class _CombatVictoryOverlayState extends State<CombatVictoryOverlay>
                                 fontWeight: FontWeight.w500,
                                 color: mutedColor,
                                 letterSpacing: 3,
+                                textAlign: TextAlign.right,
                               ),
                               SizedBox(height: short ? 10 : 14),
                               if (reward.defeatedNames.isNotEmpty) ...[
@@ -135,6 +153,7 @@ class _CombatVictoryOverlayState extends State<CombatVictoryOverlay>
                                     fontWeight: FontWeight.w500,
                                     color: titleColor,
                                     height: 1.35,
+                                    textAlign: TextAlign.right,
                                   ),
                                 ),
                               if (reward.banter != null) ...[
@@ -145,6 +164,7 @@ class _CombatVictoryOverlayState extends State<CombatVictoryOverlay>
                                   fontWeight: FontWeight.w500,
                                   color: mutedColor,
                                   height: 1.35,
+                                  textAlign: TextAlign.right,
                                 ),
                               ],
                               SizedBox(height: short ? 12 : 16),
@@ -153,25 +173,10 @@ class _CombatVictoryOverlayState extends State<CombatVictoryOverlay>
                                 fontSize: 11,
                                 fontWeight: FontWeight.w500,
                                 color: mutedColor,
+                                textAlign: TextAlign.right,
                               ),
                             ],
                           ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: short ? 10 : 16),
-                  Expanded(
-                    flex: short ? 5 : 6,
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: AspectRatio(
-                        aspectRatio: 3 / 4,
-                        child: Image.asset(
-                          EncounterAssets.combatVictory,
-                          fit: BoxFit.contain,
-                          filterQuality: FilterQuality.none,
-                          errorBuilder: (_, __, ___) => const SizedBox.shrink(),
                         ),
                       ),
                     ),
@@ -201,6 +206,7 @@ class _SectionLabel extends StatelessWidget {
         fontWeight: FontWeight.w600,
         color: const Color(0xFF9A8A6A),
         letterSpacing: 1.5,
+        textAlign: TextAlign.right,
       ),
     );
   }
@@ -221,6 +227,7 @@ class _RewardLine extends StatelessWidget {
         fontSize: accent ? 14 : 13,
         fontWeight: accent ? FontWeight.w600 : FontWeight.w500,
         color: accent ? const Color(0xFFE8D59A) : const Color(0xFFF2E6C8),
+        textAlign: TextAlign.right,
       ),
     );
   }

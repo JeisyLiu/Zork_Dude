@@ -194,10 +194,8 @@ class _ExplorationScreenState extends State<ExplorationScreen> {
                 children: [
                   GameBanner(
                     title: '迷雾之塔',
-                    subtitle: short ? '←↑↓→ / WASD' : 'Exploration · ←↑↓→ / WASD',
                     height: bannerH,
                     titleSize: short ? 15 : 17,
-                    subtitleSize: short ? 10 : 11,
                   ),
                   SizedBox(height: short ? 3 : 4),
                   StatusBar(controller: c),

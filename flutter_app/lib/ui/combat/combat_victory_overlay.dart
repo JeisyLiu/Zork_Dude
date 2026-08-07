@@ -4,7 +4,7 @@ import 'package:zork_dude/ui/combat/encounter_assets.dart';
 import 'package:zork_dude/ui/components/game_outlined_text.dart';
 import 'package:zork_dude/ui/layout/landscape_layout.dart';
 
-/// Victory loot summary. Tap anywhere to continue — left art, right text.
+/// Victory loot summary. Tap anywhere to continue — left text (right-aligned), right art.
 class CombatVictoryOverlay extends StatefulWidget {
   const CombatVictoryOverlay({
     super.key,
@@ -78,22 +78,6 @@ class _CombatVictoryOverlayState extends State<CombatVictoryOverlay>
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Expanded(
-                    flex: short ? 5 : 6,
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: AspectRatio(
-                        aspectRatio: 3 / 4,
-                        child: Image.asset(
-                          EncounterAssets.combatVictory,
-                          fit: BoxFit.contain,
-                          filterQuality: FilterQuality.none,
-                          errorBuilder: (_, __, ___) => const SizedBox.shrink(),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: short ? 10 : 16),
                   Expanded(
                     flex: short ? 5 : 4,
                     child: Align(
@@ -177,6 +161,22 @@ class _CombatVictoryOverlayState extends State<CombatVictoryOverlay>
                               ),
                             ],
                           ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: short ? 10 : 16),
+                  Expanded(
+                    flex: short ? 5 : 6,
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: AspectRatio(
+                        aspectRatio: 3 / 4,
+                        child: Image.asset(
+                          EncounterAssets.combatVictory,
+                          fit: BoxFit.contain,
+                          filterQuality: FilterQuality.none,
+                          errorBuilder: (_, __, ___) => const SizedBox.shrink(),
                         ),
                       ),
                     ),

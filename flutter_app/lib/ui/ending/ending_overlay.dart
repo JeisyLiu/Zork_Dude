@@ -64,6 +64,85 @@ class _EndingOverlayState extends State<EndingOverlay>
     final btnW = short ? 148.0 : 168.0;
     final btnH = HomeConstants.buttonHeightFor(btnW);
 
+    if (widget.kind == EndingKind.gameOver) {
+      return Material(
+        color: Colors.black,
+        child: FadeTransition(
+          opacity: CurvedAnimation(parent: _fade, curve: Curves.easeOut),
+          child: Stack(
+            fit: StackFit.expand,
+            clipBehavior: Clip.hardEdge,
+            children: [
+              Center(
+                child: Image.asset(
+                  EndingAssets.imageFor(widget.kind),
+                  width: size.width,
+                  fit: BoxFit.fitWidth,
+                  alignment: Alignment.center,
+                  filterQuality: FilterQuality.medium,
+                  errorBuilder: (_, __, ___) => const ColoredBox(
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              SafeArea(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: short ? 12 : 20,
+                  ),
+                  child: Column(
+                    children: [
+                      const Spacer(),
+                      GameOutlinedText(
+                        meta.title,
+                        fontSize: short ? 20 : 26,
+                        fontWeight: FontWeight.w700,
+                        color: HomeConstants.titleColor,
+                        strokeWidth: 0,
+                        letterSpacing: 1.5,
+                        shadowColor: Colors.black.withValues(alpha: 0.7),
+                        shadowBlurRadius: 6,
+                      ),
+                      const SizedBox(height: 8),
+                      GameOutlinedText(
+                        meta.subtitle,
+                        textAlign: TextAlign.center,
+                        fontSize: short ? 12 : 14,
+                        color: HomeConstants.bodyColor,
+                        strokeWidth: 0,
+                        height: 1.45,
+                        shadowColor: Colors.black.withValues(alpha: 0.65),
+                        shadowBlurRadius: 4,
+                      ),
+                      SizedBox(height: short ? 12 : 18),
+                      GameButton(
+                        width: btnW,
+                        height: btnH,
+                        compact: true,
+                        label: widget.primaryLabel ?? meta.primaryLabel,
+                        onPressed: widget.onPrimary,
+                      ),
+                      if (widget.onSecondary != null) ...[
+                        const SizedBox(height: 8),
+                        GameButton(
+                          width: btnW,
+                          height: btnH,
+                          compact: true,
+                          label: widget.secondaryLabel ?? meta.secondaryLabel,
+                          onPressed: widget.onSecondary,
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     return Material(
       color: Colors.black.withValues(alpha: 0.88),
       child: FadeTransition(

@@ -471,28 +471,16 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
         ready ? widget.controller.previewCombatTurnOrder() : const [];
     final registry = widget.controller.statusEffectRegistry;
 
-    final meleeOn = enc.meleeActive;
-    final phaseHint = switch (_phase) {
-      CombatUiPhase.pickingCommand =>
-        _activeActor != null ? '选择：${_activeActor!.name}' : '选择指令',
-      CombatUiPhase.pickingTarget => '选择目标',
-      CombatUiPhase.pickingItem => '选择道具',
-      CombatUiPhase.readyToExecute => meleeOn ? '混战中' : '准备执行',
-      CombatUiPhase.animating => meleeOn ? '混战交锋…' : '进行中…',
-    };
-
     final content = Column(
       children: [
           Stack(
             children: [
               GameBanner(
                 title: '回合战斗',
-                subtitle: 'R${enc.roundNumber} · $phaseHint',
                 height: short
                     ? CombatLayoutConstants.bannerHeightShort
                     : CombatLayoutConstants.bannerHeight,
                 titleSize: short ? 15 : 17,
-                subtitleSize: short ? 10 : 11,
               ),
               Positioned(
                 right: short ? 4 : 8,

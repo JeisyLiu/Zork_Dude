@@ -5,6 +5,7 @@ import 'package:zork_dude/ui/components/game_progress_bar.dart';
 import 'package:zork_dude/ui/components/game_button.dart';
 import 'package:zork_dude/ui/components/game_outlined_text.dart';
 import 'package:zork_dude/ui/exploration/exploration_layout_constants.dart';
+import 'package:zork_dude/ui/layout/landscape_layout.dart';
 import 'package:zork_dude/ui/game_ui_theme.dart';
 
 class StatusBar extends StatelessWidget {
@@ -21,16 +22,19 @@ class StatusBar extends StatelessWidget {
         .map((c) => s.companions[c]?.name)
         .whereType<String>()
         .join(', ');
-    final short = ExplorationLayoutConstants.isShort(MediaQuery.sizeOf(context));
-    final mapBtnH = short ? 26.0 : 32.0;
-    final mapBtnW = short ? 56.0 : 68.0;
+    final size = MediaQuery.sizeOf(context);
+    final padding = MediaQuery.paddingOf(context);
+    final short = LandscapeLayout.isShortOf(size, padding);
+    final phoneShort = LandscapeLayout.isPhoneShortOf(size, padding);
+    final mapBtnH = phoneShort ? 24.0 : (short ? 26.0 : 32.0);
+    final mapBtnW = phoneShort ? 52.0 : (short ? 56.0 : 68.0);
 
     return GamePanel(
       dark: true,
       withBorder: true,
       padding: EdgeInsets.symmetric(
-        horizontal: short ? 6 : 10,
-        vertical: short ? 3 : 6,
+        horizontal: phoneShort ? 4 : (short ? 6 : 10),
+        vertical: phoneShort ? 2 : (short ? 3 : 6),
       ),
       child: FittedBox(
         fit: BoxFit.scaleDown,

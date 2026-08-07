@@ -153,15 +153,19 @@ class _HomeScreenState extends State<HomeScreen> {
               body: LayoutBuilder(
                 builder: (context, constraints) {
                   final screen = MediaQuery.sizeOf(context);
-                  final heroSize = HomeConstants.heroSizeFor(screen);
-                  final short = LandscapeLayout.isShort(screen);
-                  final tight = screen.height < 520;
-                  final gapL = short ? 6.0 : (tight ? 10.0 : 16.0);
-                  final gapM = short ? 4.0 : (tight ? 8.0 : 12.0);
-                  final gapS = short ? 3.0 : (tight ? 6.0 : 10.0);
-                  final btnW = short
-                      ? HomeConstants.buttonWidthShort
-                      : HomeConstants.buttonWidth;
+                  final padding = MediaQuery.paddingOf(context);
+                  final short = LandscapeLayout.isShortPlayContext(context);
+                  final phoneShort = LandscapeLayout.isPhoneShortPlayContext(context);
+                  final usableH = LandscapeLayout.playUsableHeightOf(context);
+                  final heroSize = HomeConstants.heroSizeFor(screen, padding: padding);
+                  final tight = usableH < 520;
+                  final gapL = phoneShort ? 4.0 : (short ? 6.0 : (tight ? 10.0 : 16.0));
+                  final gapM = phoneShort ? 3.0 : (short ? 4.0 : (tight ? 8.0 : 12.0));
+                  final gapS = phoneShort ? 2.0 : (short ? 3.0 : (tight ? 6.0 : 10.0));
+                  final btnW = HomeConstants.buttonWidthFor(
+                    short: short,
+                    phoneShort: phoneShort,
+                  );
                   final btnH = HomeConstants.buttonHeightFor(btnW);
 
                   return Stack(
@@ -175,7 +179,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: SingleChildScrollView(
                             padding: EdgeInsets.symmetric(
                               horizontal: 16,
-                              vertical: short ? 8 : 12,
+                              vertical: phoneShort ? 6 : (short ? 8 : 12),
                             ),
                             child: ConstrainedBox(
                               constraints: const BoxConstraints(
@@ -188,7 +192,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   SizedBox(height: gapL),
                                   GameOutlinedText(
                                     '迷雾之塔',
-                                    fontSize: short ? 22 : (tight ? 26 : 30),
+                                    fontSize: phoneShort ? 20 : (short ? 22 : (tight ? 26 : 30)),
                                     fontWeight: FontWeight.w700,
                                     color: HomeConstants.titleColor,
                                     strokeWidth: 0,
@@ -201,7 +205,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   SizedBox(height: gapS),
                                   GameOutlinedText(
                                     'MIST TOWER',
-                                    fontSize: short ? 10 : (tight ? 11 : 12),
+                                    fontSize: phoneShort ? 9 : (short ? 10 : (tight ? 11 : 12)),
                                     fontWeight: FontWeight.w500,
                                     color: HomeConstants.subtitleColor,
                                     strokeWidth: 0,
@@ -211,11 +215,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                   const _PixelDivider(),
                                   SizedBox(height: gapM),
                                   GameOutlinedText(
-                                    short
+                                    short || phoneShort
                                         ? '探索、收集、对话、战斗——找回失落的真相。'
                                         : '你从迷雾森林中醒来，失去记忆。\n探索、收集、对话、战斗——找回失落的真相。',
                                     textAlign: TextAlign.center,
-                                    fontSize: short ? 12 : (tight ? 13 : 14),
+                                    fontSize: phoneShort ? 11 : (short ? 12 : (tight ? 13 : 14)),
                                     fontWeight: FontWeight.w500,
                                     color: HomeConstants.bodyColor,
                                     strokeWidth: 0,

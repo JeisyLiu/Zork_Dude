@@ -94,8 +94,8 @@ class GamePanel extends StatelessWidget {
         final h = constraints.maxHeight;
         final canSlice = w.isFinite &&
             h.isFinite &&
-            w >= minNinePatchExtent &&
-            h >= minNinePatchExtent;
+            w > minNinePatchExtent &&
+            h > minNinePatchExtent;
         return Image.asset(
           asset,
           fit: BoxFit.fill,

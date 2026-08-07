@@ -14,6 +14,7 @@ class CombatCommandMenu extends StatelessWidget {
     this.hasItems = false,
     this.meleeAvailable = true,
     this.compact = false,
+    this.phoneShort = false,
     this.showTitle = false,
   });
 
@@ -23,6 +24,7 @@ class CombatCommandMenu extends StatelessWidget {
   final bool hasItems;
   final bool meleeAvailable;
   final bool compact;
+  final bool phoneShort;
   final bool showTitle;
 
   static const options = [
@@ -37,20 +39,21 @@ class CombatCommandMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final d = GameUiTheme.of(context);
-    final preferredW = compact
-        ? CombatLayoutConstants.commandButtonWidthShort
-        : CombatLayoutConstants.commandButtonWidth;
+    final preferredW = CombatLayoutConstants.commandButtonWidthFor(
+      short: compact,
+      phoneShort: phoneShort,
+    );
 
     return GamePanel(
       withBorder: true,
       padding: EdgeInsets.symmetric(
-        horizontal: compact ? 6 : 10,
-        vertical: compact ? 6 : 8,
+        horizontal: phoneShort ? 4 : (compact ? 6 : 10),
+        vertical: phoneShort ? 4 : (compact ? 6 : 8),
       ),
       child: LayoutBuilder(
         builder: (context, constraints) {
           final count = options.length;
-          final gap = compact ? 3.0 : 5.0;
+          final gap = phoneShort ? 2.0 : (compact ? 3.0 : 5.0);
           final maxEach =
               (constraints.maxWidth - gap * (count - 1)) / count;
           final btnW =
@@ -139,6 +142,7 @@ class CombatExecuteBar extends StatelessWidget {
     required this.onExecute,
     this.highlighted = false,
     this.compact = false,
+    this.phoneShort = false,
     this.width,
     this.label = '执行',
     this.subLabel = 'Go',
@@ -148,6 +152,7 @@ class CombatExecuteBar extends StatelessWidget {
   final VoidCallback? onExecute;
   final bool highlighted;
   final bool compact;
+  final bool phoneShort;
   final double? width;
   final String label;
   final String subLabel;
@@ -155,9 +160,10 @@ class CombatExecuteBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final w = width ??
-        (compact
-            ? CombatLayoutConstants.executeButtonWidthShort
-            : CombatLayoutConstants.executeButtonWidth);
+        CombatLayoutConstants.executeButtonWidthFor(
+          short: compact,
+          phoneShort: phoneShort,
+        );
     final h = CombatLayoutConstants.executeButtonHeightForWidth(w);
     return DecoratedBox(
       decoration: highlighted

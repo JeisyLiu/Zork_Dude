@@ -40,6 +40,8 @@ void main() {
 
   for (final size in const [
     Size(667, 375),
+    Size(800, 360),
+    Size(853, 384),
     Size(854, 480),
     Size(1280, 720),
     Size(1920, 1080),

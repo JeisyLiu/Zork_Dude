@@ -33,6 +33,7 @@ abstract final class HomeConstants {
   /// Cover CTA matches `button_enter.png` plate (≈3:1).
   static const double buttonWidth = 216;
   static const double buttonWidthShort = 180;
+  static const double buttonWidthPhone = 160;
   static const double buttonAspect = 3;
 
   /// Light text on dark enter-plate.
@@ -41,13 +42,21 @@ abstract final class HomeConstants {
 
   static double buttonHeightFor(double width) => width / buttonAspect;
 
-  static double heroSizeFor(Size screen) {
-    final height = screen.height;
+  static double heroSizeFor(Size screen, {EdgeInsets padding = EdgeInsets.zero}) {
+    final height = screen.height - padding.vertical;
     final width = screen.width;
-    // Top-stacked hero: dominate the first viewport while leaving room for CTA.
-    if (height < 400) return 112;
+    if (height < 380) return 96;
+    if (height < 420) return 112;
     if (height < 520) return 168;
     if (width >= 900 || height >= 720) return 228;
     return 196;
+  }
+
+  static double buttonWidthFor({
+    required bool short,
+    bool phoneShort = false,
+  }) {
+    if (phoneShort) return buttonWidthPhone;
+    return short ? buttonWidthShort : buttonWidth;
   }
 }

@@ -8,6 +8,7 @@ import 'package:zork_dude/ui/components/game_button.dart';
 import 'package:zork_dude/ui/components/landscape_overlay.dart';
 import 'package:zork_dude/ui/components/landscape_scaffold.dart';
 import 'package:zork_dude/ui/exploration/exploration_layout_constants.dart';
+import 'package:zork_dude/ui/layout/landscape_layout.dart';
 import 'package:zork_dude/ui/game_skin_scope.dart';
 import 'package:zork_dude/ui/game_ui_theme.dart';
 import 'package:zork_dude/ui/navigation/game_exit.dart';
@@ -164,12 +165,16 @@ class _ExplorationScreenState extends State<ExplorationScreen> {
     }
 
     final size = MediaQuery.sizeOf(context);
+    final padding = MediaQuery.paddingOf(context);
+    final usableH = LandscapeLayout.playUsableHeightOf(context);
     final sideBySide = ExplorationLayoutConstants.useSideBySide(size);
-    final short = ExplorationLayoutConstants.isShort(size);
+    final short = LandscapeLayout.isShortPlayContext(context);
+    final phoneShort = LandscapeLayout.isPhoneShortPlayContext(context);
     final skin = GameUiTheme.skinForMapLayer(c.mapLayer);
-    final bannerH = short
-        ? ExplorationLayoutConstants.bannerHeightShort
-        : ExplorationLayoutConstants.bannerHeight;
+    final bannerH = ExplorationLayoutConstants.bannerHeightFor(
+      short: short,
+      phoneShort: phoneShort,
+    );
     final motionDuration = MediaQuery.disableAnimationsOf(context)
         ? Duration.zero
         : const Duration(milliseconds: 180);
@@ -195,30 +200,31 @@ class _ExplorationScreenState extends State<ExplorationScreen> {
                   GameBanner(
                     title: '迷雾之塔',
                     height: bannerH,
-                    titleSize: short ? 15 : 17,
+                    titleSize: phoneShort ? 14 : (short ? 15 : 17),
                   ),
-                  SizedBox(height: short ? 3 : 4),
+                  SizedBox(height: phoneShort ? 0 : (short ? 2 : 4)),
                   StatusBar(controller: c),
-                  SizedBox(height: short ? 3 : 4),
+                  SizedBox(height: phoneShort ? 0 : (short ? 2 : 4)),
                   Expanded(
                     child: sideBySide
                         ? Row(
                             children: [
                               Expanded(flex: 3, child: StoryLogView(controller: c)),
-                              if (c.mapVisible) const SizedBox(width: 6),
-                              Expanded(
-                                flex: c.mapVisible ? 2 : 0,
-                                child: AnimatedOpacity(
-                                  opacity: c.mapVisible ? 1 : 0,
-                                  duration: motionDuration,
-                                  child: IgnorePointer(
-                                    ignoring: !c.mapVisible,
-                                    child: c.mapVisible
-                                        ? MistMapPanel(controller: c)
-                                        : const SizedBox.shrink(),
+                              if (c.mapVisible) ...[
+                                const SizedBox(width: 6),
+                                Expanded(
+                                  flex: 2,
+                                  child: ConstrainedBox(
+                                    constraints: BoxConstraints(
+                                      minWidth: ExplorationLayoutConstants
+                                          .mapPanelMinWidth(
+                                        phoneShort: phoneShort,
+                                      ),
+                                    ),
+                                    child: MistMapPanel(controller: c),
                                   ),
                                 ),
-                              ),
+                              ],
                             ],
                           )
                         : Column(
@@ -230,7 +236,11 @@ class _ExplorationScreenState extends State<ExplorationScreen> {
                                 child: c.mapVisible
                                     ? SizedBox(
                                         key: const ValueKey('map-panel'),
-                                        height: short ? 100.0 : 140.0,
+                                        height: ExplorationLayoutConstants
+                                            .stackedMapHeight(
+                                          usableH,
+                                          short: short,
+                                        ),
                                         child: MistMapPanel(controller: c),
                                       )
                                     : const SizedBox.shrink(key: ValueKey('map-hidden')),
@@ -240,13 +250,14 @@ class _ExplorationScreenState extends State<ExplorationScreen> {
                             ],
                           ),
                   ),
-                  SizedBox(height: short ? 2 : 4),
+                  SizedBox(height: phoneShort ? 1 : (short ? 2 : 4)),
                   QuickCommandPanel(
                     controller: c,
                     onPickTargets: _showTargetPicker,
                     compact: short,
+                    phoneShort: phoneShort,
                   ),
-                  SizedBox(height: short ? 2 : 4),
+                  SizedBox(height: phoneShort ? 1 : (short ? 2 : 4)),
                   CommandInputRow(
                     controller: c,
                     focusNode: _commandFocus,

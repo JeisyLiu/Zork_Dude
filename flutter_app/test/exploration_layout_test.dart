@@ -4,6 +4,7 @@ import 'package:zork_dude/screens/exploration_screen.dart';
 import 'package:zork_dude/state/game_controller.dart';
 import 'package:zork_dude/ui/game_skin_scope.dart';
 import 'package:zork_dude/ui/game_ui_theme.dart';
+import 'package:zork_dude/widgets/mist_map_panel.dart';
 import 'package:zork_dude/widgets/quick_commands.dart';
 import 'package:zork_dude/widgets/story_log.dart';
 
@@ -57,6 +58,8 @@ void main() {
 
   for (final size in const [
     Size(667, 375),
+    Size(800, 360),
+    Size(853, 384),
     Size(854, 480),
     Size(1280, 720),
     Size(1920, 1080),
@@ -75,6 +78,36 @@ void main() {
       expect(find.text('发送'), findsNothing);
     });
   }
+
+  testWidgets('Phone landscape keeps map panel visible at 853x384', (tester) async {
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    const size = Size(853, 384);
+    await pumpExplorationScreen(tester, size);
+
+    expect(tester.takeException(), isNull);
+    expect(find.byType(MistMapPanel), findsOneWidget);
+
+    final mapBox = tester.renderObject<RenderBox>(
+      find.byType(MistMapPanel),
+    );
+    expect(mapBox.size.width, greaterThanOrEqualTo(120));
+  });
+
+  testWidgets('Phone landscape keeps map panel visible at 800x360', (tester) async {
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    const size = Size(800, 360);
+    await pumpExplorationScreen(tester, size);
+
+    expect(tester.takeException(), isNull);
+    expect(find.byType(MistMapPanel), findsOneWidget);
+
+    final mapBox = tester.renderObject<RenderBox>(
+      find.byType(MistMapPanel),
+    );
+    expect(mapBox.size.width, greaterThanOrEqualTo(120));
+  });
 
   testWidgets('Primary panel exposes former more-sheet commands', (tester) async {
     addTearDown(() => tester.binding.setSurfaceSize(null));

@@ -21,9 +21,11 @@ class LandscapeScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
-    final resolvedPadding = padding ?? EdgeInsets.all(LandscapeLayout.outerPadding(size));
+    final mqPadding = MediaQuery.paddingOf(context);
+    final resolvedPadding = padding ??
+        EdgeInsets.all(LandscapeLayout.outerPadding(size, padding: mqPadding));
     final safeBody = SafeArea(
-      minimum: minimum ?? LandscapeLayout.safeMinimum,
+      minimum: minimum ?? LandscapeLayout.playSafeMinimum(size, mqPadding),
       child: Padding(
         padding: resolvedPadding,
         child: body,

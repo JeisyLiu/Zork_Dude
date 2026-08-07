@@ -4,6 +4,7 @@ import 'package:zork_dude/ui/components/game_button.dart';
 import 'package:zork_dude/ui/components/game_panel.dart';
 import 'package:zork_dude/ui/game_ui_assets.dart';
 import 'package:zork_dude/ui/game_ui_theme.dart';
+import 'package:zork_dude/ui/layout/landscape_layout.dart';
 
 class CommandInputRow extends StatefulWidget {
   const CommandInputRow({
@@ -38,8 +39,17 @@ class _CommandInputRowState extends State<CommandInputRow> {
   @override
   Widget build(BuildContext context) {
     final d = GameUiTheme.of(context);
+    final size = MediaQuery.sizeOf(context);
+    final padding = MediaQuery.paddingOf(context);
+    final short = LandscapeLayout.isShortOf(size, padding);
+    final phoneShort = LandscapeLayout.isPhoneShortOf(size, padding);
+    final panelPad = phoneShort
+        ? const EdgeInsets.fromLTRB(10, 4, 8, 4)
+        : (short
+            ? const EdgeInsets.fromLTRB(12, 6, 8, 6)
+            : const EdgeInsets.fromLTRB(14, 8, 10, 8));
     return GamePanel(
-      padding: const EdgeInsets.fromLTRB(14, 8, 10, 8),
+      padding: panelPad,
       child: Row(
         children: [
           Expanded(

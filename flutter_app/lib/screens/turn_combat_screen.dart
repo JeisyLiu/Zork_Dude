@@ -19,6 +19,7 @@ import 'package:zork_dude/ui/combat/combat_command_menu.dart';
 import 'package:zork_dude/ui/combat/combat_command_queue.dart';
 import 'package:zork_dude/ui/combat/combat_item_picker.dart';
 import 'package:zork_dude/ui/combat/combat_layout_constants.dart';
+import 'package:zork_dude/ui/layout/landscape_layout.dart';
 import 'package:zork_dude/ui/combat/combat_round_log.dart';
 import 'package:zork_dude/ui/combat/combat_turn_order_bar.dart';
 import 'package:zork_dude/ui/components/landscape_scaffold.dart';
@@ -458,7 +459,8 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
     }
 
     final size = MediaQuery.sizeOf(context);
-    final short = CombatLayoutConstants.isShort(size);
+    final short = LandscapeLayout.isShortPlayContext(context);
+    final phoneShort = LandscapeLayout.isPhoneShortPlayContext(context);
     final sideBySide = CombatLayoutConstants.useSideBySide(size);
     final layer = widget.controller.mapLayer;
     final skin = GameUiTheme.skinForMapLayer(layer);
@@ -477,10 +479,11 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
             children: [
               GameBanner(
                 title: '回合战斗',
-                height: short
-                    ? CombatLayoutConstants.bannerHeightShort
-                    : CombatLayoutConstants.bannerHeight,
-                titleSize: short ? 15 : 17,
+                height: CombatLayoutConstants.bannerHeightFor(
+                  short: short,
+                  phoneShort: phoneShort,
+                ),
+                titleSize: phoneShort ? 14 : (short ? 15 : 17),
               ),
               Positioned(
                 right: short ? 4 : 8,
@@ -491,8 +494,8 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
                     label: '菜单',
                     subLabel: 'menu',
                     compact: true,
-                    height: short ? 28 : 32,
-                    width: short ? 56 : 64,
+                    height: phoneShort ? 26 : (short ? 28 : 32),
+                    width: phoneShort ? 52 : (short ? 56 : 64),
                     enabled: !_finished,
                     onPressed: _showPauseMenu,
                     semanticLabel: '战斗菜单',
@@ -501,7 +504,7 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
               ),
             ],
           ),
-          SizedBox(height: short ? 2 : 4),
+          SizedBox(height: phoneShort ? 2 : (short ? 2 : 4)),
           Expanded(
             child: sideBySide
                 ? Row(
@@ -509,25 +512,25 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
                     children: [
                       Expanded(
                         flex: 3,
-                        child: _battleColumn(enc, short, targetId, registry),
+                        child: _battleColumn(enc, short || phoneShort, targetId, registry),
                       ),
                       const SizedBox(width: 6),
                       Expanded(
                         flex: 2,
                         child: Column(
                           children: [
-                            if (!short)
+                            if (!short && !phoneShort)
                               CombatCommandQueue(
                                 encounter: enc,
                                 activeActorId: _activeActorId,
                                 compact: false,
                               ),
-                            if (!short) const SizedBox(height: 4),
+                            if (!short && !phoneShort) const SizedBox(height: 4),
                             if (turnOrder.isNotEmpty) ...[
                               CombatTurnOrderBar(
                                 entries: turnOrder,
                                 highlightActorId: _animatingActorId,
-                                compact: short,
+                                compact: short || phoneShort,
                               ),
                               const SizedBox(height: 4),
                             ],
@@ -535,7 +538,7 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
                               child: CombatRoundLog(
                                 messages: _log,
                                 steps: _stepLog,
-                                compact: short,
+                                compact: short || phoneShort,
                               ),
                             ),
                           ],
@@ -547,7 +550,7 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
                     children: [
                       Expanded(
                         flex: 3,
-                        child: _battleColumn(enc, short, targetId, registry),
+                        child: _battleColumn(enc, short || phoneShort, targetId, registry),
                       ),
                       if (turnOrder.isNotEmpty) ...[
                         const SizedBox(height: 2),
@@ -584,20 +587,22 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
               },
             ),
           ],
-          SizedBox(height: short ? 2 : 4),
+          SizedBox(height: phoneShort ? 2 : (short ? 2 : 4)),
           SizedBox(
-            height: CombatLayoutConstants.commandDockHeight(short: short),
+            height: CombatLayoutConstants.commandDockHeightFor(context),
             child: LayoutBuilder(
               builder: (context, constraints) {
-                final execPreferred = short
-                    ? CombatLayoutConstants.executeButtonWidthShort
-                    : CombatLayoutConstants.executeButtonWidth;
+                final execPreferred = CombatLayoutConstants.executeButtonWidthFor(
+                  short: short,
+                  phoneShort: phoneShort,
+                );
                 final execW = CombatLayoutConstants.executeWidthFor(
                   availableWidth: (constraints.maxWidth * 0.22).clamp(
                     72.0,
                     execPreferred,
                   ),
                   short: short,
+                  phoneShort: phoneShort,
                 );
                 return Row(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -611,6 +616,7 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
                         hasItems: hasItems,
                         meleeAvailable: enc.canUseMelee,
                         compact: short,
+                        phoneShort: phoneShort,
                         onSelect: _selectCommand,
                       ),
                     ),
@@ -621,6 +627,7 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
                         highlighted: _phase == CombatUiPhase.readyToExecute,
                         onExecute: _executeRound,
                         compact: short,
+                        phoneShort: phoneShort,
                         width: execW,
                       ),
                     ),

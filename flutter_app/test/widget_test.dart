@@ -99,6 +99,28 @@ void main() {
     expect(find.text('迷雾之塔'), findsOneWidget);
   });
 
+  testWidgets('Home layout fits 800x360 without overflow', (tester) async {
+    await tester.binding.setSurfaceSize(const Size(800, 360));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(const MistTowerApp());
+    await pumpUntilLoaded(tester);
+
+    expect(tester.takeException(), isNull);
+    expect(find.text('迷雾之塔'), findsOneWidget);
+  });
+
+  testWidgets('Home layout fits 853x384 without overflow', (tester) async {
+    await tester.binding.setSurfaceSize(const Size(853, 384));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(const MistTowerApp());
+    await pumpUntilLoaded(tester);
+
+    expect(tester.takeException(), isNull);
+    expect(find.text('迷雾之塔'), findsOneWidget);
+  });
+
   testWidgets('Home layout fits 854x480 without overflow', (tester) async {
     await tester.binding.setSurfaceSize(const Size(854, 480));
     addTearDown(() => tester.binding.setSurfaceSize(null));

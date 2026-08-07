@@ -7,6 +7,7 @@ import 'package:zork_dude/ui/components/game_outlined_text.dart';
 import 'package:zork_dude/ui/components/game_panel.dart';
 import 'package:zork_dude/ui/components/landscape_overlay.dart';
 import 'package:zork_dude/ui/exploration/exploration_layout_constants.dart';
+import 'package:zork_dude/ui/layout/landscape_layout.dart';
 import 'package:zork_dude/ui/exploration/inventory_panel.dart';
 import 'package:zork_dude/ui/game_ui_assets.dart';
 import 'package:zork_dude/ui/game_ui_theme.dart';
@@ -19,11 +20,13 @@ class QuickCommandPanel extends StatelessWidget {
     required this.controller,
     required this.onPickTargets,
     this.compact = false,
+    this.phoneShort = false,
   });
 
   final GameController controller;
   final void Function(String title, List<({String label, String value})> options) onPickTargets;
   final bool compact;
+  final bool phoneShort;
 
   @override
   Widget build(BuildContext context) {
@@ -36,112 +39,166 @@ class QuickCommandPanel extends StatelessWidget {
     final hasInventory = s != null && s.inventory.isNotEmpty;
     final panelEnabled = !controller.commandBusy;
 
-    final padV = ExplorationLayoutConstants.panelPadV(short: compact);
-    final dockH = ExplorationLayoutConstants.dockMinHeight(
-      short: compact,
-      showTips: !compact,
+    final usableH = LandscapeLayout.playUsableHeightOf(context);
+    var layoutShort = compact;
+    var layoutPhone = phoneShort;
+
+    var dockMax = ExplorationLayoutConstants.dockMaxHeight(
+      usableH,
+      short: layoutShort,
+      phoneShort: layoutPhone,
+      showTips: !compact && !phoneShort,
+      inCombat: inCombat,
+    );
+    var dockNatural = ExplorationLayoutConstants.dockMinHeight(
+      short: layoutShort,
+      phoneShort: layoutPhone,
+      showTips: !compact && !phoneShort,
+      inCombat: inCombat,
     );
 
-    return GamePanel(
-      padding: EdgeInsets.fromLTRB(
-        compact ? 8 : 12,
-        padV / 2,
-        compact ? 8 : 12,
-        padV / 2,
-      ),
-      child: ConstrainedBox(
-        constraints: BoxConstraints(minHeight: dockH - padV),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            LayoutBuilder(
-              builder: (context, constraints) {
-                final columns = ExplorationLayoutConstants.primaryColumns;
-                final primary = _primaryActions(
-                  context: context,
-                  inCombat: inCombat,
-                  hasItems: hasItems,
-                  hasNpc: hasNpc,
-                  hasInventory: hasInventory,
-                  panelEnabled: panelEnabled,
-                );
+    if (dockNatural > dockMax + 0.5 && !layoutPhone) {
+      layoutPhone = true;
+      dockMax = ExplorationLayoutConstants.dockMaxHeight(
+        usableH,
+        short: layoutShort,
+        phoneShort: layoutPhone,
+        showTips: !compact && !phoneShort,
+        inCombat: inCombat,
+      );
+      dockNatural = ExplorationLayoutConstants.dockMinHeight(
+        short: layoutShort,
+        phoneShort: layoutPhone,
+        showTips: !compact && !phoneShort,
+        inCombat: inCombat,
+      );
+    }
 
-                return Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    if (!inCombat) ...[
-                      Builder(
-                        builder: (context) {
-                          final prefW =
-                              ExplorationLayoutConstants.preferredChipWidth(
-                            short: compact,
-                          );
-                          final gridH =
-                              ExplorationLayoutConstants.gridContentHeight(
-                            prefW,
-                          );
-                          final dpadBase = compact
-                              ? ExplorationLayoutConstants
-                                  .directionPadWidthShort
-                              : ExplorationLayoutConstants.directionPadWidth;
-                          final dpadSize =
-                              (gridH - (compact ? 30 : 40)).clamp(56.0, dpadBase);
-                          return DirectionPad(
-                            onMove: (dir) => controller.move(dir),
-                            compact: compact,
-                            enabled: panelEnabled,
-                            size: dpadSize,
-                          );
-                        },
-                      ),
-                      SizedBox(width: compact ? 8 : 12),
-                    ],
-                    Expanded(
-                      child: LayoutBuilder(
-                        builder: (context, gridConstraints) {
-                          final chipW = ExplorationLayoutConstants.chipWidthFor(
-                            gridConstraints.maxWidth,
-                            short: compact,
-                          );
-                          final chipH =
-                              ExplorationLayoutConstants.chipHeightForWidth(
-                            chipW,
-                          );
-                          return _ActionGrid(
-                            columns: columns,
-                            actions: primary,
-                            chipWidth: chipW,
-                            chipHeight: chipH,
-                            onMore: panelEnabled
-                                ? () => _showMoreSheet(context, inCombat)
-                                : () {},
-                            panelEnabled: panelEnabled,
-                          );
-                        },
-                      ),
+    final padV = ExplorationLayoutConstants.panelPadV(
+      short: layoutShort,
+      phoneShort: layoutPhone,
+    );
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final prefW = ExplorationLayoutConstants.preferredChipWidth(
+          short: layoutShort,
+          phoneShort: layoutPhone,
+        );
+        final gridH = ExplorationLayoutConstants.gridContentHeight(
+          prefW,
+          phoneShort: layoutPhone,
+        );
+        final dpadBase = layoutShort || layoutPhone
+            ? ExplorationLayoutConstants.directionPadWidthShort
+            : ExplorationLayoutConstants.directionPadWidth;
+        final dpadSize = (gridH - (layoutPhone ? 24 : (layoutShort ? 30 : 40)))
+            .clamp(layoutPhone ? 48.0 : 56.0, dpadBase);
+        final rowGap = layoutPhone ? 6.0 : (layoutShort ? 8.0 : 12.0);
+        final gridW = prefW * ExplorationLayoutConstants.primaryColumns +
+            ExplorationLayoutConstants.chipSpacingFor(phoneShort: layoutPhone) *
+                (ExplorationLayoutConstants.primaryColumns - 1);
+        final dpadBlock = inCombat ? 0.0 : dpadSize + rowGap;
+        final availableGridW =
+            (constraints.maxWidth - dpadBlock).clamp(0.0, constraints.maxWidth);
+        final chipW = ExplorationLayoutConstants.chipWidthFor(
+          availableGridW,
+          short: layoutShort,
+          phoneShort: layoutPhone,
+        );
+        final chipH = ExplorationLayoutConstants.chipHeightForWidth(chipW);
+        final columns = ExplorationLayoutConstants.primaryColumns;
+        final primary = _primaryActions(
+          context: context,
+          inCombat: inCombat,
+          hasItems: hasItems,
+          hasNpc: hasNpc,
+          hasInventory: hasInventory,
+          panelEnabled: panelEnabled,
+        );
+
+        final panel = GamePanel(
+          padding: EdgeInsets.fromLTRB(
+            layoutPhone ? 6 : (layoutShort ? 8 : 12),
+            padV / 2,
+            layoutPhone ? 6 : (layoutShort ? 8 : 12),
+            padV / 2,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  if (!inCombat) ...[
+                      DirectionPad(
+                        onMove: (dir) => controller.move(dir),
+                        compact: layoutShort || layoutPhone,
+                      enabled: panelEnabled,
+                      size: dpadSize,
                     ),
+                    SizedBox(width: rowGap),
                   ],
-                );
-              },
-            ),
-            if (!compact) ...[
-              const SizedBox(height: 6),
-              GameOutlinedText(
-                inCombat
-                    ? '战斗中 · Combat: attack / flee'
-                    : '提示 · Tips: ←↑↓→ / WASD · PgUp/PgDn · look · take 1',
-                fontSize: 10,
-                fontWeight: FontWeight.w500,
-                color: d.textMuted,
-                strokeWidth: 0,
-                textAlign: TextAlign.left,
+                  SizedBox(
+                    width: availableGridW.clamp(0.0, gridW),
+                    child: _ActionGrid(
+                      columns: columns,
+                      actions: primary,
+                      chipWidth: chipW,
+                      chipHeight: chipH,
+                      chipSpacing: ExplorationLayoutConstants.chipSpacingFor(
+                        phoneShort: layoutPhone,
+                      ),
+                      onMore: panelEnabled
+                          ? () => _showMoreSheet(context, inCombat)
+                          : () {},
+                      panelEnabled: panelEnabled,
+                    ),
+                  ),
+                ],
               ),
+              if (!compact && !phoneShort && !layoutPhone) ...[
+                const SizedBox(height: 6),
+                GameOutlinedText(
+                  inCombat
+                      ? '战斗中 · Combat: attack / flee'
+                      : '提示 · Tips: ←↑↓→ / WASD · PgUp/PgDn · look · take 1',
+                  fontSize: 10,
+                  fontWeight: FontWeight.w500,
+                  color: d.textMuted,
+                  strokeWidth: 0,
+                  textAlign: TextAlign.left,
+                ),
+              ],
             ],
-          ],
-        ),
-      ),
+          ),
+        );
+
+        if (dockMax + 1 < dockNatural) {
+          final scale = (dockMax / dockNatural).clamp(0.82, 1.0);
+          return SizedBox(
+            height: dockMax,
+            width: constraints.maxWidth,
+            child: Transform.scale(
+              scale: scale,
+              alignment: Alignment.center,
+              child: SizedBox(
+                width: constraints.maxWidth,
+                height: dockNatural,
+                child: panel,
+              ),
+            ),
+          );
+        }
+
+        return SizedBox(
+          height: dockNatural,
+          width: constraints.maxWidth,
+          child: panel,
+        );
+      },
     );
   }
 
@@ -452,6 +509,7 @@ class _ActionGrid extends StatelessWidget {
     required this.onMore,
     required this.chipWidth,
     required this.chipHeight,
+    this.chipSpacing = ExplorationLayoutConstants.chipSpacing,
     this.panelEnabled = true,
   });
 
@@ -460,6 +518,7 @@ class _ActionGrid extends StatelessWidget {
   final VoidCallback onMore;
   final double chipWidth;
   final double chipHeight;
+  final double chipSpacing;
   final bool panelEnabled;
 
   @override
@@ -470,7 +529,7 @@ class _ActionGrid extends StatelessWidget {
       rows.add(actions.sublist(i, end));
     }
 
-    final spacing = ExplorationLayoutConstants.chipSpacing;
+    final spacing = chipSpacing;
 
     return Column(
       mainAxisSize: MainAxisSize.min,

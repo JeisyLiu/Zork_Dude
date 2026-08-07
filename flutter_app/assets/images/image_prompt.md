@@ -53,6 +53,7 @@ readable text, watermark, logo, HUD, thick frame border, collage, neon colors
 | 结算插画 `ending/*.png` | 16:9 | 640×360 或 960×540 |
 | 战斗胜利侧图 | 3:4 竖向 | 360×480 或 480×640（贴右侧，左留文案区） |
 | 标题英雄图 | 1:1 | 256×256～512×512 |
+| 血条合图（管+内图案） | 横向条带拼图 | 建议 **256×64** 或 **320×80**；透明底；上下分两行，中间留空隙方便裁剪 |
 
 ---
 
@@ -272,6 +273,49 @@ atmospheric, no text, no logo, no UI frame, portrait 3:4
 
 ---
 
+## 血条控件合图（一张图里两件：管 + 内图案）
+
+**只出一张图。** 透明背景上同时画两件零件，**不要叠成完整血条**；上下分开放，中间留空隙，后续再裁成 `hp_bar_tube` / `hp_bar_inner` 给 `GameProgressBar` 用。
+
+1. **血条管**（上行）— 空心外管，中间镂空透明  
+2. **内部图案**（下行）— 生命纹填充条，无外框  
+
+路径：`assets/images/ui/hp_bar_sheet.png`（生成合图）  
+已裁切接入：`hp_bar_tube.png` / `hp_bar_inner.png`（及 `*_small`）→ `GameProgressBar`  
+图上**不要画数字、心形、「HP」字样**。
+
+**合图布局（生成时按这个排）：**
+
+```text
+透明底
+┌────────────────────────────┐
+│  ═══════ 空心血条管 ═══════  │  ← 上行：只有外壳
+│                            │  ← 中间空隙（方便裁剪）
+│  ████████ 内部图案条 ██████  │  ← 下行：只有填充纹
+└────────────────────────────┘
+```
+
+**规格：** 建议 **256×64** 或 **320×80**；两行大致同宽；内图案高度略矮于管的内槽；小尺寸可另出一张更扁的合图，或同一张里再排一组更小的。
+
+**风格参考：** `mist_tower_hero.png` + `button_enter.png`（不要 Kenney 木条）
+
+```text
+minimalist pixel art UI sprite sheet for a dark fantasy adventure game,
+ONE transparent PNG containing TWO separate health-bar parts stacked vertically with empty gap between them,
+TOP row: hollow horizontal HP TUBE casing only, weathered stone charcoal-brown rim,
+thin desaturated antique-gold pixel highlights on outer corners, center channel empty and transparent, thicker end caps,
+BOTTOM row: INNER vitality PATTERN strip only, muted deep garnet red with dark olive undertone,
+subtle repeating rune-dot micro pattern, one thin antique-gold highlight row on top of the strip,
+no stone rim on the bottom strip, parts NOT nested together, not a finished assembled health bar,
+crisp 16-bit pixel edges, restrained detail, readable at tiny HUD size,
+clean transparent background, large empty margin, no characters, no text, no numbers, no logo,
+no hearts, no full HUD panel, widescreen sheet about 4:1
+```
+
+负面追加：`assembled complete health bar, parts overlapping, kenney UI, cartoon wood plank, bright neon red, glossy plastic, chrome metal, green potion gel, hearts, plus symbol, cross, skull, numbers, letters, HP text, thick ornate victorian frame, smooth gradient, 3D bevel, busy ornaments, watermark, solid opaque background, white background, checkerboard`
+
+---
+
 ## 文件对照
 
 | 文件 | 图层 / 结局 | 风格 |
@@ -281,6 +325,9 @@ atmospheric, no text, no logo, no UI frame, portrait 3:4
 | `fx/encounter_banner.png` | 遇敌转场 ENCOUNTER! | 像素英文特效字 |
 | `fx/battle_start_banner.png` | 开战 BATTLE START | 像素英文特效字 |
 | `fx/combat_victory.png` | 普通战斗胜利侧图 | 统一风格句 + 竖向胜利余韵 |
+| `images/ui/hp_bar_sheet.png` | 血条合图（管+内图案） | 统一风格句；一张透明底拼图 |
+| `images/ui/hp_bar_tube.png` | 血条管（已裁） | 由合图上行裁出 |
+| `images/ui/hp_bar_inner.png` | 血条内部图案（已裁） | 由合图下行裁出 |
 | `exploration/bg_surface.png` | 地表 | 统一风格句 + 题材 |
 | `exploration/bg_cave.png` | 洞穴 | 同上 |
 | `exploration/bg_tower.png` | 高塔 | 同上 |

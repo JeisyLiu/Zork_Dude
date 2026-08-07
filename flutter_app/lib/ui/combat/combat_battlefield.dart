@@ -116,8 +116,8 @@ class CombatUnitCard extends StatelessWidget {
                   builder: (context, constraints) {
                     return GameProgressBar(
                       value: actor.maxHp > 0 ? actor.hp / actor.maxHp : 0,
-                      height: compact ? 8 : 10,
-                      width: constraints.maxWidth.clamp(24, 120),
+                      height: compact ? 11 : 14,
+                      width: constraints.maxWidth.clamp(28, 120),
                     );
                   },
                 ),

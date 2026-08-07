@@ -25,8 +25,8 @@ class StatusBar extends StatelessWidget {
     final mapBtnW = LandscapeLayout.minTouch(context, 68);
     final statGap = LandscapeLayout.sp(context, 8);
     final fontSize = LandscapeLayout.sp(context, 11);
-    final progressW = LandscapeLayout.sp(context, 56);
-    final progressH = LandscapeLayout.sp(context, 9);
+    final progressW = LandscapeLayout.sp(context, 72);
+    final progressH = LandscapeLayout.sp(context, 12);
 
     return GamePanel(
       dark: true,

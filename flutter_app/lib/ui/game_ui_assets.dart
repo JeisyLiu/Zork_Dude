@@ -31,7 +31,7 @@ abstract final class GameUiAssets {
   static const bannerCurtain = '$base/banner_classic_curtain.png';
   static const bannerModern = '$base/banner_modern.png';
 
-  // Progress
+  // Progress (legacy Kenney)
   static const progressGreen = '$base/progress_green.png';
   static const progressGreenBorder = '$base/progress_green_border.png';
   static const progressGreenSmall = '$base/progress_green_small.png';
@@ -44,6 +44,12 @@ abstract final class GameUiAssets {
   static const progressRedBorder = '$base/progress_red_border.png';
   static const progressRedSmall = '$base/progress_red_small.png';
   static const progressRedSmallBorder = '$base/progress_red_small_border.png';
+
+  // Mist Tower HP bar (cropped from hp_bar_sheet)
+  static const mistHpTube = 'assets/images/ui/hp_bar_tube.png';
+  static const mistHpInner = 'assets/images/ui/hp_bar_inner.png';
+  static const mistHpTubeSmall = 'assets/images/ui/hp_bar_tube_small.png';
+  static const mistHpInnerSmall = 'assets/images/ui/hp_bar_inner_small.png';
 
   // Minimap / D-pad
   static const minimapRingBrown = '$base/minimap_ring_brown_detail.png';

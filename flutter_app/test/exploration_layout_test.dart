@@ -89,11 +89,22 @@ void main() {
 
       expect(tester.takeException(), isNull);
       expect(find.byType(ExplorationScreen), findsOneWidget);
-      expect(find.byType(DirectionPad), findsOneWidget);
       expect(find.text('查看'), findsWidgets);
       expect(find.text('丢弃'), findsWidgets);
       expect(find.text('更多'), findsWidgets);
       expect(find.text('发送'), findsNothing);
+      if (LandscapeLayout.showCommandInput) {
+        expect(find.byType(DirectionPad), findsOneWidget);
+      } else {
+        expect(find.byType(FloatingMovePad), findsOneWidget);
+        expect(
+          find.descendant(
+            of: find.byType(QuickCommandPanel),
+            matching: find.byType(DirectionPad),
+          ),
+          findsNothing,
+        );
+      }
     });
   }
 
@@ -137,6 +148,14 @@ void main() {
       expect(LandscapeLayout.showCommandInput, isFalse);
       expect(find.bySemanticsLabel('发送命令'), findsNothing);
       expect(find.byType(MistMapPanel), findsOneWidget);
+      expect(find.byType(FloatingMovePad), findsOneWidget);
+      expect(
+        find.descendant(
+          of: find.byType(QuickCommandPanel),
+          matching: find.byType(DirectionPad),
+        ),
+        findsNothing,
+      );
     } finally {
       debugDefaultTargetPlatformOverride = null;
     }
@@ -214,47 +233,66 @@ void main() {
   });
 
   testWidgets('Single-row chips fill dock width at 1280x720', (tester) async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.windows;
     addTearDown(() => tester.binding.setSurfaceSize(null));
-
-    await pumpExplorationScreen(tester, const Size(1280, 720));
-    final chip = _chipWidth(tester);
-    expect(chip, greaterThanOrEqualTo(LandscapeLayout.minTouchTarget * 0.85));
-    expect(find.byType(VerticalUpDownPad), findsOneWidget);
-    expect(
-      find.descendant(
-        of: find.byType(VerticalUpDownPad),
-        matching: find.text('U'),
-      ),
-      findsOneWidget,
-    );
-    expect(
-      find.descendant(
-        of: find.byType(VerticalUpDownPad),
-        matching: find.text('D'),
-      ),
-      findsOneWidget,
-    );
-    expect(find.textContaining('Tips:'), findsNothing);
+    try {
+      await pumpExplorationScreen(tester, const Size(1280, 720));
+      final chip = _chipWidth(tester);
+      expect(chip, greaterThanOrEqualTo(LandscapeLayout.minTouchTarget * 0.85));
+      expect(find.byType(FloatingMovePad), findsNothing);
+      expect(
+        find.descendant(
+          of: find.byType(QuickCommandPanel),
+          matching: find.byType(VerticalUpDownPad),
+        ),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(
+          of: find.byType(VerticalUpDownPad),
+          matching: find.text('U'),
+        ),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(
+          of: find.byType(VerticalUpDownPad),
+          matching: find.text('D'),
+        ),
+        findsOneWidget,
+      );
+      expect(find.textContaining('Tips:'), findsNothing);
+    } finally {
+      debugDefaultTargetPlatformOverride = null;
+    }
   });
 
-  testWidgets('Primary panel exposes former more-sheet commands', (tester) async {
+  testWidgets('Primary panel exposes eight chips and more-sheet trade commands', (tester) async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.windows;
     addTearDown(() => tester.binding.setSurfaceSize(null));
+    try {
+      await pumpExplorationScreen(tester, const Size(1280, 720));
 
-    await pumpExplorationScreen(tester, const Size(1280, 720));
+      expect(find.text('治疗'), findsWidgets);
+      expect(find.text('丢弃'), findsWidgets);
+      expect(find.text('更多'), findsWidgets);
+      expect(find.text('商品'), findsNothing);
+      expect(find.text('购买'), findsNothing);
+      expect(find.text('出售'), findsNothing);
+      expect(find.text('招募'), findsNothing);
 
-    expect(find.text('治疗'), findsWidgets);
-    expect(find.text('丢弃'), findsWidgets);
-    expect(find.text('商品'), findsWidgets);
-    expect(find.text('购买'), findsWidgets);
-    expect(find.text('出售'), findsWidgets);
-    expect(find.text('招募'), findsWidgets);
-    expect(find.text('更多'), findsWidgets);
+      await tester.tap(find.byKey(const Key('quick-command-more')));
+      await tester.pumpAndSettle();
 
-    await tester.tap(find.byKey(const Key('quick-command-more')));
-    await tester.pumpAndSettle();
-
-    expect(find.text('回标题'), findsOneWidget);
-    expect(find.text('队伍'), findsOneWidget);
+      expect(find.text('商品'), findsOneWidget);
+      expect(find.text('购买'), findsOneWidget);
+      expect(find.text('出售'), findsOneWidget);
+      expect(find.text('招募'), findsOneWidget);
+      expect(find.text('回标题'), findsOneWidget);
+      expect(find.text('队伍'), findsOneWidget);
+    } finally {
+      debugDefaultTargetPlatformOverride = null;
+    }
   });
 
   testWidgets('Story log scrolls to latest entry after command', (tester) async {

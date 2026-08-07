@@ -169,6 +169,10 @@ class _ExplorationScreenState extends State<ExplorationScreen> {
     final skin = GameUiTheme.skinForMapLayer(c.mapLayer);
     final bannerH = ExplorationLayoutConstants.bannerHeightFor(context);
     final gap = LandscapeLayout.sp(context, 4);
+    final inCombat = c.session?.inCombat ?? false;
+    final showFloatingMovePad = !LandscapeLayout.showCommandInput && !inCombat;
+    final dockH = ExplorationLayoutConstants.dockMaxHeight(context);
+    final floatMargin = ExplorationLayoutConstants.floatingPadMarginFor(context);
     final motionDuration = MediaQuery.disableAnimationsOf(context)
         ? Duration.zero
         : const Duration(milliseconds: 180);
@@ -256,6 +260,15 @@ class _ExplorationScreenState extends State<ExplorationScreen> {
                   ],
                 ],
               ),
+              if (showFloatingMovePad)
+                Positioned(
+                  left: floatMargin,
+                  bottom: dockH + floatMargin,
+                  child: FloatingMovePad(
+                    enabled: !c.commandBusy,
+                    onMove: c.move,
+                  ),
+                ),
               if (_showingEncounter)
                 EncounterTransition(
                   enemyLabel: _encounterEnemyLabel(),

@@ -52,10 +52,11 @@ class QuickCommandPanel extends StatelessWidget {
         final rowGap = LandscapeLayout.sp(context, 8);
         final chipSpacing =
             ExplorationLayoutConstants.chipSpacingFor(context);
-        final dpadBlock = inCombat
-            ? 0.0
-            : ExplorationLayoutConstants.directionPadBlockWidth(context) +
-                rowGap;
+        final dockDpad = LandscapeLayout.showCommandInput && !inCombat;
+        final dpadBlock = dockDpad
+            ? ExplorationLayoutConstants.directionPadBlockWidth(context) +
+                rowGap
+            : 0.0;
         final availableGridW =
             (constraints.maxWidth - padH * 2 - dpadBlock)
                 .clamp(0.0, constraints.maxWidth);
@@ -109,7 +110,7 @@ class QuickCommandPanel extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              if (!inCombat) ...[
+              if (dockDpad) ...[
                 DirectionPad(
                   onMove: (dir) => controller.move(dir),
                   enabled: panelEnabled,
@@ -245,7 +246,7 @@ class QuickCommandPanel extends StatelessWidget {
       ];
     }
 
-    // Single row: look/inv/take/use/talk/heal/drop/trade/buy/sell/recruit/more
+    // Single row: look/inv/take/use/talk/heal/drop/more
     return [
       _QuickAction(
         label: '查看',
@@ -293,30 +294,6 @@ class QuickCommandPanel extends StatelessWidget {
         onPressed: () => _openInventory(context, InventoryPanelMode.droppable),
       ),
       _QuickAction(
-        label: '商品',
-        subLabel: 'trade',
-        enabled: panelEnabled,
-        onPressed: () => controller.executeCommand('trade'),
-      ),
-      _QuickAction(
-        label: '购买',
-        subLabel: 'buy',
-        enabled: panelEnabled,
-        onPressed: _buy,
-      ),
-      _QuickAction(
-        label: '出售',
-        subLabel: 'sell',
-        enabled: panelEnabled && hasInventory,
-        onPressed: _sell,
-      ),
-      _QuickAction(
-        label: '招募',
-        subLabel: 'recruit',
-        enabled: panelEnabled,
-        onPressed: () => controller.executeCommand('recruit'),
-      ),
-      _QuickAction(
         label: '更多',
         subLabel: 'more',
         isMore: true,
@@ -335,8 +312,31 @@ class QuickCommandPanel extends StatelessWidget {
     );
   }
 
-  List<_QuickAction> _moreActions(BuildContext context, bool inCombat) {
+  List<_QuickAction> _moreActions(
+    BuildContext context,
+    bool inCombat, {
+    required bool hasInventory,
+  }) {
     return [
+      if (!inCombat) ...[
+        _QuickAction(
+          label: '商品',
+          subLabel: 'trade',
+          onPressed: () => controller.executeCommand('trade'),
+        ),
+        _QuickAction(label: '购买', subLabel: 'buy', onPressed: _buy),
+        _QuickAction(
+          label: '出售',
+          subLabel: 'sell',
+          onPressed: _sell,
+          enabled: hasInventory,
+        ),
+        _QuickAction(
+          label: '招募',
+          subLabel: 'recruit',
+          onPressed: () => controller.executeCommand('recruit'),
+        ),
+      ],
       _QuickAction(label: '得分', subLabel: 'score', onPressed: () => controller.executeCommand('score')),
       _QuickAction(label: '帮助', subLabel: 'help', onPressed: () => controller.executeCommand('help')),
       if (!inCombat)
@@ -360,7 +360,13 @@ class QuickCommandPanel extends StatelessWidget {
   }
 
   void _showMoreSheet(BuildContext context, bool inCombat) {
-    final actions = _moreActions(context, inCombat);
+    final s = controller.session;
+    final hasInventory = s != null && s.inventory.isNotEmpty;
+    final actions = _moreActions(
+      context,
+      inCombat,
+      hasInventory: hasInventory,
+    );
     final skin = GameUiTheme.skinForMapLayer(controller.mapLayer);
     final moreW = ExplorationLayoutConstants.moreChipWidthFor(context);
     final moreH = ExplorationLayoutConstants.chipHeightForWidth(moreW);
@@ -380,10 +386,13 @@ class QuickCommandPanel extends StatelessWidget {
               width: moreW,
               height: moreH,
               accent: action.accent,
-              onPressed: () {
-                Navigator.pop(context);
-                action.onPressed?.call();
-              },
+              enabled: action.enabled,
+              onPressed: action.enabled
+                  ? () {
+                      Navigator.pop(context);
+                      action.onPressed?.call();
+                    }
+                  : null,
             ),
         ],
       ),
@@ -515,6 +524,58 @@ class _ActionGrid extends StatelessWidget {
         accent: action.accent || action.highlighted,
         enabled: active,
         onPressed: active ? action.onPressed : null,
+      ),
+    );
+  }
+}
+
+/// Semi-transparent floating move controls for mobile exploration.
+class FloatingMovePad extends StatelessWidget {
+  const FloatingMovePad({
+    super.key,
+    required this.onMove,
+    this.enabled = true,
+  });
+
+  final void Function(Direction dir) onMove;
+  final bool enabled;
+
+  @override
+  Widget build(BuildContext context) {
+    final compass = ExplorationLayoutConstants.floatingCompassSizeFor(context);
+    final ud = ExplorationLayoutConstants.floatingUpDownSizeFor(context);
+    final gap = ExplorationLayoutConstants.floatingPadGapFor(context);
+    final udColumnH = ud * 2;
+    final rowH = math.max(compass, udColumnH);
+
+    return Opacity(
+      opacity: ExplorationLayoutConstants.floatingPadOpacity,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: Colors.black.withValues(alpha: 0.22),
+          borderRadius: BorderRadius.circular(LandscapeLayout.sp(context, 10)),
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(LandscapeLayout.sp(context, 6)),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              DirectionPad(
+                onMove: onMove,
+                enabled: enabled,
+                size: compass,
+              ),
+              SizedBox(width: gap),
+              VerticalUpDownPad(
+                onMove: onMove,
+                enabled: enabled,
+                buttonSize: ud,
+                height: rowH,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

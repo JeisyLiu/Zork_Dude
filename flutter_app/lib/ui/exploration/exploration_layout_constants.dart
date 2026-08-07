@@ -25,7 +25,14 @@ abstract final class ExplorationLayoutConstants {
   static const double panelPadHDesign = 10;
 
   /// Primary action grid: single row of command chips.
-  static const int primaryColumns = 12;
+  static const int primaryColumns = 8;
+
+  /// Floating move pad (mobile): compass ring diameter at 1280×720.
+  static const double floatingCompassDesign = 112;
+  static const double floatingUpDownDesign = 44;
+  static const double floatingPadGapDesign = 8;
+  static const double floatingPadMarginDesign = 8;
+  static const double floatingPadOpacity = 0.78;
   static const int primaryRows = 1;
 
   static bool isLandscape(Size size) => LandscapeLayout.isLandscape(size);
@@ -68,6 +75,25 @@ abstract final class ExplorationLayoutConstants {
 
   static double upDownButtonSizeFor(BuildContext context) =>
       LandscapeLayout.sp(context, dpadUpDownDesign);
+
+  static double floatingCompassSizeFor(BuildContext context) =>
+      LandscapeLayout.minTouch(context, floatingCompassDesign);
+
+  static double floatingUpDownSizeFor(BuildContext context) =>
+      LandscapeLayout.minTouch(context, floatingUpDownDesign);
+
+  static double floatingPadGapFor(BuildContext context) =>
+      LandscapeLayout.sp(context, floatingPadGapDesign);
+
+  static double floatingPadMarginFor(BuildContext context) =>
+      LandscapeLayout.sp(context, floatingPadMarginDesign);
+
+  /// Total height of the floating move pad (compass + U/D column).
+  static double floatingMovePadHeight(BuildContext context) {
+    final compass = floatingCompassSizeFor(context);
+    final ud = floatingUpDownSizeFor(context) * 2;
+    return math.max(compass, ud);
+  }
 
   /// Compass + vertical U/D column width in the dock row.
   static double directionPadBlockWidth(BuildContext context) {

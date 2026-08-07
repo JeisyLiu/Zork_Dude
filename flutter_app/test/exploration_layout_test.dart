@@ -1,9 +1,11 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:zork_dude/screens/exploration_screen.dart';
 import 'package:zork_dude/state/game_controller.dart';
 import 'package:zork_dude/ui/game_skin_scope.dart';
 import 'package:zork_dude/ui/game_ui_theme.dart';
+import 'package:zork_dude/ui/layout/landscape_layout.dart';
 import 'package:zork_dude/widgets/mist_map_panel.dart';
 import 'package:zork_dude/widgets/quick_commands.dart';
 import 'package:zork_dude/widgets/story_log.dart';
@@ -109,6 +111,35 @@ void main() {
     expect(mapBox.size.width, greaterThanOrEqualTo(120));
   });
 
+  testWidgets('Android exploration hides command input row', (tester) async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.android;
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    try {
+      await pumpExplorationScreen(tester, const Size(853, 384));
+
+      expect(tester.takeException(), isNull);
+      expect(LandscapeLayout.showCommandInput, isFalse);
+      expect(find.bySemanticsLabel('发送命令'), findsNothing);
+      expect(find.byType(MistMapPanel), findsOneWidget);
+    } finally {
+      debugDefaultTargetPlatformOverride = null;
+    }
+  });
+
+  testWidgets('Android short landscape has no overflow at 800x360', (tester) async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.android;
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    try {
+      await pumpExplorationScreen(tester, const Size(800, 360));
+
+      expect(tester.takeException(), isNull);
+      expect(find.bySemanticsLabel('发送命令'), findsNothing);
+      expect(find.byType(MistMapPanel), findsOneWidget);
+    } finally {
+      debugDefaultTargetPlatformOverride = null;
+    }
+  });
+
   testWidgets('Primary panel exposes former more-sheet commands', (tester) async {
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
@@ -130,45 +161,53 @@ void main() {
   });
 
   testWidgets('Story log scrolls to latest entry after command', (tester) async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.windows;
     addTearDown(() => tester.binding.setSurfaceSize(null));
+    try {
+      await pumpExplorationScreen(tester, const Size(1280, 720));
 
-    await pumpExplorationScreen(tester, const Size(1280, 720));
+      await tester.enterText(find.byType(TextField), 'look');
+      await tester.tap(find.bySemanticsLabel('发送命令'));
+      for (var i = 0; i < 10; i++) {
+        await tester.pump(const Duration(milliseconds: 50));
+      }
 
-    await tester.enterText(find.byType(TextField), 'look');
-    await tester.tap(find.bySemanticsLabel('发送命令'));
-    for (var i = 0; i < 10; i++) {
-      await tester.pump(const Duration(milliseconds: 50));
+      final scroll = storyLogScrollController(tester);
+      expect(scroll, isNotNull);
+      expect(scroll!.hasClients, isTrue);
+      expect(scroll.offset, scroll.position.maxScrollExtent);
+      expect(find.textContaining('look'), findsWidgets);
+    } finally {
+      debugDefaultTargetPlatformOverride = null;
     }
-
-    final scroll = storyLogScrollController(tester);
-    expect(scroll, isNotNull);
-    expect(scroll!.hasClients, isTrue);
-    expect(scroll.offset, scroll.position.maxScrollExtent);
-    expect(find.textContaining('look'), findsWidgets);
   });
 
   testWidgets('Command input submits via icon and ignores empty text', (tester) async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.windows;
     addTearDown(() => tester.binding.setSurfaceSize(null));
+    try {
+      await pumpExplorationScreen(tester, const Size(1280, 720));
 
-    await pumpExplorationScreen(tester, const Size(1280, 720));
+      expect(find.bySemanticsLabel('发送命令'), findsOneWidget);
 
-    expect(find.bySemanticsLabel('发送命令'), findsOneWidget);
+      final before = storyLogScrollController(tester)?.position.maxScrollExtent ?? 0;
 
-    final before = storyLogScrollController(tester)?.position.maxScrollExtent ?? 0;
+      await tester.tap(find.bySemanticsLabel('发送命令'));
+      await tester.pump();
+      expect(storyLogScrollController(tester)?.position.maxScrollExtent ?? 0, before);
 
-    await tester.tap(find.bySemanticsLabel('发送命令'));
-    await tester.pump();
-    expect(storyLogScrollController(tester)?.position.maxScrollExtent ?? 0, before);
-
-    sharedController.resetCommandGateForTest();
-    await tester.enterText(find.byType(TextField), 'help');
-    await tester.tap(find.bySemanticsLabel('发送命令'));
-    for (var i = 0; i < 10; i++) {
-      await tester.pump(const Duration(milliseconds: 50));
+      sharedController.resetCommandGateForTest();
+      await tester.enterText(find.byType(TextField), 'help');
+      await tester.tap(find.bySemanticsLabel('发送命令'));
+      for (var i = 0; i < 10; i++) {
+        await tester.pump(const Duration(milliseconds: 50));
+      }
+      expect(
+        sharedController.log.any((e) => e.text.toLowerCase().contains('help')),
+        isTrue,
+      );
+    } finally {
+      debugDefaultTargetPlatformOverride = null;
     }
-    expect(
-      sharedController.log.any((e) => e.text.toLowerCase().contains('help')),
-      isTrue,
-    );
   });
 }

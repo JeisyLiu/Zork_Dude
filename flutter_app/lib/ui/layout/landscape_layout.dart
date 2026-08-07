@@ -1,11 +1,12 @@
 import 'dart:math' as math;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 /// Shared breakpoints and spacing for landscape-first 16:9 layouts.
 abstract final class LandscapeLayout {
   static const double shortHeight = 420;
-  static const double phoneShortHeight = 380;
+  static const double phoneShortHeight = 400;
   static const double sideBySideMinWidth = 640;
   static const double overlayCenterMinWidth = 900;
   static const double overlayCenterMaxWidth = 480;
@@ -16,8 +17,11 @@ abstract final class LandscapeLayout {
   /// Minimum share of usable height for main content (log + map).
   static const double contentMinHeightFraction = 0.38;
 
-  /// Max share of usable height for exploration command dock.
+  /// Max share of usable height for exploration command dock (desktop).
   static const double explorationDockMaxFraction = 0.30;
+
+  /// Tighter cap on mobile where the command input row is hidden.
+  static const double explorationDockMaxFractionMobile = 0.28;
 
   /// Max share of usable height for combat command dock.
   static const double combatDockMaxFraction = 0.28;
@@ -110,4 +114,20 @@ abstract final class LandscapeLayout {
     final rail = size.width * 0.42;
     return rail.clamp(overlaySideMinWidth, overlaySideMaxWidth);
   }
+
+  /// Text command row is desktop-only; mobile uses quick-command chips.
+  static bool get showCommandInput {
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.android:
+      case TargetPlatform.iOS:
+        return false;
+      default:
+        return true;
+    }
+  }
+
+  static double explorationDockMaxFractionForPlatform() =>
+      showCommandInput
+          ? explorationDockMaxFraction
+          : explorationDockMaxFractionMobile;
 }

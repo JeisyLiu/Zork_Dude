@@ -27,6 +27,18 @@ class MistTowerApp extends StatelessWidget {
       title: '迷雾之塔',
       debugShowCheckedModeBanner: false,
       theme: GameUiTheme.appTheme(),
+      // Phones often enable OS "remove animations" / animator scale 0x, which
+      // sets MediaQuery.disableAnimations and skips all game cinematics.
+      // Force motion on so mobile matches the Windows play feel.
+      builder: (context, child) {
+        final page = child ?? const SizedBox.shrink();
+        final mq = MediaQuery.of(context);
+        if (!mq.disableAnimations) return page;
+        return MediaQuery(
+          data: mq.copyWith(disableAnimations: false),
+          child: page,
+        );
+      },
       home: const HomeScreen(),
     );
   }

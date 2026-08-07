@@ -24,6 +24,7 @@ abstract final class GameUiAssets {
   static const buttonBrown = '$base/button_brown.png';
   static const buttonGrey = '$base/button_grey.png';
   static const buttonRed = '$base/button_red.png';
+  static const buttonRedClose = '$base/button_red_close.png';
 
   // Banners
   static const bannerHanging = '$base/banner_hanging.png';

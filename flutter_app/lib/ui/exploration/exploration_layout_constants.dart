@@ -120,7 +120,7 @@ abstract final class ExplorationLayoutConstants {
       showTips: showTips,
       inCombat: inCombat,
     );
-    final cap = usableHeight * LandscapeLayout.explorationDockMaxFraction;
+    final cap = usableHeight * LandscapeLayout.explorationDockMaxFractionForPlatform();
     if (usableHeight <= 0) return minH;
     return math.min(minH, cap);
   }

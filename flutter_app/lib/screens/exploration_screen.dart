@@ -250,18 +250,24 @@ class _ExplorationScreenState extends State<ExplorationScreen> {
                             ],
                           ),
                   ),
-                  SizedBox(height: phoneShort ? 1 : (short ? 2 : 4)),
+                  if (!LandscapeLayout.showCommandInput &&
+                      (phoneShort || short))
+                    const SizedBox.shrink()
+                  else
+                    SizedBox(height: phoneShort ? 1 : (short ? 2 : 4)),
                   QuickCommandPanel(
                     controller: c,
                     onPickTargets: _showTargetPicker,
                     compact: short,
                     phoneShort: phoneShort,
                   ),
-                  SizedBox(height: phoneShort ? 1 : (short ? 2 : 4)),
-                  CommandInputRow(
-                    controller: c,
-                    focusNode: _commandFocus,
-                  ),
+                  if (LandscapeLayout.showCommandInput) ...[
+                    SizedBox(height: phoneShort ? 1 : (short ? 2 : 4)),
+                    CommandInputRow(
+                      controller: c,
+                      focusNode: _commandFocus,
+                    ),
+                  ],
                 ],
               ),
               if (_showingEncounter)

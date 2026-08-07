@@ -202,4 +202,59 @@ void main() {
     );
     expect(panelBox.size.width, closeTo(LandscapeLayout.overlayCenterMaxWidth, 1));
   });
+
+  testWidgets('Overlay close button is top-left and at least 40px', (tester) async {
+    const size = Size(667, 375);
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.binding.setSurfaceSize(size);
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: GameUiTheme.appTheme(),
+        home: MediaQuery(
+          data: MediaQueryData(size: size, disableAnimations: true),
+          child: GameSkinScope(
+            skin: GameUiSkin.fantasy,
+            child: Builder(
+              builder: (context) => Scaffold(
+                body: Center(
+                  child: ElevatedButton(
+                    key: const Key('open-overlay-close-test'),
+                    onPressed: () => LandscapeOverlay.show<void>(
+                      context: context,
+                      title: '测试标题',
+                      child: const Text('内容'),
+                    ),
+                    child: const Text('打开'),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.tap(find.byKey(const Key('open-overlay-close-test')));
+    for (var i = 0; i < 10; i++) {
+      await tester.pump(const Duration(milliseconds: 50));
+    }
+
+    expect(tester.takeException(), isNull);
+    expect(find.bySemanticsLabel('关闭'), findsOneWidget);
+
+    final closeBox = tester.renderObject<RenderBox>(
+      find.bySemanticsLabel('关闭'),
+    );
+    final panelBox = tester.renderObject<RenderBox>(
+      find.byKey(LandscapeOverlay.panelKey),
+    );
+    expect(closeBox.size.width, greaterThanOrEqualTo(40));
+    expect(closeBox.size.height, greaterThanOrEqualTo(40));
+    expect(
+      closeBox.localToGlobal(Offset.zero).dx,
+      closeTo(panelBox.localToGlobal(Offset.zero).dx, 28),
+    );
+    expect(find.text('测试标题'), findsOneWidget);
+  });
 }

@@ -177,12 +177,11 @@ class QuickCommandPanel extends StatelessWidget {
         );
 
         if (dockMax + 1 < dockNatural) {
-          final scale = (dockMax / dockNatural).clamp(0.82, 1.0);
           return SizedBox(
             height: dockMax,
             width: constraints.maxWidth,
-            child: Transform.scale(
-              scale: scale,
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
               alignment: Alignment.center,
               child: SizedBox(
                 width: constraints.maxWidth,

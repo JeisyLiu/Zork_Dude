@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:zork_dude/ui/components/game_button.dart';
 import 'package:zork_dude/ui/components/game_outlined_text.dart';
 import 'package:zork_dude/ui/components/game_panel.dart';
 import 'package:zork_dude/ui/game_skin_scope.dart';
+import 'package:zork_dude/ui/game_ui_assets.dart';
 import 'package:zork_dude/ui/game_ui_theme.dart';
 import 'package:zork_dude/ui/layout/landscape_layout.dart';
 
@@ -77,6 +79,13 @@ class _LandscapeOverlayBody extends StatelessWidget {
                 padding: const EdgeInsets.only(bottom: 8),
                 child: Row(
                   children: [
+                    GameIconButton(
+                      size: 44,
+                      asset: GameUiAssets.buttonRedClose,
+                      semanticLabel: '关闭',
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
+                    const SizedBox(width: 8),
                     Expanded(
                       child: GameOutlinedText(
                         title,
@@ -84,17 +93,6 @@ class _LandscapeOverlayBody extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                         color: GameUiTheme.of(context).textPrimary,
                         strokeWidth: 0,
-                      ),
-                    ),
-                    IconButton(
-                      visualDensity: VisualDensity.compact,
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
-                      onPressed: () => Navigator.of(context).pop(),
-                      icon: Icon(
-                        Icons.close,
-                        size: 20,
-                        color: GameUiTheme.of(context).textMuted,
                       ),
                     ),
                   ],

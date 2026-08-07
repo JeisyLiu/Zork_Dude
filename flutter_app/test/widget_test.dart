@@ -144,7 +144,9 @@ void main() {
     expect(find.text('MIST TOWER'), findsOneWidget);
   });
 
-  testWidgets('Home renders with animations disabled', (tester) async {
+  testWidgets('MistTowerApp enables animations even when OS disables them', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       const MediaQuery(
         data: MediaQueryData(disableAnimations: true),
@@ -155,6 +157,10 @@ void main() {
 
     expect(tester.takeException(), isNull);
     expect(find.text('迷雾之塔'), findsOneWidget);
+    expect(
+      MediaQuery.disableAnimationsOf(tester.element(find.text('迷雾之塔'))),
+      isFalse,
+    );
     expect(find.byType(HomeAmbientBackground), findsOneWidget);
   });
 }

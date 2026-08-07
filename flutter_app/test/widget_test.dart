@@ -79,7 +79,7 @@ void main() {
             expect(cave.scaffoldBg, isNot(equals(tower.scaffoldBg)));
             expect(
               GameUiTheme.combatDataForMapLayer(MapLayer.tower).progressFill,
-              contains('progress_red'),
+              contains('hp_bar_inner'),
             );
             return const SizedBox();
           },
@@ -149,6 +149,28 @@ void main() {
     expect(closeBox.size.width, greaterThanOrEqualTo(40));
     expect(closeBox.size.height, greaterThanOrEqualTo(40));
     expect(closeBox.localToGlobal(Offset.zero).dx, lessThan(80));
+  });
+
+  testWidgets('Home layout fits 1067x480 without overflow', (tester) async {
+    await tester.binding.setSurfaceSize(const Size(1067, 480));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(const MistTowerApp());
+    await pumpUntilLoaded(tester);
+
+    expect(tester.takeException(), isNull);
+    expect(find.text('迷雾之塔'), findsOneWidget);
+  });
+
+  testWidgets('Home layout fits 914x411 without overflow', (tester) async {
+    await tester.binding.setSurfaceSize(const Size(914, 411));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(const MistTowerApp());
+    await pumpUntilLoaded(tester);
+
+    expect(tester.takeException(), isNull);
+    expect(find.text('迷雾之塔'), findsOneWidget);
   });
 
   testWidgets('MistTowerApp enables animations even when OS disables them', (

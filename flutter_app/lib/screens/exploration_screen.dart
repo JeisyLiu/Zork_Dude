@@ -166,7 +166,6 @@ class _ExplorationScreenState extends State<ExplorationScreen> {
 
     final size = MediaQuery.sizeOf(context);
     final sideBySide = ExplorationLayoutConstants.useSideBySide(size);
-    final showTips = LandscapeLayout.uiScaleOf(context) >= 0.82;
     final skin = GameUiTheme.skinForMapLayer(c.mapLayer);
     final bannerH = ExplorationLayoutConstants.bannerHeightFor(context);
     final gap = LandscapeLayout.sp(context, 4);
@@ -247,7 +246,6 @@ class _ExplorationScreenState extends State<ExplorationScreen> {
                   QuickCommandPanel(
                     controller: c,
                     onPickTargets: _showTargetPicker,
-                    showTips: showTips,
                   ),
                   if (LandscapeLayout.showCommandInput) ...[
                     SizedBox(height: gap),

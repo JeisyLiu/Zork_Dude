@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:zork_dude/ui/layout/landscape_layout.dart';
 
-/// Unified [Scaffold] + [SafeArea] + outer padding for landscape play screens.
+/// Unified [Scaffold] + [SafeArea] + fixed 16:9 play canvas for landscape screens.
+///
+/// Extra width/height outside the canvas is letterboxed / pillarboxed so the
+/// interactive UI keeps a stable 16:9 layout on ultrawide or tall devices.
+/// [background] still paints edge-to-edge behind the bars.
 class LandscapeScaffold extends StatelessWidget {
   const LandscapeScaffold({
     super.key,
@@ -28,7 +32,26 @@ class LandscapeScaffold extends StatelessWidget {
       minimum: minimum ?? LandscapeLayout.playSafeMinimum(size, mqPadding),
       child: Padding(
         padding: resolvedPadding,
-        child: body,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final canvas = LandscapeLayout.fitDesignAspect(constraints.biggest);
+            final parentMq = MediaQuery.of(context);
+            return Center(
+              child: SizedBox(
+                width: canvas.width,
+                height: canvas.height,
+                child: MediaQuery(
+                  data: parentMq.copyWith(
+                    size: canvas,
+                    padding: EdgeInsets.zero,
+                    viewPadding: EdgeInsets.zero,
+                  ),
+                  child: body,
+                ),
+              ),
+            );
+          },
+        ),
       ),
     );
 

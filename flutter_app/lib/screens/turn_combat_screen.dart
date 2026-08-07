@@ -471,7 +471,11 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
           widget.controller.mapLayer,
         ),
         body: Center(
-          child: GameOutlinedText('战斗已结束', fontSize: 16, color: Colors.white),
+          child: GameOutlinedText(
+            '战斗已结束',
+            fontSize: LandscapeLayout.sp(context, 16),
+            color: Colors.white,
+          ),
         ),
       );
     }

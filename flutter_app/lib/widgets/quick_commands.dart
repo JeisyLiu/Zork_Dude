@@ -15,24 +15,21 @@ import 'package:zork_dude/ui/game_ui_assets.dart';
 import 'package:zork_dude/ui/game_ui_theme.dart';
 import 'package:zork_dude/ui/navigation/game_exit.dart';
 
-/// Exploration controls: fixed D-pad + grouped two-row action grid + more sheet.
+/// Exploration controls: D-pad + vertical U/D + single-row action chips.
 class QuickCommandPanel extends StatelessWidget {
   const QuickCommandPanel({
     super.key,
     required this.controller,
     required this.onPickTargets,
-    this.showTips = true,
   });
 
   final GameController controller;
   final void Function(String title, List<({String label, String value})> options) onPickTargets;
-  final bool showTips;
 
   @override
   Widget build(BuildContext context) {
     final s = controller.session;
     final inCombat = s?.inCombat ?? false;
-    final d = GameUiTheme.of(context);
     final room = s != null ? s.rooms[s.currentRoomId] : null;
     final hasItems = room?.items.isNotEmpty ?? false;
     final hasNpc = room?.npcId != null;
@@ -41,12 +38,10 @@ class QuickCommandPanel extends StatelessWidget {
 
     final dockTarget = ExplorationLayoutConstants.dockMaxHeight(
       context,
-      showTips: showTips,
       inCombat: inCombat,
     );
     final dockNatural = ExplorationLayoutConstants.dockMinHeight(
       context,
-      showTips: showTips,
       inCombat: inCombat,
     );
     final padV = ExplorationLayoutConstants.panelPadV(context);
@@ -54,32 +49,44 @@ class QuickCommandPanel extends StatelessWidget {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        final prefW = ExplorationLayoutConstants.preferredChipWidth(context);
-        final gridH = ExplorationLayoutConstants.gridContentHeight(context);
-        final dpadBase =
-            ExplorationLayoutConstants.directionPadWidthFor(context);
-        final offset = LandscapeLayout.sp(
-          context,
-          ExplorationLayoutConstants.dpadGridOffset,
-        );
-        final minDpad = LandscapeLayout.sp(
-          context,
-          ExplorationLayoutConstants.dpadMinSize,
-        );
-        final dpadSize = (gridH - offset).clamp(minDpad, dpadBase);
-        final rowGap = LandscapeLayout.sp(context, 12);
+        final rowGap = LandscapeLayout.sp(context, 8);
         final chipSpacing =
             ExplorationLayoutConstants.chipSpacingFor(context);
-        final gridW = prefW * ExplorationLayoutConstants.primaryColumns +
-            chipSpacing * (ExplorationLayoutConstants.primaryColumns - 1);
-        final dpadBlock = inCombat ? 0.0 : dpadSize + rowGap;
+        final dpadBlock = inCombat
+            ? 0.0
+            : ExplorationLayoutConstants.directionPadBlockWidth(context) +
+                rowGap;
         final availableGridW =
-            (constraints.maxWidth - dpadBlock).clamp(0.0, constraints.maxWidth);
+            (constraints.maxWidth - padH * 2 - dpadBlock)
+                .clamp(0.0, constraints.maxWidth);
         final chipW = ExplorationLayoutConstants.chipWidthFor(
           context,
           availableGridW,
         );
         final chipH = ExplorationLayoutConstants.chipHeightForWidth(chipW);
+        // Keep compass/UD aligned to the single chip row height.
+        final compassSize = math
+            .min(
+              ExplorationLayoutConstants.directionPadWidthFor(context),
+              chipH,
+            )
+            .clamp(
+              math.min(
+                chipH,
+                LandscapeLayout.sp(
+                  context,
+                  ExplorationLayoutConstants.dpadMinSize,
+                ),
+              ),
+              chipH,
+            )
+            .toDouble();
+        final udSize = math
+            .min(
+              ExplorationLayoutConstants.upDownButtonSizeFor(context),
+              math.max(1.0, (chipH - 2) / 2),
+            )
+            .toDouble();
         final columns = ExplorationLayoutConstants.primaryColumns;
         final primary = _primaryActions(
           context: context,
@@ -90,8 +97,6 @@ class QuickCommandPanel extends StatelessWidget {
           panelEnabled: panelEnabled,
         );
 
-        // Reclaimed height becomes vertical padding so the panel fills flush
-        // to the bottom without stretching chip width past the row budget.
         final extraPad = math.max(0.0, dockTarget - dockNatural);
         final contentH = dockNatural + extraPad;
         final panel = GamePanel(
@@ -101,51 +106,36 @@ class QuickCommandPanel extends StatelessWidget {
             padH,
             padV / 2,
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  if (!inCombat) ...[
-                    DirectionPad(
-                      onMove: (dir) => controller.move(dir),
-                      enabled: panelEnabled,
-                      size: dpadSize,
-                    ),
-                    SizedBox(width: rowGap),
-                  ],
-                  SizedBox(
-                    width: availableGridW.clamp(0.0, gridW),
-                    child: _ActionGrid(
-                      columns: columns,
-                      actions: primary,
-                      chipWidth: chipW,
-                      chipHeight: chipH,
-                      chipSpacing: chipSpacing,
-                      onMore: panelEnabled
-                          ? () => _showMoreSheet(context, inCombat)
-                          : () {},
-                      panelEnabled: panelEnabled,
-                    ),
-                  ),
-                ],
-              ),
-              if (showTips) ...[
-                SizedBox(height: LandscapeLayout.sp(context, 6)),
-                GameOutlinedText(
-                  inCombat
-                      ? '战斗中 · Combat: attack / flee'
-                      : '提示 · Tips: ←↑↓→ / WASD · PgUp/PgDn · look · take 1',
-                  fontSize: LandscapeLayout.sp(context, 10),
-                  fontWeight: FontWeight.w500,
-                  color: d.textMuted,
-                  strokeWidth: 0,
-                  textAlign: TextAlign.left,
+              if (!inCombat) ...[
+                DirectionPad(
+                  onMove: (dir) => controller.move(dir),
+                  enabled: panelEnabled,
+                  size: compassSize,
                 ),
+                SizedBox(width: rowGap),
+                VerticalUpDownPad(
+                  onMove: (dir) => controller.move(dir),
+                  enabled: panelEnabled,
+                  buttonSize: udSize,
+                  height: chipH,
+                ),
+                SizedBox(width: rowGap),
               ],
+              Expanded(
+                child: _ActionGrid(
+                  columns: columns,
+                  actions: primary,
+                  chipHeight: chipH,
+                  chipSpacing: chipSpacing,
+                  onMore: panelEnabled
+                      ? () => _showMoreSheet(context, inCombat)
+                      : () {},
+                  panelEnabled: panelEnabled,
+                ),
+              ),
             ],
           ),
         );
@@ -255,7 +245,7 @@ class QuickCommandPanel extends StatelessWidget {
       ];
     }
 
-    // 6×2: 查看/背包/拿起/使用/对话/治疗 + 丢弃/商品/购买/出售/招募/队伍
+    // Single row: look/inv/take/use/talk/heal/drop/trade/buy/sell/recruit/more
     return [
       _QuickAction(
         label: '查看',
@@ -472,7 +462,6 @@ class _ActionGrid extends StatelessWidget {
     required this.columns,
     required this.actions,
     required this.onMore,
-    required this.chipWidth,
     required this.chipHeight,
     required this.chipSpacing,
     this.panelEnabled = true,
@@ -481,39 +470,23 @@ class _ActionGrid extends StatelessWidget {
   final int columns;
   final List<_QuickAction> actions;
   final VoidCallback onMore;
-  final double chipWidth;
   final double chipHeight;
   final double chipSpacing;
   final bool panelEnabled;
 
   @override
   Widget build(BuildContext context) {
-    final rows = <List<_QuickAction>>[];
-    for (var i = 0; i < actions.length; i += columns) {
-      final end = i + columns > actions.length ? actions.length : i + columns;
-      rows.add(actions.sublist(i, end));
-    }
-
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        for (var r = 0; r < rows.length; r++) ...[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              for (var i = 0; i < columns; i++)
-                SizedBox(
-                  width: chipWidth,
-                  height: chipHeight,
-                  child: i < rows[r].length
-                      ? _chipFor(rows[r][i])
-                      : const SizedBox.shrink(),
-                ),
-            ],
-          ),
-          if (r < rows.length - 1) SizedBox(height: chipSpacing),
+    final count = math.min(columns, actions.length);
+    return SizedBox(
+      height: chipHeight,
+      child: Row(
+        children: [
+          for (var i = 0; i < count; i++) ...[
+            if (i > 0) SizedBox(width: chipSpacing),
+            Expanded(child: _chipFor(actions[i])),
+          ],
         ],
-      ],
+      ),
     );
   }
 
@@ -525,7 +498,7 @@ class _ActionGrid extends StatelessWidget {
         label: action.label,
         subLabel: action.subLabel,
         height: chipHeight,
-        width: chipWidth,
+        width: double.infinity,
         enabled: active,
         onPressed: active ? onMore : null,
         semanticLabel: '更多命令',
@@ -538,7 +511,7 @@ class _ActionGrid extends StatelessWidget {
         label: action.label,
         subLabel: action.subLabel,
         height: chipHeight,
-        width: chipWidth,
+        width: double.infinity,
         accent: action.accent || action.highlighted,
         enabled: active,
         onPressed: active ? action.onPressed : null,
@@ -547,7 +520,7 @@ class _ActionGrid extends StatelessWidget {
   }
 }
 
-/// Cross-shaped D-pad using minimap ring + compass sprites.
+/// Compass-only D-pad (N/E/S/W). U/D live in [VerticalUpDownPad].
 class DirectionPad extends StatelessWidget {
   const DirectionPad({
     super.key,
@@ -565,96 +538,56 @@ class DirectionPad extends StatelessWidget {
     final d = GameUiTheme.of(context);
     final ring = size ??
         ExplorationLayoutConstants.directionPadWidthFor(context);
-    final upDown = LandscapeLayout.sp(context, ExplorationLayoutConstants.dpadUpDownDesign);
     final compassSize = LandscapeLayout.sp(context, 28);
     final padInset = LandscapeLayout.sp(context, 4);
     return SizedBox(
       width: ring,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
+      height: ring,
+      child: Stack(
+        alignment: Alignment.center,
         children: [
-          SizedBox(
+          Image.asset(
+            d.minimapRing,
             width: ring,
             height: ring,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                Image.asset(
-                  d.minimapRing,
-                  width: ring,
-                  height: ring,
-                  fit: BoxFit.contain,
-                  filterQuality: FilterQuality.none,
-                ),
-                Positioned(
-                  top: padInset,
-                  child: _compassBtn(
-                    GameUiAssets.compassN,
-                    '北 N',
-                    compassSize,
-                    enabled ? () => onMove(Direction.north) : null,
-                  ),
-                ),
-                Positioned(
-                  left: padInset,
-                  child: _compassBtn(
-                    GameUiAssets.compassW,
-                    '西 W',
-                    compassSize,
-                    enabled ? () => onMove(Direction.west) : null,
-                  ),
-                ),
-                Positioned(
-                  right: padInset,
-                  child: _compassBtn(
-                    GameUiAssets.compassE,
-                    '东 E',
-                    compassSize,
-                    enabled ? () => onMove(Direction.east) : null,
-                  ),
-                ),
-                Positioned(
-                  bottom: padInset,
-                  child: _compassBtn(
-                    GameUiAssets.compassS,
-                    '南 S',
-                    compassSize,
-                    enabled ? () => onMove(Direction.south) : null,
-                  ),
-                ),
-              ],
+            fit: BoxFit.contain,
+            filterQuality: FilterQuality.none,
+          ),
+          Positioned(
+            top: padInset,
+            child: _compassBtn(
+              GameUiAssets.compassN,
+              '北 N',
+              compassSize,
+              enabled ? () => onMove(Direction.north) : null,
             ),
           ),
-          SizedBox(height: padInset),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              GameIconButton(
-                size: upDown,
-                semanticLabel: '上 U',
-                enabled: enabled,
-                onPressed: enabled ? () => onMove(Direction.up) : null,
-                child: GameOutlinedText(
-                  'U',
-                  fontSize: LandscapeLayout.sp(context, 11),
-                  fontWeight: FontWeight.bold,
-                  strokeWidth: 0,
-                ),
-              ),
-              SizedBox(width: LandscapeLayout.sp(context, 6)),
-              GameIconButton(
-                size: upDown,
-                semanticLabel: '下 D',
-                enabled: enabled,
-                onPressed: enabled ? () => onMove(Direction.down) : null,
-                child: GameOutlinedText(
-                  'D',
-                  fontSize: LandscapeLayout.sp(context, 11),
-                  fontWeight: FontWeight.bold,
-                  strokeWidth: 0,
-                ),
-              ),
-            ],
+          Positioned(
+            left: padInset,
+            child: _compassBtn(
+              GameUiAssets.compassW,
+              '西 W',
+              compassSize,
+              enabled ? () => onMove(Direction.west) : null,
+            ),
+          ),
+          Positioned(
+            right: padInset,
+            child: _compassBtn(
+              GameUiAssets.compassE,
+              '东 E',
+              compassSize,
+              enabled ? () => onMove(Direction.east) : null,
+            ),
+          ),
+          Positioned(
+            bottom: padInset,
+            child: _compassBtn(
+              GameUiAssets.compassS,
+              '南 S',
+              compassSize,
+              enabled ? () => onMove(Direction.south) : null,
+            ),
           ),
         ],
       ),
@@ -690,3 +623,84 @@ class DirectionPad extends StatelessWidget {
     );
   }
 }
+
+/// Vertical U / D controls placed beside the compass in the dock row.
+class VerticalUpDownPad extends StatelessWidget {
+  const VerticalUpDownPad({
+    super.key,
+    required this.onMove,
+    this.enabled = true,
+    required this.buttonSize,
+    required this.height,
+  });
+
+  final void Function(Direction dir) onMove;
+  final bool enabled;
+  final double buttonSize;
+  final double height;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: math.min(buttonSize, math.max(1.0, height / 2)),
+      height: height,
+      child: Column(
+        children: [
+          Expanded(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final size = math
+                    .min(
+                      buttonSize,
+                      math.min(constraints.maxWidth, constraints.maxHeight),
+                    )
+                    .toDouble();
+                return Center(
+                  child: GameIconButton(
+                    size: size,
+                    semanticLabel: '上 U',
+                    enabled: enabled,
+                    onPressed: enabled ? () => onMove(Direction.up) : null,
+                    child: GameOutlinedText(
+                      'U',
+                      fontSize: math.max(8.0, size * 0.35),
+                      fontWeight: FontWeight.bold,
+                      strokeWidth: 0,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          Expanded(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final size = math
+                    .min(
+                      buttonSize,
+                      math.min(constraints.maxWidth, constraints.maxHeight),
+                    )
+                    .toDouble();
+                return Center(
+                  child: GameIconButton(
+                    size: size,
+                    semanticLabel: '下 D',
+                    enabled: enabled,
+                    onPressed: enabled ? () => onMove(Direction.down) : null,
+                    child: GameOutlinedText(
+                      'D',
+                      fontSize: math.max(8.0, size * 0.35),
+                      fontWeight: FontWeight.bold,
+                      strokeWidth: 0,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+

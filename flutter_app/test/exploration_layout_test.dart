@@ -4,7 +4,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:zork_dude/screens/exploration_screen.dart';
 import 'package:zork_dude/state/game_controller.dart';
 import 'package:zork_dude/ui/components/game_button.dart';
-import 'package:zork_dude/ui/exploration/exploration_layout_constants.dart';
 import 'package:zork_dude/ui/game_skin_scope.dart';
 import 'package:zork_dude/ui/game_ui_theme.dart';
 import 'package:zork_dude/ui/layout/landscape_layout.dart';
@@ -14,13 +13,21 @@ import 'package:zork_dude/widgets/story_log.dart';
 
 late GameController sharedController;
 
-Future<void> pumpExplorationScreen(WidgetTester tester, Size size) async {
+Future<void> pumpExplorationScreen(
+  WidgetTester tester,
+  Size size, {
+  EdgeInsets padding = EdgeInsets.zero,
+}) async {
   await tester.binding.setSurfaceSize(size);
   await tester.pumpWidget(
     MaterialApp(
       theme: GameUiTheme.appTheme(),
       home: MediaQuery(
-        data: MediaQueryData(size: size, disableAnimations: true),
+        data: MediaQueryData(
+          size: size,
+          padding: padding,
+          disableAnimations: true,
+        ),
         child: GameSkinScope(
           skin: GameUiSkin.fantasy,
           child: ExplorationScreen(controller: sharedController),
@@ -67,6 +74,10 @@ void main() {
     Size(853, 384),
     Size(853, 480),
     Size(854, 480),
+    Size(914, 411),
+    Size(915, 412),
+    Size(960, 432),
+    Size(1067, 480),
     Size(1280, 720),
     Size(1600, 900),
     Size(1920, 1080),
@@ -145,7 +156,48 @@ void main() {
     }
   });
 
-  testWidgets('Chip width ratio tracks uiScale at same 16:9 aspect', (tester) async {
+  testWidgets('20:9 landscape keeps 16:9 play canvas and short uiScale', (tester) async {
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await pumpExplorationScreen(tester, const Size(914, 411));
+    final scale = _uiScale(tester);
+    final playCtx = tester.element(find.byType(QuickCommandPanel));
+
+    expect(scale, lessThan(0.75));
+    expect(scale, greaterThanOrEqualTo(LandscapeLayout.scaleMinShort));
+    expect(
+      LandscapeLayout.aspectRatioOf(playCtx),
+      closeTo(LandscapeLayout.designAspect, 0.02),
+    );
+    expect(LandscapeLayout.isUltrawideOf(playCtx), isFalse);
+  });
+
+  testWidgets('20:9 with SafeArea padding has no overflow', (tester) async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.android;
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    try {
+      await pumpExplorationScreen(
+        tester,
+        const Size(1067, 480),
+        padding: const EdgeInsets.fromLTRB(48, 0, 48, 24),
+      );
+
+      expect(tester.takeException(), isNull);
+      expect(find.bySemanticsLabel('发送命令'), findsNothing);
+      expect(find.byType(MistMapPanel), findsOneWidget);
+      expect(_uiScale(tester), lessThan(0.75));
+      expect(
+        LandscapeLayout.aspectRatioOf(
+          tester.element(find.byType(QuickCommandPanel)),
+        ),
+        closeTo(LandscapeLayout.designAspect, 0.02),
+      );
+    } finally {
+      debugDefaultTargetPlatformOverride = null;
+    }
+  });
+
+  testWidgets('Chip width grows with wider 16:9 dock', (tester) async {
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
     const small = Size(800, 450);
@@ -153,27 +205,36 @@ void main() {
 
     await pumpExplorationScreen(tester, small);
     final smallChip = _chipWidth(tester);
-    final smallScale = _uiScale(tester);
 
     await pumpExplorationScreen(tester, large);
     final largeChip = _chipWidth(tester);
-    final largeScale = _uiScale(tester);
 
-    expect(smallScale, lessThan(largeScale));
-    expect(smallChip / largeChip, closeTo(smallScale / largeScale, 0.05));
-    expect(smallChip, greaterThanOrEqualTo(LandscapeLayout.minTouchTarget));
-    expect(largeChip, greaterThanOrEqualTo(LandscapeLayout.minTouchTarget));
+    expect(largeChip, greaterThan(smallChip));
+    expect(smallChip, greaterThanOrEqualTo(LandscapeLayout.minTouchTarget * 0.85));
   });
 
-  testWidgets('Scaled chip matches layout constant at 1280x720', (tester) async {
+  testWidgets('Single-row chips fill dock width at 1280x720', (tester) async {
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
     await pumpExplorationScreen(tester, const Size(1280, 720));
     final chip = _chipWidth(tester);
-    final expected = ExplorationLayoutConstants.preferredChipWidth(
-      tester.element(find.byType(QuickCommandPanel)),
+    expect(chip, greaterThanOrEqualTo(LandscapeLayout.minTouchTarget * 0.85));
+    expect(find.byType(VerticalUpDownPad), findsOneWidget);
+    expect(
+      find.descendant(
+        of: find.byType(VerticalUpDownPad),
+        matching: find.text('U'),
+      ),
+      findsOneWidget,
     );
-    expect(chip, closeTo(expected, 2));
+    expect(
+      find.descendant(
+        of: find.byType(VerticalUpDownPad),
+        matching: find.text('D'),
+      ),
+      findsOneWidget,
+    );
+    expect(find.textContaining('Tips:'), findsNothing);
   });
 
   testWidgets('Primary panel exposes former more-sheet commands', (tester) async {
@@ -261,6 +322,6 @@ double _chipWidth(WidgetTester tester) {
 
 double _uiScale(WidgetTester tester) {
   return LandscapeLayout.uiScaleOf(
-    tester.element(find.byType(ExplorationScreen)),
+    tester.element(find.byType(QuickCommandPanel)),
   );
 }

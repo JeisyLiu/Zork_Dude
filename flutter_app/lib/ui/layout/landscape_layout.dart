@@ -4,13 +4,23 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 /// Shared breakpoints and spacing for landscape-first 16:9 layouts.
+///
+/// Play screens render inside a fixed 16:9 canvas ([fitDesignAspect]) so
+/// ultrawide / tall devices letterbox or pillarbox instead of stretching UI.
 abstract final class LandscapeLayout {
   /// Design reference (16:9 landscape).
   static const double designWidth = 1280;
   static const double designHeight = 720;
+  static const double designAspect = designWidth / designHeight;
   static const double scaleMin = 0.75;
+  static const double scaleMinShort = 0.55;
+  static const double shortScaleHeight = 480;
   static const double scaleMax = 1.25;
   static const double minTouchTarget = 40;
+
+  /// Ultrawide phone landscape (e.g. 20:9, 19.5:9). Used for device detection
+  /// outside the play canvas; inside [LandscapeScaffold] aspect is always 16:9.
+  static const double ultrawideAspect = 19.5 / 9;
 
   static const double shortHeight = 420;
   static const double phoneShortHeight = 400;
@@ -75,36 +85,47 @@ abstract final class LandscapeLayout {
     return usableHeight(mq.size, mq.padding);
   }
 
-  /// Usable height inside [LandscapeScaffold] body (minus outer padding).
-  static double playUsableHeightOf(BuildContext context) {
-    final mq = MediaQuery.of(context);
-    final outer = outerPadding(mq.size, padding: mq.padding);
-    final safeMin = playSafeMinimum(mq.size, mq.padding);
-    final top = math.max(mq.padding.top, safeMin.top);
-    final bottom = math.max(mq.padding.bottom, safeMin.bottom);
-    return (mq.size.height - top - bottom - outer * 2)
-        .clamp(0.0, mq.size.height);
+  /// Largest 16:9 rect that fits in [maxSize] (letterbox / pillarbox).
+  static Size fitDesignAspect(Size maxSize) {
+    if (maxSize.width <= 0 || maxSize.height <= 0) return Size.zero;
+    final maxAspect = maxSize.width / maxSize.height;
+    if (maxAspect > designAspect) {
+      final h = maxSize.height;
+      return Size(h * designAspect, h);
+    }
+    final w = maxSize.width;
+    return Size(w, w / designAspect);
   }
 
-  /// Usable width inside [LandscapeScaffold] body (minus outer padding).
-  static double playUsableWidthOf(BuildContext context) {
-    final mq = MediaQuery.of(context);
-    final outer = outerPadding(mq.size, padding: mq.padding);
-    final safeMin = playSafeMinimum(mq.size, mq.padding);
-    final left = math.max(mq.padding.left, safeMin.left);
-    final right = math.max(mq.padding.right, safeMin.right);
-    return (mq.size.width - left - right - outer * 2)
-        .clamp(0.0, mq.size.width);
-  }
+  /// Play canvas size from [LandscapeScaffold] (always ~16:9).
+  static double playUsableHeightOf(BuildContext context) =>
+      MediaQuery.sizeOf(context).height;
 
-  /// Uniform UI scale from design resolution (1280×720), clamped.
+  /// Play canvas size from [LandscapeScaffold] (always ~16:9).
+  static double playUsableWidthOf(BuildContext context) =>
+      MediaQuery.sizeOf(context).width;
+
+  /// Uniform UI scale from design height (720dp), clamped.
   static double uiScaleOf(BuildContext context) {
+    final h = playUsableHeightOf(context);
+    if (h <= 0) return 1.0;
+    final min = scaleMinForHeight(h);
+    return (h / designHeight).clamp(min, scaleMax);
+  }
+
+  static double scaleMinForHeight(double usableHeight) =>
+      usableHeight < shortScaleHeight ? scaleMinShort : scaleMin;
+
+  /// Play-canvas width / height (≈16:9 inside [LandscapeScaffold]).
+  static double aspectRatioOf(BuildContext context) {
     final w = playUsableWidthOf(context);
     final h = playUsableHeightOf(context);
-    if (w <= 0 || h <= 0) return 1.0;
-    final scale = math.min(w / designWidth, h / designHeight);
-    return scale.clamp(scaleMin, scaleMax);
+    if (h <= 0) return designAspect;
+    return w / h;
   }
+
+  static bool isUltrawideOf(BuildContext context) =>
+      aspectRatioOf(context) >= ultrawideAspect;
 
   /// Scaled spacing, font size, or non-touch dimension.
   static double sp(BuildContext context, double designDp) =>

@@ -239,7 +239,18 @@ class GameController extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Players may only view layers with at least one visited room.
+  /// Developer mode can switch to any layer (with full reveal in the map UI).
+  bool canViewMapLayer(MapLayer layer) {
+    if (developerMode) return true;
+    final s = session;
+    if (s == null) return layer == MapLayer.surface;
+    return MapService().visitedOnLayer(s, layer).isNotEmpty;
+  }
+
   void setMapLayer(MapLayer layer) {
+    if (!canViewMapLayer(layer)) return;
+    if (mapLayer == layer) return;
     mapLayer = layer;
     notifyListeners();
   }
@@ -253,6 +264,11 @@ class GameController extends ChangeNotifier {
     final s = session;
     if (s == null) return;
     mapLayer = mapLayerOfRoom(s.currentRoomId, s.mapMeta);
+  }
+
+  void _clampMapLayerToAccessible() {
+    if (canViewMapLayer(mapLayer)) return;
+    syncMapLayerToPlayer();
   }
 
   bool _canAcceptCommand() {
@@ -274,6 +290,7 @@ class GameController extends ChangeNotifier {
   Future<void> setDeveloperMode(bool value) async {
     if (!kDebugMode) return;
     developerMode = value;
+    if (!value) _clampMapLayerToAccessible();
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('developer_mode', value);

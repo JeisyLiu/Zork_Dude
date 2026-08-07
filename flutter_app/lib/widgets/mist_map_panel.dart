@@ -109,7 +109,14 @@ class _MistMapPanelState extends State<MistMapPanel> {
                       label: mapLayerLabels[l]!,
                       width: 56,
                       height: LandscapeLayout.heightFromWidth(56),
-                      onPressed: () => widget.controller.setMapLayer(l),
+                      accent: l == layer,
+                      enabled: widget.controller.canViewMapLayer(l),
+                      onPressed: widget.controller.canViewMapLayer(l)
+                          ? () => widget.controller.setMapLayer(l)
+                          : null,
+                      semanticLabel: widget.controller.canViewMapLayer(l)
+                          ? mapLayerLabels[l]!
+                          : '${mapLayerLabels[l]!}（未探索）',
                     ),
                   ),
                 const SizedBox(width: 8),

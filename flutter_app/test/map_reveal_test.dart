@@ -70,5 +70,12 @@ void main() {
         isTrue,
       );
     });
+
+    test('visitedOnLayer is empty for unvisited layers at start', () {
+      expect(svc.visitedOnLayer(session, MapLayer.surface), isNotEmpty);
+      expect(svc.visitedOnLayer(session, MapLayer.cave), isEmpty);
+      expect(svc.visitedOnLayer(session, MapLayer.tower), isEmpty);
+      expect(svc.visitedOnLayer(session, MapLayer.site), isEmpty);
+    });
   });
 }

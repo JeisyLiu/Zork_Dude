@@ -17,9 +17,6 @@ abstract final class GameConfirmDialog {
     String? confirmSubLabel,
     GameUiSkin skin = GameUiSkin.fantasy,
   }) async {
-    final btnH = ExplorationLayoutConstants.chipHeightForWidth(
-      ExplorationLayoutConstants.moreChipWidth,
-    );
     final result = await LandscapeOverlay.show<bool>(
       context: context,
       title: title,
@@ -27,6 +24,7 @@ abstract final class GameConfirmDialog {
       child: Builder(
         builder: (dialogContext) {
           final theme = GameUiTheme.of(dialogContext);
+          final btnH = ExplorationLayoutConstants.chipHeightFor(dialogContext);
           return Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,

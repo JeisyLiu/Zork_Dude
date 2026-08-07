@@ -39,15 +39,13 @@ class _CommandInputRowState extends State<CommandInputRow> {
   @override
   Widget build(BuildContext context) {
     final d = GameUiTheme.of(context);
-    final size = MediaQuery.sizeOf(context);
-    final padding = MediaQuery.paddingOf(context);
-    final short = LandscapeLayout.isShortOf(size, padding);
-    final phoneShort = LandscapeLayout.isPhoneShortOf(size, padding);
-    final panelPad = phoneShort
-        ? const EdgeInsets.fromLTRB(10, 4, 8, 4)
-        : (short
-            ? const EdgeInsets.fromLTRB(12, 6, 8, 6)
-            : const EdgeInsets.fromLTRB(14, 8, 10, 8));
+    final panelPad = EdgeInsets.fromLTRB(
+      LandscapeLayout.sp(context, 14),
+      LandscapeLayout.sp(context, 8),
+      LandscapeLayout.sp(context, 10),
+      LandscapeLayout.sp(context, 8),
+    );
+    final iconSize = LandscapeLayout.minTouch(context, 36);
     return GamePanel(
       padding: panelPad,
       child: Row(
@@ -58,7 +56,7 @@ class _CommandInputRowState extends State<CommandInputRow> {
               focusNode: widget.focusNode,
               style: TextStyle(
                 color: d.textPrimary,
-                fontSize: 14,
+                fontSize: LandscapeLayout.sp(context, 14),
                 fontWeight: FontWeight.w600,
               ),
               decoration: InputDecoration(
@@ -72,15 +70,15 @@ class _CommandInputRowState extends State<CommandInputRow> {
               onSubmitted: (_) => _submit(),
             ),
           ),
-          const SizedBox(width: 4),
+          SizedBox(width: LandscapeLayout.sp(context, 4)),
           GameIconButton(
-            size: 36,
+            size: iconSize,
             semanticLabel: '发送命令',
             onPressed: _submit,
             child: Image.asset(
               GameUiAssets.arrowEast,
-              width: 18,
-              height: 18,
+              width: LandscapeLayout.sp(context, 18),
+              height: LandscapeLayout.sp(context, 18),
               filterQuality: FilterQuality.none,
             ),
           ),

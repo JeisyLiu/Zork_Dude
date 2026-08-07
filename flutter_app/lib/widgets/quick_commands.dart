@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:zork_dude/domain/models/enums.dart';
@@ -19,14 +21,12 @@ class QuickCommandPanel extends StatelessWidget {
     super.key,
     required this.controller,
     required this.onPickTargets,
-    this.compact = false,
-    this.phoneShort = false,
+    this.showTips = true,
   });
 
   final GameController controller;
   final void Function(String title, List<({String label, String value})> options) onPickTargets;
-  final bool compact;
-  final bool phoneShort;
+  final bool showTips;
 
   @override
   Widget build(BuildContext context) {
@@ -39,72 +39,45 @@ class QuickCommandPanel extends StatelessWidget {
     final hasInventory = s != null && s.inventory.isNotEmpty;
     final panelEnabled = !controller.commandBusy;
 
-    final usableH = LandscapeLayout.playUsableHeightOf(context);
-    var layoutShort = compact;
-    var layoutPhone = phoneShort;
-
-    var dockMax = ExplorationLayoutConstants.dockMaxHeight(
-      usableH,
-      short: layoutShort,
-      phoneShort: layoutPhone,
-      showTips: !compact && !phoneShort,
+    final dockTarget = ExplorationLayoutConstants.dockMaxHeight(
+      context,
+      showTips: showTips,
       inCombat: inCombat,
     );
-    var dockNatural = ExplorationLayoutConstants.dockMinHeight(
-      short: layoutShort,
-      phoneShort: layoutPhone,
-      showTips: !compact && !phoneShort,
+    final dockNatural = ExplorationLayoutConstants.dockMinHeight(
+      context,
+      showTips: showTips,
       inCombat: inCombat,
     );
-
-    if (dockNatural > dockMax + 0.5 && !layoutPhone) {
-      layoutPhone = true;
-      dockMax = ExplorationLayoutConstants.dockMaxHeight(
-        usableH,
-        short: layoutShort,
-        phoneShort: layoutPhone,
-        showTips: !compact && !phoneShort,
-        inCombat: inCombat,
-      );
-      dockNatural = ExplorationLayoutConstants.dockMinHeight(
-        short: layoutShort,
-        phoneShort: layoutPhone,
-        showTips: !compact && !phoneShort,
-        inCombat: inCombat,
-      );
-    }
-
-    final padV = ExplorationLayoutConstants.panelPadV(
-      short: layoutShort,
-      phoneShort: layoutPhone,
-    );
+    final padV = ExplorationLayoutConstants.panelPadV(context);
+    final padH = ExplorationLayoutConstants.panelPadH(context);
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        final prefW = ExplorationLayoutConstants.preferredChipWidth(
-          short: layoutShort,
-          phoneShort: layoutPhone,
+        final prefW = ExplorationLayoutConstants.preferredChipWidth(context);
+        final gridH = ExplorationLayoutConstants.gridContentHeight(context);
+        final dpadBase =
+            ExplorationLayoutConstants.directionPadWidthFor(context);
+        final offset = LandscapeLayout.sp(
+          context,
+          ExplorationLayoutConstants.dpadGridOffset,
         );
-        final gridH = ExplorationLayoutConstants.gridContentHeight(
-          prefW,
-          phoneShort: layoutPhone,
+        final minDpad = LandscapeLayout.sp(
+          context,
+          ExplorationLayoutConstants.dpadMinSize,
         );
-        final dpadBase = layoutShort || layoutPhone
-            ? ExplorationLayoutConstants.directionPadWidthShort
-            : ExplorationLayoutConstants.directionPadWidth;
-        final dpadSize = (gridH - (layoutPhone ? 24 : (layoutShort ? 30 : 40)))
-            .clamp(layoutPhone ? 48.0 : 56.0, dpadBase);
-        final rowGap = layoutPhone ? 6.0 : (layoutShort ? 8.0 : 12.0);
+        final dpadSize = (gridH - offset).clamp(minDpad, dpadBase);
+        final rowGap = LandscapeLayout.sp(context, 12);
+        final chipSpacing =
+            ExplorationLayoutConstants.chipSpacingFor(context);
         final gridW = prefW * ExplorationLayoutConstants.primaryColumns +
-            ExplorationLayoutConstants.chipSpacingFor(phoneShort: layoutPhone) *
-                (ExplorationLayoutConstants.primaryColumns - 1);
+            chipSpacing * (ExplorationLayoutConstants.primaryColumns - 1);
         final dpadBlock = inCombat ? 0.0 : dpadSize + rowGap;
         final availableGridW =
             (constraints.maxWidth - dpadBlock).clamp(0.0, constraints.maxWidth);
         final chipW = ExplorationLayoutConstants.chipWidthFor(
+          context,
           availableGridW,
-          short: layoutShort,
-          phoneShort: layoutPhone,
         );
         final chipH = ExplorationLayoutConstants.chipHeightForWidth(chipW);
         final columns = ExplorationLayoutConstants.primaryColumns;
@@ -117,11 +90,15 @@ class QuickCommandPanel extends StatelessWidget {
           panelEnabled: panelEnabled,
         );
 
+        // Reclaimed height becomes vertical padding so the panel fills flush
+        // to the bottom without stretching chip width past the row budget.
+        final extraPad = math.max(0.0, dockTarget - dockNatural);
+        final contentH = dockNatural + extraPad;
         final panel = GamePanel(
           padding: EdgeInsets.fromLTRB(
-            layoutPhone ? 6 : (layoutShort ? 8 : 12),
-            padV / 2,
-            layoutPhone ? 6 : (layoutShort ? 8 : 12),
+            padH,
+            padV / 2 + extraPad,
+            padH,
             padV / 2,
           ),
           child: Column(
@@ -133,9 +110,8 @@ class QuickCommandPanel extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   if (!inCombat) ...[
-                      DirectionPad(
-                        onMove: (dir) => controller.move(dir),
-                        compact: layoutShort || layoutPhone,
+                    DirectionPad(
+                      onMove: (dir) => controller.move(dir),
                       enabled: panelEnabled,
                       size: dpadSize,
                     ),
@@ -148,9 +124,7 @@ class QuickCommandPanel extends StatelessWidget {
                       actions: primary,
                       chipWidth: chipW,
                       chipHeight: chipH,
-                      chipSpacing: ExplorationLayoutConstants.chipSpacingFor(
-                        phoneShort: layoutPhone,
-                      ),
+                      chipSpacing: chipSpacing,
                       onMore: panelEnabled
                           ? () => _showMoreSheet(context, inCombat)
                           : () {},
@@ -159,13 +133,13 @@ class QuickCommandPanel extends StatelessWidget {
                   ),
                 ],
               ),
-              if (!compact && !phoneShort && !layoutPhone) ...[
-                const SizedBox(height: 6),
+              if (showTips) ...[
+                SizedBox(height: LandscapeLayout.sp(context, 6)),
                 GameOutlinedText(
                   inCombat
                       ? '战斗中 · Combat: attack / flee'
                       : '提示 · Tips: ←↑↓→ / WASD · PgUp/PgDn · look · take 1',
-                  fontSize: 10,
+                  fontSize: LandscapeLayout.sp(context, 10),
                   fontWeight: FontWeight.w500,
                   color: d.textMuted,
                   strokeWidth: 0,
@@ -176,26 +150,18 @@ class QuickCommandPanel extends StatelessWidget {
           ),
         );
 
-        if (dockMax + 1 < dockNatural) {
-          return SizedBox(
-            height: dockMax,
-            width: constraints.maxWidth,
-            child: FittedBox(
-              fit: BoxFit.scaleDown,
-              alignment: Alignment.center,
-              child: SizedBox(
-                width: constraints.maxWidth,
-                height: dockNatural,
-                child: panel,
-              ),
-            ),
-          );
-        }
-
         return SizedBox(
-          height: dockNatural,
+          height: dockTarget,
           width: constraints.maxWidth,
-          child: panel,
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.bottomCenter,
+            child: SizedBox(
+              width: constraints.maxWidth,
+              height: contentH,
+              child: panel,
+            ),
+          ),
         );
       },
     );
@@ -406,23 +372,23 @@ class QuickCommandPanel extends StatelessWidget {
   void _showMoreSheet(BuildContext context, bool inCombat) {
     final actions = _moreActions(context, inCombat);
     final skin = GameUiTheme.skinForMapLayer(controller.mapLayer);
+    final moreW = ExplorationLayoutConstants.moreChipWidthFor(context);
+    final moreH = ExplorationLayoutConstants.chipHeightForWidth(moreW);
 
     LandscapeOverlay.show<void>(
       context: context,
       title: '更多命令 · More',
       skin: skin,
       child: Wrap(
-        spacing: 6,
-        runSpacing: 6,
+        spacing: LandscapeLayout.sp(context, 6),
+        runSpacing: LandscapeLayout.sp(context, 6),
         children: [
           for (final action in actions)
             GameButton(
               label: action.label,
               subLabel: action.subLabel,
-              width: ExplorationLayoutConstants.moreChipWidth,
-              height: ExplorationLayoutConstants.chipHeightForWidth(
-                ExplorationLayoutConstants.moreChipWidth,
-              ),
+              width: moreW,
+              height: moreH,
               accent: action.accent,
               onPressed: () {
                 Navigator.pop(context);
@@ -508,7 +474,7 @@ class _ActionGrid extends StatelessWidget {
     required this.onMore,
     required this.chipWidth,
     required this.chipHeight,
-    this.chipSpacing = ExplorationLayoutConstants.chipSpacing,
+    required this.chipSpacing,
     this.panelEnabled = true,
   });
 
@@ -528,8 +494,6 @@ class _ActionGrid extends StatelessWidget {
       rows.add(actions.sublist(i, end));
     }
 
-    final spacing = chipSpacing;
-
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -547,7 +511,7 @@ class _ActionGrid extends StatelessWidget {
                 ),
             ],
           ),
-          if (r < rows.length - 1) SizedBox(height: spacing),
+          if (r < rows.length - 1) SizedBox(height: chipSpacing),
         ],
       ],
     );
@@ -588,13 +552,11 @@ class DirectionPad extends StatelessWidget {
   const DirectionPad({
     super.key,
     required this.onMove,
-    this.compact = false,
     this.enabled = true,
     this.size,
   });
 
   final void Function(Direction dir) onMove;
-  final bool compact;
   final bool enabled;
   final double? size;
 
@@ -602,10 +564,10 @@ class DirectionPad extends StatelessWidget {
   Widget build(BuildContext context) {
     final d = GameUiTheme.of(context);
     final ring = size ??
-        (compact
-            ? ExplorationLayoutConstants.directionPadWidthShort
-            : ExplorationLayoutConstants.directionPadWidth);
-    final upDown = compact ? 26.0 : 36.0;
+        ExplorationLayoutConstants.directionPadWidthFor(context);
+    final upDown = LandscapeLayout.sp(context, ExplorationLayoutConstants.dpadUpDownDesign);
+    final compassSize = LandscapeLayout.sp(context, 28);
+    final padInset = LandscapeLayout.sp(context, 4);
     return SizedBox(
       width: ring,
       child: Column(
@@ -625,41 +587,45 @@ class DirectionPad extends StatelessWidget {
                   filterQuality: FilterQuality.none,
                 ),
                 Positioned(
-                  top: 4,
+                  top: padInset,
                   child: _compassBtn(
                     GameUiAssets.compassN,
                     '北 N',
+                    compassSize,
                     enabled ? () => onMove(Direction.north) : null,
                   ),
                 ),
                 Positioned(
-                  left: 4,
+                  left: padInset,
                   child: _compassBtn(
                     GameUiAssets.compassW,
                     '西 W',
+                    compassSize,
                     enabled ? () => onMove(Direction.west) : null,
                   ),
                 ),
                 Positioned(
-                  right: 4,
+                  right: padInset,
                   child: _compassBtn(
                     GameUiAssets.compassE,
                     '东 E',
+                    compassSize,
                     enabled ? () => onMove(Direction.east) : null,
                   ),
                 ),
                 Positioned(
-                  bottom: 4,
+                  bottom: padInset,
                   child: _compassBtn(
                     GameUiAssets.compassS,
                     '南 S',
+                    compassSize,
                     enabled ? () => onMove(Direction.south) : null,
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: padInset),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -668,15 +634,25 @@ class DirectionPad extends StatelessWidget {
                 semanticLabel: '上 U',
                 enabled: enabled,
                 onPressed: enabled ? () => onMove(Direction.up) : null,
-                child: const GameOutlinedText('U', fontSize: 11, fontWeight: FontWeight.bold, strokeWidth: 0),
+                child: GameOutlinedText(
+                  'U',
+                  fontSize: LandscapeLayout.sp(context, 11),
+                  fontWeight: FontWeight.bold,
+                  strokeWidth: 0,
+                ),
               ),
-              SizedBox(width: compact ? 4 : 6),
+              SizedBox(width: LandscapeLayout.sp(context, 6)),
               GameIconButton(
                 size: upDown,
                 semanticLabel: '下 D',
                 enabled: enabled,
                 onPressed: enabled ? () => onMove(Direction.down) : null,
-                child: const GameOutlinedText('D', fontSize: 11, fontWeight: FontWeight.bold, strokeWidth: 0),
+                child: GameOutlinedText(
+                  'D',
+                  fontSize: LandscapeLayout.sp(context, 11),
+                  fontWeight: FontWeight.bold,
+                  strokeWidth: 0,
+                ),
               ),
             ],
           ),
@@ -685,7 +661,12 @@ class DirectionPad extends StatelessWidget {
     );
   }
 
-  Widget _compassBtn(String asset, String label, VoidCallback? onTap) {
+  Widget _compassBtn(
+    String asset,
+    String label,
+    double size,
+    VoidCallback? onTap,
+  ) {
     return Semantics(
       button: true,
       label: label,
@@ -699,8 +680,8 @@ class DirectionPad extends StatelessWidget {
             opacity: onTap != null ? 1 : 0.45,
             child: Image.asset(
               asset,
-              width: 28,
-              height: 28,
+              width: size,
+              height: size,
               filterQuality: FilterQuality.none,
             ),
           ),

@@ -5,6 +5,13 @@ import 'package:flutter/material.dart';
 
 /// Shared breakpoints and spacing for landscape-first 16:9 layouts.
 abstract final class LandscapeLayout {
+  /// Design reference (16:9 landscape).
+  static const double designWidth = 1280;
+  static const double designHeight = 720;
+  static const double scaleMin = 0.75;
+  static const double scaleMax = 1.25;
+  static const double minTouchTarget = 40;
+
   static const double shortHeight = 420;
   static const double phoneShortHeight = 400;
   static const double sideBySideMinWidth = 640;
@@ -20,8 +27,8 @@ abstract final class LandscapeLayout {
   /// Max share of usable height for exploration command dock (desktop).
   static const double explorationDockMaxFraction = 0.30;
 
-  /// Tighter cap on mobile where the command input row is hidden.
-  static const double explorationDockMaxFractionMobile = 0.28;
+  /// Mobile reclaims the hidden command-input row into a taller dock.
+  static const double explorationDockMaxFractionMobile = 0.36;
 
   /// Max share of usable height for combat command dock.
   static const double combatDockMaxFraction = 0.28;
@@ -78,6 +85,34 @@ abstract final class LandscapeLayout {
     return (mq.size.height - top - bottom - outer * 2)
         .clamp(0.0, mq.size.height);
   }
+
+  /// Usable width inside [LandscapeScaffold] body (minus outer padding).
+  static double playUsableWidthOf(BuildContext context) {
+    final mq = MediaQuery.of(context);
+    final outer = outerPadding(mq.size, padding: mq.padding);
+    final safeMin = playSafeMinimum(mq.size, mq.padding);
+    final left = math.max(mq.padding.left, safeMin.left);
+    final right = math.max(mq.padding.right, safeMin.right);
+    return (mq.size.width - left - right - outer * 2)
+        .clamp(0.0, mq.size.width);
+  }
+
+  /// Uniform UI scale from design resolution (1280×720), clamped.
+  static double uiScaleOf(BuildContext context) {
+    final w = playUsableWidthOf(context);
+    final h = playUsableHeightOf(context);
+    if (w <= 0 || h <= 0) return 1.0;
+    final scale = math.min(w / designWidth, h / designHeight);
+    return scale.clamp(scaleMin, scaleMax);
+  }
+
+  /// Scaled spacing, font size, or non-touch dimension.
+  static double sp(BuildContext context, double designDp) =>
+      designDp * uiScaleOf(context);
+
+  /// Scaled touch target with minimum 40dp.
+  static double minTouch(BuildContext context, double designDp) =>
+      math.max(sp(context, designDp), minTouchTarget);
 
   static bool isShortPlayContext(BuildContext context) {
     final mq = MediaQuery.of(context);

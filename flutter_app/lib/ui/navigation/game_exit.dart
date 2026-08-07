@@ -77,7 +77,7 @@ abstract final class GameExit {
     GameController controller,
   ) async {
     final skin = GameUiTheme.skinForMapLayer(controller.mapLayer);
-    final btnW = ExplorationLayoutConstants.moreChipWidth;
+    final btnW = ExplorationLayoutConstants.moreChipWidthFor(context);
     final btnH = ExplorationLayoutConstants.chipHeightForWidth(btnW);
 
     await LandscapeOverlay.show<void>(

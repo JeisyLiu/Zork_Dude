@@ -97,6 +97,7 @@ void main() {
 
     expect(tester.takeException(), isNull);
     expect(find.text('迷雾之塔'), findsOneWidget);
+    expect(find.bySemanticsLabel('关闭'), findsOneWidget);
   });
 
   testWidgets('Home layout fits 800x360 without overflow', (tester) async {
@@ -142,6 +143,12 @@ void main() {
 
     expect(tester.takeException(), isNull);
     expect(find.text('MIST TOWER'), findsOneWidget);
+    final closeBox = tester.renderObject<RenderBox>(
+      find.bySemanticsLabel('关闭'),
+    );
+    expect(closeBox.size.width, greaterThanOrEqualTo(40));
+    expect(closeBox.size.height, greaterThanOrEqualTo(40));
+    expect(closeBox.localToGlobal(Offset.zero).dx, lessThan(80));
   });
 
   testWidgets('MistTowerApp enables animations even when OS disables them', (

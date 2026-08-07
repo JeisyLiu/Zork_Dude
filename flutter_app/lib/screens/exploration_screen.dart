@@ -113,7 +113,7 @@ class _ExplorationScreenState extends State<ExplorationScreen> {
       skin: skin,
       child: Builder(
         builder: (context) {
-          final btnW = ExplorationLayoutConstants.moreChipWidth;
+          final btnW = ExplorationLayoutConstants.moreChipWidthFor(context);
           final btnH = ExplorationLayoutConstants.chipHeightForWidth(btnW);
           return Column(
             mainAxisSize: MainAxisSize.min,
@@ -165,16 +165,11 @@ class _ExplorationScreenState extends State<ExplorationScreen> {
     }
 
     final size = MediaQuery.sizeOf(context);
-    final padding = MediaQuery.paddingOf(context);
-    final usableH = LandscapeLayout.playUsableHeightOf(context);
     final sideBySide = ExplorationLayoutConstants.useSideBySide(size);
-    final short = LandscapeLayout.isShortPlayContext(context);
-    final phoneShort = LandscapeLayout.isPhoneShortPlayContext(context);
+    final showTips = LandscapeLayout.uiScaleOf(context) >= 0.82;
     final skin = GameUiTheme.skinForMapLayer(c.mapLayer);
-    final bannerH = ExplorationLayoutConstants.bannerHeightFor(
-      short: short,
-      phoneShort: phoneShort,
-    );
+    final bannerH = ExplorationLayoutConstants.bannerHeightFor(context);
+    final gap = LandscapeLayout.sp(context, 4);
     final motionDuration = MediaQuery.disableAnimationsOf(context)
         ? Duration.zero
         : const Duration(milliseconds: 180);
@@ -200,11 +195,11 @@ class _ExplorationScreenState extends State<ExplorationScreen> {
                   GameBanner(
                     title: '迷雾之塔',
                     height: bannerH,
-                    titleSize: phoneShort ? 14 : (short ? 15 : 17),
+                    titleSize: LandscapeLayout.sp(context, 17),
                   ),
-                  SizedBox(height: phoneShort ? 0 : (short ? 2 : 4)),
+                  SizedBox(height: gap),
                   StatusBar(controller: c),
-                  SizedBox(height: phoneShort ? 0 : (short ? 2 : 4)),
+                  SizedBox(height: gap),
                   Expanded(
                     child: sideBySide
                         ? Row(
@@ -217,9 +212,7 @@ class _ExplorationScreenState extends State<ExplorationScreen> {
                                   child: ConstrainedBox(
                                     constraints: BoxConstraints(
                                       minWidth: ExplorationLayoutConstants
-                                          .mapPanelMinWidth(
-                                        phoneShort: phoneShort,
-                                      ),
+                                          .mapPanelMinWidth(context),
                                     ),
                                     child: MistMapPanel(controller: c),
                                   ),
@@ -237,10 +230,7 @@ class _ExplorationScreenState extends State<ExplorationScreen> {
                                     ? SizedBox(
                                         key: const ValueKey('map-panel'),
                                         height: ExplorationLayoutConstants
-                                            .stackedMapHeight(
-                                          usableH,
-                                          short: short,
-                                        ),
+                                            .stackedMapHeight(context),
                                         child: MistMapPanel(controller: c),
                                       )
                                     : const SizedBox.shrink(key: ValueKey('map-hidden')),
@@ -250,19 +240,17 @@ class _ExplorationScreenState extends State<ExplorationScreen> {
                             ],
                           ),
                   ),
-                  if (!LandscapeLayout.showCommandInput &&
-                      (phoneShort || short))
-                    const SizedBox.shrink()
+                  if (LandscapeLayout.showCommandInput)
+                    SizedBox(height: gap)
                   else
-                    SizedBox(height: phoneShort ? 1 : (short ? 2 : 4)),
+                    const SizedBox.shrink(),
                   QuickCommandPanel(
                     controller: c,
                     onPickTargets: _showTargetPicker,
-                    compact: short,
-                    phoneShort: phoneShort,
+                    showTips: showTips,
                   ),
                   if (LandscapeLayout.showCommandInput) ...[
-                    SizedBox(height: phoneShort ? 1 : (short ? 2 : 4)),
+                    SizedBox(height: gap),
                     CommandInputRow(
                       controller: c,
                       focusNode: _commandFocus,

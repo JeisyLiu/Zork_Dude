@@ -80,16 +80,16 @@ class _LandscapeOverlayBody extends StatelessWidget {
                 child: Row(
                   children: [
                     GameIconButton(
-                      size: 44,
+                      size: LandscapeLayout.minTouch(context, 44),
                       asset: GameUiAssets.buttonRedClose,
                       semanticLabel: '关闭',
                       onPressed: () => Navigator.of(context).pop(),
                     ),
-                    const SizedBox(width: 8),
+                    SizedBox(width: LandscapeLayout.sp(context, 8)),
                     Expanded(
                       child: GameOutlinedText(
                         title,
-                        fontSize: 14,
+                        fontSize: LandscapeLayout.sp(context, 14),
                         fontWeight: FontWeight.bold,
                         color: GameUiTheme.of(context).textPrimary,
                         strokeWidth: 0,

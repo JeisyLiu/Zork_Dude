@@ -128,8 +128,7 @@ class _InventoryPanelState extends State<InventoryPanel> {
       return;
     }
 
-    final short = ExplorationLayoutConstants.isShort(MediaQuery.sizeOf(context));
-    final btnH = ExplorationLayoutConstants.chipHeightFor(short: short);
+    final btnH = ExplorationLayoutConstants.chipHeightFor(context);
     final skin = GameUiTheme.skinForMapLayer(_c.mapLayer);
 
     await LandscapeOverlay.show<void>(
@@ -186,10 +185,7 @@ class _InventoryPanelState extends State<InventoryPanel> {
   Widget build(BuildContext context) {
     final d = GameUiTheme.of(context);
     final s = _c.session;
-    final short = ExplorationLayoutConstants.isShort(MediaQuery.sizeOf(context));
-    final btnH = ExplorationLayoutConstants.chipHeightFor(
-      short: short,
-    );
+    final btnH = ExplorationLayoutConstants.chipHeightFor(context);
 
     if (s == null) {
       return GameOutlinedText('尚未加载', fontSize: 13, color: d.textMuted);

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:zork_dude/screens/exploration_screen.dart';
 import 'package:zork_dude/state/game_controller.dart';
+import 'package:zork_dude/ui/components/game_button.dart';
+import 'package:zork_dude/ui/exploration/exploration_layout_constants.dart';
 import 'package:zork_dude/ui/game_skin_scope.dart';
 import 'package:zork_dude/ui/game_ui_theme.dart';
 import 'package:zork_dude/ui/layout/landscape_layout.dart';
@@ -61,9 +63,12 @@ void main() {
   for (final size in const [
     Size(667, 375),
     Size(800, 360),
+    Size(800, 450),
     Size(853, 384),
+    Size(853, 480),
     Size(854, 480),
     Size(1280, 720),
+    Size(1600, 900),
     Size(1920, 1080),
   ]) {
     testWidgets('Exploration layout fits ${size.width.toInt()}x${size.height.toInt()}', (tester) async {
@@ -140,6 +145,37 @@ void main() {
     }
   });
 
+  testWidgets('Chip width ratio tracks uiScale at same 16:9 aspect', (tester) async {
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    const small = Size(800, 450);
+    const large = Size(1280, 720);
+
+    await pumpExplorationScreen(tester, small);
+    final smallChip = _chipWidth(tester);
+    final smallScale = _uiScale(tester);
+
+    await pumpExplorationScreen(tester, large);
+    final largeChip = _chipWidth(tester);
+    final largeScale = _uiScale(tester);
+
+    expect(smallScale, lessThan(largeScale));
+    expect(smallChip / largeChip, closeTo(smallScale / largeScale, 0.05));
+    expect(smallChip, greaterThanOrEqualTo(LandscapeLayout.minTouchTarget));
+    expect(largeChip, greaterThanOrEqualTo(LandscapeLayout.minTouchTarget));
+  });
+
+  testWidgets('Scaled chip matches layout constant at 1280x720', (tester) async {
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await pumpExplorationScreen(tester, const Size(1280, 720));
+    final chip = _chipWidth(tester);
+    final expected = ExplorationLayoutConstants.preferredChipWidth(
+      tester.element(find.byType(QuickCommandPanel)),
+    );
+    expect(chip, closeTo(expected, 2));
+  });
+
   testWidgets('Primary panel exposes former more-sheet commands', (tester) async {
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
@@ -210,4 +246,21 @@ void main() {
       debugDefaultTargetPlatformOverride = null;
     }
   });
+}
+
+double _chipWidth(WidgetTester tester) {
+  final chipFinder = find.descendant(
+    of: find.byType(QuickCommandPanel),
+    matching: find.ancestor(
+      of: find.text('查看'),
+      matching: find.byType(GameButton),
+    ),
+  );
+  return tester.renderObject<RenderBox>(chipFinder.first).size.width;
+}
+
+double _uiScale(WidgetTester tester) {
+  return LandscapeLayout.uiScaleOf(
+    tester.element(find.byType(ExplorationScreen)),
+  );
 }

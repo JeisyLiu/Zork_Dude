@@ -7,6 +7,7 @@ import 'package:zork_dude/ui/components/game_outlined_text.dart';
 import 'package:zork_dude/ui/components/landscape_scaffold.dart';
 import 'package:zork_dude/ui/components/save_slot_picker.dart';
 import 'package:zork_dude/ui/game_skin_scope.dart';
+import 'package:zork_dude/ui/game_ui_assets.dart';
 import 'package:zork_dude/ui/game_ui_theme.dart';
 import 'package:zork_dude/ui/home/home_ambient_background.dart';
 import 'package:zork_dude/ui/home/home_constants.dart';
@@ -152,21 +153,14 @@ class _HomeScreenState extends State<HomeScreen> {
               background: HomeAmbientBackground(pointerListenable: _pointer),
               body: LayoutBuilder(
                 builder: (context, constraints) {
-                  final screen = MediaQuery.sizeOf(context);
-                  final padding = MediaQuery.paddingOf(context);
-                  final short = LandscapeLayout.isShortPlayContext(context);
-                  final phoneShort = LandscapeLayout.isPhoneShortPlayContext(context);
-                  final usableH = LandscapeLayout.playUsableHeightOf(context);
-                  final heroSize = HomeConstants.heroSizeFor(screen, padding: padding);
-                  final tight = usableH < 520;
-                  final gapL = phoneShort ? 4.0 : (short ? 6.0 : (tight ? 10.0 : 16.0));
-                  final gapM = phoneShort ? 3.0 : (short ? 4.0 : (tight ? 8.0 : 12.0));
-                  final gapS = phoneShort ? 2.0 : (short ? 3.0 : (tight ? 6.0 : 10.0));
-                  final btnW = HomeConstants.buttonWidthFor(
-                    short: short,
-                    phoneShort: phoneShort,
-                  );
+                  final heroSize = HomeConstants.heroSizeFor(context);
+                  final gapL = LandscapeLayout.sp(context, HomeConstants.gapLarge);
+                  final gapM = LandscapeLayout.sp(context, HomeConstants.gapMedium);
+                  final gapS = LandscapeLayout.sp(context, HomeConstants.gapSmall);
+                  final btnW = HomeConstants.buttonWidthFor(context);
                   final btnH = HomeConstants.buttonHeightFor(btnW);
+                  final closeSize =
+                      LandscapeLayout.minTouch(context, HomeConstants.closeButtonSize);
 
                   return Stack(
                     fit: StackFit.expand,
@@ -178,8 +172,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           child: SingleChildScrollView(
                             padding: EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: phoneShort ? 6 : (short ? 8 : 12),
+                              horizontal: LandscapeLayout.sp(
+                                context,
+                                HomeConstants.scrollPadH,
+                              ),
+                              vertical: LandscapeLayout.sp(
+                                context,
+                                HomeConstants.scrollPadV,
+                              ),
                             ),
                             child: ConstrainedBox(
                               constraints: const BoxConstraints(
@@ -192,7 +192,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                   SizedBox(height: gapL),
                                   GameOutlinedText(
                                     '迷雾之塔',
-                                    fontSize: phoneShort ? 20 : (short ? 22 : (tight ? 26 : 30)),
+                                    fontSize: LandscapeLayout.sp(
+                                      context,
+                                      HomeConstants.titleFontSize,
+                                    ),
                                     fontWeight: FontWeight.w700,
                                     color: HomeConstants.titleColor,
                                     strokeWidth: 0,
@@ -205,21 +208,36 @@ class _HomeScreenState extends State<HomeScreen> {
                                   SizedBox(height: gapS),
                                   GameOutlinedText(
                                     'MIST TOWER',
-                                    fontSize: phoneShort ? 9 : (short ? 10 : (tight ? 11 : 12)),
+                                    fontSize: LandscapeLayout.sp(
+                                      context,
+                                      HomeConstants.subtitleFontSize,
+                                    ),
                                     fontWeight: FontWeight.w500,
                                     color: HomeConstants.subtitleColor,
                                     strokeWidth: 0,
                                     letterSpacing: 4,
                                   ),
                                   SizedBox(height: gapM),
-                                  const _PixelDivider(),
+                                  _PixelDivider(
+                                    width: LandscapeLayout.sp(
+                                      context,
+                                      HomeConstants.dividerWidth,
+                                    ),
+                                    height: LandscapeLayout.sp(
+                                      context,
+                                      HomeConstants.dividerHeight,
+                                    ),
+                                  ),
                                   SizedBox(height: gapM),
                                   GameOutlinedText(
-                                    short || phoneShort
+                                    LandscapeLayout.uiScaleOf(context) < 0.85
                                         ? '探索、收集、对话、战斗——找回失落的真相。'
                                         : '你从迷雾森林中醒来，失去记忆。\n探索、收集、对话、战斗——找回失落的真相。',
                                     textAlign: TextAlign.center,
-                                    fontSize: phoneShort ? 11 : (short ? 12 : (tight ? 13 : 14)),
+                                    fontSize: LandscapeLayout.sp(
+                                      context,
+                                      HomeConstants.bodyFontSize,
+                                    ),
                                     fontWeight: FontWeight.w500,
                                     color: HomeConstants.bodyColor,
                                     strokeWidth: 0,
@@ -273,29 +291,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                     semanticLabel: '进入迷雾',
                                   ),
                                   SizedBox(height: gapM),
-                                  if (GameExit.isDesktop) ...[
-                                    TextButton(
-                                      onPressed: _controller.loading || _entering
-                                          ? null
-                                          : () async {
-                                              final ok =
-                                                  await GameExit.confirmQuitApp(
-                                                      context);
-                                              if (ok) GameExit.quitApp();
-                                            },
-                                      child: GameOutlinedText(
-                                        '退出游戏',
-                                        fontSize: short ? 11 : 12,
-                                        fontWeight: FontWeight.w500,
-                                        color: HomeConstants.hintColor,
-                                        strokeWidth: 0,
-                                      ),
-                                    ),
-                                    SizedBox(height: gapS),
-                                  ],
                                   GameOutlinedText(
                                     '指令探索 · 迷雾地图 · 遇敌进入回合战斗',
-                                    fontSize: 10,
+                                    fontSize: LandscapeLayout.sp(
+                                      context,
+                                      HomeConstants.hintFontSize,
+                                    ),
                                     fontWeight: FontWeight.w500,
                                     color: HomeConstants.hintColor,
                                     strokeWidth: 0,
@@ -306,6 +307,24 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                       ),
+                      if (!_entering)
+                        Positioned(
+                          top: LandscapeLayout.sp(context, 4),
+                          left: LandscapeLayout.sp(context, 4),
+                          child: GameIconButton(
+                            size: closeSize,
+                            asset: GameUiAssets.buttonRedClose,
+                            semanticLabel: '关闭',
+                            enabled: !_controller.loading,
+                            onPressed: _controller.loading
+                                ? null
+                                : () async {
+                                    final ok =
+                                        await GameExit.confirmQuitApp(context);
+                                    if (ok) GameExit.quitApp();
+                                  },
+                          ),
+                        ),
                       if (_entering)
                         HomeEnterTransition(
                           onCompleted: () => _pushExploration(context),
@@ -328,13 +347,19 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class _PixelDivider extends StatelessWidget {
-  const _PixelDivider();
+  const _PixelDivider({
+    required this.width,
+    required this.height,
+  });
+
+  final double width;
+  final double height;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 120,
-      height: 3,
+      width: width,
+      height: height,
       child: CustomPaint(
         painter: _PixelDividerPainter(),
       ),

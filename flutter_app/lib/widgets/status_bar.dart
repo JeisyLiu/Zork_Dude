@@ -4,7 +4,6 @@ import 'package:zork_dude/ui/components/game_panel.dart';
 import 'package:zork_dude/ui/components/game_progress_bar.dart';
 import 'package:zork_dude/ui/components/game_button.dart';
 import 'package:zork_dude/ui/components/game_outlined_text.dart';
-import 'package:zork_dude/ui/exploration/exploration_layout_constants.dart';
 import 'package:zork_dude/ui/layout/landscape_layout.dart';
 import 'package:zork_dude/ui/game_ui_theme.dart';
 
@@ -22,19 +21,19 @@ class StatusBar extends StatelessWidget {
         .map((c) => s.companions[c]?.name)
         .whereType<String>()
         .join(', ');
-    final size = MediaQuery.sizeOf(context);
-    final padding = MediaQuery.paddingOf(context);
-    final short = LandscapeLayout.isShortOf(size, padding);
-    final phoneShort = LandscapeLayout.isPhoneShortOf(size, padding);
-    final mapBtnH = phoneShort ? 24.0 : (short ? 26.0 : 32.0);
-    final mapBtnW = phoneShort ? 52.0 : (short ? 56.0 : 68.0);
+    final mapBtnH = LandscapeLayout.minTouch(context, 32);
+    final mapBtnW = LandscapeLayout.minTouch(context, 68);
+    final statGap = LandscapeLayout.sp(context, 8);
+    final fontSize = LandscapeLayout.sp(context, 11);
+    final progressW = LandscapeLayout.sp(context, 56);
+    final progressH = LandscapeLayout.sp(context, 9);
 
     return GamePanel(
       dark: true,
       withBorder: true,
       padding: EdgeInsets.symmetric(
-        horizontal: phoneShort ? 4 : (short ? 6 : 10),
-        vertical: phoneShort ? 2 : (short ? 3 : 6),
+        horizontal: LandscapeLayout.sp(context, 10),
+        vertical: LandscapeLayout.sp(context, 6),
       ),
       child: FittedBox(
         fit: BoxFit.scaleDown,
@@ -42,33 +41,42 @@ class StatusBar extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _stat(context, '❤️', '${s.playerHp}/${s.playerMaxHp}',
-                child: GameProgressBar(
-                  value: ratio,
-                  width: short ? 44 : 56,
-                  height: short ? 7 : 9,
-                ),
-                compact: short),
-            SizedBox(width: short ? 6 : 8),
-            _stat(context, '⚔️', '${s.totalAtk}', compact: short),
-            SizedBox(width: short ? 6 : 8),
-            _stat(context, '🛡️', '${s.totalDef}', compact: short),
-            SizedBox(width: short ? 6 : 8),
-            _stat(context, '💰', '${s.gold}', compact: short),
-            SizedBox(width: short ? 6 : 8),
-            _stat(context, '🏆', '${s.score}', compact: short),
-            SizedBox(width: short ? 6 : 8),
-            _stat(context, '🎒', '${s.totalWeight()}/${s.bagCapacity()}', compact: short),
+            _stat(
+              context,
+              '❤️',
+              '${s.playerHp}/${s.playerMaxHp}',
+              fontSize: fontSize,
+              child: GameProgressBar(
+                value: ratio,
+                width: progressW,
+                height: progressH,
+              ),
+            ),
+            SizedBox(width: statGap),
+            _stat(context, '⚔️', '${s.totalAtk}', fontSize: fontSize),
+            SizedBox(width: statGap),
+            _stat(context, '🛡️', '${s.totalDef}', fontSize: fontSize),
+            SizedBox(width: statGap),
+            _stat(context, '💰', '${s.gold}', fontSize: fontSize),
+            SizedBox(width: statGap),
+            _stat(context, '🏆', '${s.score}', fontSize: fontSize),
+            SizedBox(width: statGap),
+            _stat(
+              context,
+              '🎒',
+              '${s.totalWeight()}/${s.bagCapacity()}',
+              fontSize: fontSize,
+            ),
             if (companions.isNotEmpty) ...[
-              SizedBox(width: short ? 6 : 8),
+              SizedBox(width: statGap),
               _stat(
                 context,
                 '👥',
                 companions.length > 8 ? '${companions.substring(0, 8)}…' : companions,
-                compact: short,
+                fontSize: fontSize,
               ),
             ],
-            SizedBox(width: short ? 6 : 8),
+            SizedBox(width: statGap),
             GameButton(
               label: controller.mapVisible ? '地图' : '地图·关',
               subLabel: 'map',
@@ -87,11 +95,10 @@ class StatusBar extends StatelessWidget {
     BuildContext context,
     String icon,
     String value, {
+    required double fontSize,
     Widget? child,
-    bool compact = false,
   }) {
     final d = GameUiTheme.of(context);
-    final fontSize = compact ? 10.0 : 11.0;
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [

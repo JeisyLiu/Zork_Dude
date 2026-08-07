@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zork_dude/ui/layout/landscape_layout.dart';
 
 /// Palette and layout constants for the minimalist pixel home screen.
 abstract final class HomeConstants {
@@ -30,11 +31,25 @@ abstract final class HomeConstants {
   static const Color towerRune = Color(0xFF8A7A50);
 
   static const double maxContentWidth = 520;
+
   /// Cover CTA matches `button_enter.png` plate (≈3:1).
   static const double buttonWidth = 216;
-  static const double buttonWidthShort = 180;
-  static const double buttonWidthPhone = 160;
   static const double buttonAspect = 3;
+  static const double heroSize = 196;
+  static const double closeButtonSize = 44;
+
+  // Typography design sizes.
+  static const double titleFontSize = 30;
+  static const double subtitleFontSize = 12;
+  static const double bodyFontSize = 14;
+  static const double hintFontSize = 10;
+  static const double gapLarge = 16;
+  static const double gapMedium = 12;
+  static const double gapSmall = 10;
+  static const double scrollPadV = 12;
+  static const double scrollPadH = 16;
+  static const double dividerWidth = 120;
+  static const double dividerHeight = 3;
 
   /// Light text on dark enter-plate.
   static const Color buttonLabelColor = Color(0xFFE8DCC0);
@@ -42,21 +57,9 @@ abstract final class HomeConstants {
 
   static double buttonHeightFor(double width) => width / buttonAspect;
 
-  static double heroSizeFor(Size screen, {EdgeInsets padding = EdgeInsets.zero}) {
-    final height = screen.height - padding.vertical;
-    final width = screen.width;
-    if (height < 380) return 96;
-    if (height < 420) return 112;
-    if (height < 520) return 168;
-    if (width >= 900 || height >= 720) return 228;
-    return 196;
-  }
+  static double heroSizeFor(BuildContext context) =>
+      LandscapeLayout.sp(context, heroSize);
 
-  static double buttonWidthFor({
-    required bool short,
-    bool phoneShort = false,
-  }) {
-    if (phoneShort) return buttonWidthPhone;
-    return short ? buttonWidthShort : buttonWidth;
-  }
+  static double buttonWidthFor(BuildContext context) =>
+      LandscapeLayout.minTouch(context, buttonWidth);
 }

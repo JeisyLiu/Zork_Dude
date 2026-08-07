@@ -4,6 +4,7 @@ import 'package:zork_dude/ui/components/game_outlined_text.dart';
 import 'package:zork_dude/ui/components/game_panel.dart';
 import 'package:zork_dude/ui/combat/combat_layout_constants.dart';
 import 'package:zork_dude/ui/game_ui_theme.dart';
+import 'package:zork_dude/ui/layout/landscape_layout.dart';
 
 class CombatCommandMenu extends StatelessWidget {
   const CombatCommandMenu({
@@ -13,8 +14,6 @@ class CombatCommandMenu extends StatelessWidget {
     this.enabled = true,
     this.hasItems = false,
     this.meleeAvailable = true,
-    this.compact = false,
-    this.phoneShort = false,
     this.showTitle = false,
   });
 
@@ -23,8 +22,6 @@ class CombatCommandMenu extends StatelessWidget {
   final bool enabled;
   final bool hasItems;
   final bool meleeAvailable;
-  final bool compact;
-  final bool phoneShort;
   final bool showTitle;
 
   static const options = [
@@ -39,21 +36,18 @@ class CombatCommandMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final d = GameUiTheme.of(context);
-    final preferredW = CombatLayoutConstants.commandButtonWidthFor(
-      short: compact,
-      phoneShort: phoneShort,
-    );
+    final preferredW = CombatLayoutConstants.commandButtonWidthFor(context);
 
     return GamePanel(
       withBorder: true,
       padding: EdgeInsets.symmetric(
-        horizontal: phoneShort ? 4 : (compact ? 6 : 10),
-        vertical: phoneShort ? 4 : (compact ? 6 : 8),
+        horizontal: LandscapeLayout.sp(context, 10),
+        vertical: LandscapeLayout.sp(context, 8),
       ),
       child: LayoutBuilder(
         builder: (context, constraints) {
           final count = options.length;
-          final gap = phoneShort ? 2.0 : (compact ? 3.0 : 5.0);
+          final gap = LandscapeLayout.sp(context, 5);
           final maxEach =
               (constraints.maxWidth - gap * (count - 1)) / count;
           final btnW =
@@ -68,11 +62,11 @@ class CombatCommandMenu extends StatelessWidget {
               if (showTitle) ...[
                 GameOutlinedText(
                   '指令 Commands',
-                  fontSize: 13,
+                  fontSize: LandscapeLayout.sp(context, 13),
                   color: d.textMuted,
                   strokeWidth: 0,
                 ),
-                const SizedBox(height: 6),
+                SizedBox(height: LandscapeLayout.sp(context, 6)),
               ],
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -141,8 +135,6 @@ class CombatExecuteBar extends StatelessWidget {
     required this.ready,
     required this.onExecute,
     this.highlighted = false,
-    this.compact = false,
-    this.phoneShort = false,
     this.width,
     this.label = '执行',
     this.subLabel = 'Go',
@@ -151,19 +143,13 @@ class CombatExecuteBar extends StatelessWidget {
   final bool ready;
   final VoidCallback? onExecute;
   final bool highlighted;
-  final bool compact;
-  final bool phoneShort;
   final double? width;
   final String label;
   final String subLabel;
 
   @override
   Widget build(BuildContext context) {
-    final w = width ??
-        CombatLayoutConstants.executeButtonWidthFor(
-          short: compact,
-          phoneShort: phoneShort,
-        );
+    final w = width ?? CombatLayoutConstants.executeButtonWidthFor(context);
     final h = CombatLayoutConstants.executeButtonHeightForWidth(w);
     return DecoratedBox(
       decoration: highlighted

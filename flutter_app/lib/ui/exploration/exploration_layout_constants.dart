@@ -8,22 +8,23 @@ import 'package:zork_dude/ui/layout/landscape_layout.dart';
 abstract final class ExplorationLayoutConstants {
   static const double sideBySideMinWidth = LandscapeLayout.sideBySideMinWidth;
   static const double shortHeight = LandscapeLayout.shortHeight;
+
+  // Design constants (1280×720 reference).
   static const double directionPadWidth = 112;
-  static const double directionPadWidthShort = 72;
   static const double chipSpacing = 8;
-  static const double chipSpacingPhone = 6;
   static const double moreChipWidth = 96;
   static const double bannerHeight = 60;
-  static const double bannerHeightShort = 48;
-  static const double bannerHeightPhone = 48;
-
-  /// Fixed golden-ratio chip widths (height = width × 0.618). No runtime rescale.
   static const double chipWidth = 96;
-  static const double chipWidthShort = 80;
-  static const double chipWidthPhone = 64;
-
   static const double mapMinWidth = 160;
-  static const double mapMinWidthPhone = 120;
+  static const double panelPadVDesign = 18;
+  static const double tipsRowHeight = 20;
+  static const double dpadUpDownDesign = 36;
+  static const double dpadGapDesign = 4;
+  static const double dpadMinSize = 56;
+  static const double dpadGridOffset = 40;
+  static const double stackedMapMinHeight = 140;
+  static const double stackedMapFraction = 0.22;
+  static const double panelPadHDesign = 12;
 
   /// Primary action grid: 6 columns × 2 rows.
   static const int primaryColumns = 6;
@@ -40,126 +41,114 @@ abstract final class ExplorationLayoutConstants {
   static bool isPhoneShortOf(BuildContext context) =>
       LandscapeLayout.isPhoneShortOfContext(context);
 
-  static double preferredChipWidth({
-    required bool short,
-    bool phoneShort = false,
-  }) {
-    if (phoneShort) return chipWidthPhone;
-    return short ? chipWidthShort : chipWidth;
-  }
+  static double preferredChipWidth(BuildContext context) =>
+      LandscapeLayout.minTouch(context, chipWidth);
 
   static double chipHeightForWidth(double width) =>
       LandscapeLayout.heightFromWidth(width);
 
-  static double chipHeightFor({
-    required bool short,
-    bool phoneShort = false,
-  }) =>
-      chipHeightForWidth(preferredChipWidth(short: short, phoneShort: phoneShort));
+  static double chipHeightFor(BuildContext context) =>
+      chipHeightForWidth(preferredChipWidth(context));
 
-  static double panelPadV({required bool short, bool phoneShort = false}) {
-    if (phoneShort) return 8;
-    return short ? 12.0 : 18.0;
-  }
+  static double panelPadV(BuildContext context) =>
+      LandscapeLayout.sp(context, panelPadVDesign);
 
-  static double chipSpacingFor({bool phoneShort = false}) =>
-      phoneShort ? chipSpacingPhone : chipSpacing;
+  static double panelPadH(BuildContext context) =>
+      LandscapeLayout.sp(context, panelPadHDesign);
 
-  /// Natural 2-row grid height for a given chip width (no panel padding).
-  static double gridContentHeight(double chipWidth, {bool phoneShort = false}) {
-    final h = chipHeightForWidth(chipWidth);
-    final spacing = chipSpacingFor(phoneShort: phoneShort);
+  static double chipSpacingFor(BuildContext context) =>
+      LandscapeLayout.sp(context, chipSpacing);
+
+  /// Natural 2-row grid height for scaled chip width (no panel padding).
+  static double gridContentHeight(BuildContext context) {
+    final w = preferredChipWidth(context);
+    final h = chipHeightForWidth(w);
+    final spacing = chipSpacingFor(context);
     return 2 * h + spacing;
   }
 
-  static double directionPadBlockHeight({
-    required bool short,
-    bool phoneShort = false,
+  static double directionPadWidthFor(BuildContext context) =>
+      LandscapeLayout.sp(context, directionPadWidth);
+
+  static double directionPadBlockHeight(
+    BuildContext context, {
+    bool inCombat = false,
   }) {
-    final chipW = preferredChipWidth(short: short, phoneShort: phoneShort);
-    final gridH = gridContentHeight(chipW, phoneShort: phoneShort);
-    final dpadBase = short || phoneShort
-        ? directionPadWidthShort
-        : directionPadWidth;
-    final dpadSize = (gridH - (phoneShort ? 24 : (short ? 30 : 40)))
-        .clamp(phoneShort ? 48.0 : 56.0, dpadBase);
-    final upDown = phoneShort || short ? 26.0 : 36.0;
-    return dpadSize + 4 + upDown;
+    if (inCombat) return 0;
+    final gridH = gridContentHeight(context);
+    final dpadBase = directionPadWidthFor(context);
+    final offset = LandscapeLayout.sp(context, dpadGridOffset);
+    final minSize = LandscapeLayout.sp(context, dpadMinSize);
+    final dpadSize = (gridH - offset).clamp(minSize, dpadBase);
+    final upDown = LandscapeLayout.sp(context, dpadUpDownDesign);
+    return dpadSize + LandscapeLayout.sp(context, dpadGapDesign) + upDown;
   }
 
   /// Dock height that neatly fits the 6×2 golden button grid (+ optional tips).
-  static double dockMinHeight({
-    required bool short,
-    bool phoneShort = false,
+  static double dockMinHeight(
+    BuildContext context, {
     bool showTips = true,
     bool inCombat = false,
   }) {
-    final chipW = preferredChipWidth(short: short, phoneShort: phoneShort);
-    final gridH = gridContentHeight(chipW, phoneShort: phoneShort);
+    final gridH = gridContentHeight(context);
     final rowH = inCombat
         ? gridH
-        : math.max(gridH, directionPadBlockHeight(
-            short: short,
-            phoneShort: phoneShort,
-          ));
-    final tips = (!short && !phoneShort && showTips) ? 20.0 : 0.0;
-    return rowH + panelPadV(short: short, phoneShort: phoneShort) + tips;
+        : math.max(gridH, directionPadBlockHeight(context, inCombat: inCombat));
+    final tips =
+        showTips ? LandscapeLayout.sp(context, tipsRowHeight) : 0.0;
+    return rowH + panelPadV(context) + tips;
   }
 
-  /// Cap dock height so the middle content area keeps room for map + log.
+  /// Target dock height: on mobile reclaim the hidden input-row budget;
+  /// on desktop keep natural size unless the fraction cap forces a shrink.
   static double dockMaxHeight(
-    double usableHeight, {
-    required bool short,
-    bool phoneShort = false,
+    BuildContext context, {
     bool showTips = true,
     bool inCombat = false,
   }) {
-    final minH = dockMinHeight(
-      short: short,
-      phoneShort: phoneShort,
+    final usableH = LandscapeLayout.playUsableHeightOf(context);
+    final natural = dockMinHeight(
+      context,
       showTips: showTips,
       inCombat: inCombat,
     );
-    final cap = usableHeight * LandscapeLayout.explorationDockMaxFractionForPlatform();
-    if (usableHeight <= 0) return minH;
-    return math.min(minH, cap);
+    if (usableH <= 0) return natural;
+    final cap =
+        usableH * LandscapeLayout.explorationDockMaxFractionForPlatform();
+    final maxByContent =
+        usableH * (1.0 - LandscapeLayout.contentMinHeightFraction);
+    final ceiling = math.min(cap, maxByContent);
+    if (!LandscapeLayout.showCommandInput) {
+      // Roughly one command-input row (design 48dp), spent on a taller dock.
+      final reclaim = LandscapeLayout.sp(context, 48);
+      return math.min(natural + reclaim, ceiling);
+    }
+    return math.min(natural, ceiling);
   }
 
-  static double mapPanelMinWidth({required bool phoneShort}) =>
-      phoneShort ? mapMinWidthPhone : mapMinWidth;
+  static double mapPanelMinWidth(BuildContext context) =>
+      LandscapeLayout.sp(context, mapMinWidth);
 
-  static double stackedMapHeight(double usableHeight, {required bool short}) {
-    final fraction = short ? 0.28 : 0.22;
-    return math.max(short ? 100.0 : 140.0, usableHeight * fraction);
-  }
-
-  /// Fixed chip width (no scaling) — layout spreads buttons to fill the panel.
-  static double chipWidthFor(
-    double availableWidth, {
-    required bool short,
-    bool phoneShort = false,
-  }) =>
-      preferredChipWidth(short: short, phoneShort: phoneShort);
-
-  static double dockMaxHeightFor(Size size, EdgeInsets padding) {
-    final usable = LandscapeLayout.usableHeight(size, padding);
-    final phone = LandscapeLayout.isPhoneShortOf(size, padding);
-    final short = LandscapeLayout.isShortOf(size, padding);
-    return dockMaxHeight(
-      usable,
-      short: short,
-      phoneShort: phone,
-      showTips: !short && !phone,
+  static double stackedMapHeight(BuildContext context) {
+    final usableH = LandscapeLayout.playUsableHeightOf(context);
+    return math.max(
+      LandscapeLayout.sp(context, stackedMapMinHeight),
+      usableH * stackedMapFraction,
     );
   }
 
-  static int chipColumnsFor(double width, {bool short = false}) => primaryColumns;
+  /// Fixed scaled chip width — layout spreads buttons to fill the panel.
+  static double chipWidthFor(BuildContext context, double availableWidth) =>
+      preferredChipWidth(context);
 
-  static double bannerHeightFor({
-    required bool short,
-    bool phoneShort = false,
-  }) {
-    if (phoneShort) return bannerHeightPhone;
-    return short ? bannerHeightShort : bannerHeight;
-  }
+  static double dockMaxHeightFor(BuildContext context) => dockMaxHeight(context);
+
+  static int chipColumnsFor(double width, {bool short = false}) =>
+      primaryColumns;
+
+  static double bannerHeightFor(BuildContext context) =>
+      LandscapeLayout.sp(context, bannerHeight);
+
+  static double moreChipWidthFor(BuildContext context) =>
+      LandscapeLayout.minTouch(context, moreChipWidth);
 }

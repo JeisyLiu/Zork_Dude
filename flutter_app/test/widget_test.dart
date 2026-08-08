@@ -131,7 +131,9 @@ void main() {
 
     expect(tester.takeException(), isNull);
     expect(find.byType(HomeAmbientBackground), findsOneWidget);
-    expect(find.byType(GameButton), findsOneWidget);
+    expect(find.byType(GameButton), findsNWidgets(3));
+    expect(find.text('成就'), findsOneWidget);
+    expect(find.text('排行榜'), findsOneWidget);
   });
 
   testWidgets('Home layout fits 1280x720 without overflow', (tester) async {

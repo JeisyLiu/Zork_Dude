@@ -16,6 +16,7 @@ import 'package:zork_dude/domain/game_session.dart';
 import 'package:zork_dude/domain/models/enums.dart';
 import 'package:zork_dude/domain/models/map_meta.dart';
 import 'package:zork_dude/domain/map_service.dart';
+import 'package:zork_dude/services/play_games/play_games_service.dart';
 import 'package:zork_dude/state/ending_kind.dart';
 
 class LogEntry {
@@ -221,6 +222,17 @@ class GameController extends ChangeNotifier {
     } catch (_) {
       // Autosave unavailable (e.g. widget tests without platform plugins).
     }
+    _syncPlayGamesProgress();
+  }
+
+  void _syncPlayGamesProgress() {
+    final score = session?.score;
+    if (score == null) return;
+    unawaited(PlayGamesService.instance.submitBestScore(score));
+  }
+
+  void _notifyPlayGamesEnding(EndingKind kind) {
+    unawaited(PlayGamesService.instance.onEnding(kind));
   }
 
   void reviveFromDeath() {
@@ -371,6 +383,7 @@ class GameController extends ChangeNotifier {
     final s = session!;
     if (s.won && !wasWonBefore && pendingEnding != EndingKind.mainClear) {
       pendingEnding = EndingKind.mainClear;
+      _notifyPlayGamesEnding(EndingKind.mainClear);
     }
     if (s.won && !s.flags.containsKey('main_win_announced')) {
       s.flags['main_win_announced'] = true;
@@ -531,8 +544,10 @@ class GameController extends ChangeNotifier {
     if (outcome != CombatOutcome.victory) return;
     if (defeatedIds.contains('scp_001')) {
       pendingEnding = EndingKind.siteClear;
+      _notifyPlayGamesEnding(EndingKind.siteClear);
     } else if (defeatedIds.contains('dragon_whelp')) {
       pendingEnding = EndingKind.dragonClear;
+      _notifyPlayGamesEnding(EndingKind.dragonClear);
     }
     notifyListeners();
   }
@@ -548,6 +563,7 @@ class GameController extends ChangeNotifier {
     if (s.hasItem('magic_gem') && dragon != null && !dragon.alive) {
       s.won = true;
       pendingEnding = EndingKind.mainClear;
+      _notifyPlayGamesEnding(EndingKind.mainClear);
       if (!s.flags.containsKey('main_win_announced')) {
         s.flags['main_win_announced'] = true;
         _append('\n🎉 宝石在塔顶共鸣，记忆涌回——迷雾诅咒随之消散！');

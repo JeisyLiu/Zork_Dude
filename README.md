@@ -6,10 +6,14 @@
 
 | 版本 | 链接 |
 |------|------|
-| 桌面版 | [https://jeisyliu.github.io/Zork_Dude/](https://jeisyliu.github.io/Zork_Dude/) |
-| 移动版 | [https://jeisyliu.github.io/Zork_Dude/mobile](https://jeisyliu.github.io/Zork_Dude/mobile) |
+| 世界观主页 | [https://jeisyliu.github.io/Zork_Dude/](https://jeisyliu.github.io/Zork_Dude/) |
+| 桌面 Web 版 | [https://jeisyliu.github.io/Zork_Dude/play.html](https://jeisyliu.github.io/Zork_Dude/play.html) |
+| 移动 Web 版 | [https://jeisyliu.github.io/Zork_Dude/mobile](https://jeisyliu.github.io/Zork_Dude/mobile) |
+| 隐私政策 | [https://jeisyliu.github.io/Zork_Dude/privacy.html](https://jeisyliu.github.io/Zork_Dude/privacy.html) |
 
 浏览器打开即可玩，无需安装。手机建议使用移动版。
+
+**开发者**：Beatinghouse Inc · [JeisyLiu](https://github.com/jeisyliu)
 
 ## 特色
 
@@ -30,12 +34,14 @@
 
 ### Web 版
 
-用任意静态服务器打开根目录，或直接用浏览器打开 `index.html` / `mobile/index.html`：
+用任意静态服务器打开根目录：
 
 ```bash
 # 例如使用 Python
 python -m http.server 8080
-# 然后访问 http://localhost:8080/ 或 http://localhost:8080/mobile/
+# 主页（世界观） http://localhost:8080/
+# 桌面游玩     http://localhost:8080/play.html
+# 移动版       http://localhost:8080/mobile/
 ```
 
 ### 命令行版（Python）
@@ -86,7 +92,10 @@ Web 版也支持按钮点选与底部输入框输入命令。
 
 ```
 zork-dude/
-├── index.html          # 桌面 Web 版
+├── index.html          # 世界观介绍主页
+├── play.html           # 桌面 Web 文字冒险
+├── privacy.html        # 隐私政策
+├── site/               # 主页样式、版本说明、落地页图片
 ├── mobile/
 │   └── index.html      # 移动 Web 版
 ├── flutter_app/        # Flutter 原生移动端

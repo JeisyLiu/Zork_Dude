@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zork_dude/screens/exploration_screen.dart';
+import 'package:zork_dude/services/play_games/play_games_service.dart';
 import 'package:zork_dude/state/game_controller.dart';
 import 'package:zork_dude/ui/components/game_button.dart';
 import 'package:zork_dude/ui/ads/offpack_banner.dart';
@@ -28,6 +29,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final _controller = GameController();
+  final _playGames = PlayGamesService.instance;
   final _pointer = ValueNotifier<HomePointerSample?>(null);
   bool _entering = false;
 
@@ -35,14 +37,18 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _controller.addListener(_onControllerChanged);
+    _playGames.addListener(_onPlayGamesChanged);
     _controller.init();
   }
 
   void _onControllerChanged() => setState(() {});
 
+  void _onPlayGamesChanged() => setState(() {});
+
   @override
   void dispose() {
     _controller.removeListener(_onControllerChanged);
+    _playGames.removeListener(_onPlayGamesChanged);
     _controller.dispose();
     _pointer.dispose();
     super.dispose();
@@ -126,6 +132,43 @@ class _HomeScreenState extends State<HomeScreen> {
         setState(() => _entering = false);
       }
     });
+  }
+
+  Future<bool> _ensurePlayGamesConnected(BuildContext context) async {
+    if (_playGames.signedIn) return true;
+    final confirmed = await GameConfirmDialog.show(
+      context: context,
+      title: '连接 Play 游戏',
+      message: '连接 Google Play 游戏后可查看成就与排行榜。不连接也可正常游玩。',
+      cancelLabel: '稍后再说',
+      confirmLabel: '立即连接',
+      confirmSubLabel: 'connect',
+      skin: GameUiSkin.fantasy,
+    );
+    if (!confirmed || !mounted) return false;
+    return _playGames.connect();
+  }
+
+  Future<void> _openAchievements(BuildContext context) async {
+    if (_controller.loading || _entering) return;
+    if (_playGames.signedIn) {
+      await _playGames.showAchievements();
+      return;
+    }
+    final connected = await _ensurePlayGamesConnected(context);
+    if (!mounted || !connected) return;
+    await _playGames.showAchievements();
+  }
+
+  Future<void> _openLeaderboards(BuildContext context) async {
+    if (_controller.loading || _entering) return;
+    if (_playGames.signedIn) {
+      await _playGames.showLeaderboards();
+      return;
+    }
+    final connected = await _ensurePlayGamesConnected(context);
+    if (!mounted || !connected) return;
+    await _playGames.showLeaderboards();
   }
 
   @override
@@ -291,6 +334,48 @@ class _HomeScreenState extends State<HomeScreen> {
                                         : () => _enterGame(context),
                                     semanticLabel: '进入迷雾',
                                   ),
+                                  if (_playGames.isSupported) ...[
+                                    SizedBox(height: gapS),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        GameButton(
+                                          width: btnW * 0.48,
+                                          height: btnH * 0.82,
+                                          compact: true,
+                                          asset: GameUiAssets.buttonGrey,
+                                          label: '成就',
+                                          subLabel: 'achievements',
+                                          enabled: !_controller.loading &&
+                                              !_entering,
+                                          onPressed: _controller.loading ||
+                                                  _entering
+                                              ? null
+                                              : () =>
+                                                    _openAchievements(context),
+                                          semanticLabel: '成就',
+                                        ),
+                                        SizedBox(width: gapS),
+                                        GameButton(
+                                          width: btnW * 0.48,
+                                          height: btnH * 0.82,
+                                          compact: true,
+                                          asset: GameUiAssets.buttonGrey,
+                                          label: '排行榜',
+                                          subLabel: 'leaderboard',
+                                          enabled: !_controller.loading &&
+                                              !_entering,
+                                          onPressed: _controller.loading ||
+                                                  _entering
+                                              ? null
+                                              : () =>
+                                                    _openLeaderboards(context),
+                                          semanticLabel: '排行榜',
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                   SizedBox(height: gapM),
                                   GameOutlinedText(
                                     '指令探索 · 迷雾地图 · 遇敌进入回合战斗',

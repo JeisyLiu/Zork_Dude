@@ -28,9 +28,11 @@ class _MistMapPanelState extends State<MistMapPanel> {
 
   final _mapService = MapService();
   final _transform = TransformationController();
+  final _viewerKey = GlobalKey();
 
   String _detail = '拖拽平移 · 滚轮/双指缩放 · 点击相邻节点移动';
   MapLayer? _boundLayer;
+  Size _viewportSize = Size.zero;
 
   @override
   void dispose() {
@@ -38,12 +40,50 @@ class _MistMapPanelState extends State<MistMapPanel> {
     super.dispose();
   }
 
-  void _syncLayerCamera(MapLayer layer) {
+  /// Center the camera on the current room (or canvas origin if absent).
+  void _centerOnHere(MapViewModel vm, {double scale = 1.0}) {
+    final clamped = scale.clamp(_minScale, _maxScale);
+    MapNode? here;
+    for (final n in vm.nodes) {
+      if (n.isHere) {
+        here = n;
+        break;
+      }
+    }
+    if (here == null) {
+      _transform.value = Matrix4.identity()..scale(clamped);
+      return;
+    }
+    final vw = _viewportSize.width;
+    final vh = _viewportSize.height;
+    if (vw <= 0 || vh <= 0) {
+      final box = _viewerKey.currentContext?.findRenderObject() as RenderBox?;
+      if (box == null || !box.hasSize || box.size.isEmpty) return;
+      _viewportSize = box.size;
+    }
+    final w = _viewportSize.width;
+    final h = _viewportSize.height;
+    if (w <= 0 || h <= 0) return;
+    final tx = w / 2 - here.cx * clamped;
+    final ty = h / 2 - here.cy * clamped;
+    _transform.value = Matrix4.identity()
+      ..translate(tx, ty)
+      ..scale(clamped);
+  }
+
+  void _syncLayerCamera(MapLayer layer, MapViewModel vm) {
     if (_boundLayer == layer) return;
     _boundLayer = layer;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted || _boundLayer != layer) return;
-      _transform.value = Matrix4.identity();
+      _centerOnHere(vm);
+      // Viewport may still be zero on the first frame; retry once.
+      if (_viewportSize.isEmpty) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!mounted || _boundLayer != layer) return;
+          _centerOnHere(vm);
+        });
+      }
     });
   }
 
@@ -81,12 +121,12 @@ class _MistMapPanelState extends State<MistMapPanel> {
     if (s == null) return const SizedBox.shrink();
     // Do not sync layer here — setMapLayer must stick until the player moves.
     final layer = widget.controller.mapLayer;
-    _syncLayerCamera(layer);
     final vm = _mapService.buildView(
       s,
       layer,
       revealAll: widget.controller.developerMode,
     );
+    _syncLayerCamera(layer, vm);
     final canvas = _canvasSize(vm);
     final d = GameUiTheme.of(context);
 
@@ -103,22 +143,18 @@ class _MistMapPanelState extends State<MistMapPanel> {
             child: Row(
               children: [
                 for (final l in MapLayer.values)
-                  Padding(
-                    padding: const EdgeInsets.only(right: 6),
-                    child: GameButton(
-                      label: mapLayerLabels[l]!,
-                      width: 56,
-                      height: LandscapeLayout.heightFromWidth(56),
-                      accent: l == layer,
-                      enabled: widget.controller.canViewMapLayer(l),
-                      onPressed: widget.controller.canViewMapLayer(l)
-                          ? () => widget.controller.setMapLayer(l)
-                          : null,
-                      semanticLabel: widget.controller.canViewMapLayer(l)
-                          ? mapLayerLabels[l]!
-                          : '${mapLayerLabels[l]!}（未探索）',
+                  if (widget.controller.canViewMapLayer(l))
+                    Padding(
+                      padding: const EdgeInsets.only(right: 6),
+                      child: GameButton(
+                        label: mapLayerLabels[l]!,
+                        width: 56,
+                        height: LandscapeLayout.heightFromWidth(56),
+                        accent: l == layer,
+                        onPressed: () => widget.controller.setMapLayer(l),
+                        semanticLabel: mapLayerLabels[l]!,
+                      ),
                     ),
-                  ),
                 const SizedBox(width: 8),
                 if (widget.controller.developerMode)
                   Padding(
@@ -159,34 +195,49 @@ class _MistMapPanelState extends State<MistMapPanel> {
                       ),
                     ),
                   ),
-                  Listener(
-                    onPointerSignal: (signal) {
-                      if (signal is PointerScrollEvent) {
-                        _onScrollZoom(signal);
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      final next = Size(
+                        constraints.maxWidth,
+                        constraints.maxHeight,
+                      );
+                      if (next != _viewportSize &&
+                          next.width > 0 &&
+                          next.height > 0) {
+                        _viewportSize = next;
                       }
-                    },
-                    child: InteractiveViewer(
-                      transformationController: _transform,
-                      constrained: false,
-                      boundaryMargin: const EdgeInsets.all(180),
-                      minScale: _minScale,
-                      maxScale: _maxScale,
-                      panEnabled: true,
-                      scaleEnabled: true,
-                      clipBehavior: Clip.hardEdge,
-                      child: SizedBox(
-                        width: canvas.width,
-                        height: canvas.height,
-                        child: GestureDetector(
-                          behavior: HitTestBehavior.opaque,
-                          onTapUp: (details) => _onCanvasTap(vm, details.localPosition),
-                          child: CustomPaint(
-                            size: canvas,
-                            painter: MapGraphPainter(vm: vm),
+                      return Listener(
+                        key: _viewerKey,
+                        onPointerSignal: (signal) {
+                          if (signal is PointerScrollEvent) {
+                            _onScrollZoom(signal);
+                          }
+                        },
+                        child: InteractiveViewer(
+                          transformationController: _transform,
+                          constrained: false,
+                          boundaryMargin: const EdgeInsets.all(180),
+                          minScale: _minScale,
+                          maxScale: _maxScale,
+                          panEnabled: true,
+                          scaleEnabled: true,
+                          clipBehavior: Clip.hardEdge,
+                          child: SizedBox(
+                            width: canvas.width,
+                            height: canvas.height,
+                            child: GestureDetector(
+                              behavior: HitTestBehavior.opaque,
+                              onTapUp: (details) =>
+                                  _onCanvasTap(vm, details.localPosition),
+                              child: CustomPaint(
+                                size: canvas,
+                                painter: MapGraphPainter(vm: vm),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
+                      );
+                    },
                   ),
                 ],
               ),

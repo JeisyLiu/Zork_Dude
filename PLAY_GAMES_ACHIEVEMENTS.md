@@ -1,141 +1,339 @@
-# Play Games Console — 成就与排行榜文案
+# Play Games Console — 成就与排行榜文案（18 成就）
 
 在 Google Play Console：
 
 **Grow users → Play Games Services → Setup and management → Achievements / Leaderboards**
 
-按下面每一条创建。名称、描述可直接复制。创建完成后 **Publish** PGS 配置，再把生成的 ID 填回工程。
+按下面每一条创建。名称、描述可直接复制。全部建好后 **Publish** PGS 配置，再把生成的 ID 填回工程。
 
 包名：`com.zorkdude.zork_dude`  
-游戏名：迷雾之塔 / Mist Tower
+游戏名：迷雾之塔 / Mist Tower  
+
+**Points 规则提醒：** 须为 5 的倍数；单个 ≤200；全作合计 ≤2000（本表合计 **595**，留有余量）。  
+**无 Steam 式稀有度类型**；用更高分 + Hidden 表达稀有。
 
 ---
 
-## 成就 1 / 3
-
-**本地逻辑 ID（代码用，勿填进 Console 名称栏）**  
-`ending_dragon`
+## 成就 1 / 18 — `awaken`
 
 | Console 字段 | 复制内容 |
 |--------------|----------|
-| Name（名称） | 幼龙已陨落 |
-| Description（描述） | 击败塔顶幼龙，取得魔法宝石。 |
-| Initial state（初始状态） | Revealed（显示） |
-| Points（经验值） | 20 |
-| Incremental（增量） | No（否，标准一次解锁） |
-| List order（列表顺序） | 1 |
+| Name | 雾中苏醒 |
+| Description | 踏入迷雾森林，开始旅程。 |
+| Initial state | Revealed |
+| Points | 5 |
+| Incremental | No |
+| List order | 1 |
 
-**触发说明（给自己看，不必贴 Console）**  
-战斗胜利且击败 `dragon_whelp` → `EndingKind.dragonClear`
+触发：首次离开 `forest_entrance`。
 
 ---
 
-## 成就 2 / 3
-
-**本地逻辑 ID**  
-`ending_site`
+## 成就 2 / 18 — `first_victory`
 
 | Console 字段 | 复制内容 |
 |--------------|----------|
-| Name（名称） | 站点行动完成 |
-| Description（描述） | 击败收容站最终 BOSS，完成站点行动。 |
-| Initial state（初始状态） | Revealed（显示） |
-| Points（经验值） | 50 |
-| Incremental（增量） | No |
-| List order（列表顺序） | 2 |
+| Name | 初战告捷 |
+| Description | 赢得第一场战斗。 |
+| Initial state | Revealed |
+| Points | 10 |
+| Incremental | No |
+| List order | 2 |
 
-**触发说明**  
-战斗胜利且击败 `scp_001` → `EndingKind.siteClear`
+触发：生涯首次战斗胜利。
 
 ---
 
-## 成就 3 / 3
-
-**本地逻辑 ID**  
-`ending_main`
+## 成就 3 / 18 — `first_recruit`
 
 | Console 字段 | 复制内容 |
 |--------------|----------|
-| Name（名称） | 迷雾消散 |
-| Description（描述） | 在塔顶使用魔法宝石，找回记忆并打破迷雾诅咒。 |
-| Initial state（初始状态） | Revealed（显示） |
-| Points（经验值） | 100 |
-| Incremental（增量） | No |
-| List order（列表顺序） | 3 |
+| Name | 结伴而行 |
+| Description | 招募第一位队友。 |
+| Initial state | Revealed |
+| Points | 15 |
+| Incremental | No |
+| List order | 3 |
 
-**触发说明**  
-主线通关 → `EndingKind.mainClear` / `session.won == true`
+触发：首次成功招募。
 
 ---
 
-## 排行榜 1 / 1
-
-**本地逻辑 ID**  
-`high_score`
+## 成就 4 / 18 — `first_quest`
 
 | Console 字段 | 复制内容 |
 |--------------|----------|
-| Name（名称） | 最高得分 |
-| Score formatting（分数格式） | Numeric（数值） |
-| Sort order（排序） | Larger is better（越大越好） |
-| Ordering（展示） | Higher scores are better |
-| Score unit / Format | 整数得分（无小数） |
+| Name | 受托之人 |
+| Description | 完成第一个 NPC 委托。 |
+| Initial state | Revealed |
+| Points | 15 |
+| Incremental | No |
+| List order | 4 |
+
+触发：任意 NPC `questDone` 首次完成。
+
+---
+
+## 成就 5 / 18 — `enter_cave`
+
+| Console 字段 | 复制内容 |
+|--------------|----------|
+| Name | 深入地下 |
+| Description | 首次进入洞穴层。 |
+| Initial state | Revealed |
+| Points | 20 |
+| Incremental | No |
+| List order | 5 |
+
+触发：首次访问洞穴层房间。
+
+---
+
+## 成就 6 / 18 — `enter_tower`
+
+| Console 字段 | 复制内容 |
+|--------------|----------|
+| Name | 塔影将至 |
+| Description | 首次登上高塔层。 |
+| Initial state | Revealed |
+| Points | 25 |
+| Incremental | No |
+| List order | 6 |
+
+触发：首次访问高塔层房间。
+
+---
+
+## 成就 7 / 18 — `site_gate`
+
+| Console 字段 | 复制内容 |
+|--------------|----------|
+| Name | 石门洞开 |
+| Description | 持魔法宝石打开通往收容站的石门。 |
+| Initial state | Hidden |
+| Points | 30 |
+| Incremental | No |
+| List order | 7 |
+
+触发：`grave_site_open` 标志首次置位。
+
+---
+
+## 成就 8 / 18 — `enter_site`
+
+| Console 字段 | 复制内容 |
+|--------------|----------|
+| Name | 收容之下 |
+| Description | 首次踏入基金会收容站点。 |
+| Initial state | Hidden |
+| Points | 35 |
+| Incremental | No |
+| List order | 8 |
+
+触发：首次访问站点层房间。
+
+---
+
+## 成就 9 / 18 — `explore_20`
+
+| Console 字段 | 复制内容 |
+|--------------|----------|
+| Name | 迷雾残页 |
+| Description | 探索至少 20 个场景。 |
+| Initial state | Revealed |
+| Points | 25 |
+| Incremental | No |
+| List order | 9 |
+
+触发：`visitedCount() >= 20`。
+
+---
+
+## 成就 10 / 18 — `explore_40`
+
+| Console 字段 | 复制内容 |
+|--------------|----------|
+| Name | 雾图将满 |
+| Description | 探索至少 40 个场景。 |
+| Initial state | Revealed |
+| Points | 40 |
+| Incremental | No |
+| List order | 10 |
+
+触发：`visitedCount() >= 40`。
+
+---
+
+## 成就 11 / 18 — `battles_10`
+
+| Console 字段 | 复制内容 |
+|--------------|----------|
+| Name | 十战迷雾 |
+| Description | 累计赢得 10 场战斗。 |
+| Initial state | Revealed |
+| Points | 20 |
+| Incremental | **Yes**，Steps = **10** |
+| List order | 11 |
+
+触发：设备级生涯胜场（跨存档累计）。
+
+---
+
+## 成就 12 / 18 — `battles_25`
+
+| Console 字段 | 复制内容 |
+|--------------|----------|
+| Name | 百战将启 |
+| Description | 累计赢得 25 场战斗。 |
+| Initial state | Revealed |
+| Points | 40 |
+| Incremental | **Yes**，Steps = **25** |
+| List order | 12 |
+
+触发：设备级生涯胜场。
+
+---
+
+## 成就 13 / 18 — `ending_dragon`
+
+| Console 字段 | 复制内容 |
+|--------------|----------|
+| Name | 幼龙已陨落 |
+| Description | 击败塔顶幼龙，取得魔法宝石。 |
+| Initial state | Revealed |
+| Points | 40 |
+| Incremental | No |
+| List order | 13 |
+
+触发：`EndingKind.dragonClear`。
+
+---
+
+## 成就 14 / 18 — `ending_main`
+
+| Console 字段 | 复制内容 |
+|--------------|----------|
+| Name | 迷雾消散 |
+| Description | 在塔顶使用魔法宝石，找回记忆并打破迷雾诅咒。 |
+| Initial state | Hidden |
+| Points | 50 |
+| Incremental | No |
+| List order | 14 |
+
+触发：`EndingKind.mainClear`。
+
+---
+
+## 成就 15 / 18 — `ending_site`
+
+| Console 字段 | 复制内容 |
+|--------------|----------|
+| Name | 站点行动完成 |
+| Description | 击败收容站最终 BOSS，完成站点行动。 |
+| Initial state | Hidden |
+| Points | 50 |
+| Incremental | No |
+| List order | 15 |
+
+触发：`EndingKind.siteClear`。
+
+---
+
+## 成就 16 / 18 — `full_party`
+
+| Console 字段 | 复制内容 |
+|--------------|----------|
+| Name | 全员集结 |
+| Description | 招募全部 7 名队友。 |
+| Initial state | Hidden |
+| Points | 75 |
+| Incremental | No |
+| List order | 16 |
+
+触发：7 名 companion 均 `recruited`。
+
+---
+
+## 成就 17 / 18 — `ng_plus`
+
+| Console 字段 | 复制内容 |
+|--------------|----------|
+| Name | 二周目旅人 |
+| Description | 开启二周目旅程。 |
+| Initial state | Hidden |
+| Points | 50 |
+| Incremental | No |
+| List order | 17 |
+
+触发：成功执行 `ng+`。
+
+---
+
+## 成就 18 / 18 — `score_1000`
+
+| Console 字段 | 复制内容 |
+|--------------|----------|
+| Name | 千分迷雾 |
+| Description | 单局得分达到 1000。 |
+| Initial state | Hidden |
+| Points | 50 |
+| Incremental | No |
+| List order | 18 |
+
+触发：`session.score >= 1000`。
+
+---
+
+## 排行榜 1 / 1 — `high_score`
+
+| Console 字段 | 复制内容 |
+|--------------|----------|
+| Name | 最高得分 |
+| Score formatting | Numeric |
+| Sort order | Larger is better |
 | Number of decimal places | 0 |
-| Refresh type / 时间范围 | 允许日榜 / 周榜 / 全部时间（默认即可） |
 
-**提交说明**  
-本地 `session.score` 的历史最高分；仅当新分更高时提交。
+提交：设备本地历史最高 `session.score`。
 
 ---
 
-## 图标（Console 必传）
+## 英文备用
 
-每个成就需要解锁图标（通常还需锁定态）。建议：
+| 本地 ID | Name | Description |
+|---------|------|-------------|
+| `awaken` | Awakening | Step into the mist forest and begin your journey. |
+| `first_victory` | First Victory | Win your first battle. |
+| `first_recruit` | Companions | Recruit your first companion. |
+| `first_quest` | Trusted | Complete your first NPC quest. |
+| `enter_cave` | Into the Deep | Enter the cave layer for the first time. |
+| `enter_tower` | Tower Ahead | Reach the tower layer for the first time. |
+| `site_gate` | Stone Gate Opens | Open the path to the containment site with the magic gem. |
+| `enter_site` | Beneath Containment | Enter the Foundation containment site for the first time. |
+| `explore_20` | Mist Pages | Explore at least 20 rooms. |
+| `explore_40` | Charting the Fog | Explore at least 40 rooms. |
+| `battles_10` | Ten Battles | Win 10 battles in total. |
+| `battles_25` | Seasoned Fighter | Win 25 battles in total. |
+| `ending_dragon` | Dragon Fell | Defeat the young dragon atop the tower and claim the magic gem. |
+| `ending_main` | Mist Cleared | Use the magic gem at the tower’s peak to restore your memories and break the curse. |
+| `ending_site` | Site Secured | Defeat the containment site’s final boss and complete the operation. |
+| `full_party` | Full Party | Recruit all 7 companions. |
+| `ng_plus` | New Cycle | Start a New Game Plus run. |
+| `score_1000` | Thousand Mist | Reach a score of 1000 in a single run. |
+| `high_score` | High Score | Highest score earned in Mist Tower. |
 
-- 尺寸按 Console 当前提示（常见为 512×512）
-- 风格与游戏 UI 一致，三成就图标可区分：幼龙 / 站点 / 塔顶宝石
-- 排行榜也可上传图标（按 Console 是否必填）
+---
 
-图标文件可放在本地素材目录，创建成就时上传；本文件不附二进制资源。
+## 图标
+
+每个成就需上传图标（常见 512×512）。建议按主题区分：开局 / 探索 / 战斗 / 终局 / 稀有。风格对齐 `mist_tower_hero` 像素色板。
 
 ---
 
 ## 创建后回填工程
 
-1. Console → Play Games Services → Configuration → **Get resources**
-2. 用导出的字符串替换：
+1. Console → **Get resources** 导出 XML  
+2. 替换 [`flutter_app/android/app/src/main/res/values/games-ids.xml`](flutter_app/android/app/src/main/res/values/games-ids.xml)  
+3. 同步替换 [`flutter_app/lib/services/play_games/play_games_ids.dart`](flutter_app/lib/services/play_games/play_games_ids.dart) 中 `CgkI_PLACEHOLDER_*`  
+4. 勾选 [TODO_LIST.md](./TODO_LIST.md) 回填项  
 
-`flutter_app/android/app/src/main/res/values/games-ids.xml`
-
-```xml
-<!-- 示例结构；值为 Console 导出结果 -->
-<string name="app_id" translatable="false">……</string>
-<string name="achievement_ending_dragon" translatable="false">CgkI……</string>
-<string name="achievement_ending_site" translatable="false">CgkI……</string>
-<string name="achievement_ending_main" translatable="false">CgkI……</string>
-<string name="leaderboard_high_score" translatable="false">CgkI……</string>
-```
-
-3. 同步替换 `flutter_app/lib/services/play_games/play_games_ids.dart` 中的占位符：
-
-| 本地 ID | Dart 映射键 |
-|---------|-------------|
-| `ending_dragon` | `PlayGamesLocalId.endingDragon` |
-| `ending_site` | `PlayGamesLocalId.endingSite` |
-| `ending_main` | `PlayGamesLocalId.endingMain` |
-| `high_score` | `PlayGamesLocalId.highScore` |
-
-4. 勾选 [TODO_LIST.md](./TODO_LIST.md) 中「回填 ID」相关项。
-
----
-
-## 英文备用（若 Console 语言/商店面向海外）
-
-可选：在 Console 为英文地区添加本地化，或直接用下列英文作为主名称。
-
-| 本地 ID | Name | Description |
-|---------|------|-------------|
-| `ending_dragon` | Dragon Fell | Defeat the young dragon atop the tower and claim the magic gem. |
-| `ending_site` | Site Secured | Defeat the containment site’s final boss and complete the operation. |
-| `ending_main` | Mist Cleared | Use the magic gem at the tower’s peak to restore your memories and break the curse. |
-| `high_score` | High Score | Highest score earned in Mist Tower. |
+**Points 合计：** 5+10+15+15+20+25+30+35+25+40+20+40+40+50+50+75+50+50 = **595** / 2000

@@ -8,6 +8,8 @@ final class AchievementOutbox {
 
   static const _achievementsKey = 'pgs_achievements_v1';
   static const _leaderboardKey = 'pgs_leaderboard_high_score_v1';
+  static const _careerVictoriesKey = 'pgs_career_victories_v1';
+  static const _incrementalPushedKey = 'pgs_incremental_pushed_v1';
 
   static Future<AchievementOutbox> load() async {
     final prefs = await SharedPreferences.getInstance();
@@ -17,6 +19,8 @@ final class AchievementOutbox {
   final SharedPreferences _prefs;
   Map<String, AchievementRecord>? _achievements;
   LeaderboardRecord? _leaderboard;
+  int? _careerVictories;
+  Map<String, int>? _incrementalPushed;
 
   Map<String, AchievementRecord> get achievements {
     _achievements ??= _decodeAchievements(_prefs.getString(_achievementsKey));
@@ -27,6 +31,20 @@ final class AchievementOutbox {
     _leaderboard ??= _decodeLeaderboard(_prefs.getString(_leaderboardKey));
     return _leaderboard!;
   }
+
+  int get careerVictories {
+    _careerVictories ??= _prefs.getInt(_careerVictoriesKey) ?? 0;
+    return _careerVictories!;
+  }
+
+  Map<String, int> get incrementalPushed {
+    _incrementalPushed ??= _decodeIntMap(
+      _prefs.getString(_incrementalPushedKey),
+    );
+    return _incrementalPushed!;
+  }
+
+  bool isUnlocked(String localId) => achievements.containsKey(localId);
 
   Future<void> markUnlocked(String localId) async {
     final now = DateTime.now().millisecondsSinceEpoch;
@@ -45,6 +63,26 @@ final class AchievementOutbox {
 
   Iterable<MapEntry<String, AchievementRecord>> get pendingAchievements =>
       achievements.entries.where((e) => !e.value.pushed);
+
+  /// Lifetime combat wins on this device. Returns the new total.
+  Future<int> addCareerVictory() async {
+    final next = careerVictories + 1;
+    _careerVictories = next;
+    await _prefs.setInt(_careerVictoriesKey, next);
+    return next;
+  }
+
+  int pushedStepsFor(String localId) => incrementalPushed[localId] ?? 0;
+
+  Future<void> markIncrementalPushed(String localId, int steps) async {
+    final prev = pushedStepsFor(localId);
+    if (steps <= prev) return;
+    incrementalPushed[localId] = steps;
+    await _prefs.setString(
+      _incrementalPushedKey,
+      jsonEncode(incrementalPushed),
+    );
+  }
 
   /// Returns true when [score] is a new local best.
   Future<bool> recordBestScore(int score) async {
@@ -86,6 +124,18 @@ final class AchievementOutbox {
           id,
           AchievementRecord.fromJson(value as Map<String, dynamic>),
         ),
+      );
+    } catch (_) {
+      return {};
+    }
+  }
+
+  static Map<String, int> _decodeIntMap(String? raw) {
+    if (raw == null || raw.isEmpty) return {};
+    try {
+      final decoded = jsonDecode(raw) as Map<String, dynamic>;
+      return decoded.map(
+        (id, value) => MapEntry(id, (value as num?)?.toInt() ?? 0),
       );
     } catch (_) {
       return {};
@@ -140,4 +190,31 @@ final class LeaderboardRecord {
         best: (json['best'] as num?)?.toInt() ?? 0,
         pushedBest: (json['pushedBest'] as num?)?.toInt() ?? 0,
       );
+}
+
+/// Snapshot of session fields used for achievement evaluation.
+final class PlayGamesSessionSnapshot {
+  const PlayGamesSessionSnapshot({
+    required this.currentRoomId,
+    required this.visitedCount,
+    required this.score,
+    required this.siteGateOpen,
+    required this.hasVisitedCave,
+    required this.hasVisitedTower,
+    required this.hasVisitedSite,
+    required this.recruitedCount,
+    required this.hasCompletedQuest,
+  });
+
+  final String currentRoomId;
+  final int visitedCount;
+  final int score;
+  final bool siteGateOpen;
+  final bool hasVisitedCave;
+  final bool hasVisitedTower;
+  final bool hasVisitedSite;
+  final int recruitedCount;
+  final bool hasCompletedQuest;
+
+  static const companionTotal = 7;
 }

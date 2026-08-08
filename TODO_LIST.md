@@ -27,7 +27,9 @@
 
 ## 2. Google Play Games Services 后台配置
 
-详细文案见：[PLAY_GAMES_ACHIEVEMENTS.md](./PLAY_GAMES_ACHIEVEMENTS.md)（可逐条复制到 Console）
+详细文案见：[PLAY_GAMES_ACHIEVEMENTS.md](./PLAY_GAMES_ACHIEVEMENTS.md)（**18 成就 + 1 排行榜**，可逐条复制到 Console）
+
+客户端钩子已接入（本地 Outbox + 静默登录补推）。Console 仍需配置并回填真 ID。
 
 - [ ] Play Console 创建/选择应用「迷雾之塔」
 - [ ] Grow users → Play Games Services → 完成初始 Setup / Configuration
@@ -35,8 +37,9 @@
 - [ ] 添加 Credential：Android（包名 `com.zorkdude.zork_dude`）
 - [ ] 填入 **debug** 签名 SHA-1
 - [ ] 填入 **release / Play App Signing** 签名 SHA-1
-- [ ] 按 `PLAY_GAMES_ACHIEVEMENTS.md` 创建 3 个成就
+- [ ] 按 `PLAY_GAMES_ACHIEVEMENTS.md` 创建 **18** 个成就（含 2 个增量）
 - [ ] 按该文件创建 1 个排行榜
+- [ ] 上传成就图标（512×512）
 - [ ] Play Games Services → Publishing → **Publish**（只发布 PGS 配置，不等于上架游戏）
 - [ ] Configuration → Credentials → **Get resources**，导出 XML
 - [ ] 用真实 ID 替换工程占位符：
@@ -49,10 +52,25 @@
 | 本地 ID | Console 资源名 | Android ID（CgkI…） |
 |---------|----------------|---------------------|
 | `app_id` | Play Games App ID | |
+| `awaken` | 雾中苏醒 | |
+| `first_victory` | 初战告捷 | |
+| `first_recruit` | 结伴而行 | |
+| `first_quest` | 受托之人 | |
+| `enter_cave` | 深入地下 | |
+| `enter_tower` | 塔影将至 | |
+| `site_gate` | 石门洞开 | |
+| `enter_site` | 收容之下 | |
+| `explore_20` | 迷雾残页 | |
+| `explore_40` | 雾图将满 | |
+| `battles_10` | 十战迷雾 | |
+| `battles_25` | 百战将启 | |
 | `ending_dragon` | 幼龙已陨落 | |
-| `ending_site` | 站点行动完成 | |
 | `ending_main` | 迷雾消散 | |
-| `high_score` | 最高得分 | |
+| `ending_site` | 站点行动完成 | |
+| `full_party` | 全员集结 | |
+| `ng_plus` | 二周目旅人 | |
+| `score_1000` | 千分迷雾 | |
+| `high_score` | 最高得分（排行榜） | |
 
 ---
 
@@ -71,4 +89,3 @@
 - 自有后端 / 云存档
 - 应用内「注销自有账号」（当前无自有账号）
 - iOS Game Center
-- 增量成就、更多成就（首期仅 3 成就 + 1 排行榜）

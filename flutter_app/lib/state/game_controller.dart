@@ -16,6 +16,7 @@ import 'package:zork_dude/domain/game_session.dart';
 import 'package:zork_dude/domain/models/enums.dart';
 import 'package:zork_dude/domain/models/map_meta.dart';
 import 'package:zork_dude/domain/map_service.dart';
+import 'package:zork_dude/services/play_games/achievement_outbox.dart';
 import 'package:zork_dude/services/play_games/play_games_service.dart';
 import 'package:zork_dude/state/ending_kind.dart';
 
@@ -226,13 +227,45 @@ class GameController extends ChangeNotifier {
   }
 
   void _syncPlayGamesProgress() {
-    final score = session?.score;
-    if (score == null) return;
-    unawaited(PlayGamesService.instance.submitBestScore(score));
+    final s = session;
+    if (s == null) return;
+    unawaited(
+      PlayGamesService.instance.evaluateSession(_playGamesSnapshot(s)),
+    );
   }
 
   void _notifyPlayGamesEnding(EndingKind kind) {
     unawaited(PlayGamesService.instance.onEnding(kind));
+  }
+
+  PlayGamesSessionSnapshot _playGamesSnapshot(GameSession s) {
+    var cave = false;
+    var tower = false;
+    var site = false;
+    for (final entry in s.rooms.entries) {
+      if (!entry.value.visited) continue;
+      switch (mapLayerOfRoom(entry.key, s.mapMeta)) {
+        case MapLayer.cave:
+          cave = true;
+        case MapLayer.tower:
+          tower = true;
+        case MapLayer.site:
+          site = true;
+        case MapLayer.surface:
+          break;
+      }
+    }
+    return PlayGamesSessionSnapshot(
+      currentRoomId: s.currentRoomId,
+      visitedCount: s.visitedCount(),
+      score: s.score,
+      siteGateOpen: s.flags.containsKey('grave_site_open'),
+      hasVisitedCave: cave,
+      hasVisitedTower: tower,
+      hasVisitedSite: site,
+      recruitedCount: s.companions.values.where((c) => c.recruited).length,
+      hasCompletedQuest: s.npcs.values.any((n) => n.questDone),
+    );
   }
 
   void reviveFromDeath() {
@@ -343,7 +376,10 @@ class GameController extends ChangeNotifier {
           const {'ng+', 'newgame+', 'ngplus'}.contains(lowered);
       final result = s.processCommand(raw);
       _handleResult(result, wasWonBefore: wasWon);
-      if (startsNewGamePlus) _resetAdRunState();
+      if (startsNewGamePlus) {
+        _resetAdRunState();
+        unawaited(PlayGamesService.instance.onNewGamePlus());
+      }
     } finally {
       _commandBusy = false;
       notifyListeners();
@@ -461,7 +497,10 @@ class GameController extends ChangeNotifier {
     final defeatedBoss = defeatedIds.any(
       (id) => s.monsters[id]?.rank == MonsterRank.boss,
     );
-    if (outcome == CombatOutcome.victory) combatVictoryCount += 1;
+    if (outcome == CombatOutcome.victory) {
+      combatVictoryCount += 1;
+      unawaited(PlayGamesService.instance.onCombatVictory());
+    }
     pendingCombatGoldBonus = outcome == CombatOutcome.victory && !defeatedBoss
         ? (lastCombatReward?.gold ?? 0)
         : 0;

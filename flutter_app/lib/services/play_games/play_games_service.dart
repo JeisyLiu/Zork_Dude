@@ -82,6 +82,16 @@ final class PlayGamesService extends ChangeNotifier {
     }
   }
 
+  Future<AchievementOutbox?> _ensureOutbox() async {
+    if (_outbox != null) return _outbox;
+    try {
+      _outbox = await AchievementOutbox.load();
+      return _outbox;
+    } catch (_) {
+      return null;
+    }
+  }
+
   Future<void> onEnding(EndingKind kind) async {
     final localId = switch (kind) {
       EndingKind.dragonClear => PlayGamesLocalId.endingDragon,
@@ -93,46 +103,102 @@ final class PlayGamesService extends ChangeNotifier {
     await unlockLocal(localId);
   }
 
-  Future<void> unlockLocal(String localId) async {
-    final outbox = _outbox;
-    if (outbox == null) {
-      try {
-        _outbox = await AchievementOutbox.load();
-      } catch (_) {
-        return;
-      }
+  Future<void> onNewGamePlus() async {
+    await unlockLocal(PlayGamesLocalId.ngPlus);
+  }
+
+  Future<void> onCombatVictory() async {
+    final outbox = await _ensureOutbox();
+    if (outbox == null) return;
+
+    final total = await outbox.addCareerVictory();
+    if (total >= 1) {
+      await unlockLocal(PlayGamesLocalId.firstVictory);
     }
-    await _outbox!.markUnlocked(localId);
-    if (_signedIn) {
+    await _syncIncremental(
+      PlayGamesLocalId.battles10,
+      total,
+      PlayGamesLocalId.incrementalTargets[PlayGamesLocalId.battles10]!,
+    );
+    await _syncIncremental(
+      PlayGamesLocalId.battles25,
+      total,
+      PlayGamesLocalId.incrementalTargets[PlayGamesLocalId.battles25]!,
+    );
+  }
+
+  /// Evaluate exploration / quest / party / score milestones from session state.
+  Future<void> evaluateSession(PlayGamesSessionSnapshot snap) async {
+    if (snap.currentRoomId != 'forest_entrance' || snap.visitedCount > 1) {
+      await unlockLocal(PlayGamesLocalId.awaken);
+    }
+    if (snap.hasCompletedQuest) {
+      await unlockLocal(PlayGamesLocalId.firstQuest);
+    }
+    if (snap.recruitedCount >= 1) {
+      await unlockLocal(PlayGamesLocalId.firstRecruit);
+    }
+    if (snap.recruitedCount >= PlayGamesSessionSnapshot.companionTotal) {
+      await unlockLocal(PlayGamesLocalId.fullParty);
+    }
+    if (snap.hasVisitedCave) {
+      await unlockLocal(PlayGamesLocalId.enterCave);
+    }
+    if (snap.hasVisitedTower) {
+      await unlockLocal(PlayGamesLocalId.enterTower);
+    }
+    if (snap.siteGateOpen) {
+      await unlockLocal(PlayGamesLocalId.siteGate);
+    }
+    if (snap.hasVisitedSite) {
+      await unlockLocal(PlayGamesLocalId.enterSite);
+    }
+    if (snap.visitedCount >= 20) {
+      await unlockLocal(PlayGamesLocalId.explore20);
+    }
+    if (snap.visitedCount >= 40) {
+      await unlockLocal(PlayGamesLocalId.explore40);
+    }
+    if (snap.score >= 1000) {
+      await unlockLocal(PlayGamesLocalId.score1000);
+    }
+    await submitBestScore(snap.score);
+  }
+
+  Future<void> unlockLocal(String localId) async {
+    final outbox = await _ensureOutbox();
+    if (outbox == null) return;
+    final already = outbox.isUnlocked(localId);
+    await outbox.markUnlocked(localId);
+    if (_signedIn && (!already || !(outbox.achievements[localId]?.pushed ?? false))) {
       await _pushAchievement(localId);
     }
   }
 
   Future<void> submitBestScore(int score) async {
     if (score < 0) return;
-    final outbox = _outbox;
-    if (outbox == null) {
-      try {
-        _outbox = await AchievementOutbox.load();
-      } catch (_) {
-        return;
-      }
-    }
-    await _outbox!.recordBestScore(score);
-    if (_signedIn && _outbox!.shouldPushScore(score)) {
+    final outbox = await _ensureOutbox();
+    if (outbox == null) return;
+    await outbox.recordBestScore(score);
+    if (_signedIn && outbox.shouldPushScore(score)) {
       await _pushScore(score);
     }
   }
 
   Future<void> flush() async {
     if (!isSupported || !_signedIn || _flushing) return;
-    final outbox = _outbox;
+    final outbox = await _ensureOutbox();
     if (outbox == null) return;
 
     _flushing = true;
     try {
       for (final entry in outbox.pendingAchievements.toList()) {
         await _pushAchievement(entry.key);
+      }
+      // Re-sync incremental progress even if already marked unlocked locally.
+      final wins = outbox.careerVictories;
+      for (final entry in PlayGamesLocalId.incrementalTargets.entries) {
+        await _syncIncremental(entry.key, wins, entry.value);
       }
       final best = outbox.leaderboard.best;
       if (outbox.shouldPushScore(best)) {
@@ -167,11 +233,56 @@ final class PlayGamesService extends ChangeNotifier {
     }
   }
 
+  Future<void> _syncIncremental(String localId, int absolute, int maxSteps) async {
+    final outbox = await _ensureOutbox();
+    if (outbox == null) return;
+
+    final capped = absolute.clamp(0, maxSteps);
+    if (capped >= maxSteps) {
+      await outbox.markUnlocked(localId);
+    }
+
+    if (!_signedIn || !isSupported) return;
+
+    final androidId = PlayGamesIds.achievementAndroidId(localId);
+    if (androidId == null) return;
+
+    final alreadyPushed = outbox.pushedStepsFor(localId);
+    final delta = capped - alreadyPushed;
+    if (delta <= 0) {
+      if (capped >= maxSteps) {
+        final rec = outbox.achievements[localId];
+        if (rec != null && !rec.pushed) await outbox.markPushed(localId);
+      }
+      return;
+    }
+
+    try {
+      await Achievements.increment(
+        achievement: Achievement(androidID: androidId, steps: delta),
+      );
+      await outbox.markIncrementalPushed(localId, capped);
+      if (capped >= maxSteps) {
+        await outbox.markUnlocked(localId);
+        await outbox.markPushed(localId);
+      }
+    } catch (_) {
+      // Keep pending for a later flush attempt.
+    }
+  }
+
   Future<void> _pushAchievement(String localId) async {
     final outbox = _outbox;
     if (outbox == null || !_signedIn) return;
     final androidId = PlayGamesIds.achievementAndroidId(localId);
     if (androidId == null) return;
+
+    if (PlayGamesIds.isIncremental(localId)) {
+      final max = PlayGamesLocalId.incrementalTargets[localId]!;
+      await _syncIncremental(localId, outbox.careerVictories, max);
+      return;
+    }
+
     try {
       await Achievements.unlock(
         achievement: Achievement(androidID: androidId),

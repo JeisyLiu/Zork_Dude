@@ -515,7 +515,52 @@ img {
 }
 
 .privacy-content li {
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.55rem;
+}
+
+.privacy-content li span[lang] {
+  display: inline;
+}
+
+.privacy-block + .privacy-block {
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.legal-id {
+  margin: 1.25rem 0;
+  padding: 1.1rem 1.2rem;
+  border: 1px solid var(--border);
+  background: var(--bg-elevated);
+  font-size: 0.92rem;
+}
+
+.legal-id dt {
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  margin-top: 0.85rem;
+}
+
+.legal-id dt:first-child {
+  margin-top: 0;
+}
+
+.legal-id dd {
+  margin: 0.25rem 0 0;
+  color: var(--text-body);
+  line-height: 1.55;
+}
+
+.addr-zh,
+.addr-block {
+  display: block;
+  margin-top: 0.5rem;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  line-height: 1.55;
 }
 
 /* ── Animations ── */

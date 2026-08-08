@@ -13,7 +13,7 @@
 
 浏览器打开即可玩，无需安装。手机建议使用移动版。
 
-**开发者**：Beatinghouse Inc · [JeisyLiu](https://github.com/jeisyliu)
+**开发者**：湖南跃动小屋信息技术有限公司（Hunan Beating House Information Technology Co Ltd）· [JeisyLiu](https://github.com/jeisyliu) · [beatinghousehunan@gmail.com](mailto:beatinghousehunan@gmail.com)
 
 ## 特色
 

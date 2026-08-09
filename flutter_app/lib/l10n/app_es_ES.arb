@@ -392,5 +392,11 @@
   "creditProducedBy": "Productor / Producido por",
   "creditEngineering": "Programa / Ingeniería",
   "creditSpecialThanks": "Agradecimiento Especial / Agradecimiento Especial",
-  "creditTechSupport": "Soporte Técnico / Soporte Tecnológico"
+  "creditTechSupport": "Soporte Técnico / Soporte Tecnológico",
+  "settingsTitle": "Ajustes",
+  "settingsBgmEnabled": "Música de fondo",
+  "settingsSfxEnabled": "Efectos de sonido",
+  "settingsGearSemantics": "Ajustes",
+  "settingsHint": "Ajusta el volumen con las teclas del dispositivo.",
+  "settingsMenuLabel": "Ajustes"
 }

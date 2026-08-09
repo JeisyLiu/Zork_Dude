@@ -625,4 +625,22 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get creditTechSupport => '기술지원 / 기술지원';
+
+  @override
+  String get settingsTitle => '설정';
+
+  @override
+  String get settingsBgmEnabled => '배경 음악';
+
+  @override
+  String get settingsSfxEnabled => '효과음';
+
+  @override
+  String get settingsGearSemantics => '설정';
+
+  @override
+  String get settingsHint => '음량은 기기 음량 버튼으로 조절하세요.';
+
+  @override
+  String get settingsMenuLabel => '설정';
 }

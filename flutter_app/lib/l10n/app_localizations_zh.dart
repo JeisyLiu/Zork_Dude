@@ -619,6 +619,24 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get creditTechSupport => '技术支持 / Technology Support';
+
+  @override
+  String get settingsTitle => '设置';
+
+  @override
+  String get settingsBgmEnabled => '背景音乐';
+
+  @override
+  String get settingsSfxEnabled => '音效';
+
+  @override
+  String get settingsGearSemantics => '设置';
+
+  @override
+  String get settingsHint => '音量请用系统音量键调节。';
+
+  @override
+  String get settingsMenuLabel => '设置';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hans`).
@@ -1236,6 +1254,24 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get creditTechSupport => '技术支持 / Technology Support';
+
+  @override
+  String get settingsTitle => '设置';
+
+  @override
+  String get settingsBgmEnabled => '背景音乐';
+
+  @override
+  String get settingsSfxEnabled => '音效';
+
+  @override
+  String get settingsGearSemantics => '设置';
+
+  @override
+  String get settingsHint => '音量请用系统音量键调节。';
+
+  @override
+  String get settingsMenuLabel => '设置';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
@@ -1853,4 +1889,22 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get creditTechSupport => '技術支援 / Technology Support';
+
+  @override
+  String get settingsTitle => '設定';
+
+  @override
+  String get settingsBgmEnabled => '背景音樂';
+
+  @override
+  String get settingsSfxEnabled => '音效';
+
+  @override
+  String get settingsGearSemantics => '設定';
+
+  @override
+  String get settingsHint => '音量請用系統音量鍵調節。';
+
+  @override
+  String get settingsMenuLabel => '設定';
 }

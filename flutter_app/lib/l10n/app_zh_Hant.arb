@@ -392,5 +392,11 @@
   "creditProducedBy": "製作人 / Produced by",
   "creditEngineering": "程序 / Engineering",
   "creditSpecialThanks": "特別鳴謝 / Special Thanks",
-  "creditTechSupport": "技術支援 / Technology Support"
+  "creditTechSupport": "技術支援 / Technology Support",
+  "settingsTitle": "設定",
+  "settingsBgmEnabled": "背景音樂",
+  "settingsSfxEnabled": "音效",
+  "settingsGearSemantics": "設定",
+  "settingsHint": "音量請用系統音量鍵調節。",
+  "settingsMenuLabel": "設定"
 }

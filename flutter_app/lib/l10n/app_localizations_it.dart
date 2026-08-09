@@ -636,4 +636,22 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get creditTechSupport => 'Supporto tecnico/Supporto tecnologico';
+
+  @override
+  String get settingsTitle => 'Impostazioni';
+
+  @override
+  String get settingsBgmEnabled => 'Musica di sottofondo';
+
+  @override
+  String get settingsSfxEnabled => 'Effetti sonori';
+
+  @override
+  String get settingsGearSemantics => 'Impostazioni';
+
+  @override
+  String get settingsHint => 'Regola il volume con i tasti del dispositivo.';
+
+  @override
+  String get settingsMenuLabel => 'Impostazioni';
 }

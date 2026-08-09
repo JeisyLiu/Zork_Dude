@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:zork_dude/domain/game_session.dart';
 import 'package:zork_dude/l10n/app_localizations.dart';
 import 'package:zork_dude/services/offpack_ads.dart';
+import 'package:zork_dude/services/audio/game_audio_service.dart';
 import 'package:zork_dude/state/ending_kind.dart';
 import 'package:zork_dude/state/game_controller.dart';
 import 'package:zork_dude/ui/ending/credits_roll.dart';
@@ -21,6 +22,8 @@ abstract final class EndingFlow {
       afterDismiss?.call();
       return;
     }
+
+    GameAudioService.instance.playEndingBgm();
 
     switch (kind) {
       case EndingKind.dragonClear:

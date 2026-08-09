@@ -2,7 +2,7 @@
 <!-- Replace placeholder IDs after configuring Play Games Services in Play Console. -->
 <resources>
     <string name="app_id" translatable="false">000000000000</string>
-    <string name="package_name" translatable="false">com.zorkdude.zork_dude</string>
+    <string name="package_name" translatable="false">com.beatinghouse.mist</string>
 
     <string name="achievement_awaken" translatable="false">CgkI_PLACEHOLDER_AWAKEN</string>
     <string name="achievement_first_victory" translatable="false">CgkI_PLACEHOLDER_FIRST_VICTORY</string>

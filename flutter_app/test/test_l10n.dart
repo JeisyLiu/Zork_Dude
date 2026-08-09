@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:zork_dude/l10n/app_localizations.dart';
 import 'package:zork_dude/l10n/locale_tag.dart';
+import 'package:zork_dude/services/audio/game_audio_service.dart';
 
 const testZhHans = Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans');
 const testZhHant = Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant');

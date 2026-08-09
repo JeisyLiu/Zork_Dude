@@ -624,4 +624,22 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get creditTechSupport => '技術サポート / 技術サポート';
+
+  @override
+  String get settingsTitle => '設定';
+
+  @override
+  String get settingsBgmEnabled => '背景音楽';
+
+  @override
+  String get settingsSfxEnabled => '効果音';
+
+  @override
+  String get settingsGearSemantics => '設定';
+
+  @override
+  String get settingsHint => '音量は端末の音量ボタンで調整してください。';
+
+  @override
+  String get settingsMenuLabel => '設定';
 }

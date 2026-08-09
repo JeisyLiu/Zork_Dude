@@ -20,6 +20,8 @@ import 'package:zork_dude/ui/home/home_hero_art.dart';
 import 'package:zork_dude/ui/layout/landscape_layout.dart';
 import 'package:zork_dude/ui/navigation/game_exit.dart';
 import 'package:zork_dude/ui/navigation/landscape_page_route.dart';
+import 'package:zork_dude/ui/settings/settings_overlay.dart';
+import 'package:zork_dude/services/audio/game_audio_service.dart';
 
 /// Launch screen before entering the Zork exploration world.
 class HomeScreen extends StatefulWidget {
@@ -46,6 +48,9 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
     _controller.init();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      GameAudioService.instance.playHomeBgm();
+    });
   }
 
   void _onControllerChanged() => setState(() {});
@@ -410,6 +415,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                       ),
+                      if (!_entering)
+                        Positioned(
+                          top: LandscapeLayout.sp(context, 4),
+                          right: LandscapeLayout.sp(context, 4),
+                          child: SettingsGearButton(
+                            size: closeSize,
+                          ),
+                        ),
                       if (!_entering)
                         Positioned(
                           top: LandscapeLayout.sp(context, 4),

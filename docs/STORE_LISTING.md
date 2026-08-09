@@ -2,7 +2,7 @@
 
 复制到 Play Console 对应字段。截图与图标需自行从真机/模拟器截取。
 
-## 链接
+## 链接（各语言通用）
 
 | 字段 | 值 |
 |------|-----|
@@ -12,51 +12,24 @@
 
 ---
 
-## 商店列表文案
+## 商店列表文案（按语言）
 
-### 标题（≤30 字）
+各语言标题、短描述、完整描述见 `version/store/{locale}/listing.md`，可直接复制到 Play Console 对应语言条目：
 
-- **zh-CN**：迷雾之塔
-- **en-US**：Mist Tower
+| Locale | 文件 |
+|--------|------|
+| zh_Hans | [version/store/zh_Hans/listing.md](../version/store/zh_Hans/listing.md) |
+| zh_Hant | [version/store/zh_Hant/listing.md](../version/store/zh_Hant/listing.md) |
+| en_US | [version/store/en_US/listing.md](../version/store/en_US/listing.md) |
+| ja | [version/store/ja/listing.md](../version/store/ja/listing.md) |
+| ko | [version/store/ko/listing.md](../version/store/ko/listing.md) |
+| fr | [version/store/fr/listing.md](../version/store/fr/listing.md) |
+| de | [version/store/de/listing.md](../version/store/de/listing.md) |
+| it | [version/store/it/listing.md](../version/store/it/listing.md) |
+| es_ES | [version/store/es_ES/listing.md](../version/store/es_ES/listing.md) |
+| pt_BR | [version/store/pt_BR/listing.md](../version/store/pt_BR/listing.md) |
 
-### 短描述（≤80 字）
-
-- **zh-CN**：在迷雾森林醒来，探索四层世界，回合战斗，揭开诅咒与收容站秘密。
-- **en-US**：Awaken in the mist. Explore four layers, turn-based combat, uncover the curse.
-
-### 完整描述
-
-**zh-CN：**
-
-```
-你从迷雾森林边缘醒来，记忆支离破碎。远处古塔刺破雾层——探索、收集、对话、战斗，找回失落的真相。
-
-• 四层世界：地表森林、地下洞穴、诅咒高塔、基金会收容站点
-• 指令式探索 + 迷雾地图，点击相邻节点移动
-• 遇敌进入回合制战斗，为队伍选择攻击、技能、道具或逃跑
-• 多结局与职员表，支持二周目
-• 本地多槽存档，无需注册账号
-
-Android 版含 Google Play 游戏成就与排行榜（可选连接）、广告以支持免费游玩。
-
-隐私政策：https://jeisyliu.github.io/Zork_Dude/privacy.html
-```
-
-**en-US：**
-
-```
-You wake at the edge of a misty forest with fractured memories. A tower pierces the fog—explore, collect, talk, and fight to recover the truth.
-
-• Four layers: surface forest, caves, cursed tower, Foundation site
-• Command-based exploration with a mist map
-• Turn-based combat when enemies appear
-• Multiple endings, credits roll, New Game+
-• Local save slots—no account required
-
-Android: optional Play Games achievements and leaderboards; ads support free play.
-
-Privacy: https://jeisyliu.github.io/Zork_Dude/privacy.html
-```
+版本更新说明（全语言合集）：[version/0.9.1.md](../version/0.9.1.md)
 
 ---
 

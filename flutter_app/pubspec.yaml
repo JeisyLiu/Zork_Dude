@@ -1,7 +1,7 @@
 name: zork_dude
 description: "Mist Tower RPG - Flutter mobile client for Zork Dude"
 publish_to: 'none'
-version: 1.0.0+1
+version: 0.9.1+1
 
 environment:
   sdk: ^3.11.4
@@ -17,6 +17,8 @@ dependencies:
   google_mobile_ads: ^9.0.0
   shared_preferences: ^2.5.3
   games_services: ^5.0.0
+  just_audio: ^0.10.4
+  audio_session: ^0.2.2
 
 dev_dependencies:
   flutter_test:
@@ -35,6 +37,7 @@ flutter:
     - assets/images/fx/
     - assets/images/ui/
     - assets/ui/
+    - assets/audio/
     - assets/l10n/messages/
     - assets/data/l10n/zh_Hans/
     - assets/data/l10n/zh_Hant/

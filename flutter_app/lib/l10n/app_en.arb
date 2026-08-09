@@ -392,5 +392,11 @@
   "creditProducedBy": "Produced by",
   "creditEngineering": "Engineering",
   "creditSpecialThanks": "Special Thanks",
-  "creditTechSupport": "Technology Support"
+  "creditTechSupport": "Technology Support",
+  "settingsTitle": "Settings",
+  "settingsBgmEnabled": "Background music",
+  "settingsSfxEnabled": "Sound effects",
+  "settingsGearSemantics": "Settings",
+  "settingsHint": "Use your device volume buttons to adjust loudness.",
+  "settingsMenuLabel": "Settings"
 }

@@ -6,12 +6,12 @@
 
 | 项 | 值 |
 |---|---|
-| 包名 | `com.zorkdude.zork_dude` |
+| 包名 | `com.beatinghouse.mist` |
 | 游戏名 | 迷雾之塔 / Mist Tower |
 | 应用主页 | https://jeisyliu.github.io/Zork_Dude/ |
 | 隐私政策 | https://jeisyliu.github.io/Zork_Dude/privacy.html |
 | 成就文案 | [PLAY_GAMES_ACHIEVEMENTS.md](../PLAY_GAMES_ACHIEVEMENTS.md) |
-| 商店文案 | [STORE_LISTING.md](./STORE_LISTING.md) |
+| 商店文案 | [version/store/](../version/store/)（各语言 `listing.md`） |
 
 ---
 
@@ -36,7 +36,7 @@
 1. 完成初始 **Setup / Configuration**
 2. **Google Cloud** → OAuth 同意屏幕（外部测试 / 正式发布前配置）
 3. **Credentials** → 添加 **Android**：
-   - 包名：`com.zorkdude.zork_dude`
+   - 包名：`com.beatinghouse.mist`
    - SHA-1（debug，本机开发用）：
 
 ```powershell
@@ -75,7 +75,7 @@ PGS → **Testing** → 添加测试 Google 账号（Gmail）。
 
 ## 3. 商店与合规
 
-见 [STORE_LISTING.md](./STORE_LISTING.md)：
+见 [STORE_LISTING.md](./STORE_LISTING.md)（合规与素材）及各语言文案目录 [version/store/](../version/store/)。
 
 - Data Safety 问卷答案
 - 标题 / 短描述 / 完整描述（中/英）

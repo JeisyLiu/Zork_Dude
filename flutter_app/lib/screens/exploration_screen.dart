@@ -21,6 +21,7 @@ import 'package:zork_dude/widgets/quick_commands.dart';
 import 'package:zork_dude/widgets/status_bar.dart';
 import 'package:zork_dude/ui/ending/ending_flow.dart';
 import 'package:zork_dude/state/ending_kind.dart';
+import 'package:zork_dude/services/audio/game_audio_service.dart';
 import 'package:zork_dude/widgets/story_log.dart';
 
 class ExplorationScreen extends StatefulWidget {
@@ -41,6 +42,11 @@ class _ExplorationScreenState extends State<ExplorationScreen> {
   void initState() {
     super.initState();
     widget.controller.addListener(_onControllerChanged);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (widget.controller.session != null) {
+        GameAudioService.instance.playExplorationBgm(widget.controller.mapLayer);
+      }
+    });
   }
 
   @override

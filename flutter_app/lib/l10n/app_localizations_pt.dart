@@ -631,6 +631,24 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get creditTechSupport => 'Suporte Técnico / Suporte Tecnológico';
+
+  @override
+  String get settingsTitle => 'Configurações';
+
+  @override
+  String get settingsBgmEnabled => 'Música de fundo';
+
+  @override
+  String get settingsSfxEnabled => 'Efeitos sonoros';
+
+  @override
+  String get settingsGearSemantics => 'Configurações';
+
+  @override
+  String get settingsHint => 'Ajuste o volume com as teclas do aparelho.';
+
+  @override
+  String get settingsMenuLabel => 'Configurações';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
@@ -1260,4 +1278,22 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get creditTechSupport => 'Suporte Técnico / Suporte Tecnológico';
+
+  @override
+  String get settingsTitle => 'Configurações';
+
+  @override
+  String get settingsBgmEnabled => 'Música de fundo';
+
+  @override
+  String get settingsSfxEnabled => 'Efeitos sonoros';
+
+  @override
+  String get settingsGearSemantics => 'Configurações';
+
+  @override
+  String get settingsHint => 'Ajuste o volume com as teclas do aparelho.';
+
+  @override
+  String get settingsMenuLabel => 'Configurações';
 }

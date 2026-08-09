@@ -6,7 +6,7 @@
 
 按下面每一条创建。名称、描述可直接复制。全部建好后 **Publish** PGS 配置，再把生成的 ID 填回工程。
 
-包名：`com.zorkdude.zork_dude`  
+包名：`com.beatinghouse.mist`  
 游戏名：迷雾之塔 / Mist Tower  
 
 **Points 规则提醒：** 须为 5 的倍数；单个 ≤200；全作合计 ≤2000（本表合计 **595**，留有余量）。  

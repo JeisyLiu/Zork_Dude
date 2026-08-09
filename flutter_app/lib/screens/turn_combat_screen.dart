@@ -15,6 +15,7 @@ import 'package:zork_dude/state/game_controller.dart';
 import 'package:zork_dude/ui/components/game_banner.dart';
 import 'package:zork_dude/ui/components/game_button.dart';
 import 'package:zork_dude/services/offpack_ads.dart';
+import 'package:zork_dude/services/audio/game_audio_service.dart';
 import 'package:zork_dude/ui/ads/reward_offer_overlay.dart';
 import 'package:zork_dude/ui/components/game_outlined_text.dart';
 import 'package:zork_dude/ui/combat/combat_battlefield.dart';
@@ -68,11 +69,15 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
     _activeActorId = _encounter?.nextAllyNeedingCommand()?.instanceId;
     final msgs = widget.controller.messages;
     _log.add(msgs?.turnCombatStarted ?? '');
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      GameAudioService.instance.playCombatBgm();
+    });
   }
 
   @override
   void dispose() {
     widget.controller.removeListener(_onController);
+    GameAudioService.instance.playExplorationBgm(widget.controller.mapLayer);
     super.dispose();
   }
 
@@ -328,6 +333,7 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
   }
 
   Future<void> _playStep(CombatActionStep step) async {
+    GameAudioService.instance.playSfxForCombatStep(step);
     setState(() {
       _animatingActorId = step.actorInstanceId;
       if (step.message.isNotEmpty) {

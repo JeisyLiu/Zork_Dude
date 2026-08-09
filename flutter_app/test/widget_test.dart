@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zork_dude/domain/models/enums.dart';
 import 'package:zork_dude/main.dart';
 import 'package:zork_dude/screens/exploration_screen.dart';
+import 'package:zork_dude/services/audio/game_audio_service.dart';
 import 'package:zork_dude/ui/components/game_button.dart';
 import 'package:zork_dude/ui/game_ui_assets.dart';
 import 'package:zork_dude/ui/game_ui_theme.dart';
@@ -15,6 +16,7 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   setUp(() {
+    GameAudioService.disableForTest = true;
     SharedPreferences.setMockInitialValues({});
   });
 

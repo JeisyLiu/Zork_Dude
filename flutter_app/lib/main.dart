@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:zork_dude/l10n/app_localizations.dart';
 import 'package:zork_dude/l10n/locale_tag.dart';
+import 'package:zork_dude/services/audio/game_audio_service.dart';
 import 'package:zork_dude/services/offpack_ads.dart';
 import 'package:zork_dude/services/play_games/play_games_service.dart';
 import 'package:zork_dude/screens/home_screen.dart';
@@ -12,6 +13,8 @@ import 'package:zork_dude/ui/game_ui_theme.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  GameAudioService.disableForTest = false;
+  await GameAudioService.instance.initialize();
 
   if (!kIsWeb) {
     await SystemChrome.setPreferredOrientations([

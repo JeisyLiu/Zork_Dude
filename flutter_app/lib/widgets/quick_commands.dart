@@ -15,6 +15,7 @@ import 'package:zork_dude/ui/exploration/inventory_panel.dart';
 import 'package:zork_dude/ui/game_ui_assets.dart';
 import 'package:zork_dude/ui/game_ui_theme.dart';
 import 'package:zork_dude/ui/navigation/game_exit.dart';
+import 'package:zork_dude/ui/settings/settings_overlay.dart';
 
 /// Exploration controls: D-pad + vertical U/D + single-row action chips.
 class QuickCommandPanel extends StatelessWidget {
@@ -324,7 +325,13 @@ class QuickCommandPanel extends StatelessWidget {
     required bool hasInventory,
   }) {
     final l10n = AppLocalizations.of(context);
+    final skin = GameUiTheme.skinForMapLayer(controller.mapLayer);
     return [
+      _QuickAction(
+        label: l10n.settingsMenuLabel,
+        subLabel: 'settings',
+        onPressed: () => SettingsEntry.open(context, skin: skin),
+      ),
       if (!inCombat) ...[
         _QuickAction(
           label: l10n.cmdShop,

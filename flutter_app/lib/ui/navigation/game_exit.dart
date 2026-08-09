@@ -11,6 +11,7 @@ import 'package:zork_dude/ui/components/game_confirm_dialog.dart';
 import 'package:zork_dude/ui/components/landscape_overlay.dart';
 import 'package:zork_dude/ui/exploration/exploration_layout_constants.dart';
 import 'package:zork_dude/ui/game_ui_theme.dart';
+import 'package:zork_dude/ui/settings/settings_overlay.dart';
 
 /// Shared exit / return-to-title navigation for home, exploration, and combat.
 abstract final class GameExit {
@@ -97,6 +98,18 @@ abstract final class GameExit {
             label: l10n.resumeCombat,
             subLabel: 'resume',
             onPressed: () => Navigator.pop(context),
+          ),
+          const SizedBox(height: 8),
+          GameButton(
+            width: double.infinity,
+            height: btnH,
+            label: l10n.settingsMenuLabel,
+            subLabel: 'settings',
+            onPressed: () {
+              Navigator.pop(context);
+              if (!context.mounted) return;
+              SettingsEntry.open(context, skin: skin);
+            },
           ),
           const SizedBox(height: 8),
           GameButton(

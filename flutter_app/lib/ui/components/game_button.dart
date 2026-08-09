@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:zork_dude/services/audio/game_audio_service.dart';
 import 'package:zork_dude/ui/game_ui_assets.dart';
 import 'package:zork_dude/ui/game_ui_theme.dart';
 import 'package:zork_dude/ui/components/game_outlined_text.dart';
@@ -60,6 +61,7 @@ class _GameButtonState extends State<GameButton> {
     if (!kIsWeb) {
       HapticFeedback.selectionClick();
     }
+    GameAudioService.instance.playUiClick();
     widget.onPressed?.call();
   }
 
@@ -204,6 +206,7 @@ class _GameIconButtonState extends State<GameIconButton> {
     if (!kIsWeb) {
       HapticFeedback.selectionClick();
     }
+    GameAudioService.instance.playUiClick();
     widget.onPressed?.call();
   }
 

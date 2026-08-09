@@ -392,5 +392,11 @@
   "creditProducedBy": "프로듀서 / 제작사",
   "creditEngineering": "프로그램 / 엔지니어링",
   "creditSpecialThanks": "특별한 감사 / 특별한 감사",
-  "creditTechSupport": "기술지원 / 기술지원"
+  "creditTechSupport": "기술지원 / 기술지원",
+  "settingsTitle": "설정",
+  "settingsBgmEnabled": "배경 음악",
+  "settingsSfxEnabled": "효과음",
+  "settingsGearSemantics": "설정",
+  "settingsHint": "음량은 기기 음량 버튼으로 조절하세요.",
+  "settingsMenuLabel": "설정"
 }

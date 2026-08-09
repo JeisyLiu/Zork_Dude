@@ -639,4 +639,22 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get creditTechSupport => 'Support technique/Support technologique';
+
+  @override
+  String get settingsTitle => 'Paramètres';
+
+  @override
+  String get settingsBgmEnabled => 'Musique de fond';
+
+  @override
+  String get settingsSfxEnabled => 'Effets sonores';
+
+  @override
+  String get settingsGearSemantics => 'Paramètres';
+
+  @override
+  String get settingsHint => 'Réglez le volume avec les boutons du téléphone.';
+
+  @override
+  String get settingsMenuLabel => 'Paramètres';
 }

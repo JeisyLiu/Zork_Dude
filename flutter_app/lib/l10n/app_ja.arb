@@ -392,5 +392,11 @@
   "creditProducedBy": "プロデューサー / プロデュース",
   "creditEngineering": "プログラム / エンジニアリング",
   "creditSpecialThanks": "特別な感謝 / 特別な感謝",
-  "creditTechSupport": "技術サポート / 技術サポート"
+  "creditTechSupport": "技術サポート / 技術サポート",
+  "settingsTitle": "設定",
+  "settingsBgmEnabled": "背景音楽",
+  "settingsSfxEnabled": "効果音",
+  "settingsGearSemantics": "設定",
+  "settingsHint": "音量は端末の音量ボタンで調整してください。",
+  "settingsMenuLabel": "設定"
 }

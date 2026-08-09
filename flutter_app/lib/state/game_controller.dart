@@ -18,6 +18,8 @@ import 'package:zork_dude/domain/models/map_meta.dart';
 import 'package:zork_dude/domain/map_service.dart';
 import 'package:zork_dude/l10n/game_messages.dart';
 import 'package:zork_dude/l10n/locale_tag.dart';
+import 'package:zork_dude/services/audio/audio_assets.dart';
+import 'package:zork_dude/services/audio/game_audio_service.dart';
 import 'package:zork_dude/services/play_games/achievement_outbox.dart';
 import 'package:zork_dude/services/play_games/play_games_service.dart';
 import 'package:zork_dude/state/ending_kind.dart';
@@ -338,7 +340,10 @@ class GameController extends ChangeNotifier {
   void syncMapLayerToPlayer() {
     final s = session;
     if (s == null) return;
-    mapLayer = mapLayerOfRoom(s.currentRoomId, s.mapMeta);
+    final next = mapLayerOfRoom(s.currentRoomId, s.mapMeta);
+    final changed = next != mapLayer;
+    mapLayer = next;
+    if (changed) GameAudioService.instance.playExplorationBgm(mapLayer);
   }
 
   void _clampMapLayerToAccessible() {
@@ -393,6 +398,7 @@ class GameController extends ChangeNotifier {
       if (lowered == 'map' || lowered == 'm') {
         mapVisible = !mapVisible;
         _append(mapVisible ? session!.messages.mapShown : session!.messages.mapHidden);
+        GameAudioService.instance.playSfx(GameSfx.exploreMapOpen);
         return;
       }
       if (kDebugMode && (lowered == 'dev' || lowered == 'developer')) {
@@ -405,6 +411,8 @@ class GameController extends ChangeNotifier {
           (s.won || s.siteWon) &&
           const {'ng+', 'newgame+', 'ngplus'}.contains(lowered);
       final result = s.processCommand(raw);
+      final verb = lowered.split(RegExp(r'\s+')).first;
+      GameAudioService.instance.onCommandVerb(verb);
       _handleResult(result, wasWonBefore: wasWon);
       if (startsNewGamePlus) {
         _resetAdRunState();
@@ -433,10 +441,12 @@ class GameController extends ChangeNotifier {
       switch (event.type) {
         case GameEventType.battleRequested:
           battleNavigationPending = true;
+          GameAudioService.instance.playSfx(GameSfx.combatBattleStart);
         case GameEventType.battleEnded:
           battleNavigationPending = false;
         case GameEventType.newVisit:
           syncMapLayerToPlayer();
+          GameAudioService.instance.playSfx(GameSfx.exploreRoomEnter);
         case GameEventType.gameOver:
           pendingEnding = EndingKind.gameOver;
         case GameEventType.returnToTitle:
@@ -529,7 +539,12 @@ class GameController extends ChangeNotifier {
     );
     if (outcome == CombatOutcome.victory) {
       combatVictoryCount += 1;
+      GameAudioService.instance.playSfx(GameSfx.combatVictory);
       unawaited(PlayGamesService.instance.onCombatVictory());
+    } else if (outcome == CombatOutcome.defeat) {
+      GameAudioService.instance.playSfx(GameSfx.combatDefeat);
+    } else {
+      GameAudioService.instance.playSfx(GameSfx.combatFlee);
     }
     pendingCombatGoldBonus = outcome == CombatOutcome.victory && !defeatedBoss
         ? (lastCombatReward?.gold ?? 0)

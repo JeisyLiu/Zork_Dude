@@ -1,4 +1,4 @@
-package com.zorkdude.zork_dude
+package com.beatinghouse.mist
 
 import io.flutter.embedding.android.FlutterActivity
 

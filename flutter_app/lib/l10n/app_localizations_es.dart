@@ -631,6 +631,25 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get creditTechSupport => 'Soporte Técnico / Soporte Tecnológico';
+
+  @override
+  String get settingsTitle => 'Ajustes';
+
+  @override
+  String get settingsBgmEnabled => 'Música de fondo';
+
+  @override
+  String get settingsSfxEnabled => 'Efectos de sonido';
+
+  @override
+  String get settingsGearSemantics => 'Ajustes';
+
+  @override
+  String get settingsHint =>
+      'Ajusta el volumen con las teclas del dispositivo.';
+
+  @override
+  String get settingsMenuLabel => 'Ajustes';
 }
 
 /// The translations for Spanish Castilian, as used in Spain (`es_ES`).
@@ -1260,4 +1279,23 @@ class AppLocalizationsEsEs extends AppLocalizationsEs {
 
   @override
   String get creditTechSupport => 'Soporte Técnico / Soporte Tecnológico';
+
+  @override
+  String get settingsTitle => 'Ajustes';
+
+  @override
+  String get settingsBgmEnabled => 'Música de fondo';
+
+  @override
+  String get settingsSfxEnabled => 'Efectos de sonido';
+
+  @override
+  String get settingsGearSemantics => 'Ajustes';
+
+  @override
+  String get settingsHint =>
+      'Ajusta el volumen con las teclas del dispositivo.';
+
+  @override
+  String get settingsMenuLabel => 'Ajustes';
 }

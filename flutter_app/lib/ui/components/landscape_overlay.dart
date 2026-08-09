@@ -17,9 +17,10 @@ abstract final class LandscapeOverlay {
     required String title,
     required Widget child,
     GameUiSkin? skin,
+    VoidCallback? onDismiss,
   }) {
     final screenSize = MediaQuery.sizeOf(context);
-    return showGeneralDialog<T>(
+    final future = showGeneralDialog<T>(
       context: context,
       barrierDismissible: true,
       barrierLabel: title,
@@ -30,6 +31,7 @@ abstract final class LandscapeOverlay {
           title: title,
           child: child,
           screenSize: screenSize,
+          onDismiss: onDismiss,
         );
         if (skin == null) return body;
         return GameSkinScope(skin: skin, child: body);
@@ -42,6 +44,10 @@ abstract final class LandscapeOverlay {
         );
       },
     );
+    if (onDismiss != null) {
+      return future.whenComplete(onDismiss);
+    }
+    return future;
   }
 }
 
@@ -50,11 +56,17 @@ class _LandscapeOverlayBody extends StatelessWidget {
     required this.title,
     required this.child,
     required this.screenSize,
+    this.onDismiss,
   });
 
   final String title;
   final Widget child;
   final Size screenSize;
+  final VoidCallback? onDismiss;
+
+  void _close(BuildContext context) {
+    Navigator.of(context).pop();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +96,7 @@ class _LandscapeOverlayBody extends StatelessWidget {
                       size: LandscapeLayout.minTouch(context, 44),
                       asset: GameUiAssets.buttonRedClose,
                       semanticLabel: AppLocalizations.of(context).close,
-                      onPressed: () => Navigator.of(context).pop(),
+                      onPressed: () => _close(context),
                     ),
                     SizedBox(width: LandscapeLayout.sp(context, 8)),
                     Expanded(

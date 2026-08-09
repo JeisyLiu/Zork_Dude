@@ -1221,6 +1221,42 @@ abstract class AppLocalizations {
   /// In zh_Hans, this message translates to:
   /// **'技术支持 / Technology Support'**
   String get creditTechSupport;
+
+  /// No description provided for @settingsTitle.
+  ///
+  /// In zh_Hans, this message translates to:
+  /// **'设置'**
+  String get settingsTitle;
+
+  /// No description provided for @settingsBgmEnabled.
+  ///
+  /// In zh_Hans, this message translates to:
+  /// **'背景音乐'**
+  String get settingsBgmEnabled;
+
+  /// No description provided for @settingsSfxEnabled.
+  ///
+  /// In zh_Hans, this message translates to:
+  /// **'音效'**
+  String get settingsSfxEnabled;
+
+  /// No description provided for @settingsGearSemantics.
+  ///
+  /// In zh_Hans, this message translates to:
+  /// **'设置'**
+  String get settingsGearSemantics;
+
+  /// No description provided for @settingsHint.
+  ///
+  /// In zh_Hans, this message translates to:
+  /// **'音量请用系统音量键调节。'**
+  String get settingsHint;
+
+  /// No description provided for @settingsMenuLabel.
+  ///
+  /// In zh_Hans, this message translates to:
+  /// **'设置'**
+  String get settingsMenuLabel;
 }
 
 class _AppLocalizationsDelegate

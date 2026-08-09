@@ -36,7 +36,7 @@
 - [ ] Play Console 创建/选择应用「迷雾之塔」
 - [ ] Grow users → Play Games Services → 完成初始 Setup / Configuration
 - [ ] 配置 OAuth 同意屏幕（Google Cloud）
-- [ ] 添加 Credential：Android（包名 `com.zorkdude.zork_dude`）
+- [ ] 添加 Credential：Android（包名 `com.beatinghouse.mist`）
 - [ ] 填入 **debug** 签名 SHA-1
 - [ ] 填入 **release / Play App Signing** 签名 SHA-1
 - [ ] 按 `PLAY_GAMES_ACHIEVEMENTS.md` 创建 **18** 个成就（含 2 个增量）

@@ -626,6 +626,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get creditTechSupport => 'Technology Support';
+
+  @override
+  String get settingsTitle => 'Settings';
+
+  @override
+  String get settingsBgmEnabled => 'Background music';
+
+  @override
+  String get settingsSfxEnabled => 'Sound effects';
+
+  @override
+  String get settingsGearSemantics => 'Settings';
+
+  @override
+  String get settingsHint =>
+      'Use your device volume buttons to adjust loudness.';
+
+  @override
+  String get settingsMenuLabel => 'Settings';
 }
 
 /// The translations for English, as used in the United States (`en_US`).
@@ -1250,4 +1269,23 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get creditTechSupport => 'Technology Support';
+
+  @override
+  String get settingsTitle => 'Settings';
+
+  @override
+  String get settingsBgmEnabled => 'Background music';
+
+  @override
+  String get settingsSfxEnabled => 'Sound effects';
+
+  @override
+  String get settingsGearSemantics => 'Settings';
+
+  @override
+  String get settingsHint =>
+      'Use your device volume buttons to adjust loudness.';
+
+  @override
+  String get settingsMenuLabel => 'Settings';
 }

@@ -7,6 +7,7 @@ import 'package:zork_dude/ui/components/game_button.dart';
 import 'package:zork_dude/ui/components/game_outlined_text.dart';
 import 'package:zork_dude/ui/layout/landscape_layout.dart';
 import 'package:zork_dude/ui/game_ui_theme.dart';
+import 'package:zork_dude/ui/settings/settings_overlay.dart';
 
 class StatusBar extends StatelessWidget {
   const StatusBar({super.key, required this.controller});
@@ -86,6 +87,11 @@ class StatusBar extends StatelessWidget {
               width: mapBtnW,
               onPressed: controller.toggleMap,
               semanticLabel: l10n.cmdToggleMap,
+            ),
+            SizedBox(width: statGap),
+            SettingsGearButton(
+              skin: GameUiTheme.skinForMapLayer(controller.mapLayer),
+              size: mapBtnH,
             ),
           ],
         ),

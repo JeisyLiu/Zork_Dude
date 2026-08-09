@@ -9,15 +9,15 @@ import 'package:zork_dude/domain/models/enums.dart';
 import 'package:zork_dude/services/audio/audio_assets.dart';
 import 'package:zork_dude/services/audio/audio_preferences.dart';
 
-/// BGM + SFX playback. Missing asset files fail silently.
+/// BGM + SFX playback. Missing assets and unsupported platforms fail silently.
 class GameAudioService {
   GameAudioService._();
 
   static final GameAudioService instance = GameAudioService._();
 
   final AudioPreferences _prefs = AudioPreferences.instance;
-  final AudioPlayer _bgmPlayer = AudioPlayer();
-  final List<AudioPlayer> _sfxPlayers = List.generate(4, (_) => AudioPlayer());
+  AudioPlayer? _bgmPlayer;
+  List<AudioPlayer>? _sfxPlayers;
   int _sfxIndex = 0;
   bool _initialized = false;
   bool _disabled = false;
@@ -27,43 +27,59 @@ class GameAudioService {
   /// Set to true in widget tests to skip native audio initialization.
   static bool disableForTest = false;
 
-  bool get isActive => _initialized && !_disabled;
+  /// just_audio ships implementations for Android / iOS / macOS / web only.
+  static bool get isPlatformSupported {
+    if (kIsWeb) return true;
+    return switch (defaultTargetPlatform) {
+      TargetPlatform.android ||
+      TargetPlatform.iOS ||
+      TargetPlatform.macOS =>
+        true,
+      _ => false,
+    };
+  }
+
+  bool get isActive => _initialized && !_disabled && _bgmPlayer != null;
 
   Future<void> initialize() async {
-    if (disableForTest) {
+    if (disableForTest || !isPlatformSupported) {
       _disabled = true;
+      await _prefs.load();
       return;
     }
     if (_initialized || _disabled) return;
     try {
       await _prefs.load();
-      if (!kIsWeb) {
-        final session = await AudioSession.instance;
-        await session.configure(const AudioSessionConfiguration.music());
-      }
+      final session = await AudioSession.instance;
+      await session.configure(const AudioSessionConfiguration.music());
+      _bgmPlayer = AudioPlayer();
+      _sfxPlayers = List.generate(4, (_) => AudioPlayer());
       _prefs.addListener(_onPrefsChanged);
       _initialized = true;
     } catch (_) {
       _disabled = true;
+      await _safeDisposePlayers();
     }
   }
 
   void _applyBgmVolume() {
-    if (!_initialized) return;
-    unawaited(_bgmPlayer.setVolume(_prefs.effectiveBgmVolume));
+    final player = _bgmPlayer;
+    if (!isActive || player == null) return;
+    unawaited(player.setVolume(_prefs.effectiveBgmVolume));
   }
 
   void refreshVolumes() => _applyBgmVolume();
 
   Future<void> playBgm(String assetPath, {bool loop = true}) async {
-    if (!isActive || !_prefs.bgmEnabled) return;
-    if (_currentBgm == assetPath && _bgmPlayer.playing) return;
+    final player = _bgmPlayer;
+    if (!isActive || player == null || !_prefs.bgmEnabled) return;
+    if (_currentBgm == assetPath && player.playing) return;
     try {
-      await _bgmPlayer.setLoopMode(loop ? LoopMode.one : LoopMode.off);
-      await _bgmPlayer.setAsset(assetPath);
-      await _bgmPlayer.setVolume(_prefs.effectiveBgmVolume);
+      await player.setLoopMode(loop ? LoopMode.one : LoopMode.off);
+      await player.setAsset(assetPath);
+      await player.setVolume(_prefs.effectiveBgmVolume);
       _currentBgm = assetPath;
-      await _bgmPlayer.play();
+      await player.play();
     } catch (_) {
       _currentBgm = null;
     }
@@ -71,8 +87,10 @@ class GameAudioService {
 
   Future<void> stopBgm() async {
     _currentBgm = null;
+    final player = _bgmPlayer;
+    if (player == null) return;
     try {
-      await _bgmPlayer.stop();
+      await player.stop();
     } catch (_) {}
   }
 
@@ -93,12 +111,12 @@ class GameAudioService {
   void playEndingBgm() => playBgm(AudioAssets.bgmEnding, loop: false);
 
   void playSfx(GameSfx sfx) {
-    if (!isActive || !_prefs.sfxEnabled) return;
-    final path = sfx.path;
+    final players = _sfxPlayers;
+    if (!isActive || players == null || !_prefs.sfxEnabled) return;
     try {
-      final player = _sfxPlayers[_sfxIndex];
-      _sfxIndex = (_sfxIndex + 1) % _sfxPlayers.length;
-      unawaited(_playOnPlayer(player, path));
+      final player = players[_sfxIndex];
+      _sfxIndex = (_sfxIndex + 1) % players.length;
+      unawaited(_playOnPlayer(player, sfx.path));
     } catch (_) {}
   }
 
@@ -176,11 +194,25 @@ class GameAudioService {
     }
   }
 
+  Future<void> _safeDisposePlayers() async {
+    final bgm = _bgmPlayer;
+    final sfx = _sfxPlayers;
+    _bgmPlayer = null;
+    _sfxPlayers = null;
+    try {
+      if (bgm != null) await bgm.dispose();
+    } catch (_) {}
+    if (sfx != null) {
+      for (final p in sfx) {
+        try {
+          await p.dispose();
+        } catch (_) {}
+      }
+    }
+  }
+
   Future<void> dispose() async {
     _prefs.removeListener(_onPrefsChanged);
-    await _bgmPlayer.dispose();
-    for (final p in _sfxPlayers) {
-      await p.dispose();
-    }
+    await _safeDisposePlayers();
   }
 }

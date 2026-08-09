@@ -364,7 +364,7 @@ class AppLocalizationsFr extends AppLocalizations {
       'Il n\'y a aucun objet de combat disponible dans le sac à dos';
 
   @override
-  String get combatPickItem => 'Sélectionnez les articles d\'accessoires';
+  String get combatPickItem => '选择道具 Items';
 
   @override
   String get combatInitiative => 'Initiative de séquence d’actions';

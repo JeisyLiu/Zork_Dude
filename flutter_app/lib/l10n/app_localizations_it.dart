@@ -336,7 +336,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get combatVictory => 'vittoria in battaglia';
 
   @override
-  String get combatVictoryTap => 'Fare clic per continuare';
+  String get combatVictoryTap => '点击继续';
 
   @override
   String get combatDefeated => 'colpo';
@@ -632,8 +632,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get creditEngineering => 'Programma/Ingegneria';
 
   @override
-  String get creditSpecialThanks =>
-      'Ringraziamenti speciali / Ringraziamenti speciali';
+  String get creditSpecialThanks => '特别鸣谢 / Special Thanks';
 
   @override
   String get creditTechSupport => 'Supporto tecnico/Supporto tecnologico';

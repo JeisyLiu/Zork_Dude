@@ -15,7 +15,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get appTitleEn => 'ミストタワー';
 
   @override
-  String get taglineShort => '探索し、収集し、話し、戦い、失われた真実を取り戻しましょう。';
+  String get taglineShort => '探索、收集、对话、战斗——找回失落的真相。';
 
   @override
   String get taglineFull =>
@@ -28,7 +28,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get loading => '読み込み中…';
 
   @override
-  String get continueJourney => '旅を続けてください';
+  String get continueJourney => '继续旅程';
 
   @override
   String get enterMist => '霧の中に入る';

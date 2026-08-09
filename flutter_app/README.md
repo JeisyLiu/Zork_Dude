@@ -96,13 +96,32 @@ assets/
 ├── data/l10n/        # 世界内容（按 locale 分目录）
 └── l10n/messages/    # 领域运行时文案
 tool/
-├── generate_i18n.py  # 从 zh_Hans 生成多语言资源
-└── check_l10n.dart   # 校验键集 / 实体 id
+├── generate_i18n.py      # 从 zh_Hans 生成多语言资源
+├── check_l10n.dart       # 校验键集 / 实体 id
+├── apply_pgs_ids.dart    # Console 导出 XML → 同步 play_games_ids.dart
+└── check_pgs_ids.dart    # 校验无 PLACEHOLDER
 ```
+
+## Google Play 上架
+
+操作手册见仓库根目录 [docs/PLAY_CONSOLE_RUNBOOK.md](../docs/PLAY_CONSOLE_RUNBOOK.md)。
+
+```bash
+# Release AAB（上传 Internal testing）
+flutter build appbundle --release
+# 产物：build/app/outputs/bundle/release/app-release.aab
+
+# Console 导出 games-ids.xml 后回填真 ID
+dart run tool/apply_pgs_ids.dart
+dart run tool/check_pgs_ids.dart
+```
+
+成就图标（512×512）：`store/achievement_icons/`（`python tool/generate_achievement_icons.py` 生成）
 
 ## 构建
 
 ```bash
 flutter build apk --release
+flutter build appbundle --release
 flutter build web --web-renderer=canvaskit
 ```

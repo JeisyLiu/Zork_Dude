@@ -4,7 +4,7 @@
 
 ## 1. 应用主页 + 隐私协议网页
 
-- [ ] 准备可公网访问的 HTTPS 站点（GitHub Pages / Cloudflare Pages / 自有域名均可）— **推送仓库后由 GitHub Pages 发布**
+- [x] 准备可公网访问的 HTTPS 站点（GitHub Pages / Cloudflare Pages / 自有域名均可）— **已发布** https://jeisyliu.github.io/Zork_Dude/
 - [x] 应用主页：游戏简介、截图/宣传图、商店链接占位、联系方式（`index.html` + `site/`）
 - [x] 隐私政策页（Play Console 必填 URL），至少写清：
   - [x] 收集/使用的数据：广告（AdMob）、本地存档、Play Games 成就与排行榜
@@ -29,6 +29,8 @@
 
 详细文案见：[PLAY_GAMES_ACHIEVEMENTS.md](./PLAY_GAMES_ACHIEVEMENTS.md)（**18 成就 + 1 排行榜**，可逐条复制到 Console）
 
+操作手册：[docs/PLAY_CONSOLE_RUNBOOK.md](./docs/PLAY_CONSOLE_RUNBOOK.md) · 成就图标：`store/achievement_icons/` · ID 回填工具：`flutter_app/tool/apply_pgs_ids.dart`
+
 客户端钩子已接入（本地 Outbox + 静默登录补推）。Console 仍需配置并回填真 ID。
 
 - [ ] Play Console 创建/选择应用「迷雾之塔」
@@ -39,10 +41,10 @@
 - [ ] 填入 **release / Play App Signing** 签名 SHA-1
 - [ ] 按 `PLAY_GAMES_ACHIEVEMENTS.md` 创建 **18** 个成就（含 2 个增量）
 - [ ] 按该文件创建 1 个排行榜
-- [ ] 上传成就图标（512×512）
+- [ ] 上传成就图标（512×512）— 素材已生成于 `store/achievement_icons/`，待上传 Console
 - [ ] Play Games Services → Publishing → **Publish**（只发布 PGS 配置，不等于上架游戏）
 - [ ] Configuration → Credentials → **Get resources**，导出 XML
-- [ ] 用真实 ID 替换工程占位符：
+- [ ] 用真实 ID 替换工程占位符（工具：`dart run tool/apply_pgs_ids.dart`）：
   - [ ] [`flutter_app/android/app/src/main/res/values/games-ids.xml`](flutter_app/android/app/src/main/res/values/games-ids.xml)
   - [ ] [`flutter_app/lib/services/play_games/play_games_ids.dart`](flutter_app/lib/services/play_games/play_games_ids.dart)
 - [ ] 添加 PGS 测试账号，真机验证：静默登录 / 成就解锁 / 排行榜提交 / 主页入口
@@ -76,11 +78,13 @@
 
 ## 3. Play Console 商店与合规
 
+商店文案与 Data Safety 答案见 [docs/STORE_LISTING.md](./docs/STORE_LISTING.md)。内测验收见 [docs/INTERNAL_TEST_CHECKLIST.md](./docs/INTERNAL_TEST_CHECKLIST.md)。
+
 - [ ] Data Safety：如实填写广告、Play Games、本地数据等
 - [ ] 商店列表：标题、短描述、完整描述、截图、图标、分级问卷
 - [ ] 填写隐私政策 URL
 - [ ] （可选）填写应用主页 / 支持网址
-- [ ] 内部测试轨道上传 AAB，用测试账号验证 PGS + 广告
+- [ ] 内部测试轨道上传 AAB，用测试账号验证 PGS + 广告 — AAB 已构建：`flutter_app/build/app/outputs/bundle/release/app-release.aab`
 
 ---
 

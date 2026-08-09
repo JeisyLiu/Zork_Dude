@@ -397,10 +397,13 @@
   "settingsBgmEnabled": "Musique de fond",
   "settingsSfxEnabled": "Effets sonores",
   "settingsGearSemantics": "Paramètres",
-  "settingsHint": "Réglez le volume avec les boutons du téléphone.",
   "settingsMenuLabel": "Paramètres",
   "deleteSaveTitle": "Supprimer la sauvegarde ?",
   "deleteSaveMessage": "La progression de cet emplacement sera définitivement supprimée.",
   "deleteSaveConfirm": "Supprimer",
-  "deleteSaveSemantics": "Supprimer la sauvegarde"
+  "deleteSaveSemantics": "Supprimer la sauvegarde",
+  "settingsLanguage": "Langue",
+  "languageRestartTitle": "Changer de langue",
+  "languageRestartMessage": "L'application doit redémarrer pour charger la nouvelle langue. Redémarrer maintenant ?",
+  "languageRestartConfirm": "Redémarrer"
 }

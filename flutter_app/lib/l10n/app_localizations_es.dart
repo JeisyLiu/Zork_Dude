@@ -645,10 +645,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get settingsGearSemantics => 'Ajustes';
 
   @override
-  String get settingsHint =>
-      'Ajusta el volumen con las teclas del dispositivo.';
-
-  @override
   String get settingsMenuLabel => 'Ajustes';
 
   @override
@@ -663,6 +659,19 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get deleteSaveSemantics => 'Eliminar partida';
+
+  @override
+  String get settingsLanguage => 'Idioma';
+
+  @override
+  String get languageRestartTitle => 'Cambiar idioma';
+
+  @override
+  String get languageRestartMessage =>
+      'La aplicación debe reiniciarse para cargar el nuevo idioma. ¿Reiniciar ahora?';
+
+  @override
+  String get languageRestartConfirm => 'Reiniciar ahora';
 }
 
 /// The translations for Spanish Castilian, as used in Spain (`es_ES`).
@@ -1306,10 +1315,6 @@ class AppLocalizationsEsEs extends AppLocalizationsEs {
   String get settingsGearSemantics => 'Ajustes';
 
   @override
-  String get settingsHint =>
-      'Ajusta el volumen con las teclas del dispositivo.';
-
-  @override
   String get settingsMenuLabel => 'Ajustes';
 
   @override
@@ -1324,4 +1329,17 @@ class AppLocalizationsEsEs extends AppLocalizationsEs {
 
   @override
   String get deleteSaveSemantics => 'Eliminar partida';
+
+  @override
+  String get settingsLanguage => 'Idioma';
+
+  @override
+  String get languageRestartTitle => 'Cambiar idioma';
+
+  @override
+  String get languageRestartMessage =>
+      'La aplicación debe reiniciarse para cargar el nuevo idioma. ¿Reiniciar ahora?';
+
+  @override
+  String get languageRestartConfirm => 'Reiniciar ahora';
 }

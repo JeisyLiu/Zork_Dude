@@ -1246,12 +1246,6 @@ abstract class AppLocalizations {
   /// **'设置'**
   String get settingsGearSemantics;
 
-  /// No description provided for @settingsHint.
-  ///
-  /// In zh_Hans, this message translates to:
-  /// **'音量请用系统音量键调节。'**
-  String get settingsHint;
-
   /// No description provided for @settingsMenuLabel.
   ///
   /// In zh_Hans, this message translates to:
@@ -1281,6 +1275,30 @@ abstract class AppLocalizations {
   /// In zh_Hans, this message translates to:
   /// **'删除存档'**
   String get deleteSaveSemantics;
+
+  /// No description provided for @settingsLanguage.
+  ///
+  /// In zh_Hans, this message translates to:
+  /// **'语言'**
+  String get settingsLanguage;
+
+  /// No description provided for @languageRestartTitle.
+  ///
+  /// In zh_Hans, this message translates to:
+  /// **'切换语言'**
+  String get languageRestartTitle;
+
+  /// No description provided for @languageRestartMessage.
+  ///
+  /// In zh_Hans, this message translates to:
+  /// **'需要重启应用以加载新语言文本。是否立即重启？'**
+  String get languageRestartMessage;
+
+  /// No description provided for @languageRestartConfirm.
+  ///
+  /// In zh_Hans, this message translates to:
+  /// **'立即重启'**
+  String get languageRestartConfirm;
 }
 
 class _AppLocalizationsDelegate

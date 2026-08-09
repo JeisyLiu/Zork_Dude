@@ -397,10 +397,13 @@
   "settingsBgmEnabled": "Música de fondo",
   "settingsSfxEnabled": "Efectos de sonido",
   "settingsGearSemantics": "Ajustes",
-  "settingsHint": "Ajusta el volumen con las teclas del dispositivo.",
   "settingsMenuLabel": "Ajustes",
   "deleteSaveTitle": "¿Eliminar partida?",
   "deleteSaveMessage": "El progreso de esta ranura se eliminará permanentemente.",
   "deleteSaveConfirm": "Eliminar",
-  "deleteSaveSemantics": "Eliminar partida"
+  "deleteSaveSemantics": "Eliminar partida",
+  "settingsLanguage": "Idioma",
+  "languageRestartTitle": "Cambiar idioma",
+  "languageRestartMessage": "La aplicación debe reiniciarse para cargar el nuevo idioma. ¿Reiniciar ahora?",
+  "languageRestartConfirm": "Reiniciar ahora"
 }

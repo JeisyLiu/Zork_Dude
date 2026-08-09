@@ -397,10 +397,13 @@
   "settingsBgmEnabled": "Hintergrundmusik",
   "settingsSfxEnabled": "Soundeffekte",
   "settingsGearSemantics": "Einstellungen",
-  "settingsHint": "Lautstärke bitte mit den Gerätetasten regeln.",
   "settingsMenuLabel": "Einstellungen",
   "deleteSaveTitle": "Spielstand löschen?",
   "deleteSaveMessage": "Der Fortschritt in diesem Slot wird dauerhaft gelöscht.",
   "deleteSaveConfirm": "Löschen",
-  "deleteSaveSemantics": "Spielstand löschen"
+  "deleteSaveSemantics": "Spielstand löschen",
+  "settingsLanguage": "Sprache",
+  "languageRestartTitle": "Sprache ändern",
+  "languageRestartMessage": "Die App muss neu starten, um die neue Sprache zu laden. Jetzt neu starten?",
+  "languageRestartConfirm": "Jetzt neu starten"
 }

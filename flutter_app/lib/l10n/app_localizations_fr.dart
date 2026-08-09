@@ -653,9 +653,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get settingsGearSemantics => 'Paramètres';
 
   @override
-  String get settingsHint => 'Réglez le volume avec les boutons du téléphone.';
-
-  @override
   String get settingsMenuLabel => 'Paramètres';
 
   @override
@@ -670,4 +667,17 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get deleteSaveSemantics => 'Supprimer la sauvegarde';
+
+  @override
+  String get settingsLanguage => 'Langue';
+
+  @override
+  String get languageRestartTitle => 'Changer de langue';
+
+  @override
+  String get languageRestartMessage =>
+      'L\'application doit redémarrer pour charger la nouvelle langue. Redémarrer maintenant ?';
+
+  @override
+  String get languageRestartConfirm => 'Redémarrer';
 }

@@ -397,10 +397,13 @@
   "settingsBgmEnabled": "Background music",
   "settingsSfxEnabled": "Sound effects",
   "settingsGearSemantics": "Settings",
-  "settingsHint": "Use your device volume buttons to adjust loudness.",
   "settingsMenuLabel": "Settings",
   "deleteSaveTitle": "Delete save?",
   "deleteSaveMessage": "Progress in this slot will be permanently deleted.",
   "deleteSaveConfirm": "Delete",
-  "deleteSaveSemantics": "Delete save"
+  "deleteSaveSemantics": "Delete save",
+  "settingsLanguage": "Language",
+  "languageRestartTitle": "Change language",
+  "languageRestartMessage": "The app must restart to load the new language. Restart now?",
+  "languageRestartConfirm": "Restart now"
 }

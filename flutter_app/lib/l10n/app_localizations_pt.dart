@@ -645,9 +645,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get settingsGearSemantics => 'Configurações';
 
   @override
-  String get settingsHint => 'Ajuste o volume com as teclas do aparelho.';
-
-  @override
   String get settingsMenuLabel => 'Configurações';
 
   @override
@@ -662,6 +659,19 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get deleteSaveSemantics => 'Excluir salvamento';
+
+  @override
+  String get settingsLanguage => 'Idioma';
+
+  @override
+  String get languageRestartTitle => 'Alterar idioma';
+
+  @override
+  String get languageRestartMessage =>
+      'O app precisa reiniciar para carregar o novo idioma. Reiniciar agora?';
+
+  @override
+  String get languageRestartConfirm => 'Reiniciar agora';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
@@ -1305,9 +1315,6 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get settingsGearSemantics => 'Configurações';
 
   @override
-  String get settingsHint => 'Ajuste o volume com as teclas do aparelho.';
-
-  @override
   String get settingsMenuLabel => 'Configurações';
 
   @override
@@ -1322,4 +1329,17 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get deleteSaveSemantics => 'Excluir salvamento';
+
+  @override
+  String get settingsLanguage => 'Idioma';
+
+  @override
+  String get languageRestartTitle => 'Alterar idioma';
+
+  @override
+  String get languageRestartMessage =>
+      'O app precisa reiniciar para carregar o novo idioma. Reiniciar agora?';
+
+  @override
+  String get languageRestartConfirm => 'Reiniciar agora';
 }

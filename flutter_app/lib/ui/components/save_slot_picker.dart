@@ -77,6 +77,7 @@ class _SaveSlotGridState extends State<_SaveSlotGrid> {
     final controller = widget.controller;
     if (controller == null || _slots[index] == null) return;
     final l10n = AppLocalizations.of(context);
+    final navigator = Navigator.of(context, rootNavigator: true);
     final confirmed = await GameConfirmDialog.show(
       context: context,
       title: l10n.deleteSaveTitle,
@@ -90,7 +91,7 @@ class _SaveSlotGridState extends State<_SaveSlotGrid> {
     if (!mounted) return;
     if (widget.mode == SaveSlotPickerMode.read &&
         controller.occupiedCount == 0) {
-      Navigator.of(context).pop(null);
+      navigator.pop(null);
     }
   }
 
@@ -154,31 +155,37 @@ class _SlotTile extends StatelessWidget {
       child: Material(
         type: MaterialType.transparency,
         child: Stack(
-          clipBehavior: Clip.none,
           children: [
-            InkWell(
-              onTap: onTap,
-              borderRadius: BorderRadius.circular(4),
-              child: GamePanel(
-                dark: true,
-                withBorder: true,
-                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
-                child: info == null
-                    ? _emptySlot(marker, theme)
-                    : _filledSlot(info!, marker, theme),
+            Positioned.fill(
+              child: InkWell(
+                onTap: onTap,
+                borderRadius: BorderRadius.circular(4),
+                child: GamePanel(
+                  dark: true,
+                  withBorder: true,
+                  padding: EdgeInsets.fromLTRB(
+                    4,
+                    4,
+                    showDelete ? 22 : 4,
+                    6,
+                  ),
+                  child: info == null
+                      ? _emptySlot(marker, theme)
+                      : _filledSlot(info!, marker, theme),
+                ),
               ),
             ),
             if (showDelete && onDelete != null)
               Positioned(
-                top: -4,
-                right: -4,
+                top: 2,
+                right: 2,
                 child: GameIconButton(
-                  size: 22,
+                  size: 20,
                   semanticLabel: l10n.deleteSaveSemantics,
                   onPressed: onDelete,
                   child: Icon(
                     Icons.delete_outline,
-                    size: 14,
+                    size: 12,
                     color: theme.textPrimary,
                   ),
                 ),

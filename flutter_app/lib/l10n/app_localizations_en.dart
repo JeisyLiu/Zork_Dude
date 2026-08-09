@@ -640,10 +640,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsGearSemantics => 'Settings';
 
   @override
-  String get settingsHint =>
-      'Use your device volume buttons to adjust loudness.';
-
-  @override
   String get settingsMenuLabel => 'Settings';
 
   @override
@@ -658,6 +654,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get deleteSaveSemantics => 'Delete save';
+
+  @override
+  String get settingsLanguage => 'Language';
+
+  @override
+  String get languageRestartTitle => 'Change language';
+
+  @override
+  String get languageRestartMessage =>
+      'The app must restart to load the new language. Restart now?';
+
+  @override
+  String get languageRestartConfirm => 'Restart now';
 }
 
 /// The translations for English, as used in the United States (`en_US`).
@@ -1296,10 +1305,6 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get settingsGearSemantics => 'Settings';
 
   @override
-  String get settingsHint =>
-      'Use your device volume buttons to adjust loudness.';
-
-  @override
   String get settingsMenuLabel => 'Settings';
 
   @override
@@ -1314,4 +1319,17 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get deleteSaveSemantics => 'Delete save';
+
+  @override
+  String get settingsLanguage => 'Language';
+
+  @override
+  String get languageRestartTitle => 'Change language';
+
+  @override
+  String get languageRestartMessage =>
+      'The app must restart to load the new language. Restart now?';
+
+  @override
+  String get languageRestartConfirm => 'Restart now';
 }

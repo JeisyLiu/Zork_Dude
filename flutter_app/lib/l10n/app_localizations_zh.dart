@@ -633,9 +633,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsGearSemantics => '设置';
 
   @override
-  String get settingsHint => '音量请用系统音量键调节。';
-
-  @override
   String get settingsMenuLabel => '设置';
 
   @override
@@ -649,6 +646,18 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get deleteSaveSemantics => '删除存档';
+
+  @override
+  String get settingsLanguage => '语言';
+
+  @override
+  String get languageRestartTitle => '切换语言';
+
+  @override
+  String get languageRestartMessage => '需要重启应用以加载新语言文本。是否立即重启？';
+
+  @override
+  String get languageRestartConfirm => '立即重启';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hans`).
@@ -1280,9 +1289,6 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get settingsGearSemantics => '设置';
 
   @override
-  String get settingsHint => '音量请用系统音量键调节。';
-
-  @override
   String get settingsMenuLabel => '设置';
 
   @override
@@ -1296,6 +1302,18 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get deleteSaveSemantics => '删除存档';
+
+  @override
+  String get settingsLanguage => '语言';
+
+  @override
+  String get languageRestartTitle => '切换语言';
+
+  @override
+  String get languageRestartMessage => '需要重启应用以加载新语言文本。是否立即重启？';
+
+  @override
+  String get languageRestartConfirm => '立即重启';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
@@ -1927,9 +1945,6 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get settingsGearSemantics => '設定';
 
   @override
-  String get settingsHint => '音量請用系統音量鍵調節。';
-
-  @override
   String get settingsMenuLabel => '設定';
 
   @override
@@ -1943,4 +1958,16 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get deleteSaveSemantics => '刪除存檔';
+
+  @override
+  String get settingsLanguage => '語言';
+
+  @override
+  String get languageRestartTitle => '切換語言';
+
+  @override
+  String get languageRestartMessage => '需要重新啟動應用程式以載入新語言文字。是否立即重新啟動？';
+
+  @override
+  String get languageRestartConfirm => '立即重新啟動';
 }

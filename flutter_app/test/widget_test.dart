@@ -5,6 +5,7 @@ import 'package:zork_dude/domain/models/enums.dart';
 import 'package:zork_dude/main.dart';
 import 'package:zork_dude/screens/exploration_screen.dart';
 import 'package:zork_dude/services/audio/game_audio_service.dart';
+import 'package:zork_dude/services/locale_preferences.dart';
 import 'package:zork_dude/ui/components/game_button.dart';
 import 'package:zork_dude/ui/game_ui_assets.dart';
 import 'package:zork_dude/ui/game_ui_theme.dart';
@@ -15,9 +16,11 @@ import 'test_l10n.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  setUp(() {
+  setUp(() async {
     GameAudioService.disableForTest = true;
     SharedPreferences.setMockInitialValues({});
+    LocalePreferences.instance.resetForTest();
+    await LocalePreferences.instance.load();
   });
 
   Future<void> pumpUntilLoaded(WidgetTester tester) async {

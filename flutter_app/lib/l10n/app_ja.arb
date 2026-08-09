@@ -397,10 +397,13 @@
   "settingsBgmEnabled": "背景音楽",
   "settingsSfxEnabled": "効果音",
   "settingsGearSemantics": "設定",
-  "settingsHint": "音量は端末の音量ボタンで調整してください。",
   "settingsMenuLabel": "設定",
   "deleteSaveTitle": "セーブデータを削除しますか？",
   "deleteSaveMessage": "このスロットの進行状況は完全に削除され、元に戻せません。",
   "deleteSaveConfirm": "削除",
-  "deleteSaveSemantics": "セーブデータを削除"
+  "deleteSaveSemantics": "セーブデータを削除",
+  "settingsLanguage": "言語",
+  "languageRestartTitle": "言語を変更",
+  "languageRestartMessage": "新しい言語を読み込むにはアプリの再起動が必要です。今すぐ再起動しますか？",
+  "languageRestartConfirm": "今すぐ再起動"
 }

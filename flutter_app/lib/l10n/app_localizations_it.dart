@@ -650,9 +650,6 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settingsGearSemantics => 'Impostazioni';
 
   @override
-  String get settingsHint => 'Regola il volume con i tasti del dispositivo.';
-
-  @override
   String get settingsMenuLabel => 'Impostazioni';
 
   @override
@@ -667,4 +664,17 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get deleteSaveSemantics => 'Elimina salvataggio';
+
+  @override
+  String get settingsLanguage => 'Lingua';
+
+  @override
+  String get languageRestartTitle => 'Cambia lingua';
+
+  @override
+  String get languageRestartMessage =>
+      'L\'app deve riavviarsi per caricare la nuova lingua. Riavviare ora?';
+
+  @override
+  String get languageRestartConfirm => 'Riavvia ora';
 }

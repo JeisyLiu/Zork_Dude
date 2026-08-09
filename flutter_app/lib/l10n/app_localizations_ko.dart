@@ -639,9 +639,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get settingsGearSemantics => '설정';
 
   @override
-  String get settingsHint => '음량은 기기 음량 버튼으로 조절하세요.';
-
-  @override
   String get settingsMenuLabel => '설정';
 
   @override
@@ -655,4 +652,17 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get deleteSaveSemantics => '저장 데이터 삭제';
+
+  @override
+  String get settingsLanguage => '언어';
+
+  @override
+  String get languageRestartTitle => '언어 변경';
+
+  @override
+  String get languageRestartMessage =>
+      '새 언어를 불러오려면 앱을 다시 시작해야 합니다. 지금 다시 시작할까요?';
+
+  @override
+  String get languageRestartConfirm => '지금 다시 시작';
 }

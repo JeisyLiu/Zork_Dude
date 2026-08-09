@@ -38,7 +38,9 @@ class GameMessages {
   }
 
   @visibleForTesting
-  static void resetCacheForTest() {
+  static void resetCacheForTest() => clearCache();
+
+  static void clearCache() {
     _cachedTag = null;
     _cached = null;
   }

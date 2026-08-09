@@ -2,10 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:zork_dude/l10n/app_localizations.dart';
+import 'package:zork_dude/l10n/locale_tag.dart';
 import 'package:zork_dude/services/audio/audio_preferences.dart';
 import 'package:zork_dude/services/audio/game_audio_service.dart';
+import 'package:zork_dude/services/locale_preferences.dart';
 import 'package:zork_dude/services/offpack_ads.dart';
 import 'package:zork_dude/ui/components/game_button.dart';
+import 'package:zork_dude/ui/components/game_confirm_dialog.dart';
 import 'package:zork_dude/ui/components/game_outlined_text.dart';
 import 'package:zork_dude/ui/components/landscape_overlay.dart';
 import 'package:zork_dude/ui/exploration/exploration_layout_constants.dart';
@@ -24,7 +27,7 @@ abstract final class SettingsEntry {
       title: AppLocalizations.of(context).settingsTitle,
       skin: skin,
       onDismiss: GameAudioService.instance.playUiClosePanel,
-      child: const SettingsPanel(),
+      child: SettingsPanel(skin: skin),
     );
   }
 }
@@ -54,35 +57,76 @@ class SettingsGearButton extends StatelessWidget {
   }
 }
 
-/// Settings panel body (audio toggles + privacy).
+/// Settings panel body (audio toggles, language, privacy).
 class SettingsPanel extends StatefulWidget {
-  const SettingsPanel({super.key});
+  const SettingsPanel({super.key, this.skin = GameUiSkin.fantasy});
+
+  final GameUiSkin skin;
 
   @override
   State<SettingsPanel> createState() => _SettingsPanelState();
 }
 
 class _SettingsPanelState extends State<SettingsPanel> {
-  final _prefs = AudioPreferences.instance;
+  final _audioPrefs = AudioPreferences.instance;
+  final _localePrefs = LocalePreferences.instance;
+  late String _selectedLocaleTag;
 
   @override
   void initState() {
     super.initState();
-    _prefs.addListener(_onPrefsChanged);
-    if (!_prefs.loaded) {
-      unawaited(_prefs.load());
+    _selectedLocaleTag = _localePrefs.effectiveTag;
+    _audioPrefs.addListener(_onAudioPrefsChanged);
+    _localePrefs.addListener(_onLocalePrefsChanged);
+    if (!_audioPrefs.loaded) {
+      unawaited(_audioPrefs.load());
+    }
+    if (!_localePrefs.loaded) {
+      unawaited(_localePrefs.load());
     }
   }
 
   @override
   void dispose() {
-    _prefs.removeListener(_onPrefsChanged);
+    _audioPrefs.removeListener(_onAudioPrefsChanged);
+    _localePrefs.removeListener(_onLocalePrefsChanged);
     super.dispose();
   }
 
-  void _onPrefsChanged() {
+  void _onAudioPrefsChanged() {
     if (mounted) setState(() {});
     GameAudioService.instance.refreshVolumes();
+  }
+
+  void _onLocalePrefsChanged() {
+    if (mounted) {
+      setState(() => _selectedLocaleTag = _localePrefs.effectiveTag);
+    }
+  }
+
+  Future<void> _onLanguageChanged(String? tag) async {
+    if (tag == null || tag == _localePrefs.effectiveTag) return;
+    final previous = _selectedLocaleTag;
+    setState(() => _selectedLocaleTag = tag);
+
+    final l10n = AppLocalizations.of(context);
+    final confirmed = await GameConfirmDialog.show(
+      context: context,
+      title: l10n.languageRestartTitle,
+      message: l10n.languageRestartMessage,
+      confirmLabel: l10n.languageRestartConfirm,
+      confirmSubLabel: 'restart',
+      skin: widget.skin,
+    );
+    if (!confirmed || !mounted) {
+      setState(() => _selectedLocaleTag = previous);
+      return;
+    }
+
+    await _localePrefs.setTag(tag);
+    if (!mounted) return;
+    Navigator.of(context).pop();
+    _localePrefs.softRelaunch();
   }
 
   @override
@@ -98,9 +142,9 @@ class _SettingsPanelState extends State<SettingsPanel> {
         _toggleRow(
           context,
           label: l10n.settingsBgmEnabled,
-          value: _prefs.bgmEnabled,
+          value: _audioPrefs.bgmEnabled,
           onChanged: (v) async {
-            await _prefs.setBgmEnabled(v);
+            await _audioPrefs.setBgmEnabled(v);
             if (!v) {
               await GameAudioService.instance.stopBgm();
             }
@@ -110,9 +154,11 @@ class _SettingsPanelState extends State<SettingsPanel> {
         _toggleRow(
           context,
           label: l10n.settingsSfxEnabled,
-          value: _prefs.sfxEnabled,
-          onChanged: _prefs.setSfxEnabled,
+          value: _audioPrefs.sfxEnabled,
+          onChanged: _audioPrefs.setSfxEnabled,
         ),
+        const SizedBox(height: 12),
+        _languageRow(context, l10n.settingsLanguage),
         if (OffpackAds.instance.privacyOptionsRequired) ...[
           const SizedBox(height: 16),
           GameButton(
@@ -123,13 +169,63 @@ class _SettingsPanelState extends State<SettingsPanel> {
             onPressed: OffpackAds.instance.showPrivacyOptions,
           ),
         ],
-        const SizedBox(height: 8),
-        GameOutlinedText(
-          l10n.settingsHint,
-          fontSize: 11,
-          color: d.textMuted,
-          strokeWidth: 0,
-          textAlign: TextAlign.center,
+      ],
+    );
+  }
+
+  Widget _languageRow(BuildContext context, String label) {
+    final d = GameUiTheme.of(context);
+    // Closed control sits on a dark panel → light ink.
+    // Menu popup uses parchment cream → dark ink (fantasy panel contrast).
+    const parchment = Color(0xFFE8D9B8);
+    const parchmentBorder = Color(0xFF8A7048);
+    return Row(
+      children: [
+        Expanded(
+          child: GameOutlinedText(
+            label,
+            fontSize: 12,
+            color: d.logText,
+            strokeWidth: 0,
+          ),
+        ),
+        DecoratedBox(
+          decoration: BoxDecoration(
+            color: parchment,
+            borderRadius: BorderRadius.circular(4),
+            border: Border.all(color: parchmentBorder, width: 1.5),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<String>(
+                value: _selectedLocaleTag,
+                isDense: true,
+                dropdownColor: parchment,
+                iconEnabledColor: d.textPrimary,
+                iconDisabledColor: d.textMuted,
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: d.textPrimary,
+                ),
+                items: [
+                  for (final tag in LocaleTag.all)
+                    DropdownMenuItem(
+                      value: tag,
+                      child: Text(
+                        LocalePreferences.displayNames[tag] ?? tag,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: d.textPrimary,
+                        ),
+                      ),
+                    ),
+                ],
+                onChanged: _onLanguageChanged,
+              ),
+            ),
+          ),
         ),
       ],
     );

@@ -397,10 +397,13 @@
   "settingsBgmEnabled": "Música de fundo",
   "settingsSfxEnabled": "Efeitos sonoros",
   "settingsGearSemantics": "Configurações",
-  "settingsHint": "Ajuste o volume com as teclas do aparelho.",
   "settingsMenuLabel": "Configurações",
   "deleteSaveTitle": "Excluir salvamento?",
   "deleteSaveMessage": "O progresso deste slot será excluído permanentemente.",
   "deleteSaveConfirm": "Excluir",
-  "deleteSaveSemantics": "Excluir salvamento"
+  "deleteSaveSemantics": "Excluir salvamento",
+  "settingsLanguage": "Idioma",
+  "languageRestartTitle": "Alterar idioma",
+  "languageRestartMessage": "O app precisa reiniciar para carregar o novo idioma. Reiniciar agora?",
+  "languageRestartConfirm": "Reiniciar agora"
 }

@@ -638,9 +638,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settingsGearSemantics => '設定';
 
   @override
-  String get settingsHint => '音量は端末の音量ボタンで調整してください。';
-
-  @override
   String get settingsMenuLabel => '設定';
 
   @override
@@ -654,4 +651,16 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get deleteSaveSemantics => 'セーブデータを削除';
+
+  @override
+  String get settingsLanguage => '言語';
+
+  @override
+  String get languageRestartTitle => '言語を変更';
+
+  @override
+  String get languageRestartMessage => '新しい言語を読み込むにはアプリの再起動が必要です。今すぐ再起動しますか？';
+
+  @override
+  String get languageRestartConfirm => '今すぐ再起動';
 }

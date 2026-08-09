@@ -397,10 +397,13 @@
   "settingsBgmEnabled": "背景音樂",
   "settingsSfxEnabled": "音效",
   "settingsGearSemantics": "設定",
-  "settingsHint": "音量請用系統音量鍵調節。",
   "settingsMenuLabel": "設定",
   "deleteSaveTitle": "刪除存檔？",
   "deleteSaveMessage": "該槽位的進度將被永久刪除，無法恢復。",
   "deleteSaveConfirm": "刪除",
-  "deleteSaveSemantics": "刪除存檔"
+  "deleteSaveSemantics": "刪除存檔",
+  "settingsLanguage": "語言",
+  "languageRestartTitle": "切換語言",
+  "languageRestartMessage": "需要重新啟動應用程式以載入新語言文字。是否立即重新啟動？",
+  "languageRestartConfirm": "立即重新啟動"
 }

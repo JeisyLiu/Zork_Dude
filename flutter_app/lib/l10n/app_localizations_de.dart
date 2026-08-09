@@ -648,9 +648,6 @@ class AppLocalizationsDe extends AppLocalizations {
   String get settingsGearSemantics => 'Einstellungen';
 
   @override
-  String get settingsHint => 'Lautstärke bitte mit den Gerätetasten regeln.';
-
-  @override
   String get settingsMenuLabel => 'Einstellungen';
 
   @override
@@ -665,4 +662,17 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get deleteSaveSemantics => 'Spielstand löschen';
+
+  @override
+  String get settingsLanguage => 'Sprache';
+
+  @override
+  String get languageRestartTitle => 'Sprache ändern';
+
+  @override
+  String get languageRestartMessage =>
+      'Die App muss neu starten, um die neue Sprache zu laden. Jetzt neu starten?';
+
+  @override
+  String get languageRestartConfirm => 'Jetzt neu starten';
 }

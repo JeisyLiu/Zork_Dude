@@ -652,4 +652,17 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get settingsMenuLabel => 'Einstellungen';
+
+  @override
+  String get deleteSaveTitle => 'Spielstand löschen?';
+
+  @override
+  String get deleteSaveMessage =>
+      'Der Fortschritt in diesem Slot wird dauerhaft gelöscht.';
+
+  @override
+  String get deleteSaveConfirm => 'Löschen';
+
+  @override
+  String get deleteSaveSemantics => 'Spielstand löschen';
 }

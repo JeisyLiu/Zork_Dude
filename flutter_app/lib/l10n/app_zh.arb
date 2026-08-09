@@ -398,5 +398,9 @@
   "settingsSfxEnabled": "音效",
   "settingsGearSemantics": "设置",
   "settingsHint": "音量请用系统音量键调节。",
-  "settingsMenuLabel": "设置"
+  "settingsMenuLabel": "设置",
+  "deleteSaveTitle": "删除存档？",
+  "deleteSaveMessage": "该槽位的进度将被永久删除，无法恢复。",
+  "deleteSaveConfirm": "删除",
+  "deleteSaveSemantics": "删除存档"
 }

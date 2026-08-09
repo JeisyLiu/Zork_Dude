@@ -645,6 +645,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsMenuLabel => 'Settings';
+
+  @override
+  String get deleteSaveTitle => 'Delete save?';
+
+  @override
+  String get deleteSaveMessage =>
+      'Progress in this slot will be permanently deleted.';
+
+  @override
+  String get deleteSaveConfirm => 'Delete';
+
+  @override
+  String get deleteSaveSemantics => 'Delete save';
 }
 
 /// The translations for English, as used in the United States (`en_US`).
@@ -1288,4 +1301,17 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get settingsMenuLabel => 'Settings';
+
+  @override
+  String get deleteSaveTitle => 'Delete save?';
+
+  @override
+  String get deleteSaveMessage =>
+      'Progress in this slot will be permanently deleted.';
+
+  @override
+  String get deleteSaveConfirm => 'Delete';
+
+  @override
+  String get deleteSaveSemantics => 'Delete save';
 }

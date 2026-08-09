@@ -642,4 +642,16 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get settingsMenuLabel => '設定';
+
+  @override
+  String get deleteSaveTitle => 'セーブデータを削除しますか？';
+
+  @override
+  String get deleteSaveMessage => 'このスロットの進行状況は完全に削除され、元に戻せません。';
+
+  @override
+  String get deleteSaveConfirm => '削除';
+
+  @override
+  String get deleteSaveSemantics => 'セーブデータを削除';
 }

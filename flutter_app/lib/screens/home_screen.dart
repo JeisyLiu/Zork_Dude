@@ -36,6 +36,9 @@ class _HomeScreenState extends State<HomeScreen> {
   final _playGames = PlayGamesService.instance;
   final _pointer = ValueNotifier<HomePointerSample?>(null);
   bool _entering = false;
+  bool? _frozenHasSave;
+
+  bool get _showContinue => _frozenHasSave ?? _controller.hasSave;
 
   @override
   void initState() {
@@ -78,16 +81,21 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _enterGame(BuildContext context) async {
     if (_entering || _controller.loading) return;
     if (_controller.occupiedCount == 0) {
-      final slot = _controller.firstEmptyIndex ?? 0;
-      await _startNewGameAndEnter(context, slot);
+      await _startNewGameAndEnter(context, _controller.firstEmptyIndex ?? 0);
       return;
     }
+    setState(() => _frozenHasSave = _controller.hasSave);
     final picked = await SaveSlotPicker.show(
       context: context,
       mode: SaveSlotPickerMode.write,
       slots: _controller.slots,
+      controller: _controller,
     );
-    if (!mounted || picked == null) return;
+    if (!mounted) return;
+    if (picked == null) {
+      setState(() => _frozenHasSave = null);
+      return;
+    }
     if (_controller.slots[picked] != null) {
       final l10n = AppLocalizations.of(context);
       final confirmed = await GameConfirmDialog.show(
@@ -98,19 +106,27 @@ class _HomeScreenState extends State<HomeScreen> {
         confirmSubLabel: 'overwrite',
         skin: GameUiSkin.fantasy,
       );
-      if (!confirmed || !mounted) return;
+      if (!confirmed || !mounted) {
+        setState(() => _frozenHasSave = null);
+        return;
+      }
     }
     await _startNewGameAndEnter(context, picked);
   }
 
   Future<void> _startNewGameAndEnter(BuildContext context, int slot) async {
+    setState(() => _frozenHasSave = _controller.hasSave);
     await _controller.startNewGame(slot: slot);
-    if (!mounted || _controller.error != null) return;
+    if (!mounted || _controller.error != null) {
+      setState(() => _frozenHasSave = null);
+      return;
+    }
     setState(() => _entering = true);
   }
 
   Future<void> _continueGame(BuildContext context) async {
     if (_entering || _controller.loading) return;
+    setState(() => _frozenHasSave = _controller.hasSave);
     final sole = _controller.soleOccupiedIndex;
     if (sole != null) {
       await _loadSlotAndEnter(context, sole);
@@ -120,15 +136,29 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       mode: SaveSlotPickerMode.read,
       slots: _controller.slots,
+      controller: _controller,
     );
-    if (!mounted || picked == null) return;
-    if (_controller.slots[picked] == null) return;
+    if (!mounted) {
+      setState(() => _frozenHasSave = null);
+      return;
+    }
+    if (picked == null) {
+      setState(() => _frozenHasSave = null);
+      return;
+    }
+    if (_controller.slots[picked] == null) {
+      setState(() => _frozenHasSave = null);
+      return;
+    }
     await _loadSlotAndEnter(context, picked);
   }
 
   Future<void> _loadSlotAndEnter(BuildContext context, int slot) async {
     await _controller.continueGame(slot: slot);
-    if (!mounted || _controller.error != null) return;
+    if (!mounted || _controller.error != null) {
+      setState(() => _frozenHasSave = null);
+      return;
+    }
     setState(() => _entering = true);
   }
 
@@ -141,8 +171,11 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     ).then((_) async {
       if (mounted) {
+        setState(() {
+          _frozenHasSave = null;
+          _entering = false;
+        });
         await _controller.refreshSlots();
-        setState(() => _entering = false);
       }
     });
   }
@@ -303,7 +336,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     height: 1.45,
                                   ),
                                   SizedBox(height: gapL),
-                                  if (_controller.hasSave) ...[
+                                  if (_showContinue) ...[
                                     GameButton(
                                       width: btnW,
                                       height: btnH,

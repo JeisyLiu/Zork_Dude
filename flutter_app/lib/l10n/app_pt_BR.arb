@@ -398,5 +398,9 @@
   "settingsSfxEnabled": "Efeitos sonoros",
   "settingsGearSemantics": "Configurações",
   "settingsHint": "Ajuste o volume com as teclas do aparelho.",
-  "settingsMenuLabel": "Configurações"
+  "settingsMenuLabel": "Configurações",
+  "deleteSaveTitle": "Excluir salvamento?",
+  "deleteSaveMessage": "O progresso deste slot será excluído permanentemente.",
+  "deleteSaveConfirm": "Excluir",
+  "deleteSaveSemantics": "Excluir salvamento"
 }

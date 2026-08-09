@@ -398,5 +398,9 @@
   "settingsSfxEnabled": "音效",
   "settingsGearSemantics": "設定",
   "settingsHint": "音量請用系統音量鍵調節。",
-  "settingsMenuLabel": "設定"
+  "settingsMenuLabel": "設定",
+  "deleteSaveTitle": "刪除存檔？",
+  "deleteSaveMessage": "該槽位的進度將被永久刪除，無法恢復。",
+  "deleteSaveConfirm": "刪除",
+  "deleteSaveSemantics": "刪除存檔"
 }

@@ -649,6 +649,19 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get settingsMenuLabel => 'Configurações';
+
+  @override
+  String get deleteSaveTitle => 'Excluir salvamento?';
+
+  @override
+  String get deleteSaveMessage =>
+      'O progresso deste slot será excluído permanentemente.';
+
+  @override
+  String get deleteSaveConfirm => 'Excluir';
+
+  @override
+  String get deleteSaveSemantics => 'Excluir salvamento';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
@@ -1296,4 +1309,17 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get settingsMenuLabel => 'Configurações';
+
+  @override
+  String get deleteSaveTitle => 'Excluir salvamento?';
+
+  @override
+  String get deleteSaveMessage =>
+      'O progresso deste slot será excluído permanentemente.';
+
+  @override
+  String get deleteSaveConfirm => 'Excluir';
+
+  @override
+  String get deleteSaveSemantics => 'Excluir salvamento';
 }

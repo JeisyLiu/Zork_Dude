@@ -398,5 +398,9 @@
   "settingsSfxEnabled": "Effets sonores",
   "settingsGearSemantics": "Paramètres",
   "settingsHint": "Réglez le volume avec les boutons du téléphone.",
-  "settingsMenuLabel": "Paramètres"
+  "settingsMenuLabel": "Paramètres",
+  "deleteSaveTitle": "Supprimer la sauvegarde ?",
+  "deleteSaveMessage": "La progression de cet emplacement sera définitivement supprimée.",
+  "deleteSaveConfirm": "Supprimer",
+  "deleteSaveSemantics": "Supprimer la sauvegarde"
 }

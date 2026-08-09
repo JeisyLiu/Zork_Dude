@@ -643,4 +643,16 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get settingsMenuLabel => '설정';
+
+  @override
+  String get deleteSaveTitle => '저장 데이터를 삭제할까요?';
+
+  @override
+  String get deleteSaveMessage => '이 슬롯의 진행 상황이 영구적으로 삭제됩니다.';
+
+  @override
+  String get deleteSaveConfirm => '삭제';
+
+  @override
+  String get deleteSaveSemantics => '저장 데이터 삭제';
 }

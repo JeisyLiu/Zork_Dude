@@ -398,5 +398,9 @@
   "settingsSfxEnabled": "Efectos de sonido",
   "settingsGearSemantics": "Ajustes",
   "settingsHint": "Ajusta el volumen con las teclas del dispositivo.",
-  "settingsMenuLabel": "Ajustes"
+  "settingsMenuLabel": "Ajustes",
+  "deleteSaveTitle": "¿Eliminar partida?",
+  "deleteSaveMessage": "El progreso de esta ranura se eliminará permanentemente.",
+  "deleteSaveConfirm": "Eliminar",
+  "deleteSaveSemantics": "Eliminar partida"
 }

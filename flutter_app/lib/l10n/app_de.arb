@@ -398,5 +398,9 @@
   "settingsSfxEnabled": "Soundeffekte",
   "settingsGearSemantics": "Einstellungen",
   "settingsHint": "Lautstärke bitte mit den Gerätetasten regeln.",
-  "settingsMenuLabel": "Einstellungen"
+  "settingsMenuLabel": "Einstellungen",
+  "deleteSaveTitle": "Spielstand löschen?",
+  "deleteSaveMessage": "Der Fortschritt in diesem Slot wird dauerhaft gelöscht.",
+  "deleteSaveConfirm": "Löschen",
+  "deleteSaveSemantics": "Spielstand löschen"
 }

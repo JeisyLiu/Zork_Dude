@@ -398,5 +398,9 @@
   "settingsSfxEnabled": "효과음",
   "settingsGearSemantics": "설정",
   "settingsHint": "음량은 기기 음량 버튼으로 조절하세요.",
-  "settingsMenuLabel": "설정"
+  "settingsMenuLabel": "설정",
+  "deleteSaveTitle": "저장 데이터를 삭제할까요?",
+  "deleteSaveMessage": "이 슬롯의 진행 상황이 영구적으로 삭제됩니다.",
+  "deleteSaveConfirm": "삭제",
+  "deleteSaveSemantics": "저장 데이터 삭제"
 }

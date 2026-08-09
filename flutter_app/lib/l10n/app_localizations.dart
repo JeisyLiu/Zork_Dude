@@ -1257,6 +1257,30 @@ abstract class AppLocalizations {
   /// In zh_Hans, this message translates to:
   /// **'设置'**
   String get settingsMenuLabel;
+
+  /// No description provided for @deleteSaveTitle.
+  ///
+  /// In zh_Hans, this message translates to:
+  /// **'删除存档？'**
+  String get deleteSaveTitle;
+
+  /// No description provided for @deleteSaveMessage.
+  ///
+  /// In zh_Hans, this message translates to:
+  /// **'该槽位的进度将被永久删除，无法恢复。'**
+  String get deleteSaveMessage;
+
+  /// No description provided for @deleteSaveConfirm.
+  ///
+  /// In zh_Hans, this message translates to:
+  /// **'删除'**
+  String get deleteSaveConfirm;
+
+  /// No description provided for @deleteSaveSemantics.
+  ///
+  /// In zh_Hans, this message translates to:
+  /// **'删除存档'**
+  String get deleteSaveSemantics;
 }
 
 class _AppLocalizationsDelegate

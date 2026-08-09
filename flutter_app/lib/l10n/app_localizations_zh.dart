@@ -637,6 +637,18 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get settingsMenuLabel => '设置';
+
+  @override
+  String get deleteSaveTitle => '删除存档？';
+
+  @override
+  String get deleteSaveMessage => '该槽位的进度将被永久删除，无法恢复。';
+
+  @override
+  String get deleteSaveConfirm => '删除';
+
+  @override
+  String get deleteSaveSemantics => '删除存档';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hans`).
@@ -1272,6 +1284,18 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get settingsMenuLabel => '设置';
+
+  @override
+  String get deleteSaveTitle => '删除存档？';
+
+  @override
+  String get deleteSaveMessage => '该槽位的进度将被永久删除，无法恢复。';
+
+  @override
+  String get deleteSaveConfirm => '删除';
+
+  @override
+  String get deleteSaveSemantics => '删除存档';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
@@ -1907,4 +1931,16 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get settingsMenuLabel => '設定';
+
+  @override
+  String get deleteSaveTitle => '刪除存檔？';
+
+  @override
+  String get deleteSaveMessage => '該槽位的進度將被永久刪除，無法恢復。';
+
+  @override
+  String get deleteSaveConfirm => '刪除';
+
+  @override
+  String get deleteSaveSemantics => '刪除存檔';
 }

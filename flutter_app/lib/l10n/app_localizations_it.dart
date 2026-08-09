@@ -654,4 +654,17 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get settingsMenuLabel => 'Impostazioni';
+
+  @override
+  String get deleteSaveTitle => 'Eliminare il salvataggio?';
+
+  @override
+  String get deleteSaveMessage =>
+      'I progressi in questo slot verranno eliminati definitivamente.';
+
+  @override
+  String get deleteSaveConfirm => 'Elimina';
+
+  @override
+  String get deleteSaveSemantics => 'Elimina salvataggio';
 }

@@ -129,6 +129,15 @@ class GameController extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> deleteSlot(int slot) async {
+    if (slot < 0 || slot >= slots.length) return;
+    await _saveRepo.clearSlot(slot);
+    if (activeSlot == slot) {
+      activeSlot = null;
+    }
+    await refreshSlots();
+  }
+
   int get occupiedCount => slots.where((s) => s != null).length;
 
   int? get soleOccupiedIndex {

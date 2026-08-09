@@ -657,4 +657,17 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get settingsMenuLabel => 'Paramètres';
+
+  @override
+  String get deleteSaveTitle => 'Supprimer la sauvegarde ?';
+
+  @override
+  String get deleteSaveMessage =>
+      'La progression de cet emplacement sera définitivement supprimée.';
+
+  @override
+  String get deleteSaveConfirm => 'Supprimer';
+
+  @override
+  String get deleteSaveSemantics => 'Supprimer la sauvegarde';
 }

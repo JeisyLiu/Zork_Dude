@@ -650,6 +650,19 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get settingsMenuLabel => 'Ajustes';
+
+  @override
+  String get deleteSaveTitle => '¿Eliminar partida?';
+
+  @override
+  String get deleteSaveMessage =>
+      'El progreso de esta ranura se eliminará permanentemente.';
+
+  @override
+  String get deleteSaveConfirm => 'Eliminar';
+
+  @override
+  String get deleteSaveSemantics => 'Eliminar partida';
 }
 
 /// The translations for Spanish Castilian, as used in Spain (`es_ES`).
@@ -1298,4 +1311,17 @@ class AppLocalizationsEsEs extends AppLocalizationsEs {
 
   @override
   String get settingsMenuLabel => 'Ajustes';
+
+  @override
+  String get deleteSaveTitle => '¿Eliminar partida?';
+
+  @override
+  String get deleteSaveMessage =>
+      'El progreso de esta ranura se eliminará permanentemente.';
+
+  @override
+  String get deleteSaveConfirm => 'Eliminar';
+
+  @override
+  String get deleteSaveSemantics => 'Eliminar partida';
 }

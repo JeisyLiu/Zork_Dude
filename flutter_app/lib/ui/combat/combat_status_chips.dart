@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:zork_dude/domain/combat/combat_actor.dart';
 import 'package:zork_dude/domain/combat/status_effect.dart';
+import 'package:zork_dude/l10n/app_localizations.dart';
 import 'package:zork_dude/ui/components/game_outlined_text.dart';
 import 'package:zork_dude/ui/game_ui_theme.dart';
 
@@ -22,7 +23,9 @@ class CombatStatusChips extends StatelessWidget {
     final chips = <Widget>[];
 
     if (actor.defending) {
-      chips.add(_chip('防', d.textMuted, compact));
+      chips.add(
+        _chip(AppLocalizations.of(context).combatDefendShort, d.textMuted, compact),
+      );
     }
 
     for (final active in actor.statuses) {

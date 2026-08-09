@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zork_dude/l10n/app_localizations.dart';
 import 'package:zork_dude/state/game_controller.dart';
 import 'package:zork_dude/ui/components/game_panel.dart';
 import 'package:zork_dude/ui/components/game_progress_bar.dart';
@@ -16,6 +17,7 @@ class StatusBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final s = controller.session;
     if (s == null) return const SizedBox.shrink();
+    final l10n = AppLocalizations.of(context);
     final ratio = s.playerMaxHp > 0 ? s.playerHp / s.playerMaxHp : 0.0;
     final companions = s.companionList
         .map((c) => s.companions[c]?.name)
@@ -78,12 +80,12 @@ class StatusBar extends StatelessWidget {
             ],
             SizedBox(width: statGap),
             GameButton(
-              label: controller.mapVisible ? '地图' : '地图·关',
+              label: controller.mapVisible ? l10n.cmdMapOn : l10n.cmdMapOff,
               subLabel: 'map',
               height: mapBtnH,
               width: mapBtnW,
               onPressed: controller.toggleMap,
-              semanticLabel: '切换地图',
+              semanticLabel: l10n.cmdToggleMap,
             ),
           ],
         ),

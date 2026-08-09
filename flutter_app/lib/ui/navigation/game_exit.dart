@@ -3,6 +3,7 @@ import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:zork_dude/l10n/app_localizations.dart';
 import 'package:zork_dude/screens/home_screen.dart';
 import 'package:zork_dude/state/game_controller.dart';
 import 'package:zork_dude/ui/components/game_button.dart';
@@ -22,11 +23,12 @@ abstract final class GameExit {
     BuildContext context, {
     GameUiSkin skin = GameUiSkin.fantasy,
   }) {
+    final l10n = AppLocalizations.of(context);
     return GameConfirmDialog.show(
       context: context,
-      title: '返回标题？',
-      message: '当前进度已自动保存，可从标题页「继续旅程」恢复。',
-      confirmLabel: '返回标题',
+      title: l10n.returnToTitleTitle,
+      message: l10n.returnToTitleMessage,
+      confirmLabel: l10n.returnToTitle,
       confirmSubLabel: 'title',
       skin: skin,
     );
@@ -36,11 +38,12 @@ abstract final class GameExit {
     BuildContext context, {
     GameUiSkin skin = GameUiSkin.fantasy,
   }) {
+    final l10n = AppLocalizations.of(context);
     return GameConfirmDialog.show(
       context: context,
-      title: '退出游戏？',
-      message: '将关闭迷雾之塔。',
-      confirmLabel: '退出',
+      title: l10n.quitAppTitle,
+      message: l10n.quitAppMessage,
+      confirmLabel: l10n.quit,
       confirmSubLabel: 'quit',
       skin: skin,
     );
@@ -76,13 +79,14 @@ abstract final class GameExit {
     BuildContext context,
     GameController controller,
   ) async {
+    final l10n = AppLocalizations.of(context);
     final skin = GameUiTheme.skinForMapLayer(controller.mapLayer);
     final btnW = ExplorationLayoutConstants.moreChipWidthFor(context);
     final btnH = ExplorationLayoutConstants.chipHeightForWidth(btnW);
 
     await LandscapeOverlay.show<void>(
       context: context,
-      title: '战斗菜单 · Pause',
+      title: l10n.combatPauseTitle,
       skin: skin,
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -90,7 +94,7 @@ abstract final class GameExit {
           GameButton(
             width: double.infinity,
             height: btnH,
-            label: '继续战斗',
+            label: l10n.resumeCombat,
             subLabel: 'resume',
             onPressed: () => Navigator.pop(context),
           ),
@@ -98,7 +102,7 @@ abstract final class GameExit {
           GameButton(
             width: double.infinity,
             height: btnH,
-            label: '回标题',
+            label: l10n.backToTitle,
             subLabel: 'title',
             onPressed: () async {
               Navigator.pop(context);

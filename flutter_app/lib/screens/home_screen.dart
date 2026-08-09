@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zork_dude/l10n/app_localizations.dart';
 import 'package:zork_dude/screens/exploration_screen.dart';
 import 'package:zork_dude/services/play_games/play_games_service.dart';
 import 'package:zork_dude/state/game_controller.dart';
@@ -77,11 +78,12 @@ class _HomeScreenState extends State<HomeScreen> {
     );
     if (!mounted || picked == null) return;
     if (_controller.slots[picked] != null) {
+      final l10n = AppLocalizations.of(context);
       final confirmed = await GameConfirmDialog.show(
         context: context,
-        title: '开始新旅程？',
-        message: '该槽位已有进度，开始新游戏将覆盖此存档，是否继续？',
-        confirmLabel: '覆盖并开始',
+        title: l10n.startNewJourneyTitle,
+        message: l10n.overwriteSaveMessage,
+        confirmLabel: l10n.overwriteAndStart,
         confirmSubLabel: 'overwrite',
         skin: GameUiSkin.fantasy,
       );
@@ -136,12 +138,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<bool> _ensurePlayGamesConnected(BuildContext context) async {
     if (_playGames.signedIn) return true;
+    final l10n = AppLocalizations.of(context);
     final confirmed = await GameConfirmDialog.show(
       context: context,
-      title: '连接 Play 游戏',
-      message: '连接 Google Play 游戏后可查看成就与排行榜。不连接也可正常游玩。',
-      cancelLabel: '稍后再说',
-      confirmLabel: '立即连接',
+      title: l10n.connectPlayGamesTitle,
+      message: l10n.connectPlayGamesMessage,
+      cancelLabel: l10n.connectLater,
+      confirmLabel: l10n.connectNow,
       confirmSubLabel: 'connect',
       skin: GameUiSkin.fantasy,
     );
@@ -173,6 +176,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return PopScope(
       canPop: !GameExit.isDesktop,
       onPopInvokedWithResult: (didPop, _) async {
@@ -235,7 +239,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   HomeHeroArt(size: heroSize),
                                   SizedBox(height: gapL),
                                   GameOutlinedText(
-                                    '迷雾之塔',
+                                    l10n.appTitle,
                                     fontSize: LandscapeLayout.sp(
                                       context,
                                       HomeConstants.titleFontSize,
@@ -251,7 +255,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                   SizedBox(height: gapS),
                                   GameOutlinedText(
-                                    'MIST TOWER',
+                                    l10n.appTitleEn,
                                     fontSize: LandscapeLayout.sp(
                                       context,
                                       HomeConstants.subtitleFontSize,
@@ -275,8 +279,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   SizedBox(height: gapM),
                                   GameOutlinedText(
                                     LandscapeLayout.uiScaleOf(context) < 0.85
-                                        ? '探索、收集、对话、战斗——找回失落的真相。'
-                                        : '你从迷雾森林中醒来，失去记忆。\n探索、收集、对话、战斗——找回失落的真相。',
+                                        ? l10n.taglineShort
+                                        : l10n.taglineFull,
                                     textAlign: TextAlign.center,
                                     fontSize: LandscapeLayout.sp(
                                       context,
@@ -300,8 +304,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                       subLabelColor:
                                           HomeConstants.buttonSubLabelColor,
                                       label: _controller.loading
-                                          ? '加载中…'
-                                          : '继续旅程',
+                                          ? l10n.loading
+                                          : l10n.continueJourney,
                                       subLabel: 'continue',
                                       enabled: !_controller.loading &&
                                           !_entering,
@@ -309,7 +313,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               _entering
                                           ? null
                                           : () => _continueGame(context),
-                                      semanticLabel: '继续旅程',
+                                      semanticLabel: l10n.continueJourney,
                                     ),
                                     SizedBox(height: gapS),
                                   ],
@@ -324,15 +328,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                     subLabelColor:
                                         HomeConstants.buttonSubLabelColor,
                                     label: _controller.loading
-                                        ? '加载中…'
-                                        : '进入迷雾',
+                                        ? l10n.loading
+                                        : l10n.enterMist,
                                     subLabel: 'enter',
                                     enabled:
                                         !_controller.loading && !_entering,
                                     onPressed: _controller.loading || _entering
                                         ? null
                                         : () => _enterGame(context),
-                                    semanticLabel: '进入迷雾',
+                                    semanticLabel: l10n.enterMist,
                                   ),
                                   if (_playGames.isSupported) ...[
                                     SizedBox(height: gapS),
@@ -345,7 +349,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           height: btnH * 0.82,
                                           compact: true,
                                           asset: GameUiAssets.buttonGrey,
-                                          label: '成就',
+                                          label: l10n.achievements,
                                           subLabel: 'achievements',
                                           enabled: !_controller.loading &&
                                               !_entering,
@@ -354,7 +358,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               ? null
                                               : () =>
                                                     _openAchievements(context),
-                                          semanticLabel: '成就',
+                                          semanticLabel: l10n.achievements,
                                         ),
                                         SizedBox(width: gapS),
                                         GameButton(
@@ -362,7 +366,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           height: btnH * 0.82,
                                           compact: true,
                                           asset: GameUiAssets.buttonGrey,
-                                          label: '排行榜',
+                                          label: l10n.leaderboard,
                                           subLabel: 'leaderboard',
                                           enabled: !_controller.loading &&
                                               !_entering,
@@ -371,14 +375,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                               ? null
                                               : () =>
                                                     _openLeaderboards(context),
-                                          semanticLabel: '排行榜',
+                                          semanticLabel: l10n.leaderboard,
                                         ),
                                       ],
                                     ),
                                   ],
                                   SizedBox(height: gapM),
                                   GameOutlinedText(
-                                    '指令探索 · 迷雾地图 · 遇敌进入回合战斗',
+                                    l10n.homeHint,
                                     fontSize: LandscapeLayout.sp(
                                       context,
                                       HomeConstants.hintFontSize,
@@ -407,7 +411,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: GameIconButton(
                             size: closeSize,
                             asset: GameUiAssets.buttonRedClose,
-                            semanticLabel: '关闭',
+                            semanticLabel: l10n.close,
                             enabled: !_controller.loading,
                             onPressed: _controller.loading
                                 ? null

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zork_dude/l10n/app_localizations.dart';
 import 'package:zork_dude/state/game_controller.dart';
 import 'package:zork_dude/ui/components/game_button.dart';
 import 'package:zork_dude/ui/components/game_panel.dart';
@@ -39,6 +40,7 @@ class _CommandInputRowState extends State<CommandInputRow> {
   @override
   Widget build(BuildContext context) {
     final d = GameUiTheme.of(context);
+    final l10n = AppLocalizations.of(context);
     final panelPad = EdgeInsets.fromLTRB(
       LandscapeLayout.sp(context, 14),
       LandscapeLayout.sp(context, 8),
@@ -62,7 +64,7 @@ class _CommandInputRowState extends State<CommandInputRow> {
               decoration: InputDecoration(
                 isDense: true,
                 border: InputBorder.none,
-                hintText: '命令 cmd: look / take 1 / n …',
+                hintText: l10n.cmdHint,
                 hintStyle: TextStyle(
                   color: d.textMuted,
                 ),
@@ -73,7 +75,7 @@ class _CommandInputRowState extends State<CommandInputRow> {
           SizedBox(width: LandscapeLayout.sp(context, 4)),
           GameIconButton(
             size: iconSize,
-            semanticLabel: '发送命令',
+            semanticLabel: l10n.cmdSend,
             onPressed: _submit,
             child: Image.asset(
               GameUiAssets.arrowEast,

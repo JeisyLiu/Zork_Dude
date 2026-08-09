@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zork_dude/domain/combat/combat_encounter.dart';
+import 'package:zork_dude/l10n/app_localizations.dart';
 import 'package:zork_dude/ui/components/game_outlined_text.dart';
 import 'package:zork_dude/ui/components/game_panel.dart';
 import 'package:zork_dude/ui/combat/combat_command_labels.dart';
@@ -20,7 +21,9 @@ class CombatCommandQueue extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final d = GameUiTheme.of(context);
-    final allies = encounter.livingAllies()..sort((a, b) => a.commandOrder.compareTo(b.commandOrder));
+    final l10n = AppLocalizations.of(context);
+    final allies = encounter.livingAllies()
+      ..sort((a, b) => a.commandOrder.compareTo(b.commandOrder));
 
     return GamePanel(
       withBorder: true,
@@ -29,7 +32,7 @@ class CombatCommandQueue extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           GameOutlinedText(
-            '指令队列 Commands',
+            l10n.combatQueueTitle,
             fontSize: compact ? 12 : 14,
             color: d.textMuted,
             strokeWidth: 0,
@@ -40,26 +43,33 @@ class CombatCommandQueue extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  for (final ally in allies) _entry(context, ally, d),
+                  for (final ally in allies) _entry(context, ally, d, l10n),
                 ],
               ),
             )
           else
-            ...allies.map((ally) => Padding(
-                  padding: const EdgeInsets.only(bottom: 3),
-                  child: _entry(context, ally, d),
-                )),
+            ...allies.map(
+              (ally) => Padding(
+                padding: const EdgeInsets.only(bottom: 3),
+                child: _entry(context, ally, d, l10n),
+              ),
+            ),
         ],
       ),
     );
   }
 
-  Widget _entry(BuildContext context, ally, GameUiSkinData d) {
+  Widget _entry(
+    BuildContext context,
+    ally,
+    GameUiSkinData d,
+    AppLocalizations l10n,
+  ) {
     final cmd = encounter.pendingAllyCommands[ally.instanceId];
     final waiting = ally.instanceId == activeActorId;
     final text = cmd == null
-        ? (waiting ? '待选…' : '—')
-        : CombatCommandLabels.summarize(cmd, encounter);
+        ? (waiting ? l10n.combatQueuePending : '—')
+        : CombatCommandLabels.summarize(l10n, cmd, encounter);
 
     return Row(
       mainAxisSize: compact ? MainAxisSize.min : MainAxisSize.max,

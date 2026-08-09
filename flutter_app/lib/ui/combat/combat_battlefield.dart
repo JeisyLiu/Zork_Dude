@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:zork_dude/domain/combat/combat_actor.dart';
 import 'package:zork_dude/domain/combat/combat_command.dart';
 import 'package:zork_dude/domain/combat/status_effect.dart';
+import 'package:zork_dude/l10n/app_localizations.dart';
 import 'package:zork_dude/ui/components/game_outlined_text.dart';
 import 'package:zork_dude/ui/components/game_panel.dart';
 import 'package:zork_dude/ui/components/game_progress_bar.dart';
@@ -92,7 +93,10 @@ class CombatUnitCard extends StatelessWidget {
                             borderRadius: BorderRadius.circular(4),
                           ),
                           child: GameOutlinedText(
-                            CombatCommandLabels.shortLabel(commandBadge!.type),
+                            CombatCommandLabels.shortLabel(
+                              AppLocalizations.of(context),
+                              commandBadge!.type,
+                            ),
                             fontSize: 7,
                             color: const Color(0xFFE8B84A),
                             strokeWidth: 0,
@@ -188,7 +192,7 @@ class CombatBattlefield extends StatelessWidget {
           Expanded(
             child: _row(
               context,
-              label: '敌人 Enemies',
+              label: AppLocalizations.of(context).combatEnemies,
               actors: enemies,
               targetable: targetableSide == true,
             ),
@@ -197,7 +201,7 @@ class CombatBattlefield extends StatelessWidget {
           Expanded(
             child: _row(
               context,
-              label: '队伍 Party',
+              label: AppLocalizations.of(context).combatParty,
               actors: allies,
               targetable: targetableSide == false,
             ),

@@ -4,6 +4,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:zork_dude/domain/map_service.dart';
 import 'package:zork_dude/domain/models/enums.dart';
+import 'package:zork_dude/l10n/app_localizations.dart';
 import 'package:zork_dude/shared/game_constants.dart';
 import 'package:zork_dude/state/game_controller.dart';
 import 'package:zork_dude/ui/components/game_button.dart';
@@ -30,7 +31,7 @@ class _MistMapPanelState extends State<MistMapPanel> {
   final _transform = TransformationController();
   final _viewerKey = GlobalKey();
 
-  String _detail = '拖拽平移 · 滚轮/双指缩放 · 点击相邻节点移动';
+  String? _detail;
   MapLayer? _boundLayer;
   Size _viewportSize = Size.zero;
 
@@ -129,6 +130,7 @@ class _MistMapPanelState extends State<MistMapPanel> {
     _syncLayerCamera(layer, vm);
     final canvas = _canvasSize(vm);
     final d = GameUiTheme.of(context);
+    final l10n = AppLocalizations.of(context);
 
     return GamePanel(
       dark: true,
@@ -169,8 +171,8 @@ class _MistMapPanelState extends State<MistMapPanel> {
                   ),
                 GameOutlinedText(
                   widget.controller.developerMode
-                      ? '全图 ${vm.nodes.length}'
-                      : '已探索 ${vm.visitedCount}',
+                      ? l10n.mapFullCount(vm.nodes.length)
+                      : l10n.mapExploredCount(vm.visitedCount),
                   fontSize: 11,
                   color: d.logMuted,
                   strokeWidth: 1.0,
@@ -246,7 +248,7 @@ class _MistMapPanelState extends State<MistMapPanel> {
           Padding(
             padding: const EdgeInsets.only(top: 6),
             child: GameOutlinedText(
-              _detail,
+              _detail ?? l10n.mapHint,
               fontSize: 11,
               color: d.logText,
               strokeWidth: 1.0,
@@ -271,14 +273,15 @@ class _MistMapPanelState extends State<MistMapPanel> {
 
   void _onNodeTap(MapNode node) {
     final s = widget.controller.session!;
+    final l10n = AppLocalizations.of(context);
     if (s.inCombat) {
-      setState(() => _detail = '战斗中无法移动。');
+      setState(() => _detail = l10n.mapCannotMoveInCombat);
       return;
     }
     final dir = _mapService.exitDirTo(s, node.id);
     if (dir != null) {
       widget.controller.move(dir);
-      setState(() => _detail = '前往 ${mapDirLabel[dir]}…');
+      setState(() => _detail = l10n.mapGoing(mapDirLabel[dir]!));
     } else {
       final rm = s.rooms[node.id];
       setState(() => _detail = rm != null ? '${rm.name} — 不相邻，无法直达' : node.id);

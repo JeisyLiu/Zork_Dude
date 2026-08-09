@@ -6,6 +6,7 @@ import 'package:zork_dude/ui/game_skin_scope.dart';
 import 'package:zork_dude/ui/game_ui_assets.dart';
 import 'package:zork_dude/ui/game_ui_theme.dart';
 import 'package:zork_dude/ui/layout/landscape_layout.dart';
+import 'package:zork_dude/l10n/app_localizations.dart';
 
 /// Landscape-friendly overlay: right rail on phones, centered panel on tablets.
 abstract final class LandscapeOverlay {
@@ -82,7 +83,7 @@ class _LandscapeOverlayBody extends StatelessWidget {
                     GameIconButton(
                       size: LandscapeLayout.minTouch(context, 44),
                       asset: GameUiAssets.buttonRedClose,
-                      semanticLabel: '关闭',
+                      semanticLabel: AppLocalizations.of(context).close,
                       onPressed: () => Navigator.of(context).pop(),
                     ),
                     SizedBox(width: LandscapeLayout.sp(context, 8)),

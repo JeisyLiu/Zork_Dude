@@ -4,13 +4,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zork_dude/screens/turn_combat_screen.dart';
 import 'package:zork_dude/state/game_controller.dart';
 import 'package:zork_dude/ui/game_ui_theme.dart';
+import 'test_l10n.dart';
 
 late GameController sharedController;
 
 Future<void> pumpTurnCombat(WidgetTester tester, Size size) async {
   await tester.binding.setSurfaceSize(size);
   await tester.pumpWidget(
-    MaterialApp(
+    materialAppWithL10n(
       theme: GameUiTheme.appTheme(),
       home: MediaQuery(
         data: MediaQueryData(size: size, disableAnimations: true),

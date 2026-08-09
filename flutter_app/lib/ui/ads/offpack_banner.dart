@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:zork_dude/l10n/app_localizations.dart';
 import 'package:zork_dude/services/offpack_ads.dart';
 import 'package:zork_dude/ui/components/game_outlined_text.dart';
 import 'package:zork_dude/ui/home/home_constants.dart';
@@ -106,6 +107,7 @@ class OffpackPrivacyButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return ListenableBuilder(
       listenable: OffpackAds.instance,
       builder: (context, _) {
@@ -114,14 +116,14 @@ class OffpackPrivacyButton extends StatelessWidget {
         }
         return Semantics(
           button: true,
-          label: '隐私设置',
+          label: l10n.privacySettings,
           child: GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: OffpackAds.instance.showPrivacyOptions,
-            child: const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
               child: GameOutlinedText(
-                '隐私设置 · privacy',
+                l10n.privacySettingsHint,
                 fontSize: 10,
                 color: HomeConstants.hintColor,
                 strokeWidth: 0,

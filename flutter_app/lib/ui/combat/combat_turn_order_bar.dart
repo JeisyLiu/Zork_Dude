@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zork_dude/domain/combat/combat_engine.dart';
+import 'package:zork_dude/l10n/app_localizations.dart';
 import 'package:zork_dude/ui/components/game_outlined_text.dart';
 import 'package:zork_dude/ui/components/game_panel.dart';
 import 'package:zork_dude/ui/combat/combat_command_labels.dart';
@@ -20,6 +21,7 @@ class CombatTurnOrderBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final d = GameUiTheme.of(context);
+    final l10n = AppLocalizations.of(context);
     if (entries.isEmpty) return const SizedBox.shrink();
 
     return GamePanel(
@@ -29,7 +31,7 @@ class CombatTurnOrderBar extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           GameOutlinedText(
-            '行动顺序 Initiative',
+            l10n.combatInitiative,
             fontSize: compact ? 12 : 14,
             color: d.textMuted,
             strokeWidth: 0,
@@ -41,7 +43,7 @@ class CombatTurnOrderBar extends StatelessWidget {
               children: [
                 for (var i = 0; i < entries.length; i++) ...[
                   if (i > 0) const SizedBox(width: 6),
-                  _slot(context, entries[i], i + 1, d),
+                  _slot(context, entries[i], i + 1, d, l10n),
                 ],
               ],
             ),
@@ -51,10 +53,16 @@ class CombatTurnOrderBar extends StatelessWidget {
     );
   }
 
-  Widget _slot(BuildContext context, TurnOrderEntry entry, int index, GameUiSkinData d) {
+  Widget _slot(
+    BuildContext context,
+    TurnOrderEntry entry,
+    int index,
+    GameUiSkinData d,
+    AppLocalizations l10n,
+  ) {
     final highlighted = entry.actorId == highlightActorId;
     return Semantics(
-      label: '第 $index 位 ${entry.actorName} 速度 ${entry.speed}',
+      label: l10n.combatTurnOrderSemantics(index, entry.actorName, entry.speed),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
         decoration: BoxDecoration(
@@ -87,7 +95,7 @@ class CombatTurnOrderBar extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
             GameOutlinedText(
-              '💨${entry.speed} ${CombatCommandLabels.shortLabel(entry.command.type)}',
+              '💨${entry.speed} ${CombatCommandLabels.shortLabel(l10n, entry.command.type)}',
               fontSize: compact ? 9 : 11,
               color: d.textMuted,
               strokeWidth: 0,

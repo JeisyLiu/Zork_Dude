@@ -6,6 +6,8 @@ import 'package:zork_dude/ui/components/landscape_overlay.dart';
 import 'package:zork_dude/ui/components/save_slot_picker.dart';
 import 'package:zork_dude/ui/game_ui_theme.dart';
 
+import 'test_l10n.dart';
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -22,7 +24,7 @@ void main() {
     );
 
     await tester.pumpWidget(
-      MaterialApp(
+      materialAppWithL10n(
         theme: GameUiTheme.appTheme(),
         home: Builder(
           builder: (context) => Scaffold(

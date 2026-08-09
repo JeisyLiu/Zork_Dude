@@ -6,6 +6,8 @@ import 'package:zork_dude/domain/combat/combat_types.dart';
 import 'package:zork_dude/domain/game_session.dart';
 import 'package:zork_dude/ui/combat/combat_victory_overlay.dart';
 
+import 'test_l10n.dart';
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -38,7 +40,7 @@ void main() {
     await tester.pumpWidget(
       MediaQuery(
         data: const MediaQueryData(disableAnimations: true),
-        child: MaterialApp(
+        child: materialAppWithL10n(
           home: CombatVictoryOverlay(
             reward: const CombatReward(
               defeatedNames: ['巨鼠'],

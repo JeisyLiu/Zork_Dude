@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zork_dude/l10n/app_localizations.dart';
 import 'package:zork_dude/screens/turn_combat_screen.dart';
 import 'package:zork_dude/shared/game_constants.dart';
 import 'package:zork_dude/state/game_controller.dart';
@@ -105,7 +106,11 @@ class _ExplorationScreenState extends State<ExplorationScreen> {
     if (mounted) setState(() {});
   }
 
-  void _showTargetPicker(String title, List<({String label, String value})> options) {
+  void _showTargetPicker(
+    String title,
+    String verb,
+    List<({String label, String value})> options,
+  ) {
     final skin = GameUiTheme.skinForMapLayer(widget.controller.mapLayer);
     LandscapeOverlay.show<void>(
       context: context,
@@ -127,17 +132,7 @@ class _ExplorationScreenState extends State<ExplorationScreen> {
                     label: o.label,
                     onPressed: () {
                       Navigator.pop(context);
-                      final lower = title.toLowerCase();
-                      final cmd = lower.contains('drop') || title.contains('丢弃')
-                          ? 'drop ${o.value}'
-                          : lower.contains('use') || title.contains('使用')
-                              ? 'use ${o.value}'
-                              : lower.contains('buy') || title.contains('购买')
-                                  ? 'buy ${o.value}'
-                                  : lower.contains('sell') || title.contains('出售')
-                                      ? 'sell ${o.value}'
-                                      : 'take ${o.value}';
-                      widget.controller.executeCommand(cmd);
+                      widget.controller.executeCommand('$verb ${o.value}');
                     },
                   ),
                 ),
@@ -196,7 +191,7 @@ class _ExplorationScreenState extends State<ExplorationScreen> {
               Column(
                 children: [
                   GameBanner(
-                    title: '迷雾之塔',
+                    title: AppLocalizations.of(context).appTitle,
                     height: bannerH,
                     titleSize: LandscapeLayout.sp(context, 17),
                   ),

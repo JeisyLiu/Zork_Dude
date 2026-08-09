@@ -10,6 +10,7 @@ import 'package:zork_dude/ui/layout/landscape_layout.dart';
 import 'package:zork_dude/widgets/mist_map_panel.dart';
 import 'package:zork_dude/widgets/quick_commands.dart';
 import 'package:zork_dude/widgets/story_log.dart';
+import 'test_l10n.dart';
 
 late GameController sharedController;
 
@@ -20,7 +21,7 @@ Future<void> pumpExplorationScreen(
 }) async {
   await tester.binding.setSurfaceSize(size);
   await tester.pumpWidget(
-    MaterialApp(
+    materialAppWithL10n(
       theme: GameUiTheme.appTheme(),
       home: MediaQuery(
         data: MediaQueryData(

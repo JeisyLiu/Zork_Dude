@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zork_dude/domain/combat/combat_encounter.dart';
+import 'package:zork_dude/l10n/app_localizations.dart';
 import 'package:zork_dude/ui/components/game_outlined_text.dart';
 import 'package:zork_dude/ui/components/game_panel.dart';
 import 'package:zork_dude/ui/combat/combat_layout_constants.dart';
@@ -22,12 +23,15 @@ class CombatHeaderBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final d = GameUiTheme.of(context);
+    final l10n = AppLocalizations.of(context);
     final phaseText = switch (phase) {
-      CombatUiPhase.pickingCommand => activeActorName != null ? '选择指令：$activeActorName' : '选择指令',
-      CombatUiPhase.pickingTarget => '选择目标',
-      CombatUiPhase.pickingItem => '选择道具与目标',
-      CombatUiPhase.readyToExecute => '准备执行回合',
-      CombatUiPhase.animating => '回合进行中…',
+      CombatUiPhase.pickingCommand => activeActorName != null
+          ? l10n.combatPhasePickCommandNamed(activeActorName!)
+          : l10n.combatPhasePickCommand,
+      CombatUiPhase.pickingTarget => l10n.combatPhasePickTarget,
+      CombatUiPhase.pickingItem => l10n.combatPhasePickItem,
+      CombatUiPhase.readyToExecute => l10n.combatPhaseReady,
+      CombatUiPhase.animating => l10n.combatPhaseAnimating,
     };
 
     return ConstrainedBox(
@@ -42,7 +46,7 @@ class CombatHeaderBar extends StatelessWidget {
         child: Row(
           children: [
             GameOutlinedText(
-              '第 ${encounter.roundNumber} 回合',
+              l10n.combatRound(encounter.roundNumber),
               fontSize: compact ? 10 : 11,
               fontWeight: FontWeight.bold,
               color: d.textPrimary,

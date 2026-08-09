@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zork_dude/l10n/app_localizations.dart';
 import 'package:zork_dude/services/offpack_ads.dart';
 import 'package:zork_dude/ui/components/game_button.dart';
 import 'package:zork_dude/ui/components/game_outlined_text.dart';
@@ -53,6 +54,7 @@ class _RewardOfferOverlayState extends State<RewardOfferOverlay> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Material(
       color: Colors.black.withValues(alpha: 0.78),
       child: SafeArea(
@@ -75,7 +77,7 @@ class _RewardOfferOverlayState extends State<RewardOfferOverlay> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 GameOutlinedText(
-                  '迷雾馈赠',
+                  l10n.rewardOfferTitle,
                   fontSize: 21,
                   fontWeight: FontWeight.w700,
                   color: HomeConstants.titleColor,
@@ -84,7 +86,7 @@ class _RewardOfferOverlayState extends State<RewardOfferOverlay> {
                 ),
                 const SizedBox(height: 8),
                 GameOutlinedText(
-                  '本场金币 +${widget.gold} → +${widget.gold * 2}',
+                  l10n.rewardOfferGold(widget.gold, widget.gold * 2),
                   textAlign: TextAlign.center,
                   fontSize: 13,
                   color: HomeConstants.bodyColor,
@@ -93,7 +95,7 @@ class _RewardOfferOverlayState extends State<RewardOfferOverlay> {
                 if (_failed) ...[
                   const SizedBox(height: 6),
                   GameOutlinedText(
-                    '馈赠暂不可用，可直接继续冒险',
+                    l10n.rewardOfferUnavailable,
                     fontSize: 10,
                     color: HomeConstants.hintColor,
                     strokeWidth: 0,
@@ -106,7 +108,7 @@ class _RewardOfferOverlayState extends State<RewardOfferOverlay> {
                   compact: true,
                   accent: true,
                   enabled: !_loading,
-                  label: _loading ? '召唤馈赠中…' : '观看广告 · 金币翻倍',
+                  label: _loading ? l10n.rewardOfferLoading : l10n.rewardOfferWatch,
                   onPressed: _loading ? null : _watch,
                 ),
                 const SizedBox(height: 8),
@@ -114,7 +116,7 @@ class _RewardOfferOverlayState extends State<RewardOfferOverlay> {
                   width: 190,
                   height: 38,
                   compact: true,
-                  label: '继续冒险',
+                  label: l10n.continueAdventure,
                   onPressed: _loading
                       ? null
                       : () => Navigator.of(context).pop(false),

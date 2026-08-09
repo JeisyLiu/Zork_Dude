@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zork_dude/l10n/app_localizations.dart';
 import 'package:zork_dude/ui/components/game_button.dart';
 import 'package:zork_dude/ui/components/game_outlined_text.dart';
 import 'package:zork_dude/ui/home/home_constants.dart';
@@ -26,29 +27,29 @@ class CreditsRoll extends StatefulWidget {
 
 class _CreditsRollState extends State<CreditsRoll>
     with SingleTickerProviderStateMixin {
-  static const _lines = <CreditLine>[
-    CreditLine('出品 / Presented by', 'Beatinghouse'),
-    CreditLine('导演 / Directed by', 'Jeisy Liu'),
-    CreditLine('编剧 / Written by', 'Jeisy Liu'),
-    CreditLine('游戏设计 / Game Design', 'Jeisy Liu'),
-    CreditLine('叙事设计 / Narrative Design', 'Jeisy Liu'),
-    CreditLine('美术指导 / Art Direction', 'Jeisy Liu'),
-    CreditLine('关卡设计 / Level Design', 'Jeisy Liu'),
-    CreditLine('系统设计 / Systems Design', 'Jeisy Liu'),
-    CreditLine('战斗设计 / Combat Design', 'Jeisy Liu'),
-    CreditLine('音效构想 / Sound Concept', 'Jeisy Liu'),
-    CreditLine('制作人 / Produced by', 'Jeisy Liu'),
-    CreditLine('程序 / Engineering', 'Jeisy Liu'),
-    CreditLine('QA / Quality Assurance', 'Jeisy Liu'),
-    CreditLine('特别鸣谢 / Special Thanks', 'Jeisy Liu'),
-    CreditLine('技术支持 / Technology Support', 'Anysphere, xAI'),
-    CreditLine('', 'Mist Tower'),
-    CreditLine('', '迷雾之塔'),
-    CreditLine('', 'A Beatinghouse Game'),
-  ];
-
   late final AnimationController _scroll;
   bool _finished = false;
+
+  List<CreditLine> _lines(AppLocalizations l10n) => [
+        CreditLine(l10n.creditPresentedBy, 'Beatinghouse'),
+        CreditLine(l10n.creditDirectedBy, 'Jeisy Liu'),
+        CreditLine(l10n.creditWrittenBy, 'Jeisy Liu'),
+        CreditLine(l10n.creditGameDesign, 'Jeisy Liu'),
+        CreditLine(l10n.creditNarrativeDesign, 'Jeisy Liu'),
+        CreditLine(l10n.creditArtDirection, 'Jeisy Liu'),
+        CreditLine(l10n.creditLevelDesign, 'Jeisy Liu'),
+        CreditLine(l10n.creditSystemsDesign, 'Jeisy Liu'),
+        CreditLine(l10n.creditCombatDesign, 'Jeisy Liu'),
+        CreditLine(l10n.creditSoundConcept, 'Jeisy Liu'),
+        CreditLine(l10n.creditProducedBy, 'Jeisy Liu'),
+        CreditLine(l10n.creditEngineering, 'Jeisy Liu'),
+        const CreditLine('QA / Quality Assurance', 'Jeisy Liu'),
+        CreditLine(l10n.creditSpecialThanks, 'Jeisy Liu'),
+        CreditLine(l10n.creditTechSupport, 'Anysphere, xAI'),
+        const CreditLine('', 'Mist Tower'),
+        CreditLine('', l10n.appTitle),
+        const CreditLine('', 'A Beatinghouse Game'),
+      ];
 
   @override
   void initState() {
@@ -89,6 +90,8 @@ class _CreditsRollState extends State<CreditsRoll>
     final disable = MediaQuery.disableAnimationsOf(context);
     final btnW = short ? 148.0 : 168.0;
     final btnH = HomeConstants.buttonHeightFor(btnW);
+    final l10n = AppLocalizations.of(context);
+    final lines = _lines(l10n);
 
     return Material(
       color: HomeConstants.bgBottom,
@@ -102,7 +105,7 @@ class _CreditsRollState extends State<CreditsRoll>
                 final offset = size.height * (1.1 - _scroll.value * 1.8);
                 return Transform.translate(
                   offset: Offset(0, offset),
-                  child: _CreditsColumn(lines: _lines, short: short),
+                  child: _CreditsColumn(lines: lines, short: short),
                 );
               },
             )
@@ -110,7 +113,7 @@ class _CreditsRollState extends State<CreditsRoll>
             Center(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                child: _CreditsColumn(lines: _lines, short: short),
+                child: _CreditsColumn(lines: lines, short: short),
               ),
             ),
           if (!_finished && !disable)
@@ -119,8 +122,8 @@ class _CreditsRollState extends State<CreditsRoll>
               right: 12,
               child: TextButton(
                 onPressed: _skip,
-                child: const GameOutlinedText(
-                  '跳过',
+                child: GameOutlinedText(
+                  l10n.skip,
                   fontSize: 13,
                   color: HomeConstants.subtitleColor,
                   strokeWidth: 0,
@@ -140,7 +143,7 @@ class _CreditsRollState extends State<CreditsRoll>
                       width: btnW,
                       height: btnH,
                       compact: true,
-                      label: '继续探索',
+                      label: l10n.endingMainPrimary,
                       onPressed: widget.onFinished,
                     ),
                     const SizedBox(height: 8),
@@ -148,7 +151,7 @@ class _CreditsRollState extends State<CreditsRoll>
                       width: btnW,
                       height: btnH,
                       compact: true,
-                      label: '回标题',
+                      label: l10n.backToTitle,
                       onPressed: () {
                         Navigator.of(context).popUntil((route) => route.isFirst);
                       },

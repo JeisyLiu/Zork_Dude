@@ -46,4 +46,4 @@ class _CombatKeyboardScopeState extends State<CombatKeyboardScope> {
 }
 
 List<CombatCommandOption> get combatCommandOptions =>
-    CombatCommandMenu.options.map((e) => e.$1).toList();
+    List<CombatCommandOption>.from(CombatCommandMenu.options);

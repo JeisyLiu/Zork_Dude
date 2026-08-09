@@ -8,6 +8,8 @@ import 'package:zork_dude/ui/game_skin_scope.dart';
 import 'package:zork_dude/ui/game_ui_theme.dart';
 import 'package:zork_dude/widgets/mist_map_panel.dart';
 
+import 'test_l10n.dart';
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -27,7 +29,7 @@ void main() {
   Future<void> pumpMap(WidgetTester tester) async {
     await tester.binding.setSurfaceSize(const Size(800, 450));
     await tester.pumpWidget(
-      MaterialApp(
+      materialAppWithL10n(
         theme: GameUiTheme.appTheme(),
         home: MediaQuery(
           data: const MediaQueryData(size: Size(800, 450)),

@@ -9,6 +9,8 @@ import 'package:zork_dude/ui/game_ui_assets.dart';
 import 'package:zork_dude/ui/game_ui_theme.dart';
 import 'package:zork_dude/ui/home/home_ambient_background.dart';
 
+import 'test_l10n.dart';
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -25,6 +27,7 @@ void main() {
   }
 
   testWidgets('Home screen shows Mist Tower title and navigates', (tester) async {
+    useTestLocaleZhHans(tester);
     await tester.binding.setSurfaceSize(const Size(1280, 720));
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
@@ -89,6 +92,7 @@ void main() {
   });
 
   testWidgets('Home layout fits 667x375 without overflow', (tester) async {
+    useTestLocaleZhHans(tester);
     await tester.binding.setSurfaceSize(const Size(667, 375));
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
@@ -101,6 +105,7 @@ void main() {
   });
 
   testWidgets('Home layout fits 800x360 without overflow', (tester) async {
+    useTestLocaleZhHans(tester);
     await tester.binding.setSurfaceSize(const Size(800, 360));
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
@@ -112,6 +117,7 @@ void main() {
   });
 
   testWidgets('Home layout fits 853x384 without overflow', (tester) async {
+    useTestLocaleZhHans(tester);
     await tester.binding.setSurfaceSize(const Size(853, 384));
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
@@ -123,6 +129,7 @@ void main() {
   });
 
   testWidgets('Home layout fits 854x480 without overflow', (tester) async {
+    useTestLocaleZhHans(tester);
     await tester.binding.setSurfaceSize(const Size(854, 480));
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
@@ -137,6 +144,7 @@ void main() {
   });
 
   testWidgets('Home layout fits 1280x720 without overflow', (tester) async {
+    useTestLocaleZhHans(tester);
     await tester.binding.setSurfaceSize(const Size(1280, 720));
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
@@ -154,6 +162,7 @@ void main() {
   });
 
   testWidgets('Home layout fits 1067x480 without overflow', (tester) async {
+    useTestLocaleZhHans(tester);
     await tester.binding.setSurfaceSize(const Size(1067, 480));
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
@@ -165,6 +174,7 @@ void main() {
   });
 
   testWidgets('Home layout fits 914x411 without overflow', (tester) async {
+    useTestLocaleZhHans(tester);
     await tester.binding.setSurfaceSize(const Size(914, 411));
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
@@ -178,6 +188,7 @@ void main() {
   testWidgets('MistTowerApp enables animations even when OS disables them', (
     tester,
   ) async {
+    useTestLocaleZhHans(tester);
     await tester.pumpWidget(
       const MediaQuery(
         data: MediaQueryData(disableAnimations: true),

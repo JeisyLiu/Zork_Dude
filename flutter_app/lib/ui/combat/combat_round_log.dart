@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:zork_dude/domain/combat/combat_action_step.dart';
 import 'package:zork_dude/domain/combat/combat_types.dart';
+import 'package:zork_dude/l10n/app_localizations.dart';
 import 'package:zork_dude/ui/components/game_outlined_text.dart';
 import 'package:zork_dude/ui/components/game_panel.dart';
 import 'package:zork_dude/ui/game_ui_theme.dart';
@@ -20,6 +21,7 @@ class CombatRoundLog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final d = GameUiTheme.of(context);
+    final l10n = AppLocalizations.of(context);
     final titleSize = compact ? 12.0 : 14.0;
     final bodySize = compact ? 12.0 : 14.0;
     final lines = <_LogLine>[
@@ -37,7 +39,7 @@ class CombatRoundLog extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             GameOutlinedText(
-              '战报 Log',
+              l10n.combatLogTitle,
               fontSize: titleSize,
               color: d.textMuted,
               strokeWidth: 0,

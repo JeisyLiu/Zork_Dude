@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zork_dude/l10n/app_localizations.dart';
 import 'package:zork_dude/state/ending_kind.dart';
 import 'package:zork_dude/ui/components/game_button.dart';
 import 'package:zork_dude/ui/components/game_outlined_text.dart';
@@ -88,7 +89,8 @@ class _EndingOverlayState extends State<EndingOverlay>
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
     final short = LandscapeLayout.isShort(size);
-    final meta = _metaFor(widget.kind);
+    final l10n = AppLocalizations.of(context);
+    final meta = _metaFor(widget.kind, l10n);
     final btnW = short ? 148.0 : 168.0;
     final btnH = HomeConstants.buttonHeightFor(btnW);
 
@@ -151,8 +153,8 @@ class _EndingOverlayState extends State<EndingOverlay>
                           accent: true,
                           enabled: !_rewardLoading,
                           label: _rewardLoading
-                              ? '召唤微光中…'
-                              : widget.rewardLabel ?? '观看广告',
+                              ? l10n.summoningGlimmer
+                              : widget.rewardLabel ?? l10n.watchAd,
                           subLabel: _rewardLoading
                               ? null
                               : widget.rewardSubLabel,
@@ -160,8 +162,8 @@ class _EndingOverlayState extends State<EndingOverlay>
                         ),
                         if (_rewardFailed) ...[
                           const SizedBox(height: 5),
-                          const GameOutlinedText(
-                            '微光暂未回应，请稍后再试',
+                          GameOutlinedText(
+                            l10n.glimmerNoResponse,
                             fontSize: 10,
                             color: HomeConstants.hintColor,
                             strokeWidth: 0,
@@ -271,15 +273,15 @@ class _EndingOverlayState extends State<EndingOverlay>
                         accent: true,
                         enabled: !_rewardLoading,
                         label: _rewardLoading
-                            ? '召唤微光中…'
-                            : widget.rewardLabel ?? '观看广告',
+                            ? l10n.summoningGlimmer
+                            : widget.rewardLabel ?? l10n.watchAd,
                         subLabel: _rewardLoading ? null : widget.rewardSubLabel,
                         onPressed: _rewardLoading ? null : _watchReward,
                       ),
                       if (_rewardFailed) ...[
                         const SizedBox(height: 5),
                         GameOutlinedText(
-                          '微光暂未回应，请稍后再试',
+                          l10n.glimmerNoResponse,
                           fontSize: 10,
                           color: HomeConstants.hintColor,
                           strokeWidth: 0,
@@ -314,42 +316,42 @@ class _EndingOverlayState extends State<EndingOverlay>
     );
   }
 
-  _EndingMeta _metaFor(EndingKind kind) {
+  _EndingMeta _metaFor(EndingKind kind, AppLocalizations l10n) {
     switch (kind) {
       case EndingKind.dragonClear:
-        return const _EndingMeta(
-          title: '幼龙已陨落',
-          subtitle: '魔法宝石落入你手中。\n它既能打开墓地通往收容站的石门，也能在塔顶唤回失落的记忆。',
-          primaryLabel: '继续探险',
-          secondaryLabel: '返程完成旅行',
+        return _EndingMeta(
+          title: l10n.endingDragonTitle,
+          subtitle: l10n.endingDragonSubtitle,
+          primaryLabel: l10n.endingDragonPrimary,
+          secondaryLabel: l10n.endingDragonSecondary,
         );
       case EndingKind.mainClear:
-        return const _EndingMeta(
-          title: '迷雾消散',
-          subtitle: '记忆涌回脑海，高塔的结界随之瓦解。\n你自由了——但收容站深处仍有未竟之事。',
-          primaryLabel: '继续探索',
-          secondaryLabel: '回标题',
+        return _EndingMeta(
+          title: l10n.endingMainTitle,
+          subtitle: l10n.endingMainSubtitle,
+          primaryLabel: l10n.endingMainPrimary,
+          secondaryLabel: l10n.backToTitle,
         );
       case EndingKind.siteClear:
-        return const _EndingMeta(
-          title: '站点行动完成',
-          subtitle: '终焉原型已被压制，收容库归于沉寂。\n一段漫长的旅途，即将迎来尾声。',
-          primaryLabel: '观看职员表',
-          secondaryLabel: '跳过',
+        return _EndingMeta(
+          title: l10n.endingSiteTitle,
+          subtitle: l10n.endingSiteSubtitle,
+          primaryLabel: l10n.endingSitePrimary,
+          secondaryLabel: l10n.skip,
         );
       case EndingKind.gameOver:
-        return const _EndingMeta(
-          title: '你倒下了',
-          subtitle: '迷雾吞没了你的身影。\n你在上一处探索过的地点醒来，得分 -100（不低于 0）。',
-          primaryLabel: '在上一地点醒来',
-          secondaryLabel: '回标题',
+        return _EndingMeta(
+          title: l10n.endingGameOverTitle,
+          subtitle: l10n.endingGameOverSubtitle,
+          primaryLabel: l10n.endingGameOverPrimary,
+          secondaryLabel: l10n.backToTitle,
         );
       case EndingKind.none:
-        return const _EndingMeta(
+        return _EndingMeta(
           title: '',
           subtitle: '',
-          primaryLabel: '继续',
-          secondaryLabel: '关闭',
+          primaryLabel: l10n.continueAction,
+          secondaryLabel: l10n.close,
         );
     }
   }

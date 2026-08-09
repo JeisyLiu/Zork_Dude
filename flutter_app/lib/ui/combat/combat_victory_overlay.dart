@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zork_dude/domain/combat/combat_reward.dart';
+import 'package:zork_dude/l10n/app_localizations.dart';
 import 'package:zork_dude/ui/combat/encounter_assets.dart';
 import 'package:zork_dude/ui/components/game_outlined_text.dart';
 import 'package:zork_dude/ui/layout/landscape_layout.dart';
@@ -21,6 +22,8 @@ class CombatVictoryOverlay extends StatefulWidget {
 
 class _CombatVictoryOverlayState extends State<CombatVictoryOverlay>
     with SingleTickerProviderStateMixin {
+  static const _victoryEn = 'VICTORY';
+
   late final AnimationController _fade;
   bool _closed = false;
 
@@ -59,6 +62,7 @@ class _CombatVictoryOverlayState extends State<CombatVictoryOverlay>
     final size = MediaQuery.sizeOf(context);
     final short = LandscapeLayout.isShort(size);
     final reward = widget.reward;
+    final l10n = AppLocalizations.of(context);
     const titleColor = Color(0xFFF2E6C8);
     const mutedColor = Color(0xFFC8B896);
 
@@ -91,7 +95,7 @@ class _CombatVictoryOverlayState extends State<CombatVictoryOverlay>
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               GameOutlinedText(
-                                '战斗胜利',
+                                l10n.combatVictory,
                                 fontSize: short ? 20 : 26,
                                 fontWeight: FontWeight.w700,
                                 color: titleColor,
@@ -100,7 +104,7 @@ class _CombatVictoryOverlayState extends State<CombatVictoryOverlay>
                               ),
                               SizedBox(height: short ? 2 : 4),
                               const GameOutlinedText(
-                                'VICTORY',
+                                _victoryEn,
                                 fontSize: 11,
                                 fontWeight: FontWeight.w500,
                                 color: mutedColor,
@@ -109,23 +113,23 @@ class _CombatVictoryOverlayState extends State<CombatVictoryOverlay>
                               ),
                               SizedBox(height: short ? 10 : 14),
                               if (reward.defeatedNames.isNotEmpty) ...[
-                                const _SectionLabel('击败'),
+                                _SectionLabel(l10n.combatDefeated),
                                 for (final name in reward.defeatedNames)
                                   _RewardLine(text: name),
                                 const SizedBox(height: 10),
                               ],
                               if (reward.hasLoot) ...[
-                                const _SectionLabel('战利品'),
+                                _SectionLabel(l10n.combatLoot),
                                 for (final loot in reward.lootLabels)
                                   _RewardLine(text: loot, accent: true),
                                 const SizedBox(height: 10),
                               ],
                               if (reward.hasCurrency) ...[
-                                const _SectionLabel('收获'),
+                                _SectionLabel(l10n.combatHarvest),
                                 if (reward.gold > 0)
-                                  _RewardLine(text: '💰 金币 +${reward.gold}'),
+                                  _RewardLine(text: l10n.combatGoldGain(reward.gold)),
                                 if (reward.exp > 0)
-                                  _RewardLine(text: '⭐ 经验 +${reward.exp}'),
+                                  _RewardLine(text: l10n.combatExpGain(reward.exp)),
                                 const SizedBox(height: 10),
                               ],
                               for (final note in reward.notes)
@@ -152,8 +156,8 @@ class _CombatVictoryOverlayState extends State<CombatVictoryOverlay>
                                 ),
                               ],
                               SizedBox(height: short ? 12 : 16),
-                              const GameOutlinedText(
-                                '点击继续',
+                              GameOutlinedText(
+                                l10n.combatVictoryTap,
                                 fontSize: 11,
                                 fontWeight: FontWeight.w500,
                                 color: mutedColor,

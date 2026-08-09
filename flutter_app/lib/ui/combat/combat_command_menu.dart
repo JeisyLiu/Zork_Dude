@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zork_dude/l10n/app_localizations.dart';
 import 'package:zork_dude/ui/components/game_button.dart';
 import 'package:zork_dude/ui/components/game_outlined_text.dart';
 import 'package:zork_dude/ui/components/game_panel.dart';
@@ -24,18 +25,41 @@ class CombatCommandMenu extends StatelessWidget {
   final bool meleeAvailable;
   final bool showTitle;
 
-  static const options = [
-    (CombatCommandOption.attack, '攻击', 'Atk'),
-    (CombatCommandOption.skill, '技能', 'Skill'),
-    (CombatCommandOption.item, '道具', 'Item'),
-    (CombatCommandOption.defend, '防御', 'Def'),
-    (CombatCommandOption.melee, '混战', 'Melee'),
-    (CombatCommandOption.flee, '逃跑', 'Flee'),
+  static const options = <CombatCommandOption>[
+    CombatCommandOption.attack,
+    CombatCommandOption.skill,
+    CombatCommandOption.item,
+    CombatCommandOption.defend,
+    CombatCommandOption.melee,
+    CombatCommandOption.flee,
   ];
+
+  static String _label(AppLocalizations l10n, CombatCommandOption option) {
+    return switch (option) {
+      CombatCommandOption.attack => l10n.combatAttack,
+      CombatCommandOption.skill => l10n.combatSkill,
+      CombatCommandOption.item => l10n.combatItem,
+      CombatCommandOption.defend => l10n.combatDefend,
+      CombatCommandOption.melee => l10n.combatMelee,
+      CombatCommandOption.flee => l10n.combatFlee,
+    };
+  }
+
+  static String _sub(CombatCommandOption option) {
+    return switch (option) {
+      CombatCommandOption.attack => 'Atk',
+      CombatCommandOption.skill => 'Skill',
+      CombatCommandOption.item => 'Item',
+      CombatCommandOption.defend => 'Def',
+      CombatCommandOption.melee => 'Melee',
+      CombatCommandOption.flee => 'Flee',
+    };
+  }
 
   @override
   Widget build(BuildContext context) {
     final d = GameUiTheme.of(context);
+    final l10n = AppLocalizations.of(context);
     final preferredW = CombatLayoutConstants.commandButtonWidthFor(context);
 
     return GamePanel(
@@ -61,7 +85,7 @@ class CombatCommandMenu extends StatelessWidget {
             children: [
               if (showTitle) ...[
                 GameOutlinedText(
-                  '指令 Commands',
+                  l10n.combatCommandsTitle,
                   fontSize: LandscapeLayout.sp(context, 13),
                   color: d.textMuted,
                   strokeWidth: 0,
@@ -75,16 +99,16 @@ class CombatCommandMenu extends StatelessWidget {
                     _optionButton(
                       context,
                       index: i,
-                      option: options[i].$1,
-                      label: options[i].$2,
-                      sub: options[i].$3,
+                      option: options[i],
+                      label: _label(l10n, options[i]),
+                      sub: _sub(options[i]),
                       width: btnW,
                       height: btnH,
                       highlighted: i == highlightIndex,
                       disabled: !enabled ||
-                          (options[i].$1 == CombatCommandOption.item &&
+                          (options[i] == CombatCommandOption.item &&
                               !hasItems) ||
-                          (options[i].$1 == CombatCommandOption.melee &&
+                          (options[i] == CombatCommandOption.melee &&
                               !meleeAvailable),
                     ),
                 ],
@@ -136,7 +160,7 @@ class CombatExecuteBar extends StatelessWidget {
     required this.onExecute,
     this.highlighted = false,
     this.width,
-    this.label = '执行',
+    this.label,
     this.subLabel = 'Go',
   });
 
@@ -144,11 +168,13 @@ class CombatExecuteBar extends StatelessWidget {
   final VoidCallback? onExecute;
   final bool highlighted;
   final double? width;
-  final String label;
+  final String? label;
   final String subLabel;
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final resolvedLabel = label ?? l10n.combatExecute;
     final w = width ?? CombatLayoutConstants.executeButtonWidthFor(context);
     final h = CombatLayoutConstants.executeButtonHeightForWidth(w);
     return DecoratedBox(
@@ -159,13 +185,13 @@ class CombatExecuteBar extends StatelessWidget {
             )
           : const BoxDecoration(),
       child: GameButton(
-        label: label,
+        label: resolvedLabel,
         subLabel: subLabel,
         height: h,
         width: w,
         accent: true,
         onPressed: ready ? onExecute : null,
-        semanticLabel: label,
+        semanticLabel: resolvedLabel,
       ),
     );
   }

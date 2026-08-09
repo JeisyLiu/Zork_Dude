@@ -1,0 +1,297 @@
+{
+  "@@locale": "en",
+  "appTitle": "Mist Tower",
+  "appTitleEn": "MIST TOWER",
+  "taglineShort": "Explore, collect, talk, fight — reclaim what was lost.",
+  "taglineFull": "You wake in a misty forest with no memory.\nExplore, collect, talk, and fight — reclaim what was lost.",
+  "homeHint": "Command exploration · Mist map · Turn-based combat",
+  "loading": "Loading…",
+  "continueJourney": "Continue",
+  "enterMist": "Enter the Mist",
+  "achievements": "Achievements",
+  "leaderboard": "Leaderboard",
+  "close": "Close",
+  "cancel": "Cancel",
+  "confirm": "Confirm",
+  "skip": "Skip",
+  "continueAction": "Continue",
+  "back": "Back",
+  "menu": "Menu",
+
+  "startNewJourneyTitle": "Start a new journey?",
+  "overwriteSaveMessage": "This slot already has a save. Starting a new game will overwrite it. Continue?",
+  "overwriteAndStart": "Overwrite & start",
+  "connectPlayGamesTitle": "Connect Play Games",
+  "connectPlayGamesMessage": "Sign in to Google Play Games to view achievements and leaderboards. You can play without connecting.",
+  "connectLater": "Not now",
+  "connectNow": "Connect",
+
+  "returnToTitleTitle": "Return to title?",
+  "returnToTitleMessage": "Progress is auto-saved. Resume from the title screen with Continue.",
+  "returnToTitle": "Return to title",
+  "quitAppTitle": "Quit game?",
+  "quitAppMessage": "This will close Mist Tower.",
+  "quit": "Quit",
+  "combatPauseTitle": "Combat menu · Pause",
+  "resumeCombat": "Resume combat",
+  "backToTitle": "Title screen",
+
+  "privacySettings": "Privacy settings",
+  "privacySettingsHint": "Privacy · privacy",
+
+  "rewardOfferTitle": "Mist Gift",
+  "rewardOfferGold": "Gold this fight +{base} → +{doubled}",
+  "@rewardOfferGold": {
+    "placeholders": {
+      "base": { "type": "int" },
+      "doubled": { "type": "int" }
+    }
+  },
+  "rewardOfferUnavailable": "Gift unavailable — continue without it",
+  "rewardOfferWatch": "Watch ad · Double gold",
+  "rewardOfferLoading": "Summoning gift…",
+  "continueAdventure": "Continue adventure",
+  "watchAd": "Watch ad",
+  "watchAdRecoverLoss": "Watch ad · Recover loss",
+  "refundScorePoints": "Refund {points} points",
+  "@refundScorePoints": {
+    "placeholders": {
+      "points": { "type": "int" }
+    }
+  },
+  "summoningGlimmer": "Summoning glimmer…",
+  "glimmerNoResponse": "No response. Try again later.",
+
+  "endingDragonTitle": "The Young Dragon Falls",
+  "endingDragonSubtitle": "The magic gem is yours.\nIt can open the cemetery gate to the Site — or restore lost memories atop the tower.",
+  "endingDragonPrimary": "Keep exploring",
+  "endingDragonSecondary": "Finish the journey",
+  "endingMainTitle": "The Mist Clears",
+  "endingMainSubtitle": "Memories flood back as the tower's ward breaks.\nYou are free — yet unfinished business waits deep in the Site.",
+  "endingMainPrimary": "Keep exploring",
+  "endingSiteTitle": "Site Operation Complete",
+  "endingSiteSubtitle": "The Final Prototype is contained. The vault falls silent.\nA long journey nears its end.",
+  "endingSitePrimary": "Watch credits",
+  "endingGameOverTitle": "You Have Fallen",
+  "endingGameOverSubtitle": "The mist swallows you.\nYou wake at your last explored place. Score −100 (not below 0).",
+  "endingGameOverPrimary": "Wake at last place",
+
+  "inventoryTitle": "Bag · Inventory",
+  "inventoryUseTitle": "Use item · Use",
+  "inventoryDropTitle": "Drop item · Drop",
+  "teleportTitle": "Teleport to · Teleport",
+  "notLoaded": "Not loaded yet",
+  "noUsableItems": "No usable items.",
+  "noDroppableItems": "No droppable items.",
+  "inventoryEmpty": "Your bag is empty.",
+  "noMoreDescription": "No further description.",
+  "itemType": "Type {type}",
+  "@itemType": {
+    "placeholders": {
+      "type": { "type": "String" }
+    }
+  },
+  "itemWeight": "Weight {weight}",
+  "@itemWeight": {
+    "placeholders": {
+      "weight": { "type": "int" }
+    }
+  },
+  "itemValue": "Value {value}",
+  "@itemValue": {
+    "placeholders": {
+      "value": { "type": "int" }
+    }
+  },
+  "itemHeal": "Heal +{heal}",
+  "@itemHeal": {
+    "placeholders": {
+      "heal": { "type": "int" }
+    }
+  },
+  "itemAttackBonus": "Attack +{bonus}",
+  "@itemAttackBonus": {
+    "placeholders": {
+      "bonus": { "type": "int" }
+    }
+  },
+  "itemDefenseBonus": "Defense +{bonus}",
+  "@itemDefenseBonus": {
+    "placeholders": {
+      "bonus": { "type": "int" }
+    }
+  },
+  "itemCapacity": "Capacity {capacity}",
+  "@itemCapacity": {
+    "placeholders": {
+      "capacity": { "type": "int" }
+    }
+  },
+  "itemCount": "Qty x{count}",
+  "@itemCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "itemUseEffect": "Effect: {msg}",
+  "@itemUseEffect": {
+    "placeholders": {
+      "msg": { "type": "String" }
+    }
+  },
+  "statAtkShort": "Atk+{bonus}",
+  "@statAtkShort": {
+    "placeholders": {
+      "bonus": { "type": "int" }
+    }
+  },
+  "statDefShort": "Def+{bonus}",
+  "@statDefShort": {
+    "placeholders": {
+      "bonus": { "type": "int" }
+    }
+  },
+  "equip": "Equip",
+  "use": "Use",
+  "drop": "Drop",
+
+  "combatAttack": "Attack",
+  "combatSkill": "Skill",
+  "combatItem": "Item",
+  "combatDefend": "Defend",
+  "combatMelee": "Melee",
+  "combatFlee": "Flee",
+  "combatAttackShort": "Atk",
+  "combatSkillShort": "Skl",
+  "combatItemShort": "Itm",
+  "combatDefendShort": "Def",
+  "combatFleeShort": "Flee",
+  "combatCommandsTitle": "Commands",
+  "combatExecute": "Execute",
+  "combatVictory": "Victory",
+  "combatVictoryTap": "Tap to continue",
+  "combatDefeated": "Defeated",
+  "combatLoot": "Loot",
+  "combatHarvest": "Rewards",
+  "combatGoldGain": "💰 Gold +{gold}",
+  "@combatGoldGain": {
+    "placeholders": {
+      "gold": { "type": "int" }
+    }
+  },
+  "combatExpGain": "⭐ EXP +{exp}",
+  "@combatExpGain": {
+    "placeholders": {
+      "exp": { "type": "int" }
+    }
+  },
+  "combatNoItems": "No usable combat items in bag",
+  "combatPickItem": "Choose item",
+  "combatInitiative": "Initiative",
+  "combatTurnOrderSemantics": "Slot {index}: {name}, speed {speed}",
+  "@combatTurnOrderSemantics": {
+    "placeholders": {
+      "index": { "type": "int" },
+      "name": { "type": "String" },
+      "speed": { "type": "int" }
+    }
+  },
+  "combatLogTitle": "Combat log",
+  "combatRound": "Round {round}",
+  "@combatRound": {
+    "placeholders": {
+      "round": { "type": "int" }
+    }
+  },
+  "combatPhasePickCommandNamed": "Choose command: {name}",
+  "@combatPhasePickCommandNamed": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "combatPhasePickCommand": "Choose command",
+  "combatPhasePickTarget": "Choose target",
+  "combatPhasePickItem": "Choose item & target",
+  "combatPhaseReady": "Ready to execute",
+  "combatPhaseAnimating": "Round in progress…",
+  "combatQueueTitle": "Command queue",
+  "combatQueuePending": "Pending…",
+  "combatEnemies": "Enemies",
+  "combatParty": "Party",
+  "combatTitle": "Turn combat",
+  "combatMenuSemantics": "Combat menu",
+  "combatEnded": "Combat ended",
+  "meleeEnded": "Melee ended.",
+  "meleeCancelled": "Melee cancelled.",
+  "enemyGeneric": "Enemy",
+
+  "cmdLook": "Look",
+  "cmdBag": "Bag",
+  "cmdTalk": "Talk",
+  "cmdHeal": "Heal",
+  "cmdRecruit": "Recruit",
+  "cmdParty": "Party",
+  "cmdScore": "Score",
+  "cmdHelp": "Help",
+  "cmdNgPlus": "NG+",
+  "cmdMore": "More",
+  "cmdTake": "Take",
+  "cmdBuy": "Buy",
+  "cmdSell": "Sell",
+  "cmdShop": "Shop",
+  "cmdMoreTitle": "More commands",
+  "cmdMoreSemantics": "More commands",
+  "cmdTakeTitle": "Take",
+  "cmdBuyTitle": "Buy",
+  "cmdSellTitle": "Sell",
+  "cmdTakeAll": "All",
+  "cmdMapOn": "Map",
+  "cmdMapOff": "Map off",
+  "cmdToggleMap": "Toggle map",
+  "cmdDevMapOn": "Full map on",
+  "cmdDevMapOff": "Full map off",
+  "cmdSend": "Send command",
+  "cmdHint": "cmd: look / take 1 / n …",
+  "dirNorth": "N",
+  "dirWest": "W",
+  "dirEast": "E",
+  "dirSouth": "S",
+  "dirUp": "U",
+  "dirDown": "D",
+
+  "mapHint": "Drag to pan · Scroll/pinch to zoom · Tap adjacent node to move",
+  "mapFullCount": "Full map {count}",
+  "@mapFullCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "mapExploredCount": "Explored {count}",
+  "@mapExploredCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "mapCannotMoveInCombat": "Cannot move during combat.",
+  "mapGoing": "Going {dir}…",
+  "@mapGoing": {
+    "placeholders": {
+      "dir": { "type": "String" }
+    }
+  },
+
+  "creditPresentedBy": "Presented by",
+  "creditDirectedBy": "Directed by",
+  "creditWrittenBy": "Written by",
+  "creditGameDesign": "Game Design",
+  "creditNarrativeDesign": "Narrative Design",
+  "creditArtDirection": "Art Direction",
+  "creditLevelDesign": "Level Design",
+  "creditSystemsDesign": "Systems Design",
+  "creditCombatDesign": "Combat Design",
+  "creditSoundConcept": "Sound Concept",
+  "creditProducedBy": "Produced by",
+  "creditEngineering": "Engineering",
+  "creditSpecialThanks": "Special Thanks",
+  "creditTechSupport": "Technology Support"
+}

@@ -10,6 +10,7 @@ import 'package:zork_dude/domain/combat/combat_engine.dart';
 import 'package:zork_dude/domain/combat/combat_types.dart';
 import 'package:zork_dude/domain/combat/status_effect.dart';
 import 'package:zork_dude/domain/models/enums.dart';
+import 'package:zork_dude/l10n/app_localizations.dart';
 import 'package:zork_dude/state/game_controller.dart';
 import 'package:zork_dude/ui/components/game_banner.dart';
 import 'package:zork_dude/ui/components/game_button.dart';
@@ -92,8 +93,9 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
     }
 
     if (outcome == CombatOutcome.victory) {
+      final l10n = AppLocalizations.of(context);
       final reward = widget.controller.takeLastCombatReward() ??
-          const CombatReward(defeatedNames: ['敌人']);
+          CombatReward(defeatedNames: [l10n.enemyGeneric]);
       rewardGold = reward.gold;
       await Navigator.of(context).push<void>(
         PageRouteBuilder<void>(
@@ -311,7 +313,7 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
         return;
       }
       encNow.meleeActive = false;
-      _log.add('混战结束。');
+      _log.add(AppLocalizations.of(context).meleeEnded);
     }
 
     setState(() {
@@ -357,7 +359,7 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
       final enc = _encounter;
       if (enc != null && enc.meleeActive && !_animating) {
         widget.controller.cancelMelee();
-        _log.add('已取消混战。');
+        _log.add(AppLocalizations.of(context).meleeCancelled);
         setState(() {
           _phase = CombatUiPhase.pickingCommand;
           _activeActorId = enc.nextAllyNeedingCommand()?.instanceId;
@@ -426,17 +428,15 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
       if (key == LogicalKeyboardKey.arrowUp || key == LogicalKeyboardKey.keyW) {
         setState(() {
           _cmdHighlight = options[
-              (options.indexWhere((o) => o.$1 == _cmdHighlight) - 1 + options.length) %
-                  options.length]
-              .$1;
+              (options.indexOf(_cmdHighlight) - 1 + options.length) %
+                  options.length];
         });
         return true;
       }
       if (key == LogicalKeyboardKey.arrowDown || key == LogicalKeyboardKey.keyS) {
         setState(() {
-          _cmdHighlight = options[
-              (options.indexWhere((o) => o.$1 == _cmdHighlight) + 1) % options.length]
-              .$1;
+          _cmdHighlight =
+              options[(options.indexOf(_cmdHighlight) + 1) % options.length];
         });
         return true;
       }
@@ -463,6 +463,7 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final enc = _encounter;
     final session = widget.controller.session;
     if (enc == null || session == null || !session.inCombat) {
@@ -472,7 +473,7 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
         ),
         body: Center(
           child: GameOutlinedText(
-            '战斗已结束',
+            l10n.combatEnded,
             fontSize: LandscapeLayout.sp(context, 16),
             color: Colors.white,
           ),
@@ -500,7 +501,7 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
           Stack(
             children: [
               GameBanner(
-                title: '回合战斗',
+                title: l10n.combatTitle,
                 height: CombatLayoutConstants.bannerHeightFor(context),
                 titleSize: LandscapeLayout.sp(context, 17),
               ),
@@ -510,14 +511,14 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
                 bottom: 0,
                 child: Center(
                   child: GameButton(
-                    label: '菜单',
+                    label: l10n.menu,
                     subLabel: 'menu',
                     compact: true,
                     height: CombatLayoutConstants.menuButtonHeightFor(context),
                     width: CombatLayoutConstants.menuButtonWidthFor(context),
                     enabled: !_finished,
                     onPressed: _showPauseMenu,
-                    semanticLabel: '战斗菜单',
+                    semanticLabel: l10n.combatMenuSemantics,
                   ),
                 ),
               ),
@@ -626,7 +627,7 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
                     Expanded(
                       child: CombatCommandMenu(
                         highlightIndex: CombatCommandMenu.options
-                            .indexWhere((o) => o.$1 == _cmdHighlight),
+                            .indexOf(_cmdHighlight),
                         enabled:
                             _phase == CombatUiPhase.pickingCommand && !_animating,
                         hasItems: hasItems,

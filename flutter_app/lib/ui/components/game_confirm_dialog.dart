@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zork_dude/l10n/app_localizations.dart';
 import 'package:zork_dude/ui/components/game_button.dart';
 import 'package:zork_dude/ui/components/game_outlined_text.dart';
 import 'package:zork_dude/ui/components/landscape_overlay.dart';
@@ -11,12 +12,15 @@ abstract final class GameConfirmDialog {
     required BuildContext context,
     required String title,
     required String message,
-    String cancelLabel = '取消',
-    String confirmLabel = '确认',
+    String? cancelLabel,
+    String? confirmLabel,
     String? cancelSubLabel,
     String? confirmSubLabel,
     GameUiSkin skin = GameUiSkin.fantasy,
   }) async {
+    final l10n = AppLocalizations.of(context);
+    final resolvedCancel = cancelLabel ?? l10n.cancel;
+    final resolvedConfirm = confirmLabel ?? l10n.confirm;
     final result = await LandscapeOverlay.show<bool>(
       context: context,
       title: title,
@@ -40,7 +44,7 @@ abstract final class GameConfirmDialog {
               GameButton(
                 width: double.infinity,
                 height: btnH,
-                label: cancelLabel,
+                label: resolvedCancel,
                 subLabel: cancelSubLabel ?? 'cancel',
                 onPressed: () => Navigator.pop(dialogContext, false),
               ),
@@ -48,7 +52,7 @@ abstract final class GameConfirmDialog {
               GameButton(
                 width: double.infinity,
                 height: btnH,
-                label: confirmLabel,
+                label: resolvedConfirm,
                 subLabel: confirmSubLabel ?? 'confirm',
                 accent: true,
                 onPressed: () => Navigator.pop(dialogContext, true),

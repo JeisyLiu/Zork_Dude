@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:zork_dude/ui/navigation/game_exit.dart';
+import 'package:zork_dude/domain/game_session.dart';
+import 'package:zork_dude/l10n/app_localizations.dart';
 import 'package:zork_dude/services/offpack_ads.dart';
 import 'package:zork_dude/state/ending_kind.dart';
 import 'package:zork_dude/state/game_controller.dart';
-import 'package:zork_dude/domain/game_session.dart';
 import 'package:zork_dude/ui/ending/credits_roll.dart';
 import 'package:zork_dude/ui/ending/ending_overlay.dart';
+import 'package:zork_dude/ui/navigation/game_exit.dart';
 
 /// Presents pending ending overlays and chains site credits.
 abstract final class EndingFlow {
@@ -131,13 +132,14 @@ abstract final class EndingFlow {
     VoidCallback? afterDismiss,
   ) async {
     controller.consumePendingEnding();
+    final l10n = AppLocalizations.of(context);
     await Navigator.of(context).push<void>(
       PageRouteBuilder<void>(
         opaque: true,
         pageBuilder: (_, __, ___) => EndingOverlay(
           kind: EndingKind.gameOver,
-          rewardLabel: '观看广告 · 挽回损失',
-          rewardSubLabel: '返还 ${GameSession.deathScorePenalty} 分',
+          rewardLabel: l10n.watchAdRecoverLoss,
+          rewardSubLabel: l10n.refundScorePoints(GameSession.deathScorePenalty),
           onRewarded:
               !controller.rewardedReviveUsed &&
                   OffpackAds.instance.rewardReady(OffpackRewardPlacement.revive)

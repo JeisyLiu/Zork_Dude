@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zork_dude/l10n/app_localizations.dart';
 import 'package:zork_dude/ui/combat/combat_layout_constants.dart';
 import 'package:zork_dude/ui/components/game_button.dart';
 import 'package:zork_dude/ui/components/game_outlined_text.dart';
@@ -22,12 +23,13 @@ class CombatItemPicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final d = GameUiTheme.of(context);
+    final l10n = AppLocalizations.of(context);
     if (items.isEmpty) {
       return GamePanel(
         withBorder: true,
         padding: GamePanel.compactPadding,
         child: GameOutlinedText(
-          '背包中没有可用战斗道具',
+          l10n.combatNoItems,
           fontSize: 12,
           color: d.textMuted,
           strokeWidth: 0,
@@ -44,7 +46,12 @@ class CombatItemPicker extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          GameOutlinedText('选择道具 Items', fontSize: 12, color: d.textMuted, strokeWidth: 0),
+          GameOutlinedText(
+            l10n.combatPickItem,
+            fontSize: 12,
+            color: d.textMuted,
+            strokeWidth: 0,
+          ),
           const SizedBox(height: 6),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,

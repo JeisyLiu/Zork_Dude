@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:zork_dude/domain/models/enums.dart';
+import 'package:zork_dude/l10n/app_localizations.dart';
 import 'package:zork_dude/state/game_controller.dart';
 import 'package:zork_dude/ui/components/game_button.dart';
 import 'package:zork_dude/ui/components/game_outlined_text.dart';
@@ -24,7 +25,11 @@ class QuickCommandPanel extends StatelessWidget {
   });
 
   final GameController controller;
-  final void Function(String title, List<({String label, String value})> options) onPickTargets;
+  final void Function(
+    String title,
+    String verb,
+    List<({String label, String value})> options,
+  ) onPickTargets;
 
   @override
   Widget build(BuildContext context) {
@@ -166,79 +171,80 @@ class QuickCommandPanel extends StatelessWidget {
     required bool hasInventory,
     required bool panelEnabled,
   }) {
+    final l10n = AppLocalizations.of(context);
     if (inCombat) {
       return [
         _QuickAction(
-          label: '攻击',
+          label: l10n.combatAttack,
           subLabel: 'attack',
           accent: true,
           enabled: panelEnabled,
           onPressed: () => controller.executeCommand('attack'),
         ),
         _QuickAction(
-          label: '逃跑',
+          label: l10n.combatFlee,
           subLabel: 'flee',
           accent: true,
           enabled: panelEnabled,
           onPressed: () => controller.executeCommand('flee'),
         ),
         _QuickAction(
-          label: '查看',
+          label: l10n.cmdLook,
           subLabel: 'look',
           enabled: panelEnabled,
           onPressed: () => controller.executeCommand('look'),
         ),
         _QuickAction(
-          label: '背包',
+          label: l10n.cmdBag,
           subLabel: 'inv',
           enabled: panelEnabled,
           onPressed: () => _openInventory(context, InventoryPanelMode.all),
         ),
         _QuickAction(
-          label: '对话',
+          label: l10n.cmdTalk,
           subLabel: 'talk',
           highlighted: hasNpc,
           enabled: panelEnabled && hasNpc,
           onPressed: () => controller.executeCommand('talk'),
         ),
         _QuickAction(
-          label: '治疗',
+          label: l10n.cmdHeal,
           subLabel: 'heal',
           enabled: panelEnabled,
           onPressed: () => controller.executeCommand('heal'),
         ),
         _QuickAction(
-          label: '招募',
+          label: l10n.cmdRecruit,
           subLabel: 'recruit',
           enabled: panelEnabled,
           onPressed: () => controller.executeCommand('recruit'),
         ),
         _QuickAction(
-          label: '队伍',
+          label: l10n.cmdParty,
           subLabel: 'party',
           enabled: panelEnabled,
           onPressed: () => controller.executeCommand('party'),
         ),
         _QuickAction(
-          label: '得分',
+          label: l10n.cmdScore,
           subLabel: 'score',
           enabled: panelEnabled,
           onPressed: () => controller.executeCommand('score'),
         ),
         _QuickAction(
-          label: '帮助',
+          label: l10n.cmdHelp,
           subLabel: 'help',
           enabled: panelEnabled,
           onPressed: () => controller.executeCommand('help'),
         ),
         _QuickAction(
-          label: '二周目',
+          label: l10n.cmdNgPlus,
           subLabel: 'ng+',
           enabled: panelEnabled,
           onPressed: () => controller.executeCommand('ng+'),
         ),
         _QuickAction(
-          label: '更多',
+          label: l10n.cmdMore,
           subLabel: 'more',
           isMore: true,
           enabled: panelEnabled,
@@ -249,52 +255,52 @@ class QuickCommandPanel extends StatelessWidget {
     // Single row: look/inv/take/use/talk/heal/drop/more
     return [
       _QuickAction(
-        label: '查看',
+        label: l10n.cmdLook,
         subLabel: 'look',
         enabled: panelEnabled,
         onPressed: () => controller.executeCommand('look'),
       ),
       _QuickAction(
-        label: '背包',
+        label: l10n.cmdBag,
         subLabel: 'inv',
         enabled: panelEnabled,
         onPressed: () => _openInventory(context, InventoryPanelMode.all),
       ),
       _QuickAction(
-        label: '拿起',
+        label: l10n.cmdTake,
         subLabel: 'take',
         highlighted: hasItems,
         enabled: panelEnabled && hasItems,
-        onPressed: _take,
+        onPressed: () => _take(context),
       ),
       _QuickAction(
-        label: '使用',
+        label: l10n.use,
         subLabel: 'use',
         highlighted: hasInventory,
         enabled: panelEnabled && hasInventory,
         onPressed: () => _openInventory(context, InventoryPanelMode.usable),
       ),
       _QuickAction(
-        label: '对话',
+        label: l10n.cmdTalk,
         subLabel: 'talk',
         highlighted: hasNpc,
         enabled: panelEnabled && hasNpc,
         onPressed: () => controller.executeCommand('talk'),
       ),
       _QuickAction(
-        label: '治疗',
+        label: l10n.cmdHeal,
         subLabel: 'heal',
         enabled: panelEnabled,
         onPressed: () => controller.executeCommand('heal'),
       ),
       _QuickAction(
-        label: '丢弃',
+        label: l10n.drop,
         subLabel: 'drop',
         enabled: panelEnabled && hasInventory,
         onPressed: () => _openInventory(context, InventoryPanelMode.droppable),
       ),
       _QuickAction(
-        label: '更多',
+        label: l10n.cmdMore,
         subLabel: 'more',
         isMore: true,
         enabled: panelEnabled,
@@ -317,40 +323,61 @@ class QuickCommandPanel extends StatelessWidget {
     bool inCombat, {
     required bool hasInventory,
   }) {
+    final l10n = AppLocalizations.of(context);
     return [
       if (!inCombat) ...[
         _QuickAction(
-          label: '商品',
+          label: l10n.cmdShop,
           subLabel: 'trade',
           onPressed: () => controller.executeCommand('trade'),
         ),
-        _QuickAction(label: '购买', subLabel: 'buy', onPressed: _buy),
         _QuickAction(
-          label: '出售',
+          label: l10n.cmdBuy,
+          subLabel: 'buy',
+          onPressed: () => _buy(context),
+        ),
+        _QuickAction(
+          label: l10n.cmdSell,
           subLabel: 'sell',
-          onPressed: _sell,
+          onPressed: () => _sell(context),
           enabled: hasInventory,
         ),
         _QuickAction(
-          label: '招募',
+          label: l10n.cmdRecruit,
           subLabel: 'recruit',
           onPressed: () => controller.executeCommand('recruit'),
         ),
       ],
-      _QuickAction(label: '得分', subLabel: 'score', onPressed: () => controller.executeCommand('score')),
-      _QuickAction(label: '帮助', subLabel: 'help', onPressed: () => controller.executeCommand('help')),
-      if (!inCombat)
-        _QuickAction(label: '二周目', subLabel: 'ng+', onPressed: () => controller.executeCommand('ng+')),
-      if (!inCombat)
-        _QuickAction(label: '队伍', subLabel: 'party', onPressed: () => controller.executeCommand('party')),
       _QuickAction(
-        label: '回标题',
+        label: l10n.cmdScore,
+        subLabel: 'score',
+        onPressed: () => controller.executeCommand('score'),
+      ),
+      _QuickAction(
+        label: l10n.cmdHelp,
+        subLabel: 'help',
+        onPressed: () => controller.executeCommand('help'),
+      ),
+      if (!inCombat)
+        _QuickAction(
+          label: l10n.cmdNgPlus,
+          subLabel: 'ng+',
+          onPressed: () => controller.executeCommand('ng+'),
+        ),
+      if (!inCombat)
+        _QuickAction(
+          label: l10n.cmdParty,
+          subLabel: 'party',
+          onPressed: () => controller.executeCommand('party'),
+        ),
+      _QuickAction(
+        label: l10n.backToTitle,
         subLabel: 'title',
         onPressed: () => GameExit.returnToTitle(context, controller),
       ),
       if (kDebugMode)
         _QuickAction(
-          label: controller.developerMode ? '全图关' : '全图开',
+          label: controller.developerMode ? l10n.cmdDevMapOff : l10n.cmdDevMapOn,
           subLabel: 'dev',
           onPressed: () async {
             await controller.toggleDeveloperMode();
@@ -370,10 +397,11 @@ class QuickCommandPanel extends StatelessWidget {
     final skin = GameUiTheme.skinForMapLayer(controller.mapLayer);
     final moreW = ExplorationLayoutConstants.moreChipWidthFor(context);
     final moreH = ExplorationLayoutConstants.chipHeightForWidth(moreW);
+    final l10n = AppLocalizations.of(context);
 
     LandscapeOverlay.show<void>(
       context: context,
-      title: '更多命令 · More',
+      title: l10n.cmdMoreTitle,
       skin: skin,
       child: Wrap(
         spacing: LandscapeLayout.sp(context, 6),
@@ -399,31 +427,33 @@ class QuickCommandPanel extends StatelessWidget {
     );
   }
 
-  void _take() {
+  void _take(BuildContext context) {
     final s = controller.session!;
     final rm = s.rooms[s.currentRoomId]!;
+    final l10n = AppLocalizations.of(context);
     if (rm.items.isEmpty) {
       controller.executeCommand('take');
       return;
     }
-    onPickTargets('拿起 take', [
+    onPickTargets(l10n.cmdTakeTitle, 'take', [
       ...rm.items.asMap().entries.map((e) {
         final it = s.items[e.value];
         return (label: '(${e.key + 1}) ${it?.name ?? e.value}', value: '${e.key + 1}');
       }),
-      (label: '全部 all', value: 'all'),
+      (label: l10n.cmdTakeAll, value: 'all'),
     ]);
   }
 
-  void _buy() {
+  void _buy(BuildContext context) {
     final s = controller.session!;
     final rm = s.rooms[s.currentRoomId]!;
     final npc = rm.npcId != null ? s.npcs[rm.npcId] : null;
+    final l10n = AppLocalizations.of(context);
     if (npc == null || npc.tradeItems.isEmpty) {
       controller.executeCommand('buy');
       return;
     }
-    onPickTargets('购买 buy', [
+    onPickTargets(l10n.cmdBuyTitle, 'buy', [
       for (var i = 0; i < npc.tradeItems.length; i++)
         (
           label: '(${i + 1}) ${s.items[npc.tradeItems[i].$1]?.name} ${npc.tradeItems[i].$2}💰',
@@ -432,14 +462,15 @@ class QuickCommandPanel extends StatelessWidget {
     ]);
   }
 
-  void _sell() {
+  void _sell(BuildContext context) {
     final s = controller.session!;
     final keys = s.inventory.keys.toList();
+    final l10n = AppLocalizations.of(context);
     if (keys.isEmpty) {
       controller.executeCommand('sell');
       return;
     }
-    onPickTargets('出售 sell', [
+    onPickTargets(l10n.cmdSellTitle, 'sell', [
       for (var i = 0; i < keys.length; i++)
         (label: '(${i + 1}) ${s.items[keys[i]]?.name ?? keys[i]}', value: '${i + 1}'),
     ]);
@@ -492,14 +523,14 @@ class _ActionGrid extends StatelessWidget {
         children: [
           for (var i = 0; i < count; i++) ...[
             if (i > 0) SizedBox(width: chipSpacing),
-            Expanded(child: _chipFor(actions[i])),
+            Expanded(child: _chipFor(context, actions[i])),
           ],
         ],
       ),
     );
   }
 
-  Widget _chipFor(_QuickAction action) {
+  Widget _chipFor(BuildContext context, _QuickAction action) {
     final active = panelEnabled && action.enabled;
     if (action.isMore) {
       return GameButton(
@@ -510,7 +541,7 @@ class _ActionGrid extends StatelessWidget {
         width: double.infinity,
         enabled: active,
         onPressed: active ? onMore : null,
-        semanticLabel: '更多命令',
+        semanticLabel: AppLocalizations.of(context).cmdMoreSemantics,
       );
     }
 
@@ -597,6 +628,7 @@ class DirectionPad extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final d = GameUiTheme.of(context);
+    final l10n = AppLocalizations.of(context);
     final ring = size ??
         ExplorationLayoutConstants.directionPadWidthFor(context);
     final compassSize = LandscapeLayout.sp(context, 28);
@@ -618,7 +650,7 @@ class DirectionPad extends StatelessWidget {
             top: padInset,
             child: _compassBtn(
               GameUiAssets.compassN,
-              '北 N',
+              l10n.dirNorth,
               compassSize,
               enabled ? () => onMove(Direction.north) : null,
             ),
@@ -627,7 +659,7 @@ class DirectionPad extends StatelessWidget {
             left: padInset,
             child: _compassBtn(
               GameUiAssets.compassW,
-              '西 W',
+              l10n.dirWest,
               compassSize,
               enabled ? () => onMove(Direction.west) : null,
             ),
@@ -636,7 +668,7 @@ class DirectionPad extends StatelessWidget {
             right: padInset,
             child: _compassBtn(
               GameUiAssets.compassE,
-              '东 E',
+              l10n.dirEast,
               compassSize,
               enabled ? () => onMove(Direction.east) : null,
             ),
@@ -645,7 +677,7 @@ class DirectionPad extends StatelessWidget {
             bottom: padInset,
             child: _compassBtn(
               GameUiAssets.compassS,
-              '南 S',
+              l10n.dirSouth,
               compassSize,
               enabled ? () => onMove(Direction.south) : null,
             ),
@@ -702,6 +734,7 @@ class VerticalUpDownPad extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return SizedBox(
       width: math.min(buttonSize, math.max(1.0, height / 2)),
       height: height,
@@ -719,7 +752,7 @@ class VerticalUpDownPad extends StatelessWidget {
                 return Center(
                   child: GameIconButton(
                     size: size,
-                    semanticLabel: '上 U',
+                    semanticLabel: l10n.dirUp,
                     enabled: enabled,
                     onPressed: enabled ? () => onMove(Direction.up) : null,
                     child: GameOutlinedText(
@@ -745,7 +778,7 @@ class VerticalUpDownPad extends StatelessWidget {
                 return Center(
                   child: GameIconButton(
                     size: size,
-                    semanticLabel: '下 D',
+                    semanticLabel: l10n.dirDown,
                     enabled: enabled,
                     onPressed: enabled ? () => onMove(Direction.down) : null,
                     child: GameOutlinedText(

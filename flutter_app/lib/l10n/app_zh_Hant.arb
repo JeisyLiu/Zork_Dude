@@ -1,0 +1,297 @@
+{
+  "@@locale": "zh_Hant",
+  "appTitle": "迷霧之塔",
+  "appTitleEn": "MIST TOWER",
+  "taglineShort": "探索、收集、對話、戰鬥——找回失落的真相。",
+  "taglineFull": "你從迷霧森林中醒來，失去記憶。\n探索、收集、對話、戰鬥——找回失落的真相。",
+  "homeHint": "指令探索 · 迷霧地圖 · 遇敵進入回合戰鬥",
+  "loading": "載入中…",
+  "continueJourney": "繼續旅程",
+  "enterMist": "進入迷霧",
+  "achievements": "成就",
+  "leaderboard": "排行榜",
+  "close": "關閉",
+  "cancel": "取消",
+  "confirm": "確認",
+  "skip": "跳過",
+  "continueAction": "繼續",
+  "back": "返回",
+  "menu": "選單",
+
+  "startNewJourneyTitle": "開始新旅程？",
+  "overwriteSaveMessage": "該槽位已有進度，開始新遊戲將覆蓋此存檔，是否繼續？",
+  "overwriteAndStart": "覆蓋並開始",
+  "connectPlayGamesTitle": "連接 Play 遊戲",
+  "connectPlayGamesMessage": "連接 Google Play 遊戲後可查看成就與排行榜。不連接也可正常遊玩。",
+  "connectLater": "稍後再說",
+  "connectNow": "立即連接",
+
+  "returnToTitleTitle": "返回標題？",
+  "returnToTitleMessage": "目前進度已自動儲存，可從標題頁「繼續旅程」恢復。",
+  "returnToTitle": "返回標題",
+  "quitAppTitle": "退出遊戲？",
+  "quitAppMessage": "將關閉迷霧之塔。",
+  "quit": "退出",
+  "combatPauseTitle": "戰鬥選單 · Pause",
+  "resumeCombat": "繼續戰鬥",
+  "backToTitle": "回標題",
+
+  "privacySettings": "隱私設定",
+  "privacySettingsHint": "隱私設定 · privacy",
+
+  "rewardOfferTitle": "迷霧饋贈",
+  "rewardOfferGold": "本場金幣 +{base} → +{doubled}",
+  "@rewardOfferGold": {
+    "placeholders": {
+      "base": { "type": "int" },
+      "doubled": { "type": "int" }
+    }
+  },
+  "rewardOfferUnavailable": "饋贈暫不可用，可直接繼續冒險",
+  "rewardOfferWatch": "觀看廣告 · 金幣翻倍",
+  "rewardOfferLoading": "召喚饋贈中…",
+  "continueAdventure": "繼續冒險",
+  "watchAd": "觀看廣告",
+  "watchAdRecoverLoss": "觀看廣告 · 挽回損失",
+  "refundScorePoints": "返還 {points} 分",
+  "@refundScorePoints": {
+    "placeholders": {
+      "points": { "type": "int" }
+    }
+  },
+  "summoningGlimmer": "召喚微光中…",
+  "glimmerNoResponse": "微光暫未回應，請稍後再試",
+
+  "endingDragonTitle": "幼龍已隕落",
+  "endingDragonSubtitle": "魔法寶石落入你手中。\n它既能打開墓地通往收容站的石門，也能在塔頂喚回失落的記憶。",
+  "endingDragonPrimary": "繼續探險",
+  "endingDragonSecondary": "返程完成旅行",
+  "endingMainTitle": "迷霧消散",
+  "endingMainSubtitle": "記憶湧回腦海，高塔的結界隨之瓦解。\n你自由了——但收容站深處仍有未竟之事。",
+  "endingMainPrimary": "繼續探索",
+  "endingSiteTitle": "站點行動完成",
+  "endingSiteSubtitle": "終焉原型已被壓制，收容庫歸於沉寂。\n一段漫長的旅途，即將迎來尾聲。",
+  "endingSitePrimary": "觀看職員表",
+  "endingGameOverTitle": "你倒下了",
+  "endingGameOverSubtitle": "迷霧吞沒了你的身影。\n你在上一處探索過的地點醒來，得分 -100（不低於 0）。",
+  "endingGameOverPrimary": "在上一地點醒來",
+
+  "inventoryTitle": "背包 · Inventory",
+  "inventoryUseTitle": "使用道具 · Use",
+  "inventoryDropTitle": "丟棄道具 · Drop",
+  "teleportTitle": "傳送到 · Teleport",
+  "notLoaded": "尚未載入",
+  "noUsableItems": "沒有可使用的道具。",
+  "noDroppableItems": "沒有可丟棄的道具。",
+  "inventoryEmpty": "背包是空的。",
+  "noMoreDescription": "沒有更多描述。",
+  "itemType": "類型 {type}",
+  "@itemType": {
+    "placeholders": {
+      "type": { "type": "String" }
+    }
+  },
+  "itemWeight": "重量 {weight}",
+  "@itemWeight": {
+    "placeholders": {
+      "weight": { "type": "int" }
+    }
+  },
+  "itemValue": "價值 {value}",
+  "@itemValue": {
+    "placeholders": {
+      "value": { "type": "int" }
+    }
+  },
+  "itemHeal": "治療 +{heal}",
+  "@itemHeal": {
+    "placeholders": {
+      "heal": { "type": "int" }
+    }
+  },
+  "itemAttackBonus": "攻擊 +{bonus}",
+  "@itemAttackBonus": {
+    "placeholders": {
+      "bonus": { "type": "int" }
+    }
+  },
+  "itemDefenseBonus": "防禦 +{bonus}",
+  "@itemDefenseBonus": {
+    "placeholders": {
+      "bonus": { "type": "int" }
+    }
+  },
+  "itemCapacity": "容量 {capacity}",
+  "@itemCapacity": {
+    "placeholders": {
+      "capacity": { "type": "int" }
+    }
+  },
+  "itemCount": "數量 x{count}",
+  "@itemCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "itemUseEffect": "使用效果：{msg}",
+  "@itemUseEffect": {
+    "placeholders": {
+      "msg": { "type": "String" }
+    }
+  },
+  "statAtkShort": "攻+{bonus}",
+  "@statAtkShort": {
+    "placeholders": {
+      "bonus": { "type": "int" }
+    }
+  },
+  "statDefShort": "防+{bonus}",
+  "@statDefShort": {
+    "placeholders": {
+      "bonus": { "type": "int" }
+    }
+  },
+  "equip": "裝備",
+  "use": "使用",
+  "drop": "丟棄",
+
+  "combatAttack": "攻擊",
+  "combatSkill": "技能",
+  "combatItem": "道具",
+  "combatDefend": "防禦",
+  "combatMelee": "混戰",
+  "combatFlee": "逃跑",
+  "combatAttackShort": "攻",
+  "combatSkillShort": "技",
+  "combatItemShort": "道",
+  "combatDefendShort": "防",
+  "combatFleeShort": "逃",
+  "combatCommandsTitle": "指令 Commands",
+  "combatExecute": "執行",
+  "combatVictory": "戰鬥勝利",
+  "combatVictoryTap": "點擊繼續",
+  "combatDefeated": "擊敗",
+  "combatLoot": "戰利品",
+  "combatHarvest": "收穫",
+  "combatGoldGain": "💰 金幣 +{gold}",
+  "@combatGoldGain": {
+    "placeholders": {
+      "gold": { "type": "int" }
+    }
+  },
+  "combatExpGain": "⭐ 經驗 +{exp}",
+  "@combatExpGain": {
+    "placeholders": {
+      "exp": { "type": "int" }
+    }
+  },
+  "combatNoItems": "背包中沒有可用戰鬥道具",
+  "combatPickItem": "選擇道具 Items",
+  "combatInitiative": "行動順序 Initiative",
+  "combatTurnOrderSemantics": "第 {index} 位 {name} 速度 {speed}",
+  "@combatTurnOrderSemantics": {
+    "placeholders": {
+      "index": { "type": "int" },
+      "name": { "type": "String" },
+      "speed": { "type": "int" }
+    }
+  },
+  "combatLogTitle": "戰報 Log",
+  "combatRound": "第 {round} 回合",
+  "@combatRound": {
+    "placeholders": {
+      "round": { "type": "int" }
+    }
+  },
+  "combatPhasePickCommandNamed": "選擇指令：{name}",
+  "@combatPhasePickCommandNamed": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "combatPhasePickCommand": "選擇指令",
+  "combatPhasePickTarget": "選擇目標",
+  "combatPhasePickItem": "選擇道具與目標",
+  "combatPhaseReady": "準備執行回合",
+  "combatPhaseAnimating": "回合進行中…",
+  "combatQueueTitle": "指令佇列 Commands",
+  "combatQueuePending": "待選…",
+  "combatEnemies": "敵人 Enemies",
+  "combatParty": "隊伍 Party",
+  "combatTitle": "回合戰鬥",
+  "combatMenuSemantics": "戰鬥選單",
+  "combatEnded": "戰鬥已結束",
+  "meleeEnded": "混戰結束。",
+  "meleeCancelled": "已取消混戰。",
+  "enemyGeneric": "敵人",
+
+  "cmdLook": "查看",
+  "cmdBag": "背包",
+  "cmdTalk": "對話",
+  "cmdHeal": "治療",
+  "cmdRecruit": "招募",
+  "cmdParty": "隊伍",
+  "cmdScore": "得分",
+  "cmdHelp": "幫助",
+  "cmdNgPlus": "二周目",
+  "cmdMore": "更多",
+  "cmdTake": "拿起",
+  "cmdBuy": "購買",
+  "cmdSell": "出售",
+  "cmdShop": "商品",
+  "cmdMoreTitle": "更多命令 · More",
+  "cmdMoreSemantics": "更多命令",
+  "cmdTakeTitle": "拿起 take",
+  "cmdBuyTitle": "購買 buy",
+  "cmdSellTitle": "出售 sell",
+  "cmdTakeAll": "全部 all",
+  "cmdMapOn": "地圖",
+  "cmdMapOff": "地圖·關",
+  "cmdToggleMap": "切換地圖",
+  "cmdDevMapOn": "全圖開",
+  "cmdDevMapOff": "全圖關",
+  "cmdSend": "發送命令",
+  "cmdHint": "命令 cmd: look / take 1 / n …",
+  "dirNorth": "北 N",
+  "dirWest": "西 W",
+  "dirEast": "東 E",
+  "dirSouth": "南 S",
+  "dirUp": "上 U",
+  "dirDown": "下 D",
+
+  "mapHint": "拖曳平移 · 滾輪/雙指縮放 · 點擊相鄰節點移動",
+  "mapFullCount": "全圖 {count}",
+  "@mapFullCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "mapExploredCount": "已探索 {count}",
+  "@mapExploredCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "mapCannotMoveInCombat": "戰鬥中無法移動。",
+  "mapGoing": "前往 {dir}…",
+  "@mapGoing": {
+    "placeholders": {
+      "dir": { "type": "String" }
+    }
+  },
+
+  "creditPresentedBy": "出品 / Presented by",
+  "creditDirectedBy": "導演 / Directed by",
+  "creditWrittenBy": "編劇 / Written by",
+  "creditGameDesign": "遊戲設計 / Game Design",
+  "creditNarrativeDesign": "敘事設計 / Narrative Design",
+  "creditArtDirection": "美術指導 / Art Direction",
+  "creditLevelDesign": "關卡設計 / Level Design",
+  "creditSystemsDesign": "系統設計 / Systems Design",
+  "creditCombatDesign": "戰鬥設計 / Combat Design",
+  "creditSoundConcept": "音效構想 / Sound Concept",
+  "creditProducedBy": "製作人 / Produced by",
+  "creditEngineering": "程式 / Engineering",
+  "creditSpecialThanks": "特別鳴謝 / Special Thanks",
+  "creditTechSupport": "技術支援 / Technology Support"
+}

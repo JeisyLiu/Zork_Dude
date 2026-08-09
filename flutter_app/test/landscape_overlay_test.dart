@@ -9,12 +9,14 @@ import 'package:zork_dude/ui/game_skin_scope.dart';
 import 'package:zork_dude/ui/game_ui_theme.dart';
 import 'package:zork_dude/ui/layout/landscape_layout.dart';
 
+import 'test_l10n.dart';
+
 late GameController sharedController;
 
 Future<void> pumpExploration(WidgetTester tester, Size size) async {
   await tester.binding.setSurfaceSize(size);
   await tester.pumpWidget(
-    MaterialApp(
+    materialAppWithL10n(
       theme: GameUiTheme.appTheme(),
       home: MediaQuery(
         data: MediaQueryData(size: size, disableAnimations: true),
@@ -49,7 +51,7 @@ void main() {
 
     await tester.binding.setSurfaceSize(size);
     await tester.pumpWidget(
-      MaterialApp(
+      materialAppWithL10n(
         theme: GameUiTheme.appTheme(),
         home: MediaQuery(
           data: MediaQueryData(size: size, disableAnimations: true),
@@ -99,7 +101,7 @@ void main() {
 
     await tester.binding.setSurfaceSize(size);
     await tester.pumpWidget(
-      MaterialApp(
+      materialAppWithL10n(
         theme: GameUiTheme.appTheme(),
         home: MediaQuery(
           data: MediaQueryData(size: size, disableAnimations: true),
@@ -163,7 +165,7 @@ void main() {
 
     await tester.binding.setSurfaceSize(size);
     await tester.pumpWidget(
-      MaterialApp(
+      materialAppWithL10n(
         theme: GameUiTheme.appTheme(),
         home: MediaQuery(
           data: MediaQueryData(size: size, disableAnimations: true),
@@ -209,7 +211,7 @@ void main() {
 
     await tester.binding.setSurfaceSize(size);
     await tester.pumpWidget(
-      MaterialApp(
+      materialAppWithL10n(
         theme: GameUiTheme.appTheme(),
         home: MediaQuery(
           data: MediaQueryData(size: size, disableAnimations: true),

@@ -7,6 +7,8 @@ import 'package:zork_dude/ui/exploration/inventory_panel.dart';
 import 'package:zork_dude/ui/game_skin_scope.dart';
 import 'package:zork_dude/ui/game_ui_theme.dart';
 
+import 'test_l10n.dart';
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -28,7 +30,7 @@ void main() {
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
     await tester.pumpWidget(
-      MaterialApp(
+      materialAppWithL10n(
         theme: GameUiTheme.appTheme(),
         home: MediaQuery(
           data: const MediaQueryData(size: size, disableAnimations: true),

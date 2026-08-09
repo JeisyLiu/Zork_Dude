@@ -5,13 +5,15 @@ import 'package:zork_dude/ui/components/game_confirm_dialog.dart';
 import 'package:zork_dude/ui/components/landscape_overlay.dart';
 import 'package:zork_dude/ui/game_ui_theme.dart';
 
+import 'test_l10n.dart';
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   testWidgets('GameConfirmDialog uses game panel not AlertDialog', (tester) async {
     await tester.binding.setSurfaceSize(const Size(1280, 720));
     await tester.pumpWidget(
-      MaterialApp(
+      materialAppWithL10n(
         theme: GameUiTheme.appTheme(),
         home: Builder(
           builder: (context) => Scaffold(

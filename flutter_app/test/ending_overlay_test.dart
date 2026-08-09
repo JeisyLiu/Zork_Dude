@@ -4,14 +4,16 @@ import 'package:zork_dude/state/ending_kind.dart';
 import 'package:zork_dude/ui/ending/credits_roll.dart';
 import 'package:zork_dude/ui/ending/ending_overlay.dart';
 
+import 'test_l10n.dart';
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   testWidgets('EndingOverlay renders with animations disabled', (tester) async {
     await tester.pumpWidget(
-      const MediaQuery(
-        data: MediaQueryData(disableAnimations: true),
-        child: MaterialApp(
+      MediaQuery(
+        data: const MediaQueryData(disableAnimations: true),
+        child: materialAppWithL10n(
           home: EndingOverlay(
             kind: EndingKind.gameOver,
             onPrimary: _noop,
@@ -30,9 +32,9 @@ void main() {
     tester,
   ) async {
     await tester.pumpWidget(
-      const MediaQuery(
-        data: MediaQueryData(disableAnimations: true),
-        child: MaterialApp(home: CreditsRoll(onFinished: _noop)),
+      MediaQuery(
+        data: const MediaQueryData(disableAnimations: true),
+        child: materialAppWithL10n(home: CreditsRoll(onFinished: _noop)),
       ),
     );
     await tester.pump();
@@ -50,7 +52,7 @@ void main() {
     await tester.pumpWidget(
       MediaQuery(
         data: const MediaQueryData(disableAnimations: true),
-        child: MaterialApp(
+        child: materialAppWithL10n(
           home: EndingOverlay(
             kind: EndingKind.gameOver,
             onPrimary: _noop,

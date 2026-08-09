@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:zork_dude/domain/game_session.dart';
 import 'package:zork_dude/domain/models/entities.dart';
 import 'package:zork_dude/domain/models/enums.dart';
+import 'package:zork_dude/l10n/app_localizations.dart';
 import 'package:zork_dude/state/game_controller.dart';
 import 'package:zork_dude/ui/components/game_button.dart';
 import 'package:zork_dude/ui/components/game_outlined_text.dart';
@@ -37,10 +38,11 @@ class InventoryPanel extends StatefulWidget {
     GameUiSkin? skin,
     InventoryPanelMode mode = InventoryPanelMode.all,
   }) {
+    final l10n = AppLocalizations.of(context);
     final title = switch (mode) {
-      InventoryPanelMode.all => '背包 · Inventory',
-      InventoryPanelMode.usable => '使用道具 · Use',
-      InventoryPanelMode.droppable => '丢弃道具 · Drop',
+      InventoryPanelMode.all => l10n.inventoryTitle,
+      InventoryPanelMode.usable => l10n.inventoryUseTitle,
+      InventoryPanelMode.droppable => l10n.inventoryDropTitle,
     };
     return LandscapeOverlay.show<void>(
       context: context,
@@ -130,10 +132,11 @@ class _InventoryPanelState extends State<InventoryPanel> {
 
     final btnH = ExplorationLayoutConstants.chipHeightFor(context);
     final skin = GameUiTheme.skinForMapLayer(_c.mapLayer);
+    final l10n = AppLocalizations.of(context);
 
     await LandscapeOverlay.show<void>(
       context: context,
-      title: '传送到 · Teleport',
+      title: l10n.teleportTitle,
       skin: skin,
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -186,9 +189,10 @@ class _InventoryPanelState extends State<InventoryPanel> {
     final d = GameUiTheme.of(context);
     final s = _c.session;
     final btnH = ExplorationLayoutConstants.chipHeightFor(context);
+    final l10n = AppLocalizations.of(context);
 
     if (s == null) {
-      return GameOutlinedText('尚未加载', fontSize: 13, color: d.textMuted);
+      return GameOutlinedText(l10n.notLoaded, fontSize: 13, color: d.textMuted);
     }
 
     if (_selectedId != null) {
@@ -199,6 +203,7 @@ class _InventoryPanelState extends State<InventoryPanel> {
       } else {
         return _detail(
           d: d,
+          l10n: l10n,
           entry: hit.first,
           sessionEquippedBag: s.equippedBag,
           btnH: btnH,
@@ -206,11 +211,12 @@ class _InventoryPanelState extends State<InventoryPanel> {
       }
     }
 
-    return _list(d: d, session: s, btnH: btnH);
+    return _list(d: d, l10n: l10n, session: s, btnH: btnH);
   }
 
   Widget _list({
     required GameUiSkinData d,
+    required AppLocalizations l10n,
     required GameSession session,
     required double btnH,
   }) {
@@ -236,10 +242,10 @@ class _InventoryPanelState extends State<InventoryPanel> {
             padding: const EdgeInsets.symmetric(vertical: 12),
             child: GameOutlinedText(
               widget.mode == InventoryPanelMode.usable
-                  ? '没有可使用的道具。'
+                  ? l10n.noUsableItems
                   : widget.mode == InventoryPanelMode.droppable
-                      ? '没有可丢弃的道具。'
-                      : '背包是空的。',
+                      ? l10n.noDroppableItems
+                      : l10n.inventoryEmpty,
               fontSize: 13,
               color: d.textMuted,
               strokeWidth: 0,
@@ -257,10 +263,12 @@ class _InventoryPanelState extends State<InventoryPanel> {
               itemBuilder: (context, i) {
                 final e = entries[i];
                 final bonus = <String>[];
-                if (e.item.heal > 0) bonus.add('HP+${e.item.heal}');
-                if (e.item.damageBonus > 0) bonus.add('攻+${e.item.damageBonus}');
+                if (e.item.heal > 0) bonus.add(l10n.itemHeal(e.item.heal));
+                if (e.item.damageBonus > 0) {
+                  bonus.add(l10n.statAtkShort(e.item.damageBonus));
+                }
                 if (e.item.defenseBonus > 0) {
-                  bonus.add('防+${e.item.defenseBonus}');
+                  bonus.add(l10n.statDefShort(e.item.defenseBonus));
                 }
                 final sub = [
                   if (e.count > 1) 'x${e.count}',
@@ -284,6 +292,7 @@ class _InventoryPanelState extends State<InventoryPanel> {
 
   Widget _detail({
     required GameUiSkinData d,
+    required AppLocalizations l10n,
     required ({String id, ItemDefinition item, int count, int index}) entry,
     required String? sessionEquippedBag,
     required double btnH,
@@ -292,14 +301,14 @@ class _InventoryPanelState extends State<InventoryPanel> {
     final canUse = it.usable || it.type == ItemType.bag;
     final canDrop = entry.id != sessionEquippedBag;
     final stats = <String>[
-      '类型 ${it.type.jsonName}',
-      '重量 ${it.weight}',
-      if (it.value > 0) '价值 ${it.value}',
-      if (it.heal > 0) '治疗 +${it.heal}',
-      if (it.damageBonus > 0) '攻击 +${it.damageBonus}',
-      if (it.defenseBonus > 0) '防御 +${it.defenseBonus}',
-      if (it.type == ItemType.bag && it.capacity > 0) '容量 ${it.capacity}',
-      if (entry.count > 1) '数量 x${entry.count}',
+      l10n.itemType(it.type.jsonName),
+      l10n.itemWeight(it.weight),
+      if (it.value > 0) l10n.itemValue(it.value),
+      if (it.heal > 0) l10n.itemHeal(it.heal),
+      if (it.damageBonus > 0) l10n.itemAttackBonus(it.damageBonus),
+      if (it.defenseBonus > 0) l10n.itemDefenseBonus(it.defenseBonus),
+      if (it.type == ItemType.bag && it.capacity > 0) l10n.itemCapacity(it.capacity),
+      if (entry.count > 1) l10n.itemCount(entry.count),
     ];
 
     return Column(
@@ -316,7 +325,7 @@ class _InventoryPanelState extends State<InventoryPanel> {
         ),
         const SizedBox(height: 6),
         GameOutlinedText(
-          it.desc.isNotEmpty ? it.desc : '没有更多描述。',
+          it.desc.isNotEmpty ? it.desc : l10n.noMoreDescription,
           fontSize: 13,
           color: d.textPrimary,
           strokeWidth: 0,
@@ -333,7 +342,7 @@ class _InventoryPanelState extends State<InventoryPanel> {
         if (it.useMsg.isNotEmpty) ...[
           const SizedBox(height: 6),
           GameOutlinedText(
-            '使用效果：${it.useMsg}',
+            l10n.itemUseEffect(it.useMsg),
             fontSize: 12,
             color: d.textMuted,
             strokeWidth: 0,
@@ -348,7 +357,7 @@ class _InventoryPanelState extends State<InventoryPanel> {
             if (canUse)
               GameButton(
                 key: const Key('inventory-action-use'),
-                label: it.type == ItemType.bag ? '装备' : '使用',
+                label: it.type == ItemType.bag ? l10n.equip : l10n.use,
                 subLabel: 'use',
                 accent: true,
                 width: 100,
@@ -358,7 +367,7 @@ class _InventoryPanelState extends State<InventoryPanel> {
             if (canDrop)
               GameButton(
                 key: const Key('inventory-action-drop'),
-                label: '丢弃',
+                label: l10n.drop,
                 subLabel: 'drop',
                 width: 100,
                 height: btnH,
@@ -366,7 +375,7 @@ class _InventoryPanelState extends State<InventoryPanel> {
               ),
             GameButton(
               key: const Key('inventory-action-back'),
-              label: '返回',
+              label: l10n.back,
               subLabel: 'back',
               width: 100,
               height: btnH,

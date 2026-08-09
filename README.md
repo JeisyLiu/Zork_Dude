@@ -1,4 +1,124 @@
-# 🌫 迷雾之塔
+# 🌫 Mist Tower (迷雾之塔)
+
+A [Zork](https://en.wikipedia.org/wiki/Zork)-like text adventure. You wake in a misty forest with no memory—explore, collect, talk, recruit, fight, and solve puzzles to uncover the truth.
+
+## Play online
+
+| Build | Link |
+|------|------|
+| Lore homepage | [https://jeisyliu.github.io/Zork_Dude/](https://jeisyliu.github.io/Zork_Dude/) |
+| Desktop Web | [https://jeisyliu.github.io/Zork_Dude/play.html](https://jeisyliu.github.io/Zork_Dude/play.html) |
+| Mobile Web | [https://jeisyliu.github.io/Zork_Dude/mobile](https://jeisyliu.github.io/Zork_Dude/mobile) |
+| Privacy policy | [https://jeisyliu.github.io/Zork_Dude/privacy.html](https://jeisyliu.github.io/Zork_Dude/privacy.html) |
+
+Open in a browser—no install required. On phones, prefer the mobile build.
+
+**Developer**: Hunan Beating House Information Technology Co Ltd（湖南跃动小屋信息技术有限公司）· [JeisyLiu](https://github.com/jeisyliu) · [beatinghousehunan@gmail.com](mailto:beatinghousehunan@gmail.com)
+
+## Features
+
+- **59** rooms (surface / caves / tower / containment site)
+- **34** monsters (elites, bosses, and many anomalies)
+- Keep exploring after main or site endings; `ng+` New Game+ keeps gear
+- **21** NPCs (Plague Doctor, aging AI, Cain, and more)
+- **7** recruitable companions (fighter, rogue, mage, healer…)
+- **100+** items (including 30+ original SCP-inspired anomalies)
+- **Swappable backpacks**: canvas / tactical / anomaly sack, different weight caps
+- **Foundation containment site**: cell block, Site-914 workshop, 096/173/682 cells
+- Site devices: `use 914` refine, `use 294` drink, `use 261` vending
+- Combat, dialogue, trade, heal, quests, and scoring
+- Mist-fragment map with layer switching (including the site layer)
+- Data-driven: entities live in `data/*.json`—change data without touching core logic
+
+## Run locally
+
+### Web
+
+Serve the repo root with any static server:
+
+```bash
+# e.g. Python
+python -m http.server 8080
+# Lore home     http://localhost:8080/
+# Desktop play  http://localhost:8080/play.html
+# Mobile        http://localhost:8080/mobile/
+```
+
+### CLI (Python)
+
+Requires Python 3.10+:
+
+```bash
+python zork_game.py
+```
+
+### Flutter native (Zork exploration + turn combat)
+
+The native app lives in `flutter_app/` (separate from the `mobile/` Web build). The main loop is **Zork-style exploration + mist-fragment map**; encounters open **turn-based combat**:
+
+```bash
+cd flutter_app
+dart run tool/sync_game_data.dart   # sync root data/*.json
+flutter pub get
+flutter run
+```
+
+See [flutter_app/README.md](flutter_app/README.md).
+
+## Common commands
+
+| Category | Commands | Notes |
+|------|------|------|
+| Move | `n` / `s` / `e` / `w` / `u` / `d` | north / south / east / west / up / down |
+| Explore | `look` `take` `drop` `use` `inventory` | look, take, drop, use, inventory |
+| Social | `talk` `buy` `sell` `heal` | talk, trade, heal |
+| Combat | `attack` `flee` | attack, flee |
+| Party | `recruit` `party` | recruit, party |
+| System | `help` `score` `map` `ng+` `quit` | help, score, map, New Game+, quit |
+
+Items can be targeted by name or index, e.g. `take 1`, `use 2`. Food / treasure / materials stack (cap 999).
+
+**Backpack**: `use` a backpack item (e.g. tactical pack) to equip it; you cannot switch if current weight exceeds the new capacity.
+
+**Site side path**: with the magic gem from the young dragon, open the stone gate at the cursed graveyard to enter the Foundation containment site. South from the containment corridor reaches the cell block; go down to the Site-914 workshop (`use 914`).
+
+Example anomalies: Incomplete Score (012), Shy Guy (096), Sculpture (173), Converter (914), Plague Doctor (049), Panacea (500), Immortal Crawler (682), Terminal Prototype (001)—original gameplay homage, not wiki text.
+
+**Endings & New Game+**: after defeating the young dragon you may keep exploring or return to finish the main ending; using the magic gem at the tower top also completes the main line. Defeating 001 plays the site ending and credits. Tips show once; the game does not hard-stop. After either ending, `ng+` / `newgame+` (Web has a New Game+ button) resets the world but keeps gear, items, gold, and companions.
+
+The Web builds also support tap buttons plus a command input at the bottom.
+
+## Project layout
+
+```
+zork-dude/
+├── index.html          # lore homepage
+├── play.html           # desktop Web adventure
+├── privacy.html        # privacy policy
+├── site/               # homepage styles, version notes, landing art
+├── mobile/
+│   └── index.html      # mobile Web
+├── flutter_app/        # Flutter native app
+├── zork_game.py        # full CLI
+└── data/
+    ├── rooms.json      # rooms
+    ├── items.json      # items
+    ├── monsters.json   # monsters
+    ├── npcs.json       # NPCs
+    └── companions.json # recruitable companions
+```
+
+## Victory goal
+
+Reach the tower top, defeat the young dragon, use the magic gem—recover your memory and break the mist curse.
+
+Wake in the mist. Recover what was lost.
+
+---
+
+# 中文说明
+
+## 🌫 迷雾之塔
 
 类 [Zork](https://en.wikipedia.org/wiki/Zork) 的中文文字冒险游戏。你从迷雾森林中醒来，失去记忆——探索、收集、对话、招募、战斗、解谜，找回失落的真相。
 

@@ -346,6 +346,70 @@ void main() {
       debugDefaultTargetPlatformOverride = null;
     }
   });
+
+  testWidgets('DirectionPad compass buttons meet min touch target at small ring', (tester) async {
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(
+      materialAppWithL10n(
+        theme: GameUiTheme.appTheme(),
+        home: GameSkinScope(
+          skin: GameUiSkin.fantasy,
+          child: SizedBox(
+            width: 200,
+            height: 200,
+            child: DirectionPad(
+              size: 62,
+              onMove: (_) {},
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    for (final label in ['北 N', '东 E', '南 S', '西 W']) {
+      final finder = find.bySemanticsLabel(label);
+      expect(finder, findsOneWidget);
+      final box = tester.renderObject<RenderBox>(finder);
+      expect(box.size.width, greaterThanOrEqualTo(LandscapeLayout.minTouchTarget));
+      expect(box.size.height, greaterThanOrEqualTo(LandscapeLayout.minTouchTarget));
+    }
+
+    Offset centerOf(String label) {
+      final box = tester.renderObject<RenderBox>(find.bySemanticsLabel(label));
+      return box.localToGlobal(box.size.center(Offset.zero));
+    }
+
+    final n = centerOf('北 N');
+    final s = centerOf('南 S');
+    final w = centerOf('西 W');
+    final e = centerOf('东 E');
+    // Icons must stay on cardinal sides, not collapse into the ring center.
+    expect(s.dy - n.dy, greaterThanOrEqualTo(18));
+    expect(e.dx - w.dx, greaterThanOrEqualTo(18));
+  });
+
+  testWidgets('Short phone floating pad compass buttons meet min touch target', (tester) async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.android;
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    try {
+      await pumpExplorationScreen(tester, const Size(667, 375));
+
+      expect(tester.takeException(), isNull);
+      expect(find.byType(FloatingMovePad), findsOneWidget);
+
+      for (final label in ['北 N', '东 E', '南 S', '西 W']) {
+        final finder = find.bySemanticsLabel(label);
+        expect(finder, findsOneWidget);
+        final box = tester.renderObject<RenderBox>(finder);
+        expect(box.size.width, greaterThanOrEqualTo(LandscapeLayout.minTouchTarget));
+        expect(box.size.height, greaterThanOrEqualTo(LandscapeLayout.minTouchTarget));
+      }
+    } finally {
+      debugDefaultTargetPlatformOverride = null;
+    }
+  });
 }
 
 double _chipWidth(WidgetTester tester) {

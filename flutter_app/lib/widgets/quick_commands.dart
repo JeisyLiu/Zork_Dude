@@ -638,12 +638,18 @@ class DirectionPad extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     final ring = size ??
         ExplorationLayoutConstants.directionPadWidthFor(context);
-    final compassSize = LandscapeLayout.sp(context, 28);
-    final padInset = LandscapeLayout.sp(context, 4);
+    final iconSize = (ring * ExplorationLayoutConstants.dpadIconFraction)
+        .clamp(18.0, ring * 0.40);
+    final hitSize = math.max(iconSize, LandscapeLayout.minTouchTarget);
+    // Keep icons on the rim; enlarge hit boxes toward the center (and
+    // slightly outside) so a small ring does not pull all glyphs inward.
+    final rimInset = (ring * 0.08).clamp(2.0, 8.0);
+    final hitInset = rimInset - (hitSize - iconSize) / 2;
     return SizedBox(
       width: ring,
       height: ring,
       child: Stack(
+        clipBehavior: Clip.none,
         alignment: Alignment.center,
         children: [
           Image.asset(
@@ -654,38 +660,42 @@ class DirectionPad extends StatelessWidget {
             filterQuality: FilterQuality.none,
           ),
           Positioned(
-            top: padInset,
+            top: hitInset,
             child: _compassBtn(
               GameUiAssets.compassN,
               l10n.dirNorth,
-              compassSize,
+              iconSize,
+              hitSize,
               enabled ? () => onMove(Direction.north) : null,
             ),
           ),
           Positioned(
-            left: padInset,
+            left: hitInset,
             child: _compassBtn(
               GameUiAssets.compassW,
               l10n.dirWest,
-              compassSize,
+              iconSize,
+              hitSize,
               enabled ? () => onMove(Direction.west) : null,
             ),
           ),
           Positioned(
-            right: padInset,
+            right: hitInset,
             child: _compassBtn(
               GameUiAssets.compassE,
               l10n.dirEast,
-              compassSize,
+              iconSize,
+              hitSize,
               enabled ? () => onMove(Direction.east) : null,
             ),
           ),
           Positioned(
-            bottom: padInset,
+            bottom: hitInset,
             child: _compassBtn(
               GameUiAssets.compassS,
               l10n.dirSouth,
-              compassSize,
+              iconSize,
+              hitSize,
               enabled ? () => onMove(Direction.south) : null,
             ),
           ),
@@ -697,7 +707,8 @@ class DirectionPad extends StatelessWidget {
   Widget _compassBtn(
     String asset,
     String label,
-    double size,
+    double iconSize,
+    double hitSize,
     VoidCallback? onTap,
   ) {
     return Semantics(
@@ -706,16 +717,22 @@ class DirectionPad extends StatelessWidget {
       enabled: onTap != null,
       child: Material(
         color: Colors.transparent,
-        child: InkWell(
-          onTap: onTap,
-          customBorder: const CircleBorder(),
-          child: Opacity(
-            opacity: onTap != null ? 1 : 0.45,
-            child: Image.asset(
-              asset,
-              width: size,
-              height: size,
-              filterQuality: FilterQuality.none,
+        child: SizedBox(
+          width: hitSize,
+          height: hitSize,
+          child: InkWell(
+            onTap: onTap,
+            customBorder: const CircleBorder(),
+            child: Center(
+              child: Opacity(
+                opacity: onTap != null ? 1 : 0.45,
+                child: Image.asset(
+                  asset,
+                  width: iconSize,
+                  height: iconSize,
+                  filterQuality: FilterQuality.none,
+                ),
+              ),
             ),
           ),
         ),

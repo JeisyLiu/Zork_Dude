@@ -20,6 +20,7 @@ abstract final class ExplorationLayoutConstants {
   static const double dpadUpDownDesign = 36;
   static const double dpadGapDesign = 4;
   static const double dpadMinSize = 56;
+  static const double dpadIconFraction = 0.32;
   static const double stackedMapMinHeight = 140;
   static const double stackedMapFraction = 0.22;
   static const double panelPadHDesign = 10;
@@ -28,7 +29,7 @@ abstract final class ExplorationLayoutConstants {
   static const int primaryColumns = 8;
 
   /// Floating move pad (mobile): compass ring diameter at 1280×720.
-  static const double floatingCompassDesign = 112;
+  static const double floatingCompassDesign = 128;
   static const double floatingUpDownDesign = 44;
   static const double floatingPadGapDesign = 8;
   static const double floatingPadMarginDesign = 8;

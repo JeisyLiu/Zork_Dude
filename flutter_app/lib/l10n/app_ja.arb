@@ -1,0 +1,396 @@
+{
+  "@@locale": "ja",
+  "appTitle": "霧の塔",
+  "appTitleEn": "ミストタワー",
+  "taglineShort": "探索、收集、对话、战斗——找回失落的真相。",
+  "taglineFull": "あなたは霧の森から記憶を失って目覚めます。\n探索し、収集し、話し、戦い、失われた真実を取り戻しましょう。",
+  "homeHint": "コマンド探索・フォグマップ・敵と遭遇して戦闘ラウンドに入る",
+  "loading": "読み込み中…",
+  "continueJourney": "继续旅程",
+  "enterMist": "霧の中に入る",
+  "achievements": "成果",
+  "leaderboard": "ランキング一覧",
+  "close": "閉鎖",
+  "cancel": "キャンセル",
+  "confirm": "確認する",
+  "skip": "飛び越える",
+  "continueAction": "続く",
+  "back": "戻る",
+  "menu": "メニュー",
+  "startNewJourneyTitle": "新しい旅を始めませんか？",
+  "overwriteSaveMessage": "このスロットにはすでに進捗があります。新しいゲームを開始すると、この保存は上書きされます。続けますか?",
+  "overwriteAndStart": "カバーしてスタート",
+  "connectPlayGamesTitle": "ゲームを接続する",
+  "connectPlayGamesMessage": "Google Play ゲームに接続して、実績とリーダーボードを表示します。接続しなくても普通にプレイできます。",
+  "connectLater": "後でまた話しましょう",
+  "connectNow": "今すぐ接続してください",
+  "returnToTitleTitle": "タイトルを返しますか？",
+  "returnToTitleMessage": "現在の進行状況は自動的に保存され、タイトルページの「旅を続ける」から復元できます。",
+  "returnToTitle": "タイトルを返す",
+  "quitAppTitle": "ゲームをやめますか?",
+  "quitAppMessage": "ミストタワーは閉館となります。",
+  "quit": "やめる",
+  "combatPauseTitle": "バトルメニュー・ポーズ",
+  "resumeCombat": "戦い続ける",
+  "backToTitle": "タイトルに戻る",
+  "privacySettings": "プライバシー設定",
+  "privacySettingsHint": "プライバシー設定 · プライバシー",
+  "rewardOfferTitle": "霧の贈り物",
+  "rewardOfferGold": "このゲームのゴールド コイン +{base} → +{doubled}",
+  "@rewardOfferGold": {
+    "placeholders": {
+      "base": {
+        "type": "int"
+      },
+      "doubled": {
+        "type": "int"
+      }
+    }
+  },
+  "rewardOfferUnavailable": "ギフトは一時的に利用できなくなります。冒険を直接続行できます",
+  "rewardOfferWatch": "広告を見る · ダブル金貨",
+  "rewardOfferLoading": "ギフトを召喚しています...",
+  "continueAdventure": "冒険を続ける",
+  "watchAd": "広告を見る",
+  "watchAdRecoverLoss": "広告を見る · 損失を回復する",
+  "refundScorePoints": "{points} ポイントを返却",
+  "@refundScorePoints": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      }
+    }
+  },
+  "summoningGlimmer": "黄昏の召喚…",
+  "glimmerNoResponse": "シマーはまだ応答していません。後でもう一度試してください。",
+  "endingDragonTitle": "若き竜は堕ちた",
+  "endingDragonSubtitle": "魔法の宝石があなたの手に落ちます。\nそれは墓地から避難所への石の扉を開けるだけでなく、塔の頂上で失われた記憶を呼び戻すこともできます。",
+  "endingDragonPrimary": "冒険を続ける",
+  "endingDragonSecondary": "戻って旅行を完了する",
+  "endingMainTitle": "霧が消える",
+  "endingMainSubtitle": "記憶が脳裏に甦り、塔の結界が崩れた。\nあなたは自由ですが、精神病院の奥深くにはまだやり残した仕事が残っています。",
+  "endingMainPrimary": "探索を続けてください",
+  "endingSiteTitle": "サイトアクションが完了しました",
+  "endingSiteSubtitle": "最終試作機は鎮圧され、収容室は沈黙に陥った。\n長かった旅も終わりに近づいています。",
+  "endingSitePrimary": "スタッフ一覧を見る",
+  "endingGameOverTitle": "あなたは落ちました",
+  "endingGameOverSubtitle": "霧があなたの姿を飲み込みます。\nあなたは、最後に探索した場所で目覚めます。スコアは -100 (0 以上) です。",
+  "endingGameOverPrimary": "最後の場所で目覚める",
+  "inventoryTitle": "バックパック・在庫",
+  "inventoryUseTitle": "小道具を使用する・使用する",
+  "inventoryDropTitle": "小道具をドロップする · ドロップする",
+  "teleportTitle": "送信先・テレポート",
+  "notLoaded": "まだロードされていません",
+  "noUsableItems": "利用できる小道具はありません。",
+  "noDroppableItems": "捨てる小道具はありません。",
+  "inventoryEmpty": "バックパックは空です。",
+  "noMoreDescription": "それ以上の説明はありません。",
+  "itemType": "{type}と入力してください",
+  "@itemType": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "itemWeight": "重量 {weight}",
+  "@itemWeight": {
+    "placeholders": {
+      "weight": {
+        "type": "int"
+      }
+    }
+  },
+  "itemValue": "値 {value}",
+  "@itemValue": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "itemHeal": "治療 +{heal}",
+  "@itemHeal": {
+    "placeholders": {
+      "heal": {
+        "type": "int"
+      }
+    }
+  },
+  "itemAttackBonus": "攻撃 +{bonus}",
+  "@itemAttackBonus": {
+    "placeholders": {
+      "bonus": {
+        "type": "int"
+      }
+    }
+  },
+  "itemDefenseBonus": "防御 +{bonus}",
+  "@itemDefenseBonus": {
+    "placeholders": {
+      "bonus": {
+        "type": "int"
+      }
+    }
+  },
+  "itemCapacity": "容量{capacity}",
+  "@itemCapacity": {
+    "placeholders": {
+      "capacity": {
+        "type": "int"
+      }
+    }
+  },
+  "itemCount": "数量 x{count}",
+  "@itemCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "itemUseEffect": "使用効果: {msg}",
+  "@itemUseEffect": {
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
+  "statAtkShort": "攻撃+{bonus}",
+  "@statAtkShort": {
+    "placeholders": {
+      "bonus": {
+        "type": "int"
+      }
+    }
+  },
+  "statDefShort": "アンチ+{bonus}",
+  "@statDefShort": {
+    "placeholders": {
+      "bonus": {
+        "type": "int"
+      }
+    }
+  },
+  "equip": "装置",
+  "use": "使用",
+  "drop": "捨てる",
+  "combatAttack": "攻撃",
+  "combatSkill": "スキル",
+  "combatItem": "小道具",
+  "combatDefend": "防衛",
+  "combatMelee": "近接攻撃",
+  "combatFlee": "逃げる",
+  "combatAttackShort": "攻撃",
+  "combatSkillShort": "テクノロジー",
+  "combatItemShort": "道",
+  "combatDefendShort": "守る",
+  "combatFleeShort": "逃げる",
+  "combatCommandsTitle": "コマンド",
+  "combatExecute": "埋め込む",
+  "combatVictory": "戦いの勝利",
+  "combatVictoryTap": "クリックして続行します",
+  "combatDefeated": "ビート",
+  "combatLoot": "戦利品",
+  "combatHarvest": "収穫",
+  "combatGoldGain": "💰 ゴールドコイン +{gold}",
+  "@combatGoldGain": {
+    "placeholders": {
+      "gold": {
+        "type": "int"
+      }
+    }
+  },
+  "combatExpGain": "⭐ 経験 +{exp}",
+  "@combatExpGain": {
+    "placeholders": {
+      "exp": {
+        "type": "int"
+      }
+    }
+  },
+  "combatNoItems": "バックパックには戦闘アイテムはありません",
+  "combatPickItem": "小道具アイテムの選択",
+  "combatInitiative": "アクションシーケンスイニシアチブ",
+  "combatTurnOrderSemantics": "ビット {index} {name} 速度 {speed}",
+  "@combatTurnOrderSemantics": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      },
+      "name": {
+        "type": "String"
+      },
+      "speed": {
+        "type": "int"
+      }
+    }
+  },
+  "combatLogTitle": "バトルレポートログ",
+  "combatRound": "ラウンド {round}",
+  "@combatRound": {
+    "placeholders": {
+      "round": {
+        "type": "int"
+      }
+    }
+  },
+  "combatPhasePickCommandNamed": "コマンドを選択: {name}",
+  "@combatPhasePickCommandNamed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "combatPhasePickCommand": "コマンドを選択",
+  "combatPhasePickTarget": "ターゲットの選択",
+  "combatPhasePickItem": "プロップとターゲットを選択する",
+  "combatPhaseReady": "ラウンドを実行する準備ができました",
+  "combatPhaseAnimating": "ラウンド進行中…",
+  "combatQueueTitle": "コマンドキューコマンド",
+  "combatQueuePending": "選ばれるには…",
+  "combatEnemies": "敵 敵",
+  "combatParty": "チームパーティー",
+  "combatTitle": "ターン制戦闘",
+  "combatMenuSemantics": "バトルメニュー",
+  "combatEnded": "戦いは終わった",
+  "meleeEnded": "乱戦は終了する。",
+  "meleeCancelled": "近接攻撃はキャンセルされました。",
+  "enemyGeneric": "敵",
+  "cmdLook": "チェック",
+  "cmdBag": "バックパック",
+  "cmdTalk": "対話",
+  "cmdHeal": "扱う",
+  "cmdRecruit": "リクルート",
+  "cmdParty": "チーム",
+  "cmdScore": "スコア",
+  "cmdHelp": "ヘルプ",
+  "cmdNgPlus": "2週目",
+  "cmdMore": "もっと",
+  "cmdTake": "選び出す",
+  "cmdBuy": "買う",
+  "cmdSell": "売る",
+  "cmdShop": "商品",
+  "cmdMoreTitle": "その他のコマンド · もっと見る",
+  "cmdMoreSemantics": "その他のコマンド",
+  "cmdTakeTitle": "拾う",
+  "cmdBuyTitle": "買う 買う",
+  "cmdSellTitle": "売る",
+  "cmdTakeAll": "全部全部",
+  "cmdMapOn": "地図",
+  "cmdMapOff": "地図・関",
+  "cmdToggleMap": "マップを切り替える",
+  "cmdDevMapOn": "全体像を開く",
+  "cmdDevMapOff": "フルマップレベル",
+  "cmdSend": "コマンドを送信する",
+  "cmdHint": "コマンド cmd: look / take 1 / n …",
+  "dirNorth": "北北",
+  "dirWest": "西西",
+  "dirEast": "東東",
+  "dirSouth": "南南",
+  "dirUp": "アップユー",
+  "dirDown": "次のD",
+  "mapHint": "ドラッグしてパンする · ホイール/ピンチをスクロールしてズームする · 隣接するノードをクリックして移動する",
+  "mapFullCount": "フル画像 {count}",
+  "@mapFullCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mapExploredCount": "{count}を探索しました",
+  "@mapExploredCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mapCannotMoveInCombat": "戦闘中は移動不可。",
+  "mapGoing": "{dir} に移動します…",
+  "@mapGoing": {
+    "placeholders": {
+      "dir": {
+        "type": "String"
+      }
+    }
+  },
+  "mapDevFullMap": "DEV・全体像",
+  "mapNotAdjacentDetail": "{name} — 隣接していない、直接アクセスできない",
+  "@mapNotAdjacentDetail": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "inventoryRoomHere": "{name} (ここ)",
+  "@inventoryRoomHere": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "inventoryHeader": "{bag} · 重量 {weight}/{capacity} · {count} 個 · 💰{gold}",
+  "@inventoryHeader": {
+    "placeholders": {
+      "bag": {
+        "type": "String"
+      },
+      "weight": {
+        "type": "int"
+      },
+      "capacity": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      },
+      "gold": {
+        "type": "int"
+      }
+    }
+  },
+  "combatUnitSemantics": "{name} HP {hp}/{maxHp} 攻撃 {atk} 防御 {def} 速度 {spd}",
+  "@combatUnitSemantics": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "hp": {
+        "type": "int"
+      },
+      "maxHp": {
+        "type": "int"
+      },
+      "atk": {
+        "type": "int"
+      },
+      "def": {
+        "type": "int"
+      },
+      "spd": {
+        "type": "int"
+      }
+    }
+  },
+  "creditQa": "品質保証",
+  "creditPresentedBy": "制作・提供：",
+  "creditDirectedBy": "監督 / 監督",
+  "creditWrittenBy": "脚本家・脚本家",
+  "creditGameDesign": "ゲームデザイン / ゲームデザイン",
+  "creditNarrativeDesign": "ナラティブデザイン / ナラティブデザイン",
+  "creditArtDirection": "アートディレクション / アートディレクション",
+  "creditLevelDesign": "レベルデザイン / レベルデザイン",
+  "creditSystemsDesign": "システムデザイン / システムデザイン",
+  "creditCombatDesign": "戦闘デザイン / 戦闘デザイン",
+  "creditSoundConcept": "サウンドコンセプト / サウンドコンセプト",
+  "creditProducedBy": "プロデューサー / プロデュース",
+  "creditEngineering": "プログラム / エンジニアリング",
+  "creditSpecialThanks": "特別な感謝 / 特別な感謝",
+  "creditTechSupport": "技術サポート / 技術サポート"
+}

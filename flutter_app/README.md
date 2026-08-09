@@ -8,8 +8,9 @@
 
 - **探索主界面**：Zork 指令系统 + 迷雾残页小地图（移植自 Web 版）
 - **战斗场景**：遇敌时进入 `TurnCombatScreen` 回合制战斗
-- **数据**：读取 `assets/data/*.json`（与根目录 `data/` 同步）
+- **数据**：按 locale 加载 `assets/data/l10n/{locale}/*.json`（缺失回落 `zh_Hans`；旧路径 `assets/data/*.json` 仍兼容）
 - **UI**：Kenney UI Pack Adventure 像素风资源（棕木幻想 / 灰铆钉站点 / 战斗 HUD）
+- **国际化**：UI ARB + 领域 `GameMessages` + 世界 JSON，共 10 种语言（见下）
 
 ## 同步资源
 
@@ -29,6 +30,37 @@ UI 资源许可见 `assets/ui/License.txt`（Kenney UI Pack Adventure, CC0 1.0�
 cd flutter_app
 flutter pub get
 flutter run
+```
+
+## 国际化（i18n）
+
+支持 10 个 BCP 47 locale：`zh_Hans`、`zh_Hant`、`en_US`、`ja`、`ko`、`fr`、`de`、`it`、`es_ES`、`pt_BR`。
+
+| 层 | 机制 | 路径 |
+|---|---|---|
+| UI 壳 | Flutter gen-l10n（ARB） | `lib/l10n/app_*.arb`（含 `es` / `pt` 基础回落） |
+| 领域文案 | `GameMessages`（无 BuildContext） | `assets/l10n/messages/{locale}.json` |
+| 世界内容 | `WorldRepository` 按 locale 加载 | `assets/data/l10n/{locale}/*.json` |
+
+语言在**开局时绑定**（跟随系统 locale）；中途改系统语言需重进游戏，不做热切换。
+
+### 重新生成翻译
+
+以 `zh_Hans` 为源，批量生成其余 9 语种（UI ARB + messages JSON + 世界 JSON）：
+
+```bash
+cd flutter_app
+pip install deep-translator   # 仅首次
+python tool/generate_i18n.py
+```
+
+### 校验与测试
+
+```bash
+cd flutter_app
+dart run tool/check_l10n.dart   # 各 locale 键集 / 实体 id 与 zh_Hans 一致
+flutter gen-l10n
+flutter test
 ```
 
 ## 操作
@@ -54,11 +86,18 @@ flutter run
 ```
 lib/
 ├── domain/           # GameSession、回合战斗引擎、地图算法、指令处理
-├── data/             # JSON 加载
+├── data/             # JSON 加载（按 locale）
+├── l10n/             # ARB、AppLocalizations、GameMessages、LocaleTag
 ├── state/            # GameController
 ├── ui/               # 主题、资源路径、Kenney 组件
 ├── screens/          # Home、Exploration、TurnCombat
 └── widgets/          # 状态栏、日志、地图、快捷指令
+assets/
+├── data/l10n/        # 世界内容（按 locale 分目录）
+└── l10n/messages/    # 领域运行时文案
+tool/
+├── generate_i18n.py  # 从 zh_Hans 生成多语言资源
+└── check_l10n.dart   # 校验键集 / 实体 id
 ```
 
 ## 构建

@@ -1,25 +1,16 @@
 import 'package:zork_dude/domain/game_session.dart';
 import 'package:zork_dude/domain/models/enums.dart';
 import 'package:zork_dude/domain/models/map_meta.dart';
+import 'package:zork_dude/l10n/game_messages.dart';
 
 const mapCell = 52.0;
 const mapPad = 36.0;
 
-const mapLayerLabels = {
-  MapLayer.surface: '地表',
-  MapLayer.cave: '洞穴',
-  MapLayer.tower: '高塔',
-  MapLayer.site: '设施',
-};
+String mapLayerLabel(MapLayer layer, GameMessages messages) =>
+    messages.mapLayerName(layer.name);
 
-const mapDirLabel = {
-  Direction.north: '北',
-  Direction.south: '南',
-  Direction.east: '东',
-  Direction.west: '西',
-  Direction.up: '上',
-  Direction.down: '下',
-};
+String mapDirLabel(Direction dir, GameMessages messages) =>
+    messages.mapDirName(dir.value);
 
 const mapDirOffset = {
   Direction.north: [0.0, -0.42],

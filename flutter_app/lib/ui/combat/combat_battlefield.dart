@@ -47,8 +47,17 @@ class CombatUnitCard extends StatelessWidget {
     final def = actor.effectiveDefense(statusRegistry);
     final spd = actor.effectiveSpeed(statusRegistry);
 
+    final l10n = AppLocalizations.of(context);
+
     return Semantics(
-      label: '${actor.name} HP ${actor.hp}/${actor.maxHp} 攻击 $atk 防御 $def 速度 $spd',
+      label: l10n.combatUnitSemantics(
+        actor.name,
+        actor.hp,
+        actor.maxHp,
+        atk,
+        def,
+        spd,
+      ),
       button: onTap != null,
       child: GestureDetector(
         onTap: onTap,

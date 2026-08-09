@@ -1,0 +1,396 @@
+{
+  "@@locale": "ko",
+  "appTitle": "안개의 탑",
+  "appTitleEn": "미스트 타워",
+  "taglineShort": "탐험하고, 수집하고, 대화하고, 싸워 잃어버린 진실을 되찾으세요.",
+  "taglineFull": "당신은 기억이 없는 안개 낀 숲에서 깨어납니다.\n탐험하고, 수집하고, 대화하고, 싸워 잃어버린 진실을 되찾으세요.",
+  "homeHint": "지휘 탐색 · 안개 지도 · 적과 조우하고 전투에 돌입",
+  "loading": "로드 중…",
+  "continueJourney": "여행을 계속하세요",
+  "enterMist": "안개 속으로 들어가세요",
+  "achievements": "성취",
+  "leaderboard": "순위 목록",
+  "close": "폐쇄",
+  "cancel": "취소",
+  "confirm": "확인하다",
+  "skip": "뛰어넘다",
+  "continueAction": "계속하다",
+  "back": "반품",
+  "menu": "메뉴",
+  "startNewJourneyTitle": "새로운 여행을 시작하시나요?",
+  "overwriteSaveMessage": "이 슬롯에는 이미 진행 상황이 있습니다. 새 게임을 시작하면 이 저장 내용을 덮어쓰게 됩니다. 계속하시겠습니까?",
+  "overwriteAndStart": "덮고 시작하세요",
+  "connectPlayGamesTitle": "Play 게임 연결",
+  "connectPlayGamesMessage": "업적과 리더보드를 보려면 Google Play 게임즈에 연결하세요. 연결하지 않아도 정상적으로 플레이가 가능합니다.",
+  "connectLater": "나중에 얘기하자",
+  "connectNow": "지금 연결하세요",
+  "returnToTitleTitle": "제목을 반환하시겠습니까?",
+  "returnToTitleMessage": "현재 진행 상황은 자동으로 저장되었으며 제목 페이지 \"Continue Journey\"에서 복원할 수 있습니다.",
+  "returnToTitle": "제목 반환",
+  "quitAppTitle": "게임을 종료하시겠습니까?",
+  "quitAppMessage": "미스트 타워는 폐쇄됩니다.",
+  "quit": "그만두다",
+  "combatPauseTitle": "전투 메뉴 · 일시 정지",
+  "resumeCombat": "계속 싸워라",
+  "backToTitle": "제목으로 돌아가기",
+  "privacySettings": "개인정보 설정",
+  "privacySettingsHint": "개인정보 설정 · 개인정보 보호",
+  "rewardOfferTitle": "안개의 선물",
+  "rewardOfferGold": "이 게임의 금화 +{base} → +{doubled}",
+  "@rewardOfferGold": {
+    "placeholders": {
+      "base": {
+        "type": "int"
+      },
+      "doubled": {
+        "type": "int"
+      }
+    }
+  },
+  "rewardOfferUnavailable": "선물을 일시적으로 사용할 수 없습니다. 직접 모험을 계속할 수 있습니다.",
+  "rewardOfferWatch": "광고 시청 · 금화 두 배",
+  "rewardOfferLoading": "선물 소환...",
+  "continueAdventure": "모험을 계속하다",
+  "watchAd": "광고 시청",
+  "watchAdRecoverLoss": "광고 시청 · 손실 복구",
+  "refundScorePoints": "{points} 포인트 반환",
+  "@refundScorePoints": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      }
+    }
+  },
+  "summoningGlimmer": "황혼 속에서 소환…",
+  "glimmerNoResponse": "Shimmer가 아직 응답하지 않았습니다. 나중에 다시 시도해 주세요.",
+  "endingDragonTitle": "어린 용이 쓰러졌다",
+  "endingDragonSubtitle": "마법의 보석이 당신의 손에 떨어졌습니다.\n묘지에서 쉼터로 이어지는 돌문을 열 수 있을 뿐만 아니라, 탑 꼭대기에서 잃어버린 기억을 불러일으킬 수도 있다.",
+  "endingDragonPrimary": "모험을 계속하다",
+  "endingDragonSecondary": "여행을 마무리하기 위해 돌아오세요",
+  "endingMainTitle": "안개가 흩어진다",
+  "endingMainSubtitle": "기억이 그의 마음 속에 다시 넘쳐났고, 탑의 장벽이 무너졌습니다.\n당신은 자유입니다. 하지만 정신병원 깊숙한 곳에는 아직 끝나지 않은 일이 남아 있습니다.",
+  "endingMainPrimary": "계속 탐색하세요",
+  "endingSiteTitle": "사이트 작업 완료",
+  "endingSiteSubtitle": "최종 프로토타입은 진압되었고 격리실은 침묵에 빠졌습니다.\n긴 여정이 끝나가고 있습니다.",
+  "endingSitePrimary": "직원 목록 보기",
+  "endingGameOverTitle": "당신은 떨어졌다",
+  "endingGameOverSubtitle": "안개가 당신의 모습을 삼켜버립니다.\n마지막으로 탐색한 위치에서 깨어났으며 점수는 -100(0 이상)입니다.",
+  "endingGameOverPrimary": "마지막 장소에서 일어나",
+  "inventoryTitle": "배낭 · 재고",
+  "inventoryUseTitle": "소품 활용 · 활용",
+  "inventoryDropTitle": "드롭 소품 · 드롭",
+  "teleportTitle": "보내기 · 텔레포트",
+  "notLoaded": "아직 로드되지 않음",
+  "noUsableItems": "사용할 수 있는 소품이 없습니다.",
+  "noDroppableItems": "버릴 소품이 없습니다.",
+  "inventoryEmpty": "배낭이 비어 있습니다.",
+  "noMoreDescription": "더 이상의 설명은 없습니다.",
+  "itemType": "{type}을 입력하세요.",
+  "@itemType": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "itemWeight": "체중 {weight}",
+  "@itemWeight": {
+    "placeholders": {
+      "weight": {
+        "type": "int"
+      }
+    }
+  },
+  "itemValue": "값 {value}",
+  "@itemValue": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "itemHeal": "치료 +{heal}",
+  "@itemHeal": {
+    "placeholders": {
+      "heal": {
+        "type": "int"
+      }
+    }
+  },
+  "itemAttackBonus": "공격 +{bonus}",
+  "@itemAttackBonus": {
+    "placeholders": {
+      "bonus": {
+        "type": "int"
+      }
+    }
+  },
+  "itemDefenseBonus": "방어 +{bonus}",
+  "@itemDefenseBonus": {
+    "placeholders": {
+      "bonus": {
+        "type": "int"
+      }
+    }
+  },
+  "itemCapacity": "용량 {capacity}",
+  "@itemCapacity": {
+    "placeholders": {
+      "capacity": {
+        "type": "int"
+      }
+    }
+  },
+  "itemCount": "수량 x{count}",
+  "@itemCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "itemUseEffect": "사용 효과: {msg}",
+  "@itemUseEffect": {
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
+  "statAtkShort": "공격+{bonus}",
+  "@statAtkShort": {
+    "placeholders": {
+      "bonus": {
+        "type": "int"
+      }
+    }
+  },
+  "statDefShort": "안티+{bonus}",
+  "@statDefShort": {
+    "placeholders": {
+      "bonus": {
+        "type": "int"
+      }
+    }
+  },
+  "equip": "장비",
+  "use": "사용",
+  "drop": "버리다",
+  "combatAttack": "공격",
+  "combatSkill": "기능",
+  "combatItem": "소품",
+  "combatDefend": "방어",
+  "combatMelee": "난투",
+  "combatFlee": "도망가다",
+  "combatAttackShort": "공격",
+  "combatSkillShort": "기술",
+  "combatItemShort": "도로",
+  "combatDefendShort": "지키다",
+  "combatFleeShort": "탈출하다",
+  "combatCommandsTitle": "명령",
+  "combatExecute": "구현하다",
+  "combatVictory": "전투 승리",
+  "combatVictoryTap": "계속하려면 클릭하세요",
+  "combatDefeated": "이기다",
+  "combatLoot": "전리품",
+  "combatHarvest": "수확하다",
+  "combatGoldGain": "💰 금화 +{gold}",
+  "@combatGoldGain": {
+    "placeholders": {
+      "gold": {
+        "type": "int"
+      }
+    }
+  },
+  "combatExpGain": "⭐ 경험 +{exp}",
+  "@combatExpGain": {
+    "placeholders": {
+      "exp": {
+        "type": "int"
+      }
+    }
+  },
+  "combatNoItems": "배낭에는 전투용 아이템이 없습니다.",
+  "combatPickItem": "소품 아이템 선택",
+  "combatInitiative": "액션 시퀀스 이니셔티브",
+  "combatTurnOrderSemantics": "비트 {index} {name} 속도 {speed}",
+  "@combatTurnOrderSemantics": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      },
+      "name": {
+        "type": "String"
+      },
+      "speed": {
+        "type": "int"
+      }
+    }
+  },
+  "combatLogTitle": "전투 보고 기록",
+  "combatRound": "라운드 {round}",
+  "@combatRound": {
+    "placeholders": {
+      "round": {
+        "type": "int"
+      }
+    }
+  },
+  "combatPhasePickCommandNamed": "명령 선택: {name}",
+  "@combatPhasePickCommandNamed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "combatPhasePickCommand": "명령 선택",
+  "combatPhasePickTarget": "대상 선택",
+  "combatPhasePickItem": "소품과 타겟을 선택하세요",
+  "combatPhaseReady": "라운드 실행 준비 완료",
+  "combatPhaseAnimating": "라운드 진행 중…",
+  "combatQueueTitle": "명령 대기열 명령",
+  "combatQueuePending": "선정될…",
+  "combatEnemies": "적 적",
+  "combatParty": "팀 파티",
+  "combatTitle": "턴제 전투",
+  "combatMenuSemantics": "전투 메뉴",
+  "combatEnded": "전투는 끝났습니다",
+  "meleeEnded": "근접전이 종료됩니다.",
+  "meleeCancelled": "근접전이 취소되었습니다.",
+  "enemyGeneric": "적",
+  "cmdLook": "확인하다",
+  "cmdBag": "배낭",
+  "cmdTalk": "대화",
+  "cmdHeal": "대하다",
+  "cmdRecruit": "모집하다",
+  "cmdParty": "팀",
+  "cmdScore": "점수",
+  "cmdHelp": "돕다",
+  "cmdNgPlus": "두 번째 주",
+  "cmdMore": "더",
+  "cmdTake": "찾다",
+  "cmdBuy": "구입하다",
+  "cmdSell": "팔다",
+  "cmdShop": "상품",
+  "cmdMoreTitle": "더 많은 명령 · 더",
+  "cmdMoreSemantics": "추가 명령",
+  "cmdTakeTitle": "픽업 테이크",
+  "cmdBuyTitle": "구매 구매",
+  "cmdSellTitle": "팔다 팔다",
+  "cmdTakeAll": "모두 모두",
+  "cmdMapOn": "지도",
+  "cmdMapOff": "지도·관",
+  "cmdToggleMap": "지도 전환",
+  "cmdDevMapOn": "전체 사진을 열어보세요",
+  "cmdDevMapOff": "전체 지도 수준",
+  "cmdSend": "명령 보내기",
+  "cmdHint": "명령 cmd: 보기 / 가져가기 1 / n …",
+  "dirNorth": "노스 N",
+  "dirWest": "웨스트 여",
+  "dirEast": "동쪽 E",
+  "dirSouth": "사우스 S",
+  "dirUp": "업유",
+  "dirDown": "넥스트디",
+  "mapHint": "드래그 앤 팬 · 스크롤 휠/핀치로 확대/축소 · 이동하려면 인접한 노드를 클릭",
+  "mapFullCount": "전체 이미지 {count}",
+  "@mapFullCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mapExploredCount": "{count}을(를) 탐색했습니다.",
+  "@mapExploredCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mapCannotMoveInCombat": "전투 중에는 이동할 수 없습니다.",
+  "mapGoing": "{dir}(으)로 이동…",
+  "@mapGoing": {
+    "placeholders": {
+      "dir": {
+        "type": "String"
+      }
+    }
+  },
+  "mapDevFullMap": "DEV·전체 그림",
+  "mapNotAdjacentDetail": "{name} — 인접하지 않고 직접 접근할 수 없음",
+  "@mapNotAdjacentDetail": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "inventoryRoomHere": "{name}(여기)",
+  "@inventoryRoomHere": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "inventoryHeader": "{bag} · 무게 {weight}/{capacity} · {count} 개 · 💰{gold}",
+  "@inventoryHeader": {
+    "placeholders": {
+      "bag": {
+        "type": "String"
+      },
+      "weight": {
+        "type": "int"
+      },
+      "capacity": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      },
+      "gold": {
+        "type": "int"
+      }
+    }
+  },
+  "combatUnitSemantics": "{name} HP {hp}/{maxHp} 공격 {atk} 방어 {def} 속도 {spd}",
+  "@combatUnitSemantics": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "hp": {
+        "type": "int"
+      },
+      "maxHp": {
+        "type": "int"
+      },
+      "atk": {
+        "type": "int"
+      },
+      "def": {
+        "type": "int"
+      },
+      "spd": {
+        "type": "int"
+      }
+    }
+  },
+  "creditQa": "품질 보증",
+  "creditPresentedBy": "제작/발표",
+  "creditDirectedBy": "감독 / 감독",
+  "creditWrittenBy": "시나리오 작가/작가",
+  "creditGameDesign": "게임 디자인 / 게임 디자인",
+  "creditNarrativeDesign": "내러티브 디자인 / 내러티브 디자인",
+  "creditArtDirection": "아트 디렉션 / 아트 디렉션",
+  "creditLevelDesign": "레벨 디자인 / 레벨 디자인",
+  "creditSystemsDesign": "시스템 설계 / 시스템 설계",
+  "creditCombatDesign": "전투 디자인 / 전투 디자인",
+  "creditSoundConcept": "사운드 컨셉 / 사운드 컨셉",
+  "creditProducedBy": "프로듀서 / 제작사",
+  "creditEngineering": "프로그램 / 엔지니어링",
+  "creditSpecialThanks": "특별한 감사 / 특별한 감사",
+  "creditTechSupport": "기술지원 / 기술지원"
+}

@@ -17,7 +17,6 @@
   "continueAction": "继续",
   "back": "返回",
   "menu": "菜单",
-
   "startNewJourneyTitle": "开始新旅程？",
   "overwriteSaveMessage": "该槽位已有进度，开始新游戏将覆盖此存档，是否继续？",
   "overwriteAndStart": "覆盖并开始",
@@ -25,7 +24,6 @@
   "connectPlayGamesMessage": "连接 Google Play 游戏后可查看成就与排行榜。不连接也可正常游玩。",
   "connectLater": "稍后再说",
   "connectNow": "立即连接",
-
   "returnToTitleTitle": "返回标题？",
   "returnToTitleMessage": "当前进度已自动保存，可从标题页「继续旅程」恢复。",
   "returnToTitle": "返回标题",
@@ -35,16 +33,18 @@
   "combatPauseTitle": "战斗菜单 · Pause",
   "resumeCombat": "继续战斗",
   "backToTitle": "回标题",
-
   "privacySettings": "隐私设置",
   "privacySettingsHint": "隐私设置 · privacy",
-
   "rewardOfferTitle": "迷雾馈赠",
   "rewardOfferGold": "本场金币 +{base} → +{doubled}",
   "@rewardOfferGold": {
     "placeholders": {
-      "base": { "type": "int" },
-      "doubled": { "type": "int" }
+      "base": {
+        "type": "int"
+      },
+      "doubled": {
+        "type": "int"
+      }
     }
   },
   "rewardOfferUnavailable": "馈赠暂不可用，可直接继续冒险",
@@ -56,12 +56,13 @@
   "refundScorePoints": "返还 {points} 分",
   "@refundScorePoints": {
     "placeholders": {
-      "points": { "type": "int" }
+      "points": {
+        "type": "int"
+      }
     }
   },
   "summoningGlimmer": "召唤微光中…",
   "glimmerNoResponse": "微光暂未回应，请稍后再试",
-
   "endingDragonTitle": "幼龙已陨落",
   "endingDragonSubtitle": "魔法宝石落入你手中。\n它既能打开墓地通往收容站的石门，也能在塔顶唤回失落的记忆。",
   "endingDragonPrimary": "继续探险",
@@ -75,7 +76,6 @@
   "endingGameOverTitle": "你倒下了",
   "endingGameOverSubtitle": "迷雾吞没了你的身影。\n你在上一处探索过的地点醒来，得分 -100（不低于 0）。",
   "endingGameOverPrimary": "在上一地点醒来",
-
   "inventoryTitle": "背包 · Inventory",
   "inventoryUseTitle": "使用道具 · Use",
   "inventoryDropTitle": "丢弃道具 · Drop",
@@ -88,73 +88,94 @@
   "itemType": "类型 {type}",
   "@itemType": {
     "placeholders": {
-      "type": { "type": "String" }
+      "type": {
+        "type": "String"
+      }
     }
   },
   "itemWeight": "重量 {weight}",
   "@itemWeight": {
     "placeholders": {
-      "weight": { "type": "int" }
+      "weight": {
+        "type": "int"
+      }
     }
   },
   "itemValue": "价值 {value}",
   "@itemValue": {
     "placeholders": {
-      "value": { "type": "int" }
+      "value": {
+        "type": "int"
+      }
     }
   },
   "itemHeal": "治疗 +{heal}",
   "@itemHeal": {
     "placeholders": {
-      "heal": { "type": "int" }
+      "heal": {
+        "type": "int"
+      }
     }
   },
   "itemAttackBonus": "攻击 +{bonus}",
   "@itemAttackBonus": {
     "placeholders": {
-      "bonus": { "type": "int" }
+      "bonus": {
+        "type": "int"
+      }
     }
   },
   "itemDefenseBonus": "防御 +{bonus}",
   "@itemDefenseBonus": {
     "placeholders": {
-      "bonus": { "type": "int" }
+      "bonus": {
+        "type": "int"
+      }
     }
   },
   "itemCapacity": "容量 {capacity}",
   "@itemCapacity": {
     "placeholders": {
-      "capacity": { "type": "int" }
+      "capacity": {
+        "type": "int"
+      }
     }
   },
   "itemCount": "数量 x{count}",
   "@itemCount": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "itemUseEffect": "使用效果：{msg}",
   "@itemUseEffect": {
     "placeholders": {
-      "msg": { "type": "String" }
+      "msg": {
+        "type": "String"
+      }
     }
   },
   "statAtkShort": "攻+{bonus}",
   "@statAtkShort": {
     "placeholders": {
-      "bonus": { "type": "int" }
+      "bonus": {
+        "type": "int"
+      }
     }
   },
   "statDefShort": "防+{bonus}",
   "@statDefShort": {
     "placeholders": {
-      "bonus": { "type": "int" }
+      "bonus": {
+        "type": "int"
+      }
     }
   },
   "equip": "装备",
   "use": "使用",
   "drop": "丢弃",
-
   "combatAttack": "攻击",
   "combatSkill": "技能",
   "combatItem": "道具",
@@ -176,13 +197,17 @@
   "combatGoldGain": "💰 金币 +{gold}",
   "@combatGoldGain": {
     "placeholders": {
-      "gold": { "type": "int" }
+      "gold": {
+        "type": "int"
+      }
     }
   },
   "combatExpGain": "⭐ 经验 +{exp}",
   "@combatExpGain": {
     "placeholders": {
-      "exp": { "type": "int" }
+      "exp": {
+        "type": "int"
+      }
     }
   },
   "combatNoItems": "背包中没有可用战斗道具",
@@ -191,22 +216,32 @@
   "combatTurnOrderSemantics": "第 {index} 位 {name} 速度 {speed}",
   "@combatTurnOrderSemantics": {
     "placeholders": {
-      "index": { "type": "int" },
-      "name": { "type": "String" },
-      "speed": { "type": "int" }
+      "index": {
+        "type": "int"
+      },
+      "name": {
+        "type": "String"
+      },
+      "speed": {
+        "type": "int"
+      }
     }
   },
   "combatLogTitle": "战报 Log",
   "combatRound": "第 {round} 回合",
   "@combatRound": {
     "placeholders": {
-      "round": { "type": "int" }
+      "round": {
+        "type": "int"
+      }
     }
   },
   "combatPhasePickCommandNamed": "选择指令：{name}",
   "@combatPhasePickCommandNamed": {
     "placeholders": {
-      "name": { "type": "String" }
+      "name": {
+        "type": "String"
+      }
     }
   },
   "combatPhasePickCommand": "选择指令",
@@ -224,7 +259,6 @@
   "meleeEnded": "混战结束。",
   "meleeCancelled": "已取消混战。",
   "enemyGeneric": "敌人",
-
   "cmdLook": "查看",
   "cmdBag": "背包",
   "cmdTalk": "对话",
@@ -258,28 +292,93 @@
   "dirSouth": "南 S",
   "dirUp": "上 U",
   "dirDown": "下 D",
-
   "mapHint": "拖拽平移 · 滚轮/双指缩放 · 点击相邻节点移动",
   "mapFullCount": "全图 {count}",
   "@mapFullCount": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "mapExploredCount": "已探索 {count}",
   "@mapExploredCount": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "mapCannotMoveInCombat": "战斗中无法移动。",
   "mapGoing": "前往 {dir}…",
   "@mapGoing": {
     "placeholders": {
-      "dir": { "type": "String" }
+      "dir": {
+        "type": "String"
+      }
     }
   },
-
+  "mapDevFullMap": "DEV · 全图",
+  "mapNotAdjacentDetail": "{name} — 不相邻，无法直达",
+  "@mapNotAdjacentDetail": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "inventoryRoomHere": "{name}（此处）",
+  "@inventoryRoomHere": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "inventoryHeader": "{bag} · 重量 {weight}/{capacity} · {count} 件 · 💰{gold}",
+  "@inventoryHeader": {
+    "placeholders": {
+      "bag": {
+        "type": "String"
+      },
+      "weight": {
+        "type": "int"
+      },
+      "capacity": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      },
+      "gold": {
+        "type": "int"
+      }
+    }
+  },
+  "combatUnitSemantics": "{name} HP {hp}/{maxHp} 攻击 {atk} 防御 {def} 速度 {spd}",
+  "@combatUnitSemantics": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "hp": {
+        "type": "int"
+      },
+      "maxHp": {
+        "type": "int"
+      },
+      "atk": {
+        "type": "int"
+      },
+      "def": {
+        "type": "int"
+      },
+      "spd": {
+        "type": "int"
+      }
+    }
+  },
+  "creditQa": "质检 / Quality Assurance",
   "creditPresentedBy": "出品 / Presented by",
   "creditDirectedBy": "导演 / Directed by",
   "creditWrittenBy": "编剧 / Written by",

@@ -6,6 +6,7 @@ import 'package:zork_dude/domain/combat/combat_actor.dart';
 import 'package:zork_dude/domain/combat/combat_random.dart';
 import 'package:zork_dude/domain/combat/combat_types.dart';
 import 'package:zork_dude/domain/models/combat_effects.dart';
+import 'package:zork_dude/l10n/game_messages.dart';
 
 enum StatusStackPolicy {
   replace,
@@ -142,9 +143,10 @@ abstract final class CombatStats {
 }
 
 class StatusEffectService {
-  StatusEffectService(this.registry);
+  StatusEffectService(this.registry, this.messages);
 
   final StatusEffectRegistry registry;
+  final GameMessages messages;
 
   bool applyEffect({
     required CombatActor target,
@@ -164,7 +166,7 @@ class StatusEffectService {
         actorInstanceId: sourceInstanceId,
         targetInstanceId: target.instanceId,
         statusEffectId: effectId,
-        message: '${target.name} 抵抗了 ${spec.name}！',
+        message: messages.statusResist(target.name, spec.name),
       ));
       return false;
     }
@@ -198,7 +200,7 @@ class StatusEffectService {
       statusEffectId: effectId,
       stacks: target.statuses.lastWhere((s) => s.specId == effectId).stacks,
       remainingRounds: dur,
-      message: '${target.name} 获得 ${spec.emoji} ${spec.name}！',
+      message: messages.statusApply(target.name, spec.emoji, spec.name),
     ));
     return true;
   }
@@ -244,7 +246,7 @@ class StatusEffectService {
         actorInstanceId: target.instanceId,
         targetInstanceId: target.instanceId,
         statusEffectId: id,
-        message: '${target.name} 的 ${spec?.name ?? id} 被解除了。',
+        message: messages.statusCleanse(target.name, spec?.name ?? id),
       ));
     }
   }
@@ -269,7 +271,7 @@ class StatusEffectService {
           amount: dmg,
           statusEffectId: active.specId,
           stacks: active.stacks,
-          message: '${actor.name} 受到 ${spec.emoji} ${spec.name} $dmg 点伤害！',
+          message: messages.statusTickDamage(actor.name, spec.emoji, spec.name, dmg),
         ));
       }
 
@@ -284,7 +286,7 @@ class StatusEffectService {
             targetInstanceId: actor.instanceId,
             amount: actual,
             statusEffectId: active.specId,
-            message: '${actor.name} 的 ${spec.emoji} ${spec.name} 恢复 $actual 点 HP！',
+            message: messages.statusTickHeal(actor.name, spec.emoji, spec.name, actual),
           ));
         }
       }
@@ -297,7 +299,7 @@ class StatusEffectService {
           actorInstanceId: actor.instanceId,
           targetInstanceId: actor.instanceId,
           statusEffectId: active.specId,
-          message: '${actor.name} 的 ${spec.emoji} ${spec.name} 消失了。',
+          message: messages.statusExpire(actor.name, spec.emoji, spec.name),
         ));
       }
     }

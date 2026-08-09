@@ -7,6 +7,8 @@ import 'package:zork_dude/data/world_repository.dart';
 import 'package:zork_dude/state/ending_kind.dart';
 import 'package:zork_dude/state/game_controller.dart';
 
+import 'test_game_messages.dart';
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -18,7 +20,10 @@ void main() {
     late GameSession session;
 
     setUp(() async {
-      session = await GameSession.create(WorldRepository());
+      session = await GameSession.create(
+        WorldRepository(),
+        messages: testGameMessages(),
+      );
       session.currentRoomId = 'haunted_graveyard';
     });
 
@@ -53,7 +58,10 @@ void main() {
 
   group('Ending state', () {
     test('defeat sets gameOver pending ending', () async {
-      final session = await GameSession.create(WorldRepository());
+      final session = await GameSession.create(
+        WorldRepository(),
+        messages: testGameMessages(),
+      );
       final controller = GameController();
       controller.session = session;
       controller.finishCombat(CombatOutcome.defeat);
@@ -61,7 +69,10 @@ void main() {
     });
 
     test('rewarded action refunds the death score penalty once', () async {
-      final session = await GameSession.create(WorldRepository());
+      final session = await GameSession.create(
+        WorldRepository(),
+        messages: testGameMessages(),
+      );
       session.score = 200;
       final controller = GameController()..session = session;
 
@@ -73,7 +84,10 @@ void main() {
     });
 
     test('combat gold bonus can only be granted once', () async {
-      final session = await GameSession.create(WorldRepository());
+      final session = await GameSession.create(
+        WorldRepository(),
+        messages: testGameMessages(),
+      );
       final controller = GameController()..session = session;
       controller.pendingCombatGoldBonus = 12;
       final before = session.gold;
@@ -110,7 +124,10 @@ void main() {
     });
 
     test('rewarded revive is marked used until restart', () async {
-      final session = await GameSession.create(WorldRepository());
+      final session = await GameSession.create(
+        WorldRepository(),
+        messages: testGameMessages(),
+      );
       session.gameOver = true;
       session.playerHp = 0;
       final controller = GameController()..session = session;
@@ -123,7 +140,10 @@ void main() {
     });
 
     test('new game plus resets ad run limits', () async {
-      final session = await GameSession.create(WorldRepository());
+      final session = await GameSession.create(
+        WorldRepository(),
+        messages: testGameMessages(),
+      );
       session.won = true;
       final controller = GameController()
         ..session = session
@@ -142,7 +162,10 @@ void main() {
     test(
       'completeMainJourney sets won and mainClear when dragon dead',
       () async {
-        final session = await GameSession.create(WorldRepository());
+        final session = await GameSession.create(
+        WorldRepository(),
+        messages: testGameMessages(),
+      );
         session.invAdd('magic_gem');
         final dragon = session.monster('dragon_whelp');
         dragon!.alive = false;

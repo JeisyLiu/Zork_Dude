@@ -1,0 +1,396 @@
+{
+  "@@locale": "pt_BR",
+  "appTitle": "Torre das Brumas",
+  "appTitleEn": "TORRE DE NÉVOA",
+  "taglineShort": "Explore, colete, converse, lute – recupere a verdade perdida.",
+  "taglineFull": "Você acorda de uma floresta nebulosa sem memória.\nExplore, colete, converse, lute – recupere a verdade perdida.",
+  "homeHint": "Exploração de comando · Mapa de neblina · Encontre um inimigo e entre em uma rodada de batalha",
+  "loading": "carregando…",
+  "continueJourney": "Continue a jornada",
+  "enterMist": "Entre na neblina",
+  "achievements": "Conquista",
+  "leaderboard": "Lista de classificação",
+  "close": "encerramento",
+  "cancel": "Cancelar",
+  "confirm": "confirmar",
+  "skip": "pular sobre",
+  "continueAction": "continuar",
+  "back": "retornar",
+  "menu": "menu",
+  "startNewJourneyTitle": "Iniciando uma nova jornada?",
+  "overwriteSaveMessage": "Já há progresso neste slot. Iniciar um novo jogo substituirá este salvamento. Você quer continuar?",
+  "overwriteAndStart": "Cubra e comece",
+  "connectPlayGamesTitle": "Conecte-se para jogar jogos",
+  "connectPlayGamesMessage": "Conecte-se ao Google Play Games para ver conquistas e placares. Você pode jogar normalmente sem conectar.",
+  "connectLater": "Falo com você mais tarde",
+  "connectNow": "Conecte-se agora",
+  "returnToTitleTitle": "Título de retorno?",
+  "returnToTitleMessage": "O progresso atual foi salvo automaticamente e pode ser restaurado na página de título \"Continuar jornada\".",
+  "returnToTitle": "retornar título",
+  "quitAppTitle": "Sair do jogo?",
+  "quitAppMessage": "A Torre da Névoa estará fechada.",
+  "quit": "desistir",
+  "combatPauseTitle": "Menu de batalha · Pausa",
+  "resumeCombat": "continue lutando",
+  "backToTitle": "Voltar ao título",
+  "privacySettings": "Configurações de privacidade",
+  "privacySettingsHint": "Configurações de privacidade · privacidade",
+  "rewardOfferTitle": "Presente da Névoa",
+  "rewardOfferGold": "Moedas de ouro neste jogo +{base} → +{doubled}",
+  "@rewardOfferGold": {
+    "placeholders": {
+      "base": {
+        "type": "int"
+      },
+      "doubled": {
+        "type": "int"
+      }
+    }
+  },
+  "rewardOfferUnavailable": "Os presentes estão temporariamente indisponíveis, você pode continuar a aventura diretamente",
+  "rewardOfferWatch": "Assistir anúncios · Moedas de ouro duplas",
+  "rewardOfferLoading": "Invocando presentes...",
+  "continueAdventure": "continuar a aventura",
+  "watchAd": "Assistir anúncios",
+  "watchAdRecoverLoss": "Assistir anúncios · Recuperar perdas",
+  "refundScorePoints": "Retornar {points} pontos",
+  "@refundScorePoints": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      }
+    }
+  },
+  "summoningGlimmer": "Invocando no crepúsculo…",
+  "glimmerNoResponse": "Shimmer ainda não respondeu, tente novamente mais tarde.",
+  "endingDragonTitle": "O jovem dragão caiu",
+  "endingDragonSubtitle": "A joia mágica cai em suas mãos.\nPode não só abrir a porta de pedra do cemitério ao abrigo, mas também relembrar memórias perdidas no topo da torre.",
+  "endingDragonPrimary": "continuar a aventura",
+  "endingDragonSecondary": "Voltar para completar a viagem",
+  "endingMainTitle": "A neblina se dissipa",
+  "endingMainSubtitle": "As memórias voltaram à sua mente e a barreira da torre desabou.\nVocê está livre, mas ainda há assuntos inacabados no asilo.",
+  "endingMainPrimary": "Continue explorando",
+  "endingSiteTitle": "Ação do site concluída",
+  "endingSiteSubtitle": "O protótipo final foi suprimido e o cofre de contenção ficou em silêncio.\nUma longa jornada está chegando ao fim.",
+  "endingSitePrimary": "Ver lista de funcionários",
+  "endingGameOverTitle": "você caiu",
+  "endingGameOverSubtitle": "A névoa engole sua figura.\nVocê acorda no último local que explorou, com pontuação de -100 (não menos que 0).",
+  "endingGameOverPrimary": "acorde no último lugar",
+  "inventoryTitle": "Mochila · Inventário",
+  "inventoryUseTitle": "Usar adereços · Usar",
+  "inventoryDropTitle": "Soltar adereços · Soltar",
+  "teleportTitle": "Enviar para · Teleporte",
+  "notLoaded": "Ainda não carregado",
+  "noUsableItems": "Não há adereços disponíveis.",
+  "noDroppableItems": "Não há adereços para jogar fora.",
+  "inventoryEmpty": "A mochila está vazia.",
+  "noMoreDescription": "Nenhuma descrição adicional.",
+  "itemType": "Digite {type}",
+  "@itemType": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "itemWeight": "Peso {weight}",
+  "@itemWeight": {
+    "placeholders": {
+      "weight": {
+        "type": "int"
+      }
+    }
+  },
+  "itemValue": "Valor {value}",
+  "@itemValue": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "itemHeal": "Tratamento +{heal}",
+  "@itemHeal": {
+    "placeholders": {
+      "heal": {
+        "type": "int"
+      }
+    }
+  },
+  "itemAttackBonus": "Ataque +{bonus}",
+  "@itemAttackBonus": {
+    "placeholders": {
+      "bonus": {
+        "type": "int"
+      }
+    }
+  },
+  "itemDefenseBonus": "Defesa +{bonus}",
+  "@itemDefenseBonus": {
+    "placeholders": {
+      "bonus": {
+        "type": "int"
+      }
+    }
+  },
+  "itemCapacity": "Capacidade {capacity}",
+  "@itemCapacity": {
+    "placeholders": {
+      "capacity": {
+        "type": "int"
+      }
+    }
+  },
+  "itemCount": "Quantidade x{count}",
+  "@itemCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "itemUseEffect": "Efeito de uso: {msg}",
+  "@itemUseEffect": {
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
+  "statAtkShort": "Ataque+{bonus}",
+  "@statAtkShort": {
+    "placeholders": {
+      "bonus": {
+        "type": "int"
+      }
+    }
+  },
+  "statDefShort": "Anti+{bonus}",
+  "@statDefShort": {
+    "placeholders": {
+      "bonus": {
+        "type": "int"
+      }
+    }
+  },
+  "equip": "equipamento",
+  "use": "usar",
+  "drop": "jogar fora",
+  "combatAttack": "ataque",
+  "combatSkill": "Habilidade",
+  "combatItem": "Adereços",
+  "combatDefend": "defesa",
+  "combatMelee": "Corpo a corpo",
+  "combatFlee": "fugir",
+  "combatAttackShort": "ataque",
+  "combatSkillShort": "tecnologia",
+  "combatItemShort": "estrada",
+  "combatDefendShort": "Defender",
+  "combatFleeShort": "escapar",
+  "combatCommandsTitle": "Comandos",
+  "combatExecute": "implementar",
+  "combatVictory": "vitória na batalha",
+  "combatVictoryTap": "Clique para continuar",
+  "combatDefeated": "bater",
+  "combatLoot": "saque",
+  "combatHarvest": "Colheita",
+  "combatGoldGain": "💰 Moeda de Ouro +{gold}",
+  "@combatGoldGain": {
+    "placeholders": {
+      "gold": {
+        "type": "int"
+      }
+    }
+  },
+  "combatExpGain": "⭐ Experiência +{exp}",
+  "@combatExpGain": {
+    "placeholders": {
+      "exp": {
+        "type": "int"
+      }
+    }
+  },
+  "combatNoItems": "Não há itens de combate disponíveis na mochila",
+  "combatPickItem": "Selecione itens de adereços",
+  "combatInitiative": "Iniciativa de Sequência de Ação",
+  "combatTurnOrderSemantics": "Bit {index} {name} Velocidade {speed}",
+  "@combatTurnOrderSemantics": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      },
+      "name": {
+        "type": "String"
+      },
+      "speed": {
+        "type": "int"
+      }
+    }
+  },
+  "combatLogTitle": "Registro de relatório de batalha",
+  "combatRound": "Rodada {round}",
+  "@combatRound": {
+    "placeholders": {
+      "round": {
+        "type": "int"
+      }
+    }
+  },
+  "combatPhasePickCommandNamed": "Selecione o comando: {name}",
+  "@combatPhasePickCommandNamed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "combatPhasePickCommand": "Selecione o comando",
+  "combatPhasePickTarget": "Selecione o alvo",
+  "combatPhasePickItem": "Escolha adereços e alvos",
+  "combatPhaseReady": "Pronto para executar a rodada",
+  "combatPhaseAnimating": "Rodada em andamento…",
+  "combatQueueTitle": "Comandos da fila de comandos",
+  "combatQueuePending": "Para ser selecionado…",
+  "combatEnemies": "Inimigos Inimigos",
+  "combatParty": "Festa da equipe",
+  "combatTitle": "Combate baseado em turnos",
+  "combatMenuSemantics": "menu de batalha",
+  "combatEnded": "A batalha acabou",
+  "meleeEnded": "A confusão termina.",
+  "meleeCancelled": "Corpo a corpo foi cancelado.",
+  "enemyGeneric": "inimigo",
+  "cmdLook": "Verificar",
+  "cmdBag": "Mochila",
+  "cmdTalk": "diálogo",
+  "cmdHeal": "tratar",
+  "cmdRecruit": "recrutar",
+  "cmdParty": "equipe",
+  "cmdScore": "Pontuação",
+  "cmdHelp": "ajuda",
+  "cmdNgPlus": "Segunda semana",
+  "cmdMore": "Mais",
+  "cmdTake": "escolher",
+  "cmdBuy": "Comprar",
+  "cmdSell": "vender",
+  "cmdShop": "mercadoria",
+  "cmdMoreTitle": "Mais comandos · Mais",
+  "cmdMoreSemantics": "Mais comandos",
+  "cmdTakeTitle": "pegar, pegar",
+  "cmdBuyTitle": "comprar comprar",
+  "cmdSellTitle": "vender vender",
+  "cmdTakeAll": "tudo tudo",
+  "cmdMapOn": "mapa",
+  "cmdMapOff": "Mapa·Guan",
+  "cmdToggleMap": "Trocar mapa",
+  "cmdDevMapOn": "Abra a imagem inteira",
+  "cmdDevMapOff": "Nível completo do mapa",
+  "cmdSend": "Enviar comando",
+  "cmdHint": "Comando cmd: olha / pega 1 / n…",
+  "dirNorth": "Norte N",
+  "dirWest": "Oeste W",
+  "dirEast": "Leste E",
+  "dirSouth": "Sul S",
+  "dirUp": "Acima de você",
+  "dirDown": "Próxima D",
+  "mapHint": "Arrastar e deslocar · Role a roda/aperte para ampliar · Clique nos nós adjacentes para mover",
+  "mapFullCount": "Imagem completa {count}",
+  "@mapFullCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mapExploredCount": "Explorado {count}",
+  "@mapExploredCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mapCannotMoveInCombat": "Incapaz de se mover durante o combate.",
+  "mapGoing": "Vá para {dir}…",
+  "@mapGoing": {
+    "placeholders": {
+      "dir": {
+        "type": "String"
+      }
+    }
+  },
+  "mapDevFullMap": "DEV·Imagem completa",
+  "mapNotAdjacentDetail": "{name} — não adjacente, não acessível diretamente",
+  "@mapNotAdjacentDetail": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "inventoryRoomHere": "{name} (aqui)",
+  "@inventoryRoomHere": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "inventoryHeader": "{bag} · Peso {weight}/{capacity} · {count} peças · 💰{gold}",
+  "@inventoryHeader": {
+    "placeholders": {
+      "bag": {
+        "type": "String"
+      },
+      "weight": {
+        "type": "int"
+      },
+      "capacity": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      },
+      "gold": {
+        "type": "int"
+      }
+    }
+  },
+  "combatUnitSemantics": "{name} HP {hp}/{maxHp} Ataque {atk} Defesa {def} Velocidade {spd}",
+  "@combatUnitSemantics": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "hp": {
+        "type": "int"
+      },
+      "maxHp": {
+        "type": "int"
+      },
+      "atk": {
+        "type": "int"
+      },
+      "def": {
+        "type": "int"
+      },
+      "spd": {
+        "type": "int"
+      }
+    }
+  },
+  "creditQa": "Garantia de Qualidade",
+  "creditPresentedBy": "Produzido/Apresentado por",
+  "creditDirectedBy": "Diretor / Dirigido por",
+  "creditWrittenBy": "Roteirista/Escrito por",
+  "creditGameDesign": "Design de Jogos / Design de Jogos",
+  "creditNarrativeDesign": "Design Narrativo / Design Narrativo",
+  "creditArtDirection": "Direção de Arte / Direção de Arte",
+  "creditLevelDesign": "Design de níveis / Design de níveis",
+  "creditSystemsDesign": "Projeto de Sistemas / Projeto de Sistemas",
+  "creditCombatDesign": "Design de Combate / Design de Combate",
+  "creditSoundConcept": "Conceito de Som / Conceito de Som",
+  "creditProducedBy": "Produtor / Produzido por",
+  "creditEngineering": "Programa / Engenharia",
+  "creditSpecialThanks": "Agradecimentos Especiais / Agradecimentos Especiais",
+  "creditTechSupport": "Suporte Técnico / Suporte Tecnológico"
+}

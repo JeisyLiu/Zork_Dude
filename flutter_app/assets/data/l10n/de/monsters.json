@@ -1,0 +1,554 @@
+[
+  {
+    "id": "giant_rat",
+    "name": "Riesenratte",
+    "desc": "Eine große Ratte von der Größe eines Hundes mit roten Augen.",
+    "hp": 8,
+    "atk": 2,
+    "exp": 5,
+    "gold": 3,
+    "loot": [
+      "mushroom"
+    ],
+    "emoji": "🐀"
+  },
+  {
+    "id": "wolf",
+    "name": "Riesenwolf",
+    "desc": "Ein riesiger Wolf mit grauschwarzem Fell und grünen Augen.",
+    "hp": 14,
+    "atk": 4,
+    "defense": 1,
+    "exp": 12,
+    "gold": 8,
+    "loot": [
+      "wolf_tooth",
+      "dried_meat"
+    ],
+    "emoji": "🐺"
+  },
+  {
+    "id": "giant_spider",
+    "name": "Riesenspinne",
+    "desc": "Pelzige Höhlenspinne mit acht Augen, die dich anstarren.",
+    "hp": 18,
+    "atk": 5,
+    "defense": 1,
+    "exp": 15,
+    "gold": 10,
+    "loot": [
+      "spider_silk"
+    ],
+    "on_hit_effects": [
+      {
+        "effect": "poison",
+        "duration": 3,
+        "potency": 1,
+        "chance": 0.35
+      }
+    ],
+    "emoji": "🕷️"
+  },
+  {
+    "id": "stone_golem",
+    "name": "Wasserspeier",
+    "desc": "Ein Wasserspeier aus Stein mit blinkenden roten Augen.",
+    "hp": 30,
+    "atk": 7,
+    "defense": 3,
+    "rank": "ELITE",
+    "exp": 30,
+    "gold": 20,
+    "loot": [
+      "emerald",
+      "chain_armor"
+    ],
+    "emoji": "🗿"
+  },
+  {
+    "id": "ghost",
+    "name": "Geist",
+    "desc": "Der durchscheinende Geisterkörper strahlt kalte Luft aus.",
+    "hp": 12,
+    "atk": 6,
+    "defense": 0,
+    "exp": 15,
+    "gold": 5,
+    "loot": [
+      "old_coin"
+    ],
+    "hostile": true,
+    "emoji": "👻"
+  },
+  {
+    "id": "shadow_beast",
+    "name": "Schattentier",
+    "desc": "Ein aus der Dunkelheit geformtes Biest, von dem nur ein Paar roter Augen deutlich sichtbar ist.",
+    "hp": 22,
+    "atk": 6,
+    "defense": 1,
+    "exp": 20,
+    "gold": 12,
+    "loot": [
+      "shadow_blade"
+    ],
+    "emoji": "🌑"
+  },
+  {
+    "id": "forest_troll",
+    "name": "Waldtroll",
+    "desc": "Ein drei Meter großer Troll mit einer Haut so rau wie Baumrinde.",
+    "hp": 35,
+    "atk": 8,
+    "defense": 2,
+    "rank": "ELITE",
+    "exp": 35,
+    "gold": 25,
+    "loot": [
+      "iron_sword",
+      "dried_meat"
+    ],
+    "emoji": "👹"
+  },
+  {
+    "id": "dragon_whelp",
+    "name": "junger Drache",
+    "desc": "Der junge Drache schläft schon seit vielen Jahren, seine Schuppen glänzen wie Obsidian.",
+    "hp": 60,
+    "atk": 12,
+    "defense": 5,
+    "rank": "BOSS",
+    "exp": 100,
+    "gold": 100,
+    "loot": [
+      "diamond",
+      "magic_gem",
+      "magic_staff"
+    ],
+    "dialog": {
+      "taunt": "Sterblicher, du solltest nicht hier sein!"
+    },
+    "emoji": "🐉"
+  },
+  {
+    "id": "goblin",
+    "name": "Kobold",
+    "desc": "Der kleine grünhäutige Mann hielt ein kaputtes Messer in der Hand und schrie.",
+    "hp": 10,
+    "atk": 3,
+    "defense": 0,
+    "speed": 5,
+    "exp": 8,
+    "gold": 5,
+    "loot": [
+      "goblin_ear",
+      "old_coin"
+    ],
+    "emoji": "👺"
+  },
+  {
+    "id": "goblin_shaman",
+    "name": "Kobold-Schamane",
+    "desc": "Der Kobold mit Knochenmaske strahlt böse Energie aus.",
+    "hp": 18,
+    "atk": 5,
+    "defense": 1,
+    "exp": 18,
+    "gold": 15,
+    "loot": [
+      "goblin_ear",
+      "mana_potion",
+      "mandrake_root"
+    ],
+    "emoji": "🧙"
+  },
+  {
+    "id": "giant_snake",
+    "name": "Riesenpython",
+    "desc": "Eine riesige Pythonschlange, dick wie ein Eimer, deren Schuppen im Dunkeln glänzten.",
+    "hp": 25,
+    "atk": 6,
+    "defense": 1,
+    "exp": 20,
+    "gold": 12,
+    "loot": [
+      "snake_skin"
+    ],
+    "emoji": "🐍"
+  },
+  {
+    "id": "bandit_leader",
+    "name": "Banditenführer",
+    "desc": "Der einäugige Mann mit dem sehnigen Gesicht hielt ein langes, blutbeflecktes Schwert in der Hand.",
+    "hp": 28,
+    "atk": 7,
+    "defense": 2,
+    "rank": "ELITE",
+    "exp": 25,
+    "gold": 30,
+    "loot": [
+      "bandit_badge",
+      "iron_sword",
+      "old_coin"
+    ],
+    "emoji": "🏴‍☠️"
+  },
+  {
+    "id": "ice_elemental",
+    "name": "Eiselement",
+    "desc": "Eine humanoide Kreatur aus Eiskristallen, die eine beißend kalte Luft ausstrahlt.",
+    "hp": 20,
+    "atk": 7,
+    "defense": 3,
+    "exp": 22,
+    "gold": 15,
+    "loot": [
+      "ice_crystal",
+      "mana_potion"
+    ],
+    "emoji": "❄️"
+  },
+  {
+    "id": "mimic",
+    "name": "Nachahmen",
+    "desc": "Es sieht aus wie eine wunderschöne Schatztruhe ... aber sie hat Zähne!",
+    "hp": 25,
+    "atk": 6,
+    "defense": 2,
+    "exp": 20,
+    "gold": 25,
+    "loot": [
+      "golden_cup",
+      "ruby",
+      "lockpick"
+    ],
+    "emoji": "📦"
+  },
+  {
+    "id": "treant",
+    "name": "Dryade",
+    "desc": "Uralte Bäume erwachen zum Leben und wedeln mit ihren rebenartigen Zweigen.",
+    "hp": 35,
+    "atk": 6,
+    "defense": 4,
+    "rank": "ELITE",
+    "exp": 30,
+    "gold": 20,
+    "loot": [
+      "magic_herb",
+      "mandrake_root"
+    ],
+    "emoji": "🌳"
+  },
+  {
+    "id": "giant_eagle",
+    "name": "Riesenadler",
+    "desc": "Ein Riesenadler mit einer Flügelspannweite von fünf Metern, sein Schnabel ist wie ein Eisenhaken und seine Augen sind wie Fackeln.",
+    "hp": 22,
+    "atk": 8,
+    "defense": 1,
+    "exp": 20,
+    "gold": 10,
+    "loot": [
+      "phoenix_feather"
+    ],
+    "emoji": "🦅"
+  },
+  {
+    "id": "goblin_king",
+    "name": "Koboldkönig",
+    "desc": "Er ist dreimal so groß wie ein gewöhnlicher Kobold, trägt eine Knochenkrone auf dem Kopf und hält einen riesigen Stock!",
+    "hp": 50,
+    "atk": 10,
+    "defense": 3,
+    "rank": "BOSS",
+    "speed": 7,
+    "ai": "boss",
+    "exp": 80,
+    "gold": 80,
+    "loot": [
+      "ancient_crown",
+      "war_hammer",
+      "rune_sword",
+      "strength_ring"
+    ],
+    "emoji": "👑"
+  },
+  {
+    "id": "wraith",
+    "name": "Gespenst",
+    "desc": "Der durchsichtige, humanoide, nachtragende Geist stieß einen leisen Schrei aus und alles, was er passierte, war mit Frost bedeckt.",
+    "hp": 28,
+    "atk": 9,
+    "defense": 1,
+    "rank": "ELITE",
+    "exp": 35,
+    "gold": 18,
+    "loot": [
+      "moonlight_elixir",
+      "ancient_scroll"
+    ],
+    "dialog": {
+      "taunt": "Du... bitte bleib bei mir..."
+    },
+    "emoji": "😈"
+  },
+  {
+    "id": "basilisk",
+    "name": "Basilisk",
+    "desc": "Eine riesige Eidechse mit einer roten Krone auf dem Rücken, die alles, was sie sieht, in Stein verwandelt!",
+    "hp": 40,
+    "atk": 10,
+    "defense": 4,
+    "rank": "ELITE",
+    "exp": 50,
+    "gold": 40,
+    "loot": [
+      "thunder_hammer",
+      "dragon_scale",
+      "gold_ingot"
+    ],
+    "emoji": "🦎"
+  },
+  {
+    "id": "scp_sentry_drone",
+    "name": "Sicherheitsdrohne",
+    "desc": "Die von der Foundation zurückgelassene autonome Patrouillendrohne hat ihr rotes Scanlicht auf Sie gerichtet.",
+    "hp": 16,
+    "atk": 5,
+    "defense": 2,
+    "exp": 18,
+    "gold": 12,
+    "loot": [
+      "old_coin"
+    ],
+    "emoji": "🤖"
+  },
+  {
+    "id": "scp_mimic_clerk",
+    "name": "mimetisches Personal",
+    "desc": "Etwas in Foundation-Uniform, dessen Gesicht nur noch aus Fleisch besteht.",
+    "hp": 24,
+    "atk": 7,
+    "defense": 1,
+    "rank": "ELITE",
+    "exp": 30,
+    "gold": 20,
+    "loot": [
+      "keycard_lvl3",
+      "amnesia_pill"
+    ],
+    "emoji": "👔"
+  },
+  {
+    "id": "scp_breach_core",
+    "name": "Außer Kontrolle geratener anormaler Kern",
+    "desc": "Die anomale Entität trat aus, nachdem die Eindämmungssäule zerbrochen war. Seine Form verändert sich ständig und die Luft wird dadurch verzerrt.",
+    "hp": 55,
+    "atk": 12,
+    "defense": 3,
+    "rank": "BOSS",
+    "exp": 80,
+    "gold": 50,
+    "loot": [
+      "anomaly_core",
+      "bag_anomalous"
+    ],
+    "dialog": {
+      "taunt": "■■■...Du...solltest...nicht...hier...sein..."
+    },
+    "emoji": "🌀"
+  },
+  {
+    "id": "scp_173",
+    "name": "Betonskulptur (SCP-ZH-173)",
+    "desc": "Eine menschliche Skulptur, bedeckt mit roter Farbe und Schmutz. Wenn Sie blinzeln, ist es näher gekommen.",
+    "hp": 35,
+    "atk": 14,
+    "defense": 2,
+    "rank": "ELITE",
+    "exp": 45,
+    "gold": 25,
+    "loot": [
+      "old_coin",
+      "scp_447_slime"
+    ],
+    "emoji": "🗿"
+  },
+  {
+    "id": "scp_096",
+    "name": "Der Schüchterne (SCP-ZH-096)",
+    "desc": "Eine blasse und große menschliche Gestalt, die ihr Gesicht mit den Händen bedeckt. Jeder, der sein Gesicht sieht, wird gejagt.",
+    "hp": 70,
+    "atk": 16,
+    "defense": 1,
+    "rank": "BOSS",
+    "exp": 90,
+    "gold": 40,
+    "loot": [
+      "scp_148_telekill",
+      "greater_potion"
+    ],
+    "emoji": "🫣"
+  },
+  {
+    "id": "scp_106",
+    "name": "Fauler alter Mann (SCP-ZH-106)",
+    "desc": "Ätzender alter Mann, der aus Wänden sickern kann. Metall rostet überall, wo es vorbeikommt.",
+    "hp": 42,
+    "atk": 11,
+    "defense": 3,
+    "rank": "ELITE",
+    "exp": 55,
+    "gold": 30,
+    "loot": [
+      "scp_409_crystal",
+      "amnesia_pill"
+    ],
+    "emoji": "🧓"
+  },
+  {
+    "id": "scp_682",
+    "name": "Unsterblicher Creeper (SCP-ZH-682)",
+    "desc": "Riesige, abscheuliche Reptilienwesen, äußerst anpassungsfähig. Nachdem Sie es besiegt haben, öffnet sich die Tür zum Lagertresor des Terminals 001.",
+    "hp": 120,
+    "atk": 18,
+    "defense": 6,
+    "rank": "BOSS",
+    "exp": 150,
+    "gold": 100,
+    "loot": [
+      "anomaly_core",
+      "scp_500_pill",
+      "dragon_scale"
+    ],
+    "emoji": "🦎"
+  },
+  {
+    "id": "scp_001",
+    "name": "Endgültiger Prototyp (SCP-ZH-001)",
+    "desc": "Das Produkt einer fehlgeschlagenen Eindämmung im tiefsten Teil der Stätte – der „Prototyp“ aller Anomalien. Dies ist die ultimative Bedrohung für den Standortbetrieb der Foundation.",
+    "hp": 180,
+    "atk": 22,
+    "defense": 8,
+    "rank": "BOSS",
+    "exp": 250,
+    "gold": 200,
+    "loot": [
+      "site_clearance",
+      "anomaly_core",
+      "bag_anomalous",
+      "scp_500_pill"
+    ],
+    "dialog": {
+      "taunt": "...Was Sie sehen, ist nur der Anfang."
+    },
+    "emoji": "👁️‍🗨️"
+  },
+  {
+    "id": "scp_939",
+    "name": "Vielkehljäger (SCP-ZH-939)",
+    "desc": "Das augenlose rote Raubtier kann menschliche Hilferufe nachahmen.",
+    "hp": 28,
+    "atk": 9,
+    "defense": 2,
+    "rank": "ELITE",
+    "exp": 35,
+    "gold": 18,
+    "loot": [
+      "dried_meat",
+      "scp_008_vial"
+    ],
+    "emoji": "🦷"
+  },
+  {
+    "id": "scp_966",
+    "name": "Latentes Beutebild (SCP-ZH-966)",
+    "desc": "Ein nahezu unsichtbarer Humanoid, der seine Beute angreift, wenn sie müde ist.",
+    "hp": 22,
+    "atk": 8,
+    "defense": 0,
+    "exp": 28,
+    "gold": 15,
+    "loot": [
+      "scp_178_glasses"
+    ],
+    "emoji": "👻"
+  },
+  {
+    "id": "scp_076",
+    "name": "Abel (SCP-ZH-076)",
+    "desc": "Der schwarzhaarige Krieger erwachte aus seinem Sarkophag, die Knochenklinge in der Hand, und wollte nichts sehnlicher als kämpfen.",
+    "hp": 50,
+    "atk": 13,
+    "defense": 3,
+    "rank": "ELITE",
+    "exp": 60,
+    "gold": 35,
+    "loot": [
+      "rune_sword",
+      "scp_714_ring"
+    ],
+    "emoji": "⚔️"
+  },
+  {
+    "id": "scp_017",
+    "name": "Schattenmann (SCP-ZH-017)",
+    "desc": "Eine menschliche Silhouette in absoluter Dunkelheit, die alles Licht verschluckt, das auf sie scheint.",
+    "hp": 20,
+    "atk": 7,
+    "defense": 1,
+    "exp": 22,
+    "gold": 12,
+    "loot": [
+      "scp_205_lamp"
+    ],
+    "emoji": "🌑"
+  },
+  {
+    "id": "scp_1048",
+    "name": "Baubär (SCP-ZH-1048)",
+    "desc": "Ein scheinbar harmloser brauner Teddybär, aus dessen Gelenken eine unbekannte Substanz austritt.",
+    "hp": 26,
+    "atk": 8,
+    "defense": 2,
+    "rank": "ELITE",
+    "exp": 32,
+    "gold": 20,
+    "loot": [
+      "scp_1230_book",
+      "old_coin"
+    ],
+    "emoji": "🧸"
+  },
+  {
+    "id": "scp_372",
+    "name": "Yu Guangren (SCP-ZH-372)",
+    "desc": "Eine Kreatur, die immer am Rande Ihres Blickfeldes bleibt und verschwindet, sobald Sie den Kopf drehen.",
+    "hp": 18,
+    "atk": 6,
+    "defense": 0,
+    "exp": 20,
+    "gold": 10,
+    "loot": [
+      "scp_055_object"
+    ],
+    "emoji": "👁️"
+  },
+  {
+    "id": "scp_3199",
+    "name": "Mensch (SCP-ZH-3199)",
+    "desc": "Ein humanoides eierlegendes Raubtier mit einem schrillen Schrei.",
+    "hp": 32,
+    "atk": 10,
+    "defense": 2,
+    "rank": "ELITE",
+    "exp": 40,
+    "gold": 22,
+    "loot": [
+      "scp_008_vial",
+      "lesser_potion"
+    ],
+    "emoji": "🥚"
+  }
+]

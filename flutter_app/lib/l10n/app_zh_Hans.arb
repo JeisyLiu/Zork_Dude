@@ -279,6 +279,41 @@
       "dir": { "type": "String" }
     }
   },
+  "mapDevFullMap": "DEV · 全图",
+  "mapNotAdjacentDetail": "{name} — 不相邻，无法直达",
+  "@mapNotAdjacentDetail": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "inventoryRoomHere": "{name}（此处）",
+  "@inventoryRoomHere": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "inventoryHeader": "{bag} · 重量 {weight}/{capacity} · {count} 件 · 💰{gold}",
+  "@inventoryHeader": {
+    "placeholders": {
+      "bag": { "type": "String" },
+      "weight": { "type": "int" },
+      "capacity": { "type": "int" },
+      "count": { "type": "int" },
+      "gold": { "type": "int" }
+    }
+  },
+  "combatUnitSemantics": "{name} HP {hp}/{maxHp} 攻击 {atk} 防御 {def} 速度 {spd}",
+  "@combatUnitSemantics": {
+    "placeholders": {
+      "name": { "type": "String" },
+      "hp": { "type": "int" },
+      "maxHp": { "type": "int" },
+      "atk": { "type": "int" },
+      "def": { "type": "int" },
+      "spd": { "type": "int" }
+    }
+  },
+  "creditQa": "质检 / Quality Assurance",
 
   "creditPresentedBy": "出品 / Presented by",
   "creditDirectedBy": "导演 / Directed by",

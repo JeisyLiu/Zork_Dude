@@ -547,6 +547,45 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get mapDevFullMap => 'DEV · Full map';
+
+  @override
+  String mapNotAdjacentDetail(String name) {
+    return '$name — not adjacent, cannot travel directly';
+  }
+
+  @override
+  String inventoryRoomHere(String name) {
+    return '$name (here)';
+  }
+
+  @override
+  String inventoryHeader(
+    String bag,
+    int weight,
+    int capacity,
+    int count,
+    int gold,
+  ) {
+    return '$bag · weight $weight/$capacity · $count items · 💰$gold';
+  }
+
+  @override
+  String combatUnitSemantics(
+    String name,
+    int hp,
+    int maxHp,
+    int atk,
+    int def,
+    int spd,
+  ) {
+    return '$name HP $hp/$maxHp ATK $atk DEF $def SPD $spd';
+  }
+
+  @override
+  String get creditQa => 'QA / Quality Assurance';
+
+  @override
   String get creditPresentedBy => 'Presented by';
 
   @override
@@ -1130,6 +1169,45 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String mapGoing(String dir) {
     return 'Going $dir…';
   }
+
+  @override
+  String get mapDevFullMap => 'DEV · Full map';
+
+  @override
+  String mapNotAdjacentDetail(String name) {
+    return '$name — not adjacent, cannot travel directly';
+  }
+
+  @override
+  String inventoryRoomHere(String name) {
+    return '$name (here)';
+  }
+
+  @override
+  String inventoryHeader(
+    String bag,
+    int weight,
+    int capacity,
+    int count,
+    int gold,
+  ) {
+    return '$bag · weight $weight/$capacity · $count items · 💰$gold';
+  }
+
+  @override
+  String combatUnitSemantics(
+    String name,
+    int hp,
+    int maxHp,
+    int atk,
+    int def,
+    int spd,
+  ) {
+    return '$name HP $hp/$maxHp ATK $atk DEF $def SPD $spd';
+  }
+
+  @override
+  String get creditQa => 'QA / Quality Assurance';
 
   @override
   String get creditPresentedBy => 'Presented by';

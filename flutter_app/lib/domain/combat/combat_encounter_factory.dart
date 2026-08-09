@@ -2,6 +2,7 @@ import 'package:zork_dude/domain/combat/combat_actor.dart';
 import 'package:zork_dude/domain/combat/combat_encounter.dart';
 import 'package:zork_dude/domain/combat/combat_types.dart';
 import 'package:zork_dude/domain/models/entities.dart';
+import 'package:zork_dude/l10n/game_messages.dart';
 
 /// Builds runtime [CombatEncounter] snapshots from world/session state.
 class CombatEncounterFactory {
@@ -14,13 +15,14 @@ class CombatEncounterFactory {
     required int playerSpeed,
     required List<CompanionState> party,
     required List<MonsterState> enemyTemplates,
+    required GameMessages messages,
   }) {
     final allies = <CombatActor>[
       CombatActor(
         instanceId: 'player#0',
         templateId: 'player',
         side: CombatSide.ally,
-        name: '你',
+        name: messages.playerName,
         emoji: '🧙',
         maxHp: playerMaxHp,
         hp: playerHp,

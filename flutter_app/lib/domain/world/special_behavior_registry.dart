@@ -10,15 +10,16 @@ class SpecialBehaviorRegistry {
 
   static void _rooms(GameSessionRef g) {
     final rooms = g.rooms;
+    final m = g.messages;
 
     rooms['ancient_ruins']!.onEnter = (session) {
       if (session.hasItem('rusty_key') && !session.flags.containsKey('ruins_open')) {
         session.room('ancient_ruins').exits[Direction.north] = 'hidden_passage';
         session.flags['ruins_open'] = true;
-        return '你用生锈钥匙打开了石门！';
+        return m.msg('room_ancient_ruins_key_opened');
       }
       if (session.flags.containsKey('ruins_open')) return null;
-      if (!session.hasItem('rusty_key')) return '石门紧锁，需要钥匙。';
+      if (!session.hasItem('rusty_key')) return m.msg('room_ancient_ruins_locked');
       return null;
     };
 
@@ -26,10 +27,10 @@ class SpecialBehaviorRegistry {
       if (session.hasItem('silver_key') && !session.flags.containsKey('tower_unlocked')) {
         session.room('tower_base').exits[Direction.up] = 'tower_foyer';
         session.flags['tower_unlocked'] = true;
-        return '银钥匙打开了塔门！';
+        return m.msg('room_tower_base_unlocked');
       }
-      if (session.flags.containsKey('tower_unlocked')) return '门已经开了。';
-      if (!session.hasItem('silver_key')) return '塔门紧锁，需要银钥匙（洞穴中层可找到）。';
+      if (session.flags.containsKey('tower_unlocked')) return m.msg('room_tower_base_already_open');
+      if (!session.hasItem('silver_key')) return m.msg('room_tower_base_locked');
       return null;
     };
 
@@ -38,28 +39,28 @@ class SpecialBehaviorRegistry {
         if (session.hasItem('crystal_key') && !session.flags.containsKey('ritual_unlocked')) {
           session.room('tower_ritual').exits[Direction.up] = 'tower_top';
           session.flags['ritual_unlocked'] = true;
-          return '水晶钥匙与锁孔共鸣，通往塔顶的门缓缓打开！';
+          return m.msg('room_tower_ritual_unlocked');
         }
         if (session.flags.containsKey('ritual_unlocked')) return null;
-        if (!session.hasItem('crystal_key')) return '水晶锁孔冰冷无光，需要水晶钥匙。';
+        if (!session.hasItem('crystal_key')) return m.msg('room_tower_ritual_locked');
         return null;
       };
     }
 
     rooms['tower_top']!.onEnter = (session) {
-      final m = session.monster('dragon_whelp');
-      return m != null && m.alive
-          ? '一股强大的龙威扑面而来……'
-          : '幼龙已经被击败，宝石唾手可得。';
+      final boss = session.monster('dragon_whelp');
+      return boss != null && boss.alive
+          ? m.msg('room_tower_top_dragon_alive')
+          : m.msg('room_tower_top_dragon_dead');
     };
 
-    rooms['goblin_throne']!.onEnter = (_) => '哥布林王咆哮着站起来！地面都在震动！';
+    rooms['goblin_throne']!.onEnter = (_) => m.msg('room_goblin_throne_enter');
 
     rooms['haunted_graveyard']!.onEnter = (session) {
       if (session.hasItem('magic_gem') && !session.flags.containsKey('grave_site_open')) {
         session.room('haunted_graveyard').exits[Direction.east] = 'scp_site_gate';
         session.flags['grave_site_open'] = true;
-        return '魔法宝石与石门上的凹槽共鸣，藤蔓退散，一条向下的通道显露出来……';
+        return m.msg('room_haunted_graveyard_gate');
       }
       return null;
     };
@@ -68,38 +69,37 @@ class SpecialBehaviorRegistry {
       final lines = <String>[];
       final core = session.monster('scp_breach_core');
       if (core != null && core.alive) {
-        lines.add('收容失效的异常核心在房间中央脉动，空气扭曲……');
+        lines.add(m.msg('room_scp_breach_core_alive'));
       }
       if (!session.hasItem('scp_goggles') && !session.flags.containsKey('cognitive_hit')) {
         session.flags['cognitive_hit'] = true;
         const dmg = 5;
         session.playerHp = (session.playerHp - dmg).clamp(1, session.playerMaxHp);
-        lines.add('认知危害袭来！你失去 $dmg 点 HP。（佩戴护目镜可避免）');
+        lines.add(m.msg('room_scp_breach_cognitive_hit', {'dmg': dmg}));
       }
       return lines.isEmpty ? null : lines.join('\n');
     };
 
     if (rooms.containsKey('scp_012_cell')) {
-      rooms['scp_012_cell']!.onEnter = (_) =>
-          '乐谱上的音符在视线里扭动，有什么东西催促你把它「写完」。';
+      rooms['scp_012_cell']!.onEnter = (_) => m.msg('room_scp_012_cell_enter');
     }
 
     if (rooms.containsKey('scp_096_cell')) {
       rooms['scp_096_cell']!.onEnter = (session) {
-        final m = session.monster('scp_096');
-        if (m != null && m.alive) {
+        final boss = session.monster('scp_096');
+        if (boss != null && boss.alive) {
           return session.hasItem('scp_goggles')
-              ? '护目镜过滤了危险轮廓。苍白的身影仍在角落轻颤。'
-              : '警告：不要直视它的脸！';
+              ? m.msg('room_scp_096_goggles')
+              : m.msg('room_scp_096_warning');
         }
-        return '单元空了，只剩抓痕。';
+        return m.msg('room_scp_096_empty');
       };
     }
 
     if (rooms.containsKey('scp_173_cell')) {
       rooms['scp_173_cell']!.onEnter = (session) {
-        final m = session.monster('scp_173');
-        return m != null && m.alive ? '不要眨眼。雕塑就在那里——或者说，曾经在那里。' : null;
+        final boss = session.monster('scp_173');
+        return boss != null && boss.alive ? m.msg('room_scp_173_alive') : null;
       };
     }
 
@@ -109,9 +109,9 @@ class SpecialBehaviorRegistry {
           session.flags['scp_002_hit'] = true;
           const dmg = 8;
           session.playerHp = (session.playerHp - dmg).clamp(1, session.playerMaxHp);
-          return '血肉墙壁收缩！你被挤伤了，失去 $dmg 点 HP。';
+          return m.msg('room_scp_002_hit', {'dmg': dmg});
         }
-        return '房间仍在缓慢脉动……';
+        return m.msg('room_scp_002_pulse');
       };
     }
 
@@ -119,7 +119,7 @@ class SpecialBehaviorRegistry {
       rooms['scp_087_depth']!.onEnter = (session) {
         const dmg = 3;
         session.playerHp = (session.playerHp - dmg).clamp(1, session.playerMaxHp);
-        return '越往下越冷。你失去 $dmg 点 HP。';
+        return m.msg('room_scp_087_depth', {'dmg': dmg});
       };
     }
 
@@ -129,29 +129,29 @@ class SpecialBehaviorRegistry {
           session.flags['scp_895_hit'] = true;
           const dmg = 6;
           session.playerHp = (session.playerHp - dmg).clamp(1, session.playerMaxHp);
-          return '你盯着棺材画面太久……头痛欲裂，失去 $dmg 点 HP。';
+          return m.msg('room_scp_895_hit', {'dmg': dmg});
         }
-        return '你强迫自己只看屏幕边缘。';
+        return m.msg('room_scp_895_edge');
       };
     }
 
     if (rooms.containsKey('scp_682_pit')) {
       rooms['scp_682_pit']!.onEnter = (session) {
-        final m = session.monster('scp_682');
-        if (m != null && m.alive) return '酸液翻涌。某种巨大的东西正抬头——它恨你。';
+        final boss = session.monster('scp_682');
+        if (boss != null && boss.alive) return m.msg('room_scp_682_alive');
         session.room('scp_682_pit').exits[Direction.east] = 'scp_001_vault';
         final finalBoss = session.monster('scp_001');
         if (finalBoss != null && finalBoss.alive) {
-          return '酸池暂时平静。东侧厚重金属门缓缓打开——通向001号终焉收容库。';
+          return m.msg('room_scp_682_gate_open');
         }
-        return '酸池平静。001号收容库的门仍开着。';
+        return m.msg('room_scp_682_peaceful');
       };
     }
 
     if (rooms.containsKey('bandit_hideout')) {
       rooms['bandit_hideout']!.onEnter = (session) {
-        final m = session.monster('mimic');
-        if (m != null && !m.alive) {
+        final mimic = session.monster('mimic');
+        if (mimic != null && !mimic.alive) {
           session.flags['bandit_cleared'] = true;
         }
         return null;
@@ -160,29 +160,30 @@ class SpecialBehaviorRegistry {
 
     if (rooms.containsKey('scp_001_vault')) {
       rooms['scp_001_vault']!.onEnter = (session) {
-        final m = session.monster('scp_001');
-        return m != null && m.alive
-            ? '终焉的压力压得你喘不过气……'
-            : '收容库空旷下来。勋章与残骸证明：站点威胁已被压制。';
+        final boss = session.monster('scp_001');
+        return boss != null && boss.alive
+            ? m.msg('room_scp_001_vault_alive')
+            : m.msg('room_scp_001_vault_clear');
       };
     }
   }
 
   static void _items(GameSessionRef g) {
+    final m = g.messages;
     final gem = g.item('magic_gem');
     if (gem != null) {
       final original = gem.onUse;
       gem.onUse = (session) {
         if (session.won) {
-          return '你已经找回记忆、打破迷雾了。可继续探索站点，或输入 ng+ 开启二周目。';
+          return m.msg('item_magic_gem_already_won');
         }
         if (session.currentRoomId == 'tower_top') {
           final dragon = session.monster('dragon_whelp');
           if (dragon != null && !dragon.alive) {
             session.won = true;
-            return '宝石嵌入书桌凹槽！书籍爆发出耀眼的光芒——\n所有记忆涌回你的脑海！你是被封印的守护者，\n迷雾是高塔的结界。现在，你自由了！\n（主线完成——可继续探索，或 ng+ 二周目）';
+            return m.msg('item_magic_gem_win');
           }
-          if (dragon != null && dragon.alive) return '幼龙还在！必须先击败它！';
+          if (dragon != null && dragon.alive) return m.msg('item_magic_gem_dragon_alive');
         }
         return original?.call(session) ?? gem.useMsg;
       };
@@ -200,41 +201,41 @@ class SpecialBehaviorRegistry {
       const dmg = 8;
       session.playerHp = (session.playerHp - dmg).clamp(1, session.playerMaxHp);
       session.score += 3;
-      return '你用血在谱上补了几个音符……手掌剧痛，失去 $dmg 点 HP。乐章仍未完结。';
+      return m.msg('item_scp_012_score_use', {'dmg': dmg});
     });
 
     setUse('scp_035_mask', (session) {
       session.flags['mask_035'] = true;
       const dmg = 4;
       session.playerHp = (session.playerHp - dmg).clamp(1, session.playerMaxHp);
-      return '面具贴合面颊。力量涌来，同时有什么在啃噬你的意志（-$dmg HP）。攻击已大幅提升。';
+      return m.msg('item_scp_035_mask_use', {'dmg': dmg});
     });
 
     setUse('scp_113_rock', (session) {
-      if (session.flags.containsKey('scp_113_used')) return '石头已经失去活性。';
+      if (session.flags.containsKey('scp_113_used')) return m.msg('item_scp_113_used');
       session.flags['scp_113_used'] = true;
       session.playerMaxHp += 5;
       session.playerHp = (session.playerHp + 5).clamp(0, session.playerMaxHp);
       session.invRemove('scp_113_rock');
-      return '基因重组完成！最大 HP +5。';
+      return m.msg('item_scp_113_rock_use');
     });
 
     setUse('scp_513_bell', (session) {
       session.flags['bell_rung'] = true;
       session.score += 2;
-      return '铃铛余音不散。你感觉多了一个「跟班」——最好别回头。';
+      return m.msg('item_scp_513_bell_use');
     });
 
     setUse('scp_701_script', (session) {
       session.score += 5;
-      return '你读完最后一句。虚空里响起掌声与哭喊，随即沉寂。得分 +5。';
+      return m.msg('item_scp_701_script_use');
     });
 
     setUse('scp_1981_tape', (session) {
       session.score += 8;
       const dmg = 2;
       session.playerHp = (session.playerHp - dmg).clamp(1, session.playerMaxHp);
-      return '录像提供了站点结构线索（+8 分），但画面令人不适（-$dmg HP）。';
+      return m.msg('item_scp_1981_tape_use', {'dmg': dmg});
     });
 
     setUse('amnesia_pill', (session) {
@@ -242,9 +243,9 @@ class SpecialBehaviorRegistry {
         session.inCombat = false;
         session.currentEnemy = '';
         session.invRemove('amnesia_pill');
-        return '你吞下药片，敌人茫然地环顾四周——你趁机脱离了战斗！';
+        return m.msg('item_amnesia_pill_combat');
       }
-      return '现在没有战斗，药片只是让你短暂头晕了一下。';
+      return m.msg('item_amnesia_pill_idle');
     });
 
     setUse('fishing_rod', (session) {
@@ -254,15 +255,15 @@ class SpecialBehaviorRegistry {
         'underground_river',
       };
       if (!waterRooms.contains(session.currentRoomId)) {
-        return '这里没有水，没法钓鱼。';
+        return m.msg('item_fishing_rod_no_water');
       }
       if (session.item('fish') == null) {
-        return '鱼漂动了动……但你好像不知道该怎么把鱼收进包里。';
+        return m.msg('item_fishing_rod_no_bag');
       }
       session.invAdd('fish');
       session.score += 3;
-      final place = session.rooms[session.currentRoomId]?.name ?? '水边';
-      return '在$place，鱼漂猛地沉下去！你钓到了一条鱼！';
+      final place = session.rooms[session.currentRoomId]?.name ?? m.msg('item_fishing_rod_place_default');
+      return m.msg('item_fishing_rod_success', {'place': place});
     });
   }
 }

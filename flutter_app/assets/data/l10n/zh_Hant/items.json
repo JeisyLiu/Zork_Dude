@@ -1,0 +1,1031 @@
+[
+  {
+    "id": "rusty_key",
+    "name": "生鏽鑰匙",
+    "desc": "古老的鐵鑰匙，還能用。",
+    "type": "KEY",
+    "usable": true,
+    "use_msg": "咔嚓一聲，似乎打開了什麼。",
+    "value": 5,
+    "emoji": "🗝️"
+  },
+  {
+    "id": "silver_key",
+    "name": "銀鑰匙",
+    "desc": "精緻的銀色鑰匙，散發出魔法微光。",
+    "type": "KEY",
+    "usable": true,
+    "use_msg": "銀鑰匙閃爍著光芒…",
+    "value": 10,
+    "emoji": "🔑"
+  },
+  {
+    "id": "crystal_key",
+    "name": "水晶鑰匙",
+    "desc": "完全透明的水晶鑰匙，幾乎看不見。",
+    "type": "KEY",
+    "usable": true,
+    "use_msg": "水晶鑰匙融入空氣中…",
+    "value": 15,
+    "emoji": "💎"
+  },
+  {
+    "id": "old_sword",
+    "name": "生鏽鐵劍",
+    "desc": "佈滿鐵鏽，但勉強能用。",
+    "type": "WEAPON",
+    "dmg_bonus": 1,
+    "value": 5,
+    "emoji": "🗡️"
+  },
+  {
+    "id": "iron_sword",
+    "name": "鐵劍",
+    "desc": "普通但可靠的鐵劍。",
+    "type": "WEAPON",
+    "dmg_bonus": 2,
+    "value": 15,
+    "emoji": "⚔️"
+  },
+  {
+    "id": "elven_bow",
+    "name": "精靈短弓",
+    "desc": "精靈打造的短弓，輕盈精準。",
+    "type": "WEAPON",
+    "dmg_bonus": 3,
+    "value": 25,
+    "emoji": "🏹"
+  },
+  {
+    "id": "magic_staff",
+    "name": "魔法杖",
+    "desc": "杖頭鑲嵌藍色寶石，蘊含魔力。",
+    "type": "WEAPON",
+    "dmg_bonus": 4,
+    "value": 35,
+    "emoji": "🪄"
+  },
+  {
+    "id": "shadow_blade",
+    "name": "影刃",
+    "desc": "漆黑的匕首，幾乎不反光。",
+    "type": "WEAPON",
+    "dmg_bonus": 3,
+    "value": 30,
+    "emoji": "🔪"
+  },
+  {
+    "id": "war_hammer",
+    "name": "戰鎚",
+    "desc": "沉重的雙手戰鎚，一擊可以碎石。",
+    "type": "WEAPON",
+    "dmg_bonus": 5,
+    "weight": 3,
+    "value": 40,
+    "emoji": "🔨"
+  },
+  {
+    "id": "spear",
+    "name": "長矛",
+    "desc": "矛尖泛著寒光，可以刺穿鎧甲。",
+    "type": "WEAPON",
+    "dmg_bonus": 3,
+    "value": 22,
+    "emoji": "🗡️"
+  },
+  {
+    "id": "rune_sword",
+    "name": "符文劍",
+    "desc": "劍身刻著發光符文，對黑暗生物有額外殺傷。",
+    "type": "WEAPON",
+    "dmg_bonus": 4,
+    "value": 45,
+    "emoji": "⚔️"
+  },
+  {
+    "id": "crossbow",
+    "name": "十字架弩",
+    "desc": "上弦的機械弩，威力驚人。",
+    "type": "WEAPON",
+    "dmg_bonus": 4,
+    "weight": 2,
+    "value": 35,
+    "emoji": "🏹"
+  },
+  {
+    "id": "assassin_dagger",
+    "name": "刺客匕首",
+    "desc": "塗了劇毒的匕首，見血封喉。",
+    "type": "WEAPON",
+    "dmg_bonus": 3,
+    "value": 28,
+    "emoji": "🗡️"
+  },
+  {
+    "id": "thunder_hammer",
+    "name": "雷神之鎚",
+    "desc": "錘身纏繞著跳動的電弧，揮舞時隱隱有雷聲。",
+    "type": "WEAPON",
+    "dmg_bonus": 6,
+    "weight": 4,
+    "value": 60,
+    "emoji": "⚡"
+  },
+  {
+    "id": "leather_armor",
+    "name": "皮甲",
+    "desc": "鞣製過的硬皮甲。",
+    "type": "ARMOR",
+    "def_bonus": 2,
+    "value": 12,
+    "emoji": "🥋"
+  },
+  {
+    "id": "chain_armor",
+    "name": "鎖子甲",
+    "desc": "鐵環編織的鎖甲。",
+    "type": "ARMOR",
+    "def_bonus": 4,
+    "value": 30,
+    "emoji": "🛡️"
+  },
+  {
+    "id": "scale_armor",
+    "name": "鱗甲",
+    "desc": "用龍鱗和鐵片編成的鎧甲。",
+    "type": "ARMOR",
+    "def_bonus": 5,
+    "weight": 3,
+    "value": 45,
+    "emoji": "🛡️"
+  },
+  {
+    "id": "mage_robe",
+    "name": "法師長袍",
+    "desc": "附魔的長袍，輕便而防寒。",
+    "type": "ARMOR",
+    "def_bonus": 2,
+    "value": 20,
+    "emoji": "🧥"
+  },
+  {
+    "id": "shield",
+    "name": "鐵盾",
+    "desc": "圓形的鐵盾，格擋利器。",
+    "type": "ARMOR",
+    "def_bonus": 3,
+    "weight": 2,
+    "value": 18,
+    "emoji": "🛡️"
+  },
+  {
+    "id": "helmet",
+    "name": "鐵頭盔",
+    "desc": "保護頭部的鐵盔。",
+    "type": "ARMOR",
+    "def_bonus": 1,
+    "value": 10,
+    "emoji": "⛑️"
+  },
+  {
+    "id": "lesser_potion",
+    "name": "小治療藥水",
+    "desc": "恢復15點HP。",
+    "type": "POTION",
+    "usable": true,
+    "heal": 15,
+    "value": 8,
+    "emoji": "🧪"
+  },
+  {
+    "id": "greater_potion",
+    "name": "大治療藥水",
+    "desc": "恢復35點HP。",
+    "type": "POTION",
+    "usable": true,
+    "heal": 35,
+    "value": 20,
+    "emoji": "🧪"
+  },
+  {
+    "id": "mana_potion",
+    "name": "魔力藥水",
+    "desc": "恢復20點HP。",
+    "type": "POTION",
+    "usable": true,
+    "heal": 20,
+    "value": 12,
+    "emoji": "🧴"
+  },
+  {
+    "id": "fire_potion",
+    "name": "火焰藥劑",
+    "desc": "瓶中的液體像熔岩一樣翻滾。",
+    "type": "POTION",
+    "usable": true,
+    "heal": 10,
+    "use_msg": "你喝下火焰藥劑，身體變得滾燙！對冰系敵人造成額外傷害！",
+    "combat_effects": [
+      {
+        "effect": "attackUp",
+        "duration": 2,
+        "potency": 1,
+        "chance": 1.0
+      }
+    ],
+    "value": 16,
+    "emoji": "🔥"
+  },
+  {
+    "id": "invis_potion",
+    "name": "隱形藥水",
+    "desc": "喝下後變得透明。",
+    "type": "POTION",
+    "usable": true,
+    "heal": 5,
+    "use_msg": "你喝下隱形藥水，身體逐漸透明……似乎沒有其他效果。",
+    "value": 25,
+    "emoji": "👻"
+  },
+  {
+    "id": "stamina_potion",
+    "name": "體力藥水",
+    "desc": "恢復25點HP。",
+    "type": "POTION",
+    "usable": true,
+    "heal": 25,
+    "value": 15,
+    "emoji": "💪"
+  },
+  {
+    "id": "moonlight_elixir",
+    "name": "月光精華",
+    "desc": "銀色瓶中的液體如月光般流動，散發出柔和的光芒。",
+    "type": "POTION",
+    "usable": true,
+    "heal": 50,
+    "use_msg": "你喝下月光精華，全身被溫暖的光芒包圍！恢復了50點生命值！",
+    "value": 40,
+    "emoji": "🌙"
+  },
+  {
+    "id": "lantern",
+    "name": "提燈",
+    "desc": "舊提燈，裡面還有油。",
+    "type": "LIGHT",
+    "usable": true,
+    "use_msg": "提燈照亮了周圍。",
+    "weight": 2,
+    "value": 8,
+    "emoji": "🏮"
+  },
+  {
+    "id": "torch",
+    "name": "火把",
+    "desc": "松脂火把。",
+    "type": "LIGHT",
+    "usable": true,
+    "use_msg": "火把燃起明亮的火焰。",
+    "value": 3,
+    "emoji": "🔦"
+  },
+  {
+    "id": "bread",
+    "name": "硬麵包",
+    "desc": "乾硬的黑麵包。",
+    "type": "FOOD",
+    "usable": true,
+    "heal": 5,
+    "value": 2,
+    "emoji": "🍞"
+  },
+  {
+    "id": "dried_meat",
+    "name": "肉乾",
+    "desc": "鹹味的燻肉乾。",
+    "type": "FOOD",
+    "usable": true,
+    "heal": 8,
+    "value": 4,
+    "emoji": "🥩"
+  },
+  {
+    "id": "mushroom",
+    "name": "螢光蘑菇",
+    "desc": "發著微光的蘑菇，不知道能不能吃。",
+    "type": "FOOD",
+    "usable": true,
+    "heal": 3,
+    "value": 1,
+    "emoji": "🍄"
+  },
+  {
+    "id": "fish",
+    "name": "烤魚",
+    "desc": "香噴噴的烤魚。",
+    "type": "FOOD",
+    "usable": true,
+    "heal": 7,
+    "value": 3,
+    "emoji": "🐟"
+  },
+  {
+    "id": "magic_herb",
+    "name": "魔法草藥",
+    "desc": "散發七彩光芒的草藥。",
+    "type": "FOOD",
+    "usable": true,
+    "heal": 12,
+    "value": 6,
+    "emoji": "🌿"
+  },
+  {
+    "id": "honey",
+    "name": "蜂蜜",
+    "desc": "金黃色的野蜜，很甜。",
+    "type": "FOOD",
+    "usable": true,
+    "heal": 6,
+    "value": 4,
+    "emoji": "🍯"
+  },
+  {
+    "id": "golden_cup",
+    "name": "金盃",
+    "desc": "純金打造的高腳杯。",
+    "type": "TREASURE",
+    "value": 40,
+    "weight": 2,
+    "emoji": "🏆"
+  },
+  {
+    "id": "silver_ring",
+    "name": "銀戒指",
+    "desc": "刻著古老花紋的銀戒指。",
+    "type": "TREASURE",
+    "value": 20,
+    "emoji": "💍"
+  },
+  {
+    "id": "emerald",
+    "name": "祖母綠寶石",
+    "desc": "拇指大小的綠色寶石。",
+    "type": "TREASURE",
+    "value": 50,
+    "emoji": "💚"
+  },
+  {
+    "id": "diamond",
+    "name": "鑽石",
+    "desc": "切割完美的鑽石。",
+    "type": "TREASURE",
+    "value": 80,
+    "emoji": "💠"
+  },
+  {
+    "id": "ruby",
+    "name": "紅寶石",
+    "desc": "血紅剔透的紅寶石。",
+    "type": "TREASURE",
+    "value": 60,
+    "emoji": "❤️"
+  },
+  {
+    "id": "sapphire",
+    "name": "藍寶石",
+    "desc": "深藍色的寶石，像海洋一樣。",
+    "type": "TREASURE",
+    "value": 55,
+    "emoji": "💙"
+  },
+  {
+    "id": "ancient_crown",
+    "name": "古老皇冠",
+    "desc": "某位國王的遺物，鑲滿了寶石。",
+    "type": "TREASURE",
+    "value": 120,
+    "weight": 2,
+    "emoji": "👑"
+  },
+  {
+    "id": "old_coin",
+    "name": "古金幣",
+    "desc": "一枚刻著模糊圖案的古金幣。",
+    "type": "TREASURE",
+    "value": 15,
+    "emoji": "🪙"
+  },
+  {
+    "id": "gold_ingot",
+    "name": "金錠",
+    "desc": "純金鑄成的金錠。",
+    "type": "MINERAL",
+    "value": 35,
+    "weight": 2,
+    "emoji": "🟨"
+  },
+  {
+    "id": "silver_ingot",
+    "name": "銀錠",
+    "desc": "純銀鑄成的銀錠。",
+    "type": "MINERAL",
+    "value": 18,
+    "weight": 2,
+    "emoji": "⬜"
+  },
+  {
+    "id": "wolf_tooth",
+    "name": "狼牙",
+    "desc": "巨狼的尖牙，可以當作力量的證明。",
+    "type": "MATERIAL",
+    "value": 5,
+    "emoji": "🦷"
+  },
+  {
+    "id": "spider_silk",
+    "name": "蜘蛛絲",
+    "desc": "晶瑩剔透的蛛絲。",
+    "type": "MATERIAL",
+    "value": 8,
+    "emoji": "🕸️"
+  },
+  {
+    "id": "dragon_scale",
+    "name": "龍鱗",
+    "desc": "幼龍身上掉落的鱗片，堅硬無比。",
+    "type": "MATERIAL",
+    "value": 50,
+    "emoji": "🐉"
+  },
+  {
+    "id": "fairy_dust",
+    "name": "妖精之塵",
+    "desc": "閃閃發光的粉末。",
+    "type": "MATERIAL",
+    "value": 20,
+    "emoji": "✨"
+  },
+  {
+    "id": "mandrake_root",
+    "name": "曼德拉草根",
+    "desc": "形如人形的草根，據說有魔力。",
+    "type": "MATERIAL",
+    "value": 15,
+    "emoji": "🪴"
+  },
+  {
+    "id": "goblin_ear",
+    "name": "哥布林耳朵",
+    "desc": "哥布林身上割下來的耳朵，血腥味很重。",
+    "type": "MATERIAL",
+    "value": 3,
+    "emoji": "👂"
+  },
+  {
+    "id": "snake_skin",
+    "name": "蛇皮",
+    "desc": "巨蟒蛻下的皮，非常堅韌。",
+    "type": "MATERIAL",
+    "value": 12,
+    "emoji": "🐍"
+  },
+  {
+    "id": "bandit_badge",
+    "name": "強盜徽章",
+    "desc": "強盜頭目的身份徽章。",
+    "type": "MATERIAL",
+    "value": 10,
+    "emoji": "🎖️"
+  },
+  {
+    "id": "ancient_scroll",
+    "name": "古捲軸",
+    "desc": "看不懂的古代文字。",
+    "type": "SCROLL",
+    "usable": true,
+    "use_msg": "捲軸發光……但無法解讀。",
+    "value": 5,
+    "emoji": "📜"
+  },
+  {
+    "id": "magic_scroll",
+    "name": "傳送捲軸",
+    "desc": "記載傳送咒語。可傳送到任意已探索地點（use 傳送捲軸 <地點>）。",
+    "type": "SCROLL",
+    "usable": true,
+    "use_msg": "傳送捲軸閃爍。選擇已探索地點：use 傳送捲軸 <地點名稱或id>",
+    "value": 15,
+    "emoji": "📜"
+  },
+  {
+    "id": "rope",
+    "name": "麻繩",
+    "desc": "10公尺長的結實麻繩。",
+    "type": "TOOL",
+    "usable": true,
+    "use_msg": "也許在別的地方更有用。",
+    "value": 3,
+    "emoji": "🪢"
+  },
+  {
+    "id": "compass",
+    "name": "古老指南針",
+    "desc": "指針指向特殊方向。",
+    "type": "TOOL",
+    "usable": true,
+    "use_msg": "指南針指向東南方…",
+    "value": 8,
+    "emoji": "🧭"
+  },
+  {
+    "id": "lockpick",
+    "name": "開鎖器",
+    "desc": "一套精巧的開鎖工具。",
+    "type": "TOOL",
+    "usable": true,
+    "use_msg": "你用開鎖器鼓搗了一下……好像打開了什麼。",
+    "value": 12,
+    "emoji": "🔓"
+  },
+  {
+    "id": "fishing_rod",
+    "name": "釣竿",
+    "desc": "一根細長的魚竿。可在湖邊、湖心島或地下河釣魚。",
+    "type": "TOOL",
+    "usable": true,
+    "use_msg": "這裡沒有水，沒辦法釣魚。",
+    "value": 5,
+    "emoji": "🎣"
+  },
+  {
+    "id": "magnifying_glass",
+    "name": "放大鏡",
+    "desc": "可以觀察細微之物。",
+    "type": "TOOL",
+    "usable": true,
+    "use_msg": "透過放大鏡，你看到了一般人看不到的細節。",
+    "value": 8,
+    "emoji": "🔍"
+  },
+  {
+    "id": "journal",
+    "name": "冒險者日誌",
+    "desc": "某位冒險者留下的日記。",
+    "type": "BOOK",
+    "usable": true,
+    "use_msg": "日誌記載：『塔頂的寶石是封印關鍵…’",
+    "value": 5,
+    "emoji": "📓"
+  },
+  {
+    "id": "magic_book",
+    "name": "魔法入門",
+    "desc": "基礎魔法理論。",
+    "type": "BOOK",
+    "usable": true,
+    "use_msg": "你學到了一些魔法知識。",
+    "value": 10,
+    "emoji": "📖"
+  },
+  {
+    "id": "magic_gem",
+    "name": "魔法寶石",
+    "desc": "散發紫光的寶石，蘊含強大魔力。",
+    "type": "QUEST",
+    "usable": true,
+    "use_msg": "寶石爆發耀眼光芒！",
+    "value": 0,
+    "weight": 1,
+    "emoji": "💎"
+  },
+  {
+    "id": "sacred_water",
+    "name": "聖水",
+    "desc": "受過祝福的聖水，裝在玻璃瓶裡。",
+    "type": "QUEST",
+    "usable": true,
+    "use_msg": "聖水發出溫和的白光。",
+    "value": 0,
+    "emoji": "💧"
+  },
+  {
+    "id": "phoenix_feather",
+    "name": "鳳凰羽毛",
+    "desc": "火紅色的鳳凰尾羽，仍然溫暖。",
+    "type": "QUEST",
+    "usable": true,
+    "use_msg": "羽毛化為火焰，在你手心留下一個火焰印記！",
+    "value": 0,
+    "emoji": "🪶"
+  },
+  {
+    "id": "ice_crystal",
+    "name": "冰晶",
+    "desc": "極寒之地凝結的永恆冰晶。",
+    "type": "QUEST",
+    "value": 0,
+    "weight": 1,
+    "emoji": "❄️"
+  },
+  {
+    "id": "ancient_key",
+    "name": "古代鑰匙",
+    "desc": "一把巨大的石鑰匙，非常沉重。",
+    "type": "KEY",
+    "usable": true,
+    "use_msg": "鑰匙太重了，你幾乎舉不動。",
+    "weight": 5,
+    "value": 0,
+    "emoji": "🗝️"
+  },
+  {
+    "id": "health_ring",
+    "name": "生命戒指",
+    "desc": "戴著它感覺精力充沛。",
+    "type": "RING",
+    "usable": true,
+    "use_msg": "生命戒指發出柔和的綠光！最大HP+10！",
+    "heal": 10,
+    "value": 30,
+    "emoji": "💚"
+  },
+  {
+    "id": "protection_ring",
+    "name": "守護之戒",
+    "desc": "配戴者會獲得隱形護盾。",
+    "type": "RING",
+    "def_bonus": 2,
+    "value": 35,
+    "emoji": "🛡️"
+  },
+  {
+    "id": "strength_ring",
+    "name": "力量戒指",
+    "desc": "提升配戴者的力量。",
+    "type": "RING",
+    "dmg_bonus": 2,
+    "value": 32,
+    "emoji": "💪"
+  },
+  {
+    "id": "mystic_amulet",
+    "name": "神秘護符",
+    "desc": "刻著古老符文的護符，來歷不明。",
+    "type": "AMULET",
+    "usable": true,
+    "use_msg": "護符發出微光，你感覺到一股神秘力量保護著你。",
+    "def_bonus": 1,
+    "value": 25,
+    "emoji": "🔮"
+  },
+  {
+    "id": "bag_starter",
+    "name": "破舊帆布包",
+    "desc": "磨損嚴重的背包，勉強裝下必需品。",
+    "type": "BAG",
+    "usable": true,
+    "capacity": 15,
+    "weight": 1,
+    "value": 0,
+    "takeable": false,
+    "emoji": "🎒"
+  },
+  {
+    "id": "bag_tactical",
+    "name": "戰術背包",
+    "desc": "基金會製式戰術背包，多層隔倉，負重出色。",
+    "type": "BAG",
+    "usable": true,
+    "capacity": 22,
+    "weight": 2,
+    "value": 40,
+    "emoji": "🎒"
+  },
+  {
+    "id": "bag_anomalous",
+    "name": "異常收納囊",
+    "desc": "內部空間似乎比外表更大，貼著「僅供D級人員」的標籤。",
+    "type": "BAG",
+    "usable": true,
+    "capacity": 28,
+    "weight": 3,
+    "value": 80,
+    "emoji": "🎒"
+  },
+  {
+    "id": "keycard_lvl2",
+    "name": "二級鑰匙卡",
+    "desc": "基金會門禁卡，權限等級：2。",
+    "type": "KEY",
+    "usable": false,
+    "value": 20,
+    "emoji": "💳"
+  },
+  {
+    "id": "keycard_lvl3",
+    "name": "三級鑰匙卡",
+    "desc": "基金會高級門禁卡，可進入深層收容區。",
+    "type": "KEY",
+    "usable": false,
+    "value": 35,
+    "emoji": "💳"
+  },
+  {
+    "id": "scp_dossier",
+    "name": "異常檔案殘頁",
+    "desc": "印有「SCP-ZH-██」編號的破損文件，提到迷霧與高塔的關聯。",
+    "type": "BOOK",
+    "usable": true,
+    "use_msg": "你讀到：『迷霧並非自然現象，而是未登記異常的洩漏…高塔可能是早期收容設施。 ’",
+    "value": 10,
+    "emoji": "📄"
+  },
+  {
+    "id": "observation_log",
+    "name": "觀察日誌",
+    "desc": "研究員手寫的觀察記錄，字跡潦草。",
+    "type": "QUEST",
+    "value": 15,
+    "emoji": "📋"
+  },
+  {
+    "id": "scp_goggles",
+    "name": "認知防護護目鏡",
+    "desc": "基金會配發的護目鏡，可抵禦輕度認知危害。",
+    "type": "ARMOR",
+    "def_bonus": 1,
+    "value": 25,
+    "emoji": "🥽"
+  },
+  {
+    "id": "containment_box",
+    "name": "便攜收容箱",
+    "desc": "小型異常收容裝置，對不穩定核心有穩定作用。",
+    "type": "TOOL",
+    "usable": false,
+    "value": 50,
+    "weight": 2,
+    "emoji": "📦"
+  },
+  {
+    "id": "amnesia_pill",
+    "name": "記憶清除藥片",
+    "desc": "基金會標配的A級記憶抑制劑，戰鬥使用快速脫離。",
+    "type": "TOOL",
+    "usable": true,
+    "use_msg": "你吞下藥片，敵人似乎短暫忘記了你的存在！",
+    "value": 18,
+    "emoji": "💊"
+  },
+  {
+    "id": "anomaly_core",
+    "name": "穩定異常核心",
+    "desc": "被擊敗的異常核心殘骸，仍散發微弱脈動。",
+    "type": "TREASURE",
+    "value": 100,
+    "weight": 2,
+    "emoji": "🔮"
+  },
+  {
+    "id": "site_clearance",
+    "name": "站點肅清勳章",
+    "desc": "證明你壓制了001號終焉威脅。可繼續探索，或開啟二週目。",
+    "type": "TREASURE",
+    "value": 500,
+    "weight": 0,
+    "emoji": "🏅"
+  },
+  {
+    "id": "site_ration",
+    "name": "基金會口糧",
+    "desc": "真空包裝的軍用口糧，味道像紙板。",
+    "type": "FOOD",
+    "usable": true,
+    "heal": 6,
+    "value": 3,
+    "emoji": "🍱"
+  },
+  {
+    "id": "scp_012_score",
+    "name": "未完樂章殘譜(SCP-ZH-012)",
+    "desc": "沾血的五線譜殘頁，音符彷彿在自行延伸。",
+    "type": "SCROLL",
+    "usable": true,
+    "use_msg": "你情不自禁想繼續寫下去……手指滲血。",
+    "value": 30,
+    "emoji": "🎼"
+  },
+  {
+    "id": "scp_035_mask",
+    "name": "白瓷面具(SCP-ZH-035)",
+    "desc": "笑臉白瓷面具，內側有乾枯黑液。",
+    "type": "ARMOR",
+    "usable": true,
+    "use_msg": "面具貼上臉龐，耳邊響起低語。",
+    "dmg_bonus": 5,
+    "def_bonus": -1,
+    "value": 60,
+    "emoji": "🎭"
+  },
+  {
+    "id": "scp_500_pill",
+    "name": "萬能藥(SCP-ZH-500)",
+    "desc": "紅色膠囊，據說可治癒一切傷病。",
+    "type": "POTION",
+    "usable": true,
+    "heal": 999,
+    "use_msg": "你覺得體內一切傷痛都消失！",
+    "value": 200,
+    "emoji": "🔴"
+  },
+  {
+    "id": "scp_055_object",
+    "name": "[已編輯](SCP-ZH-055)",
+    "desc": "你記得撿到了什麼……但說不出它是什麼。",
+    "type": "QUEST",
+    "usable": true,
+    "use_msg": "你盯著它，卻想不起自己在看什麼。",
+    "value": 55,
+    "emoji": "⬛"
+  },
+  {
+    "id": "scp_093_disc",
+    "name": "紅海圓盤(SCP-ZH-093)",
+    "desc": "血紅石盤，觸碰時傳來潮汐聲。",
+    "type": "KEY",
+    "usable": true,
+    "use_msg": "圓盤嗡鳴，像在尋找某扇門。",
+    "value": 40,
+    "emoji": "🔴"
+  },
+  {
+    "id": "scp_178_glasses",
+    "name": "立體眼鏡(SCP-ZH-178)",
+    "desc": "老式紅藍3D眼鏡，戴上後視野邊緣有東西在動。",
+    "type": "TOOL",
+    "usable": true,
+    "use_msg": "你戴上眼鏡——餘光裡出現了模糊的人形。",
+    "value": 25,
+    "emoji": "👓"
+  },
+  {
+    "id": "scp_860_key",
+    "name": "藍鑰匙(SCP-ZH-860)",
+    "desc": "通體湛藍的鑰匙，柄上刻有樹木紋樣。",
+    "type": "KEY",
+    "usable": true,
+    "use_msg": "鑰匙微微發熱，指向某處異界入口。",
+    "value": 35,
+    "emoji": "🔑"
+  },
+  {
+    "id": "scp_701_script",
+    "name": "忌日宴劇本(SCP-ZH-701)",
+    "desc": "禁演悲劇的殘本，頁邊有觀眾撕扯痕跡。",
+    "type": "BOOK",
+    "usable": true,
+    "use_msg": "讀完最後一行，你聽見舞台方向傳來掌聲。",
+    "value": 45,
+    "emoji": "📜"
+  },
+  {
+    "id": "scp_513_bell",
+    "name": "鏽蝕鈴鐺(SCP-ZH-513)",
+    "desc": "鏽跡斑斑的牛鈴，搖響後會聽見不該存在的腳步。",
+    "type": "TOOL",
+    "usable": true,
+    "use_msg": "鈴鐺輕響……身後好像多了一個影子。",
+    "value": 28,
+    "emoji": "🔔"
+  },
+  {
+    "id": "scp_714_ring",
+    "name": "玉戒(SCP-ZH-714)",
+    "desc": "冰冷的翠玉戒指，戴上後思緒變慢，卻更清醒。",
+    "type": "RING",
+    "usable": true,
+    "use_msg": "戴上玉戒，你感到遲鈍卻安全。",
+    "def_bonus": 3,
+    "dmg_bonus": -1,
+    "value": 50,
+    "emoji": "💍"
+  },
+  {
+    "id": "scp_447_slime",
+    "name": "綠黏液樣本(SCP-ZH-447)",
+    "desc": "無害的綠色黏液，標籤寫著：切勿接觸屍體。",
+    "type": "MATERIAL",
+    "value": 20,
+    "emoji": "🟢"
+  },
+  {
+    "id": "scp_1981_tape",
+    "name": "殘缺錄影帶(SCP-ZH-1981)",
+    "desc": "標籤模糊的VHS，畫面會隨著觀看次數而改變。",
+    "type": "TOOL",
+    "usable": true,
+    "use_msg": "雪花屏中，演講者的臉逐漸扭曲。你獲得了一絲情報。",
+    "value": 22,
+    "emoji": "📼"
+  },
+  {
+    "id": "scp_1230_book",
+    "name": "口袋次元之書(SCP-ZH-1230)",
+    "desc": "厚重童話書，翻開可進入安全夢境片刻。",
+    "type": "BOOK",
+    "usable": true,
+    "heal": 15,
+    "use_msg": "你墜入溫暖的夢境，傷勢緩解了。",
+    "value": 40,
+    "emoji": "📖"
+  },
+  {
+    "id": "scp_1471_phone",
+    "name": "異常手機(SCP-ZH-1471)",
+    "desc": "預先安裝社交軟體，鎖定螢幕總有犬形剪影。",
+    "type": "TOOL",
+    "usable": true,
+    "use_msg": "通知彈出：它說它一直看著你。",
+    "value": 33,
+    "emoji": "📱"
+  },
+  {
+    "id": "scp_409_crystal",
+    "name": "晶化碎片(SCP-ZH-409)",
+    "desc": "銳利晶體，接觸後皮膚隱隱發硬。",
+    "type": "MATERIAL",
+    "usable": true,
+    "use_msg": "手指傳來刺痛，你趕緊收起碎片。",
+    "value": 18,
+    "emoji": "💎"
+  },
+  {
+    "id": "scp_008_vial",
+    "name": "瘟疫樣本管(SCP-ZH-008)",
+    "desc": "密封小瓶，貼著生物危害標誌。",
+    "type": "QUEST",
+    "usable": true,
+    "use_msg": "你沒有打開它——理智尚存。",
+    "value": 5,
+    "emoji": "🧪"
+  },
+  {
+    "id": "scp_205_lamp",
+    "name": "影燈(SCP-ZH-205)",
+    "desc": "成對檯燈之一，點亮後牆上影會自行活動。",
+    "type": "LIGHT",
+    "usable": true,
+    "use_msg": "燈亮起，牆影開始緩緩挪動。",
+    "value": 30,
+    "emoji": "💡"
+  },
+  {
+    "id": "scp_140_chronicle",
+    "name": "未竟之編年史(SCP-ZH-140)",
+    "desc": "記載某個失落文明的書籍，字跡會自己增加。",
+    "type": "BOOK",
+    "usable": true,
+    "use_msg": "新的一行字自己浮現……你合上書。",
+    "value": 48,
+    "emoji": "📕"
+  },
+  {
+    "id": "scp_113_rock",
+    "name": "基因轉換石(SCP-ZH-113)",
+    "desc": "紅綠相間的光滑石頭，接觸會改寫生理特徵。",
+    "type": "TOOL",
+    "usable": true,
+    "use_msg": "一陣眩暈後，你感覺身體更強壯了。",
+    "value": 55,
+    "emoji": "🪨"
+  },
+  {
+    "id": "scp_148_telekill",
+    "name": "隔靈合金片(SCP-ZH-148)",
+    "desc": "灰暗金屬片，據說能隔絕精神幹擾。",
+    "type": "ARMOR",
+    "def_bonus": 2,
+    "value": 45,
+    "emoji": "🛡️"
+  },
+  {
+    "id": "scp_5000_file",
+    "name": "為何行動檔案(SCP-ZH-5000)",
+    "desc": "黑色封皮檔案，記錄基金會某次失控行動。",
+    "type": "BOOK",
+    "usable": true,
+    "use_msg": "你讀到令人不安的結論：迷霧與網站崩潰或有關聯。",
+    "value": 60,
+    "emoji": "📁"
+  },
+  {
+    "id": "scp_261_snack",
+    "name": "次元零食袋(SCP-ZH-261)",
+    "desc": "包裝語言未知的膨化食品，意外地好吃。",
+    "type": "FOOD",
+    "usable": true,
+    "heal": 10,
+    "value": 8,
+    "emoji": "🍿"
+  }
+]

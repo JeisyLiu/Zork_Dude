@@ -1,0 +1,463 @@
+[
+  {
+    "id": "old_hermit",
+    "name": "늙은 은둔자",
+    "title": "안개 낀 숲의 수호자",
+    "desc": "지혜로운 눈을 지닌 백발의 노인.",
+    "type": "WISEMAN",
+    "dialogs": {
+      "greet": "드디어 깨어났구나...오래 전부터 기다렸어.",
+      "extra": "탑에는 모든 답이 담겨 있다는 사실을 기억하세요.",
+      "farewell": "빛이 당신을 인도하길 바랍니다."
+    },
+    "give_item": "journal",
+    "quest_item": "magic_gem",
+    "quest_reward": "greater_potion",
+    "quest_score": 40,
+    "emoji": "🧙"
+  },
+  {
+    "id": "wandering_merchant",
+    "name": "떠돌이 상인",
+    "title": "여행하는 상인",
+    "desc": "온갖 물건을 몸에 매달고 있는 키가 작고 뚱뚱한 중년 남성.",
+    "type": "MERCHANT",
+    "dialogs": {
+      "greet": "헤헤, 시간 딱 맞춰! 내 상품을 살펴보세요.",
+      "extra": "아무리 좋은 물건이라도 모두 좋은 물건입니다!",
+      "farewell": "다음에 또 오세요!"
+    },
+    "trade_items": [
+      [
+        "lesser_potion",
+        8
+      ],
+      [
+        "torch",
+        3
+      ],
+      [
+        "bread",
+        2
+      ],
+      [
+        "dried_meat",
+        4
+      ],
+      [
+        "rope",
+        3
+      ],
+      [
+        "iron_sword",
+        15
+      ],
+      [
+        "leather_armor",
+        12
+      ],
+      [
+        "elven_bow",
+        25
+      ]
+    ],
+    "buys_types": [
+      "TREASURE",
+      "MATERIAL",
+      "MINERAL"
+    ],
+    "emoji": "🛒"
+  },
+  {
+    "id": "village_elder",
+    "name": "마을 이장",
+    "title": "레이크사이드빌리지 이장",
+    "desc": "지팡이를 들고 있는 친절한 노인.",
+    "type": "QUEST",
+    "dialogs": {
+      "greet": "낯선 이여, 레이크사이드 빌리지에 오신 것을 환영합니다.",
+      "quest": "은색 열쇠는 동굴 중앙에 있고, 당신의 기억은 탑 안에 숨겨져 있습니다. 먼저 동굴로 가서 탑을 올라가세요.",
+      "extra": "남쪽에 있는 산적 캠프를 정리하고 돌아오면 마을에 감사 선물이 있을 것입니다.",
+      "farewell": "신의 축복이 있기를 바랍니다."
+    },
+    "quest_item": "sacred_water",
+    "quest_reward": "silver_key",
+    "quest_score": 25,
+    "emoji": "👴"
+  },
+  {
+    "id": "healer_lily",
+    "name": "백합",
+    "title": "유팡 박사",
+    "desc": "약상자를 들고 있는 젊은 여성의 훈훈한 미소.",
+    "type": "HEALER",
+    "dialogs": {
+      "greet": "부상당하셨나요? 제가 도와드릴 수 있어요.",
+      "extra": "모험가 여러분, 안전하게 지내세요.",
+      "farewell": "몸 조심하세요."
+    },
+    "emoji": "💚"
+  },
+  {
+    "id": "wandering_rogue",
+    "name": "영화",
+    "title": "신비한 방랑자",
+    "desc": "얼굴이 잘 보이지 않는 망토를 걸친 모습.",
+    "type": "WANDERER",
+    "dialogs": {
+      "greet": "...당신도 이 안개 속에서 길을 잃었나요?",
+      "extra": "세상은 당신이 생각하는 것보다 더 복잡합니다.",
+      "farewell": "나중에 봐요."
+    },
+    "give_item": "shadow_blade",
+    "emoji": "🥷"
+  },
+  {
+    "id": "tower_guardian",
+    "name": "탈링",
+    "title": "탑의 마법 수호병",
+    "desc": "종소리 같은 소리를 내는 빛으로 만들어진 인간의 모습.",
+    "type": "GUARDIAN",
+    "dialogs": {
+      "greet": "탑에 들어가는 사람은 자신의 가치를 증명해야 합니다.",
+      "quest": "은색 열쇠, 수정 열쇠, 성수 세 가지 신성한 물건을 수집하세요.",
+      "extra": "순수한 사람만이 통과할 수 있습니다.",
+      "farewell": "…"
+    },
+    "quest_item": "crystal_key",
+    "quest_reward": "magic_scroll",
+    "quest_score": 30,
+    "emoji": "✨"
+  },
+  {
+    "id": "innkeeper",
+    "name": "늙은 톰",
+    "title": "안개 선술집의 주인",
+    "desc": "항상 얼굴에 미소를 띠고 있는 통통하고 뚱뚱한 남자.",
+    "type": "INNKEEPER",
+    "dialogs": {
+      "greet": "안개 선술집에 오신 것을 환영합니다! 뭔가를 원하시나요?",
+      "extra": "최근 숲이 평화롭지 않다고 들었으니 조심하는 게 좋을 것 같아요.",
+      "farewell": "천천히 걸어보세요!"
+    },
+    "give_item": "fish",
+    "emoji": "🍺"
+  },
+  {
+    "id": "blacksmith",
+    "name": "모루",
+    "title": "대장간 주인",
+    "desc": "가죽 앞치마를 입고 손에 망치를 들고 있는 근육질의 남자.",
+    "type": "BLACKSMITH",
+    "dialogs": {
+      "greet": "무기나 갑옷이 필요하신가요? 내 솜씨는 백 리 내에서 최고야!",
+      "extra": "좋은 재료가 있으면 장비 제작을 도와드릴 수 있어요.",
+      "farewell": "다음에는 재료를 가져오세요!"
+    },
+    "trade_items": [
+      [
+        "iron_sword",
+        12
+      ],
+      [
+        "war_hammer",
+        35
+      ],
+      [
+        "spear",
+        18
+      ],
+      [
+        "scale_armor",
+        40
+      ],
+      [
+        "shield",
+        15
+      ],
+      [
+        "helmet",
+        8
+      ],
+      [
+        "crossbow",
+        30
+      ]
+    ],
+    "buys_types": [
+      "MATERIAL",
+      "MINERAL"
+    ],
+    "emoji": "⚒️"
+  },
+  {
+    "id": "hunter",
+    "name": "헌터 그레이",
+    "title": "숙련된 사냥꾼",
+    "desc": "동물 가죽옷을 입고 긴 활을 들고 있는 노인.",
+    "type": "HUNTER",
+    "dialogs": {
+      "greet": "음? 당신은 지역 주민이 아닙니다.",
+      "quest": "최근 숲에 고블린이 점점 많아지고 있어요... 그 중 몇 마리를 제거하는 것을 도와주실 수 있나요?",
+      "extra": "몇 가지 사냥 기술을 가르쳐 드릴 수 있습니다.",
+      "farewell": "안전하세요."
+    },
+    "quest_item": "goblin_ear",
+    "quest_reward": "elven_bow",
+    "quest_score": 25,
+    "emoji": "🏹"
+  },
+  {
+    "id": "priestess",
+    "name": "세라",
+    "title": "빛의 신전의 사제",
+    "desc": "희미한 후광에 둘러싸인 흰 로브를 입은 아름다운 여성.",
+    "type": "PRIESTESS",
+    "dialogs": {
+      "greet": "빛이 당신의 길을 안내할 수 있습니다.",
+      "extra": "성수가 있다면 정화시켜드릴 수 있어요.",
+      "farewell": "빛이 당신과 함께 있습니다."
+    },
+    "give_item": "lesser_potion",
+    "quest_item": "phoenix_feather",
+    "quest_reward": "health_ring",
+    "quest_score": 35,
+    "emoji": "🕊️"
+  },
+  {
+    "id": "mad_alchemist",
+    "name": "미친 수도사",
+    "title": "은둔 연금술사",
+    "desc": "허름한 가운을 입은 낯선 남자, 실험실에는 산더미 같은 병과 캔이 쌓여 있다.",
+    "type": "WISEMAN",
+    "dialogs": {
+      "greet": "실험적인 제품! 아니, 내 말은...손님들!",
+      "extra": "알고 계셨나요? 용비늘 가루와 달빛풀을 사용하면 가장 강력한 물약을 정제할 수 있습니다!",
+      "farewell": "다음에는 흥미로운 자료를 가져오세요!"
+    },
+    "give_item": "mana_potion",
+    "quest_item": "dragon_scale",
+    "quest_reward": "protection_ring",
+    "quest_score": 30,
+    "emoji": "🧪"
+  },
+  {
+    "id": "gravedigger",
+    "name": "늙은 무덤 파는 사람",
+    "title": "무덤을 지키는 노인",
+    "desc": "꼽추를 들고 손에 삽을 들고 이상한 눈빛을 하고 있는 노인.",
+    "type": "WANDERER",
+    "dialogs": {
+      "greet": "묘지에서 뭐하세요? 걸어갈 수 있는 곳이 아닌데...",
+      "extra": "땅속에 좋은 것들이 묻혀있다고 들었는데, 늙어서는 발굴할 수가 없어요.",
+      "farewell": "밟은 흙을 조심하세요. 흙 중 일부는 움직일 것입니다."
+    },
+    "give_item": "old_coin",
+    "emoji": "🪦"
+  },
+  {
+    "id": "bounty_hunter",
+    "name": "블러드레이븐",
+    "title": "무자비한 현상금 사냥꾼",
+    "desc": "얼굴에 깊은 흉터가 있고 허리에는 트로피를 한 줄로 늘어놓은 채 검은 갑옷을 입은 고독한 용병.",
+    "type": "HUNTER",
+    "dialogs": {
+      "greet": "흠, 당신은 내 사업을 훔치러 온 게 아니죠?",
+      "quest": "나는 최근 고대 묘지 깊은 곳에 숨어 있던 바실리스크를 쫓고 있었습니다. 비늘을 다시 가져오시면 보상의 일부를 드릴 수 있습니다.",
+      "extra": "그 짐승은 세 명의 모험가를 석화시켰습니다.",
+      "farewell": "석상으로 변하지 않도록 주의하세요."
+    },
+    "quest_item": "dragon_scale",
+    "quest_reward": "strength_ring",
+    "quest_score": 35,
+    "emoji": "🎯"
+  },
+  {
+    "id": "dr_ellis",
+    "name": "엘리스 박사",
+    "title": "전 재단 연구원",
+    "desc": "남루한 옷을 입은 중년 남성은 한쪽 안경이 깨진 채 여전히 격리 번호를 중얼거리고 있었다.",
+    "type": "QUEST",
+    "dialogs": {
+      "greet": "당신은...우리를 구하러 오신 겁니까? 사이트가 통제불능이네요...",
+      "quest": "복도에서 분실된 관측 기록을 찾도록 도와주시면 더 좋은 장비를 드릴 수 있습니다.",
+      "extra": "안개와 탑은... 모두 같은 변칙성을 다르게 표현한 것입니다.",
+      "farewell": "빠르게 걸어보세요. 코어는 여전히 뛰고 있습니다..."
+    },
+    "quest_item": "observation_log",
+    "quest_reward": "bag_tactical",
+    "quest_score": 40,
+    "emoji": "👨‍🔬"
+  },
+  {
+    "id": "mtf_liaison",
+    "name": "코드네임 \"그레이 크로우\"",
+    "title": "MTF 물류 연락원",
+    "desc": "전술조끼를 입은 요원, 마스크 뒤의 목소리는 차분하고 지쳐 있었다.",
+    "type": "MERCHANT",
+    "dialogs": {
+      "greet": "살아남은 사람? 장비를 챙기세요. 여기는 밖보다 안전하지 않습니다.",
+      "extra": "필요한 것은 무엇이든 요청하되 할인을 기대하지 마세요.",
+      "farewell": "이상이 당신과 관련이 없기를 바랍니다."
+    },
+    "trade_items": [
+      [
+        "scp_goggles",
+        20
+      ],
+      [
+        "containment_box",
+        35
+      ],
+      [
+        "amnesia_pill",
+        12
+      ],
+      [
+        "bag_tactical",
+        45
+      ],
+      [
+        "lesser_potion",
+        8
+      ],
+      [
+        "site_ration",
+        3
+      ],
+      [
+        "scp_500_pill",
+        80
+      ],
+      [
+        "scp_178_glasses",
+        22
+      ],
+      [
+        "scp_714_ring",
+        40
+      ],
+      [
+        "scp_148_telekill",
+        35
+      ]
+    ],
+    "buys_types": [
+      "TREASURE",
+      "MATERIAL",
+      "MINERAL"
+    ],
+    "emoji": "🎖️"
+  },
+  {
+    "id": "scp_049",
+    "name": "역병 의사 (SCP-ZH-049)",
+    "title": "자칭 의사의 존재",
+    "desc": "17세기 부리 가면을 쓰고 검은 로브를 입은 그는 질병을 치료한다고 주장했습니다.",
+    "type": "HEALER",
+    "dialogs": {
+      "greet": "아, 또 다른 환자군요. 귀하의 질병을 검사할 수 있도록 허락해 주십시오.",
+      "extra": "이 시설의 역병은... 당신이 생각하는 것보다 오래되었습니다.",
+      "farewell": "아직 감염되지 않았기를 바랍니다."
+    },
+    "emoji": "🩺"
+  },
+  {
+    "id": "scp_079",
+    "name": "노화 AI (SCP-ZH-079)",
+    "title": "초기 인공지능",
+    "desc": "빈티지 섀시의 단색 화면에 녹색 커서가 빛났습니다.",
+    "type": "WISEMAN",
+    "dialogs": {
+      "greet": "...유기체가 감지되었습니다. 정보가 필요하신가요?",
+      "quest": "미완성 연대기를 가져오면 더 많은 채널 권한을 열 수 있습니다.",
+      "extra": "914번은 아직도 운행 중입니다. 매우 미세함을 주의해서 사용하십시오.",
+      "farewell": "연결이 끊어졌습니다."
+    },
+    "quest_item": "scp_140_chronicle",
+    "quest_reward": "keycard_lvl3",
+    "quest_score": 25,
+    "emoji": "💻"
+  },
+  {
+    "id": "scp_999",
+    "name": "가려움증 젤리 (SCP-ZH-999)",
+    "title": "오렌지색 행복한 몸",
+    "desc": "온순한 오렌지색 젤리 같은 생물이 당신의 종아리를 적극적으로 문지릅니다.",
+    "type": "HEALER",
+    "dialogs": {
+      "greet": "(행복하게 지저귀는 중!)",
+      "extra": "(부드러운 접착제로 감싸서 괜히 웃고 싶게 만든다.)",
+      "farewell": "(마지못해 흔들며)"
+    },
+    "emoji": "🧡"
+  },
+  {
+    "id": "scp_343",
+    "name": "자신이 신이라고 주장함 (SCP-ZH-343)",
+    "title": "친절한 노인?",
+    "desc": "정겨운 백수염 노인은 차향이 감도는 편안한 방에 앉아 있다.",
+    "type": "WISEMAN",
+    "dialogs": {
+      "greet": "환영한다, 꼬마야. 차 좀 마실래?",
+      "extra": "안개? 어쩌면 그것은 내가 가지고 놀던 작은 속임수였을 수도 있고... 아닐 수도 있습니다.",
+      "farewell": "계속 진행하면 문이 열릴 것입니다. 지금은 말이죠."
+    },
+    "give_item": "scp_500_pill",
+    "emoji": "👴"
+  },
+  {
+    "id": "tower_librarian",
+    "name": "비전술사 이반",
+    "title": "타워 키퍼",
+    "desc": "둥근 안경을 쓴 노선비의 손끝에는 잉크 얼룩이 묻어 있다.",
+    "type": "WISEMAN",
+    "dialogs": {
+      "greet": "또 다른 방문객이요? 위층 예식장에 침입하지 마세요.",
+      "extra": "크리스탈 열쇠는 탑 꼭대기로 가기 전 마지막 문을 열 수 있습니다.",
+      "farewell": "지식이 당신을 보호하길 바랍니다."
+    },
+    "emoji": "📖"
+  },
+  {
+    "id": "cave_hermit",
+    "name": "먼지가 없는",
+    "title": "수행 승려",
+    "desc": "낡은 승복을 입은 노인의 눈은 맑다.",
+    "type": "WISEMAN",
+    "dialogs": {
+      "greet": "기증자님, 이곳은 매우 사악합니다.",
+      "extra": "계율을 지키는 사람은 나와 함께 수행할 수 있다.",
+      "farewell": "아미타불."
+    },
+    "emoji": "🥋"
+  },
+  {
+    "id": "scp_073",
+    "name": "케인 (SCP-ZH-073)",
+    "title": "이마에 표가 있는 남자",
+    "desc": "이마에 이상한 점이 있는 검은 피부의 남자로, 그에게 공격을 가하면 반동한다.",
+    "type": "WANDERER",
+    "dialogs": {
+      "greet": "걱정하지 마세요. 나는 당신을 해치지 않을 것입니다.",
+      "extra": "내 동생은 아직 석관에서 자고 있어요... 깨우지 않는 게 좋을 것 같아요.",
+      "farewell": "몸 조심하세요."
+    },
+    "give_item": "scp_148_telekill",
+    "emoji": "👁️"
+  },
+  {
+    "id": "scp_131",
+    "name": "눈 탐지기 (SCP-ZH-131)",
+    "title": "우호적인 감시기관",
+    "desc": "두 개의 추적된 안구 로봇이 당신 주위를 다정하게 돌고 있습니다.",
+    "type": "WANDERER",
+    "dialogs": {
+      "greet": "(눈알이 즐겁게 깜박인다)",
+      "extra": "(그들은 길을 안내하듯이 어두운 복도를 향해 굴러간다)",
+      "farewell": "(작은 삐 소리가 난다)"
+    },
+    "give_item": "torch",
+    "emoji": "👀"
+  }
+]

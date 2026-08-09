@@ -1,0 +1,48 @@
+[
+  {
+    "id": "poison",
+    "name": "중독됨",
+    "emoji": "☠️",
+    "debuff": true,
+    "duration": 3,
+    "stack": "stackIntensity",
+    "max_stacks": 3,
+    "damage_per_stack": 2
+  },
+  {
+    "id": "stun",
+    "name": "현기증",
+    "emoji": "💫",
+    "debuff": true,
+    "duration": 1,
+    "stack": "replace",
+    "skip_action": true
+  },
+  {
+    "id": "attackUp",
+    "name": "공격력 증가",
+    "emoji": "⚔️",
+    "debuff": false,
+    "duration": 2,
+    "stack": "refreshDuration",
+    "attack_delta": 3
+  },
+  {
+    "id": "defenseUp",
+    "name": "방어력 향상",
+    "emoji": "🛡️",
+    "debuff": false,
+    "duration": 2,
+    "stack": "refreshDuration",
+    "defense_delta": 2
+  },
+  {
+    "id": "regen",
+    "name": "다시 덮다",
+    "emoji": "💚",
+    "debuff": false,
+    "duration": 2,
+    "stack": "replace",
+    "heal_per_round": 4
+  }
+]

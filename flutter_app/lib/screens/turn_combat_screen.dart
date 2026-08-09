@@ -66,7 +66,8 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
     super.initState();
     widget.controller.addListener(_onController);
     _activeActorId = _encounter?.nextAllyNeedingCommand()?.instanceId;
-    _log.add('⚔️ 回合制战斗开始！为每名队友选择指令。');
+    final msgs = widget.controller.messages;
+    _log.add(msgs?.turnCombatStarted ?? '');
   }
 
   @override
@@ -199,17 +200,17 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
   void _startMelee() {
     final enc = _encounter;
     if (enc == null || !enc.canUseMelee) {
-      _log.add('⚠️ 主角血量过低，无法混战（需高于 1/4 生命）。');
+      _log.add(widget.controller.messages?.meleeHpTooLow ?? '');
       setState(() {});
       return;
     }
     final ok = widget.controller.beginMelee();
     if (!ok) {
-      _log.add('⚠️ 无法进入混战。');
+      _log.add(widget.controller.messages?.meleeCannotStart ?? '');
       setState(() {});
       return;
     }
-    _log.add('⚔️ 混战开始！双方自由交锋，主角血量低于 1/4 时自动停止。');
+    _log.add(widget.controller.messages?.meleeStarted ?? '');
     setState(() {
       _phase = CombatUiPhase.readyToExecute;
       _activeActorId = null;
@@ -289,7 +290,7 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
     if (encNow != null && encNow.meleeActive) {
       if (encNow.shouldStopMelee) {
         encNow.meleeActive = false;
-        _log.add('💔 主角血量低于 1/4，混战中止。请手动下达指令。');
+        _log.add(widget.controller.messages?.meleeStoppedLowHp ?? '');
         setState(() {
           _animating = false;
           _phase = CombatUiPhase.pickingCommand;
@@ -301,7 +302,7 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
       }
       final continued = widget.controller.prepareNextMeleeRound();
       if (continued && mounted) {
-        _log.add('— 混战继续 · 第 ${encNow.roundNumber} 回合 —');
+        _log.add(widget.controller.messages?.meleeRoundContinue(encNow.roundNumber) ?? '');
         setState(() {
           _animating = false;
           _phase = CombatUiPhase.readyToExecute;
@@ -321,7 +322,7 @@ class _TurnCombatScreenState extends State<TurnCombatScreen> {
       _phase = CombatUiPhase.pickingCommand;
       _activeActorId = enc.nextAllyNeedingCommand()?.instanceId;
       _animatingActorId = null;
-      _log.add('— 第 ${enc.roundNumber} 回合 —');
+      _log.add(widget.controller.messages?.combatRoundStart(enc.roundNumber) ?? '');
       _stepLog.clear();
     });
   }

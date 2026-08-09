@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zork_dude/l10n/app_localizations.dart';
+import 'package:zork_dude/l10n/locale_tag.dart';
 import 'package:zork_dude/screens/exploration_screen.dart';
 import 'package:zork_dude/services/play_games/play_games_service.dart';
 import 'package:zork_dude/state/game_controller.dart';
@@ -39,6 +40,11 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     _controller.addListener(_onControllerChanged);
     _playGames.addListener(_onPlayGamesChanged);
+    _controller.setLocaleTag(
+      LocaleTag.fromLocale(
+        WidgetsBinding.instance.platformDispatcher.locale,
+      ),
+    );
     _controller.init();
   }
 

@@ -148,13 +148,21 @@ class _MistMapPanelState extends State<MistMapPanel> {
                   if (widget.controller.canViewMapLayer(l))
                     Padding(
                       padding: const EdgeInsets.only(right: 6),
-                      child: GameButton(
-                        label: mapLayerLabels[l]!,
-                        width: 56,
-                        height: LandscapeLayout.heightFromWidth(56),
-                        accent: l == layer,
-                        onPressed: () => widget.controller.setMapLayer(l),
-                        semanticLabel: mapLayerLabels[l]!,
+                      child: Builder(
+                        builder: (context) {
+                          final msgs = widget.controller.messages;
+                          final label = msgs != null
+                              ? mapLayerLabel(l, msgs)
+                              : l.name;
+                          return GameButton(
+                            label: label,
+                            width: 56,
+                            height: LandscapeLayout.heightFromWidth(56),
+                            accent: l == layer,
+                            onPressed: () => widget.controller.setMapLayer(l),
+                            semanticLabel: label,
+                          );
+                        },
                       ),
                     ),
                 const SizedBox(width: 8),
@@ -162,7 +170,7 @@ class _MistMapPanelState extends State<MistMapPanel> {
                   Padding(
                     padding: const EdgeInsets.only(right: 8),
                     child: GameOutlinedText(
-                      'DEV · 全图',
+                      l10n.mapDevFullMap,
                       fontSize: 11,
                       color: GameConstants.hero,
                       strokeWidth: 1.0,
@@ -281,10 +289,15 @@ class _MistMapPanelState extends State<MistMapPanel> {
     final dir = _mapService.exitDirTo(s, node.id);
     if (dir != null) {
       widget.controller.move(dir);
-      setState(() => _detail = l10n.mapGoing(mapDirLabel[dir]!));
+      final msgs = widget.controller.messages;
+      setState(() => _detail = l10n.mapGoing(
+            msgs != null ? mapDirLabel(dir, msgs) : dir.value,
+          ));
     } else {
       final rm = s.rooms[node.id];
-      setState(() => _detail = rm != null ? '${rm.name} — 不相邻，无法直达' : node.id);
+      setState(() => _detail = rm != null
+          ? l10n.mapNotAdjacentDetail(rm.name)
+          : node.id);
     }
   }
 }

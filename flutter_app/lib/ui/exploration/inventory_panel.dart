@@ -148,7 +148,7 @@ class _InventoryPanelState extends State<InventoryPanel> {
                 width: double.infinity,
                 height: btnH,
                 label: roomId == s.currentRoomId
-                    ? '${s.rooms[roomId]?.name ?? roomId}（此处）'
+                    ? l10n.inventoryRoomHere(s.rooms[roomId]?.name ?? roomId)
                     : (s.rooms[roomId]?.name ?? roomId),
                 enabled: roomId != s.currentRoomId,
                 onPressed: roomId == s.currentRoomId
@@ -230,7 +230,13 @@ class _InventoryPanelState extends State<InventoryPanel> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         GameOutlinedText(
-          '${s.equippedBagLabel()} · 重量 ${s.totalWeight()}/${s.bagCapacity()} · $totalItems 件 · 💰${s.gold}',
+          l10n.inventoryHeader(
+            s.equippedBagLabel(),
+            s.totalWeight(),
+            s.bagCapacity(),
+            totalItems,
+            s.gold,
+          ),
           fontSize: 12,
           color: d.textMuted,
           strokeWidth: 0,

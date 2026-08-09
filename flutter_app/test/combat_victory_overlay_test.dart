@@ -7,13 +7,17 @@ import 'package:zork_dude/domain/game_session.dart';
 import 'package:zork_dude/ui/combat/combat_victory_overlay.dart';
 
 import 'test_l10n.dart';
+import 'test_game_messages.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   group('CombatReward settlement', () {
     test('victory builds structured reward with loot and currency', () async {
-      final session = await GameSession.create(WorldRepository());
+      final session = await GameSession.create(
+        WorldRepository(),
+        messages: testGameMessages(),
+      );
       session.processCommand('w');
       expect(session.inCombat, isTrue);
 
@@ -26,7 +30,10 @@ void main() {
     });
 
     test('finishEncounter victory stores lastCombatReward', () async {
-      final session = await GameSession.create(WorldRepository());
+      final session = await GameSession.create(
+        WorldRepository(),
+        messages: testGameMessages(),
+      );
       session.processCommand('w');
       session.finishEncounter(CombatOutcome.victory);
       expect(session.lastCombatReward, isNotNull);

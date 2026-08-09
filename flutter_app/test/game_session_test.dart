@@ -5,6 +5,8 @@ import 'package:zork_dude/domain/game_session.dart';
 import 'package:zork_dude/domain/map_service.dart';
 import 'package:zork_dude/domain/models/enums.dart';
 
+import 'test_game_messages.dart';
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -24,7 +26,10 @@ void main() {
     late GameSession session;
 
     setUp(() async {
-      session = await GameSession.create(WorldRepository());
+      session = await GameSession.create(
+        WorldRepository(),
+        messages: testGameMessages(),
+      );
     });
 
     test('starts at forest entrance with starter items', () {
@@ -105,14 +110,20 @@ void main() {
 
   group('MapService', () {
     test('builds nodes for surface layer', () async {
-      final session = await GameSession.create(WorldRepository());
+      final session = await GameSession.create(
+        WorldRepository(),
+        messages: testGameMessages(),
+      );
       final vm = MapService().buildView(session, MapLayer.surface);
       expect(vm.nodes, isNotEmpty);
       expect(vm.visitedCount, greaterThan(0));
     });
 
     test('exitDirTo only allows adjacent rooms', () async {
-      final session = await GameSession.create(WorldRepository());
+      final session = await GameSession.create(
+        WorldRepository(),
+        messages: testGameMessages(),
+      );
       final svc = MapService();
       final dir = svc.exitDirTo(session, 'abandoned_hut');
       expect(dir, Direction.west);

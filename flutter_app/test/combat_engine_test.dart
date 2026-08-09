@@ -8,6 +8,9 @@ import 'package:zork_dude/domain/combat/combat_random.dart';
 import 'package:zork_dude/domain/combat/combat_types.dart';
 import 'package:zork_dude/domain/models/entities.dart';
 import 'package:zork_dude/domain/models/enums.dart';
+import 'package:zork_dude/l10n/game_messages.dart';
+
+import 'test_game_messages.dart';
 
 MonsterState _monster({
   required String id,
@@ -44,6 +47,7 @@ CombatEncounter _basicEncounter({
     playerSpeed: 6,
     party: const [],
     enemyTemplates: enemies ?? [_monster(id: 'rat', hp: 10, atk: 3)],
+    messages: testGameMessages(),
   );
 }
 
@@ -245,6 +249,7 @@ void main() {
           ),
         ],
         enemyTemplates: [_monster(id: 'rat', hp: 50, atk: 1)],
+        messages: testGameMessages(),
       );
       final engine = CombatEngine(random: ScriptedCombatRandom(diceRolls: [3, 3, 1]));
       engine.submitAllyCommand(encounter, 'player#0', const CombatCommand.defend());
@@ -279,6 +284,7 @@ void main() {
         playerSpeed: 6,
         party: party,
         enemyTemplates: enemies,
+        messages: testGameMessages(),
       );
       expect(encounter.allies.length, 4);
       expect(encounter.enemies.length, 4);

@@ -3,11 +3,13 @@ import 'package:zork_dude/domain/models/combat_effects.dart';
 import 'package:zork_dude/domain/models/enums.dart';
 import 'package:zork_dude/domain/models/map_meta.dart';
 import 'package:zork_dude/domain/dice.dart';
+import 'package:zork_dude/l10n/game_messages.dart';
 
 typedef ItemUseHandler = String? Function(GameSessionRef session);
 
 /// Minimal interface for special item handlers to avoid circular imports.
 abstract class GameSessionRef {
+  GameMessages get messages;
   String get currentRoomId;
   Map<String, int> get inventory;
   Map<String, dynamic> get flags;
@@ -336,7 +338,7 @@ class CompanionState {
     this.speed = 6,
     this.abilityDesc = '',
     this.recruitItem,
-    this.recruitMsg = '加入了你的队伍！',
+    this.recruitMsg = '',
     this.emoji = '',
     this.recruited = false,
   });
@@ -356,27 +358,29 @@ class CompanionState {
     }
   }
 
-  String banter() {
-    const m = {
-      CompanionRole.warrior: '哼，这点小伤不算什么。',
-      CompanionRole.rogue: '嘿，前面可能有陷阱。',
-      CompanionRole.mage: '我能感觉到魔法的波动……',
-      CompanionRole.healer: '大家注意安全。',
-      CompanionRole.scout: '我去前面探探路。',
-    };
+  String recruitDisplay(GameMessages messages) =>
+      recruitMsg.isNotEmpty ? recruitMsg : messages.companionRecruitDefault;
+
+  String banter(GameMessages messages) {
     final prefix = emoji.isNotEmpty ? '$emoji ' : '';
-    return '[$prefix$name] ${m[role] ?? '…'}';
+    final line = messages.msg('companion_banter_${role.name}');
+    return '[$prefix$name] $line';
   }
 
   String combatAssist(GameSessionRef g) {
-    if (role == CompanionRole.mage) return '$name 释放魔法箭！';
+    final m = g.messages;
+    if (role == CompanionRole.mage) {
+      return m.msg('companion_combat_mage', {'name': name});
+    }
     if (role == CompanionRole.healer) {
       final h = rollDice(6, 2);
       g.playerHp = (g.playerHp + h).clamp(0, g.playerMaxHp);
-      return '$name 为你恢复 $h 点HP！';
+      return m.msg('companion_combat_heal', {'name': name, 'amount': h});
     }
-    if (role == CompanionRole.rogue) return '$name 偷袭！';
-    return '$name 正在奋战！';
+    if (role == CompanionRole.rogue) {
+      return m.msg('companion_combat_rogue', {'name': name});
+    }
+    return m.msg('companion_combat_default', {'name': name});
   }
 
   factory CompanionState.fromJson(Map<String, dynamic> json) {
@@ -393,7 +397,7 @@ class CompanionState {
       speed: (json['speed'] as num?)?.toInt() ?? 6,
       abilityDesc: json['ability_desc'] as String? ?? '',
       recruitItem: json['recruit_item'] as String?,
-      recruitMsg: json['recruit_msg'] as String? ?? '加入了你的队伍！',
+      recruitMsg: json['recruit_msg'] as String? ?? '',
       emoji: json['emoji'] as String? ?? '',
     );
   }
@@ -442,14 +446,17 @@ class RoomState {
   }
 
   String description(GameSessionRef g, {NpcState? npc, MonsterState? monster}) {
+    final m = g.messages;
     final lines = <String>[name, desc];
     if (items.isNotEmpty) {
       final labels = items.map((i) => g.item(i)?.label ?? i).join('、');
-      lines.add('\n地上有：$labels');
+      lines.add('\n${m.roomItemsOnGround(labels)}');
     }
     if (npc != null) lines.add('\n👤 ${npc.name}');
     if (monster != null && monster.alive) {
-      final tag = monster.rank != MonsterRank.normal ? '[${monster.rank.displayName}]' : '';
+      final tag = monster.rank != MonsterRank.normal
+          ? '[${monster.rank.displayName(m)}]'
+          : '';
       lines.add('\n⚠️ $tag ${monster.label}');
     }
     return lines.join('\n');

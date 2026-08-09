@@ -1,0 +1,396 @@
+{
+  "@@locale": "it",
+  "appTitle": "Torre delle Nebbie",
+  "appTitleEn": "TORRE DELLA NEBBIA",
+  "taglineShort": "Esplora, raccogli, parla, combatti: recupera la verità perduta.",
+  "taglineFull": "Ti svegli da una foresta nebbiosa senza memoria.\nEsplora, raccogli, parla, combatti: recupera la verità perduta.",
+  "homeHint": "Esplorazione dei comandi · Mappa della nebbia · Incontra un nemico ed entra in un round di battaglia",
+  "loading": "caricamento…",
+  "continueJourney": "Continua il viaggio",
+  "enterMist": "Entra nella nebbia",
+  "achievements": "Risultato",
+  "leaderboard": "Classifica",
+  "close": "chiusura",
+  "cancel": "Cancellare",
+  "confirm": "confermare",
+  "skip": "saltare",
+  "continueAction": "continuare",
+  "back": "ritorno",
+  "menu": "menu",
+  "startNewJourneyTitle": "Iniziare un nuovo viaggio?",
+  "overwriteSaveMessage": "Ci sono già progressi in questo slot. L'avvio di una nuova partita sovrascriverà questo salvataggio. Vuoi continuare?",
+  "overwriteAndStart": "Copri e inizia",
+  "connectPlayGamesTitle": "Connetti Gioca ai giochi",
+  "connectPlayGamesMessage": "Connettiti a Google Play Games per visualizzare risultati e classifiche. Puoi giocare normalmente senza connetterti.",
+  "connectLater": "Parliamo più tardi",
+  "connectNow": "Connettiti ora",
+  "returnToTitleTitle": "Titolo restituito?",
+  "returnToTitleMessage": "I progressi attuali sono stati salvati automaticamente e possono essere ripristinati dalla pagina del titolo \"Continua il viaggio\".",
+  "returnToTitle": "titolo di ritorno",
+  "quitAppTitle": "Abbandonare il gioco?",
+  "quitAppMessage": "La Torre della Nebbia sarà chiusa.",
+  "quit": "esentato",
+  "combatPauseTitle": "Menu Battaglia · Pausa",
+  "resumeCombat": "continuare a combattere",
+  "backToTitle": "Ritorna al titolo",
+  "privacySettings": "Impostazioni sulla privacy",
+  "privacySettingsHint": "Impostazioni sulla privacy · privacy",
+  "rewardOfferTitle": "Dono della nebbia",
+  "rewardOfferGold": "Monete d'oro in questo gioco +{base} → +{doubled}",
+  "@rewardOfferGold": {
+    "placeholders": {
+      "base": {
+        "type": "int"
+      },
+      "doubled": {
+        "type": "int"
+      }
+    }
+  },
+  "rewardOfferUnavailable": "I regali sono temporaneamente non disponibili, puoi continuare direttamente l'avventura",
+  "rewardOfferWatch": "Guarda gli annunci · Monete d'oro doppie",
+  "rewardOfferLoading": "Evocare doni...",
+  "continueAdventure": "continuare l'avventura",
+  "watchAd": "Guarda gli annunci",
+  "watchAdRecoverLoss": "Guarda gli annunci · Recupera le perdite",
+  "refundScorePoints": "Restituisci {points} punti",
+  "@refundScorePoints": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      }
+    }
+  },
+  "summoningGlimmer": "Evocazione nel crepuscolo...",
+  "glimmerNoResponse": "Shimmer non ha ancora risposto, riprova più tardi.",
+  "endingDragonTitle": "Il giovane drago è caduto",
+  "endingDragonSubtitle": "La gemma magica cade nelle tue mani.\nNon solo può aprire la porta di pietra dal cimitero al rifugio, ma anche richiamare i ricordi perduti sulla cima della torre.",
+  "endingDragonPrimary": "continuare l'avventura",
+  "endingDragonSecondary": "Ritorno per completare il viaggio",
+  "endingMainTitle": "La nebbia si dissipa",
+  "endingMainSubtitle": "I ricordi rifluirono nella sua mente e la barriera della torre crollò.\nSei libero, ma ci sono ancora degli affari in sospeso nel profondo del manicomio.",
+  "endingMainPrimary": "Continua a esplorare",
+  "endingSiteTitle": "Azione del sito completata",
+  "endingSiteSubtitle": "Il prototipo finale è stato soppresso e il caveau di contenimento è caduto nel silenzio.\nUn lungo viaggio sta per concludersi.",
+  "endingSitePrimary": "Visualizza l'elenco del personale",
+  "endingGameOverTitle": "sei caduto",
+  "endingGameOverSubtitle": "La nebbia ingoia la tua figura.\nTi svegli nell'ultimo luogo che hai esplorato, con un punteggio di -100 (non inferiore a 0).",
+  "endingGameOverPrimary": "svegliarsi all'ultimo posto",
+  "inventoryTitle": "Zaino · Inventario",
+  "inventoryUseTitle": "Usa oggetti di scena · Usa",
+  "inventoryDropTitle": "Lascia cadere gli oggetti di scena · Lascia cadere",
+  "teleportTitle": "Invia a · Teletrasporto",
+  "notLoaded": "Non ancora caricato",
+  "noUsableItems": "Non ci sono oggetti di scena disponibili.",
+  "noDroppableItems": "Non ci sono oggetti di scena da buttare via.",
+  "inventoryEmpty": "Lo zaino è vuoto.",
+  "noMoreDescription": "Nessuna ulteriore descrizione.",
+  "itemType": "Digita {type}",
+  "@itemType": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "itemWeight": "Peso {weight}",
+  "@itemWeight": {
+    "placeholders": {
+      "weight": {
+        "type": "int"
+      }
+    }
+  },
+  "itemValue": "Valore {value}",
+  "@itemValue": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "itemHeal": "Trattamento +{heal}",
+  "@itemHeal": {
+    "placeholders": {
+      "heal": {
+        "type": "int"
+      }
+    }
+  },
+  "itemAttackBonus": "Attacco +{bonus}",
+  "@itemAttackBonus": {
+    "placeholders": {
+      "bonus": {
+        "type": "int"
+      }
+    }
+  },
+  "itemDefenseBonus": "Difesa +{bonus}",
+  "@itemDefenseBonus": {
+    "placeholders": {
+      "bonus": {
+        "type": "int"
+      }
+    }
+  },
+  "itemCapacity": "Capacità {capacity}",
+  "@itemCapacity": {
+    "placeholders": {
+      "capacity": {
+        "type": "int"
+      }
+    }
+  },
+  "itemCount": "Quantità x{count}",
+  "@itemCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "itemUseEffect": "Effetto di utilizzo: {msg}",
+  "@itemUseEffect": {
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
+  "statAtkShort": "Attacco+{bonus}",
+  "@statAtkShort": {
+    "placeholders": {
+      "bonus": {
+        "type": "int"
+      }
+    }
+  },
+  "statDefShort": "Anti+{bonus}",
+  "@statDefShort": {
+    "placeholders": {
+      "bonus": {
+        "type": "int"
+      }
+    }
+  },
+  "equip": "attrezzatura",
+  "use": "utilizzo",
+  "drop": "Buttar via",
+  "combatAttack": "attacco",
+  "combatSkill": "Abilità",
+  "combatItem": "Oggetti di scena",
+  "combatDefend": "difesa",
+  "combatMelee": "Mischia",
+  "combatFlee": "fuggire",
+  "combatAttackShort": "attacco",
+  "combatSkillShort": "tecnologia",
+  "combatItemShort": "strada",
+  "combatDefendShort": "Difendere",
+  "combatFleeShort": "fuga",
+  "combatCommandsTitle": "Comandi",
+  "combatExecute": "attrezzo",
+  "combatVictory": "vittoria in battaglia",
+  "combatVictoryTap": "点击继续",
+  "combatDefeated": "colpo",
+  "combatLoot": "bottino",
+  "combatHarvest": "Raccolto",
+  "combatGoldGain": "💰 Moneta d'oro +{gold}",
+  "@combatGoldGain": {
+    "placeholders": {
+      "gold": {
+        "type": "int"
+      }
+    }
+  },
+  "combatExpGain": "⭐ Esperienza +{exp}",
+  "@combatExpGain": {
+    "placeholders": {
+      "exp": {
+        "type": "int"
+      }
+    }
+  },
+  "combatNoItems": "Nello zaino non sono disponibili oggetti da combattimento",
+  "combatPickItem": "Seleziona gli oggetti di scena",
+  "combatInitiative": "Iniziativa in sequenza di azioni",
+  "combatTurnOrderSemantics": "Bit {index} {name} Velocità {speed}",
+  "@combatTurnOrderSemantics": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      },
+      "name": {
+        "type": "String"
+      },
+      "speed": {
+        "type": "int"
+      }
+    }
+  },
+  "combatLogTitle": "Registro del rapporto di battaglia",
+  "combatRound": "Rotondo {round}",
+  "@combatRound": {
+    "placeholders": {
+      "round": {
+        "type": "int"
+      }
+    }
+  },
+  "combatPhasePickCommandNamed": "Seleziona comando: {name}",
+  "@combatPhasePickCommandNamed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "combatPhasePickCommand": "Seleziona comando",
+  "combatPhasePickTarget": "Seleziona destinazione",
+  "combatPhasePickItem": "Scegli oggetti di scena e bersagli",
+  "combatPhaseReady": "Pronto per eseguire il giro",
+  "combatPhaseAnimating": "Turno in corso…",
+  "combatQueueTitle": "Comandi della coda di comando",
+  "combatQueuePending": "Da selezionare…",
+  "combatEnemies": "Nemici Nemici",
+  "combatParty": "Festa di squadra",
+  "combatTitle": "Combattimento a turni",
+  "combatMenuSemantics": "menu di battaglia",
+  "combatEnded": "La battaglia è finita",
+  "meleeEnded": "La mischia finisce.",
+  "meleeCancelled": "La mischia è stata annullata.",
+  "enemyGeneric": "nemico",
+  "cmdLook": "Controllo",
+  "cmdBag": "Zaino",
+  "cmdTalk": "dialogo",
+  "cmdHeal": "trattare",
+  "cmdRecruit": "reclutare",
+  "cmdParty": "squadra",
+  "cmdScore": "Punto",
+  "cmdHelp": "aiuto",
+  "cmdNgPlus": "Seconda settimana",
+  "cmdMore": "Di più",
+  "cmdTake": "raccolta",
+  "cmdBuy": "Acquistare",
+  "cmdSell": "vendere",
+  "cmdShop": "merce",
+  "cmdMoreTitle": "Altri comandi · Altro",
+  "cmdMoreSemantics": "Più comandi",
+  "cmdTakeTitle": "prendere prendere",
+  "cmdBuyTitle": "comprare comprare",
+  "cmdSellTitle": "vendere vendere",
+  "cmdTakeAll": "tutto tutto",
+  "cmdMapOn": "mappa",
+  "cmdMapOff": "Mappa·Guan",
+  "cmdToggleMap": "Cambia mappa",
+  "cmdDevMapOn": "Apri l'intera immagine",
+  "cmdDevMapOff": "Livello mappa completo",
+  "cmdSend": "Invia comando",
+  "cmdHint": "Comando cmd: guarda/prendi 1/n…",
+  "dirNorth": "Nord N",
+  "dirWest": "Ovest W",
+  "dirEast": "Est E",
+  "dirSouth": "Sud S",
+  "dirUp": "Su U",
+  "dirDown": "Il prossimo D",
+  "mapHint": "Trascina e fai una panoramica · Scorri la rotella/pizzica per ingrandire · Fai clic sui nodi adiacenti per spostarti",
+  "mapFullCount": "Immagine intera {count}",
+  "@mapFullCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mapExploredCount": "Esplorato {count}",
+  "@mapExploredCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mapCannotMoveInCombat": "Impossibile muoversi durante il combattimento.",
+  "mapGoing": "Vai a {dir}...",
+  "@mapGoing": {
+    "placeholders": {
+      "dir": {
+        "type": "String"
+      }
+    }
+  },
+  "mapDevFullMap": "DEV·Immagine completa",
+  "mapNotAdjacentDetail": "{name} — non adiacente, non direttamente accessibile",
+  "@mapNotAdjacentDetail": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "inventoryRoomHere": "{name} (qui)",
+  "@inventoryRoomHere": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "inventoryHeader": "{bag} · Peso {weight}/{capacity} · {count} pezzi · 💰{gold}",
+  "@inventoryHeader": {
+    "placeholders": {
+      "bag": {
+        "type": "String"
+      },
+      "weight": {
+        "type": "int"
+      },
+      "capacity": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      },
+      "gold": {
+        "type": "int"
+      }
+    }
+  },
+  "combatUnitSemantics": "{name} HP {hp}/{maxHp} Attacco {atk} Difesa {def} Velocità {spd}",
+  "@combatUnitSemantics": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "hp": {
+        "type": "int"
+      },
+      "maxHp": {
+        "type": "int"
+      },
+      "atk": {
+        "type": "int"
+      },
+      "def": {
+        "type": "int"
+      },
+      "spd": {
+        "type": "int"
+      }
+    }
+  },
+  "creditQa": "Garanzia di qualità",
+  "creditPresentedBy": "Prodotto/Presentato da",
+  "creditDirectedBy": "Regista / Diretto da",
+  "creditWrittenBy": "Sceneggiatore/Scritto da",
+  "creditGameDesign": "Progettazione di giochi / Progettazione di giochi",
+  "creditNarrativeDesign": "Design narrativo / Design narrativo",
+  "creditArtDirection": "Direzione artistica / Direzione artistica",
+  "creditLevelDesign": "Progettazione dei livelli / Progettazione dei livelli",
+  "creditSystemsDesign": "Progettazione di sistemi / Progettazione di sistemi",
+  "creditCombatDesign": "Progettazione del combattimento / Progettazione del combattimento",
+  "creditSoundConcept": "Concetto del suono/Concetto del suono",
+  "creditProducedBy": "Produttore / Prodotto da",
+  "creditEngineering": "Programma/Ingegneria",
+  "creditSpecialThanks": "特别鸣谢 / Special Thanks",
+  "creditTechSupport": "Supporto tecnico/Supporto tecnologico"
+}

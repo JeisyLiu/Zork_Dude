@@ -1,0 +1,93 @@
+[
+  {
+    "id": "companion_warrior",
+    "name": "Hammer",
+    "desc": "stämmiger Krieger,",
+    "role": "WARRIOR",
+    "hp": 60,
+    "atk": 10,
+    "defense": 4,
+    "ability_desc": "Nahkampfangriff, Angriff +3, Verteidigung +2",
+    "recruit_item": "iron_sword",
+    "recruit_msg": "Iron Hammer klopfte dir auf die Schulter: „Was für ein Schwert!“ Ich gehe mit dir! 』",
+    "emoji": "⚔️"
+  },
+  {
+    "id": "companion_rogue",
+    "name": "Nachtigall",
+    "desc": "Eine kluge Diebin,",
+    "role": "ROGUE",
+    "hp": 40,
+    "atk": 8,
+    "defense": 1,
+    "ability_desc": "Schleichangriffsfähigkeiten, Angriff +2, 40 % Wahrscheinlichkeit für zusätzlichen Schaden",
+    "recruit_item": "shadow_blade",
+    "recruit_msg": "Die Nachtigall erschien im Schatten: „Du bist interessant, nimm mich mit.“ 』",
+    "emoji": "🗡️"
+  },
+  {
+    "id": "companion_mage",
+    "name": "Erin",
+    "desc": "junger Magier,",
+    "role": "MAGE",
+    "hp": 35,
+    "atk": 12,
+    "defense": 0,
+    "ability_desc": "Magischer Angriff, Angriff +5, liefert Lichtquelle",
+    "recruit_item": "magic_book",
+    "recruit_msg": "Erin sagte aufgeregt: „Endlich versteht jemand Magie!“ Lass uns zusammen gehen! 』",
+    "emoji": "🔮"
+  },
+  {
+    "id": "companion_healer",
+    "name": "Mu Guang",
+    "desc": "sanfter Mönch,",
+    "role": "HEALER",
+    "hp": 50,
+    "atk": 5,
+    "defense": 3,
+    "ability_desc": "Heilunterstützung, HP-Wiederherstellung in jeder Runde, Verteidigung +1, maximale HP +15",
+    "recruit_item": "sacred_water",
+    "recruit_msg": "Mu Guang faltete die Hände: „Du brauchst auf deiner Reise heilendes Licht, lass mich mit dir gehen.“ 』",
+    "emoji": "💚"
+  },
+  {
+    "id": "companion_scout",
+    "name": "Windgeist",
+    "desc": "Ein energischer Halbelfen-Späher,",
+    "role": "SCOUT",
+    "hp": 40,
+    "atk": 7,
+    "defense": 1,
+    "ability_desc": "Aufklärungsagilität, Angriff +1, feindliche Schwächen im Kampf entdecken",
+    "recruit_item": "fairy_dust",
+    "recruit_msg": "Windgeist springt zügig vor dich her: „Du siehst aus, als ob du einen Führer brauchst!“ 』",
+    "emoji": "🪶"
+  },
+  {
+    "id": "companion_archer",
+    "name": "Den Wind jagen",
+    "desc": "Stiller Elfenbogenschütze,",
+    "role": "SCOUT",
+    "hp": 45,
+    "atk": 9,
+    "defense": 1,
+    "ability_desc": "Scharfschütze mit großer Reichweite, Angriff +2, hat eine Chance, im Kampf doppelten Schaden zu verursachen",
+    "recruit_item": "elven_bow",
+    "recruit_msg": "Zhui Feng nickte: „Deine Fähigkeiten im Bogenschießen sind gut … ich stimme dir zu.“ 』",
+    "emoji": "🏹"
+  },
+  {
+    "id": "companion_monk",
+    "name": "Staubfrei",
+    "desc": "Ein Mönch, der seit vielen Jahren praktiziert,",
+    "role": "WARRIOR",
+    "hp": 55,
+    "atk": 8,
+    "defense": 5,
+    "ability_desc": "Mann aus Stahl, Angriff +2, Verteidigung +3, erhöhte kritische Trefferquote",
+    "recruit_item": "protection_ring",
+    "recruit_msg": "Wuchen legte seine Hände zusammen und sagte: „Spender, dieser arme Mönch ist bereit, Ihnen zu helfen.“ 』",
+    "emoji": "🥋"
+  }
+]

@@ -1,0 +1,93 @@
+[
+  {
+    "id": "companion_warrior",
+    "name": "martillo",
+    "desc": "guerrero corpulento,",
+    "role": "WARRIOR",
+    "hp": 60,
+    "atk": 10,
+    "defense": 4,
+    "ability_desc": "Ataque cuerpo a cuerpo, ataque +3, defensa +2",
+    "recruit_item": "iron_sword",
+    "recruit_msg": "Iron Hammer te dio unas palmaditas en el hombro: \"¡Qué espada!\" ¡Iré contigo! 』",
+    "emoji": "⚔️"
+  },
+  {
+    "id": "companion_rogue",
+    "name": "ruiseñor",
+    "desc": "Una ladrona inteligente,",
+    "role": "ROGUE",
+    "hp": 40,
+    "atk": 8,
+    "defense": 1,
+    "ability_desc": "Habilidades de ataque furtivo, ataque +2, 40% de probabilidad de daño adicional",
+    "recruit_item": "shadow_blade",
+    "recruit_msg": "El ruiseñor apareció en la sombra: \"Eres interesante, llévame contigo\". 』",
+    "emoji": "🗡️"
+  },
+  {
+    "id": "companion_mage",
+    "name": "Irlanda",
+    "desc": "joven mago,",
+    "role": "MAGE",
+    "hp": 35,
+    "atk": 12,
+    "defense": 0,
+    "ability_desc": "Ataque mágico, ataque +5, proporciona fuente de luz.",
+    "recruit_item": "magic_book",
+    "recruit_msg": "Erin dijo emocionada: \"¡Por fin alguien entiende la magia!\" ¡Vamos juntos! 』",
+    "emoji": "🔮"
+  },
+  {
+    "id": "companion_healer",
+    "name": "Mu Guang",
+    "desc": "gentil monje,",
+    "role": "HEALER",
+    "hp": 50,
+    "atk": 5,
+    "defense": 3,
+    "ability_desc": "Apoyo curativo, recuperación de HP en cada ronda, defensa +1, HP máximo +15",
+    "recruit_item": "sacred_water",
+    "recruit_msg": "Mu Guang juntó las manos: \"Necesitas luz curativa en tu viaje, déjame ir contigo\". 』",
+    "emoji": "💚"
+  },
+  {
+    "id": "companion_scout",
+    "name": "espíritu del viento",
+    "desc": "Un vigoroso explorador semielfo,",
+    "role": "SCOUT",
+    "hp": 40,
+    "atk": 7,
+    "defense": 1,
+    "ability_desc": "Agilidad de reconocimiento, ataque +1, descubre las debilidades del enemigo durante la batalla.",
+    "recruit_item": "fairy_dust",
+    "recruit_msg": "Wind Spirit salta rápidamente frente a ti: \"¡Parece que necesitas una guía!\" 』",
+    "emoji": "🪶"
+  },
+  {
+    "id": "companion_archer",
+    "name": "persiguiendo el viento",
+    "desc": "Arquero elfo silencioso,",
+    "role": "SCOUT",
+    "hp": 45,
+    "atk": 9,
+    "defense": 1,
+    "ability_desc": "Francotirador de largo alcance, ataque +2, tiene la posibilidad de causar el doble de daño durante la batalla.",
+    "recruit_item": "elven_bow",
+    "recruit_msg": "Zhui Feng asintió: \"Tus habilidades con el tiro con arco son buenas ... te apruebo\". 』",
+    "emoji": "🏹"
+  },
+  {
+    "id": "companion_monk",
+    "name": "Libre de polvo",
+    "desc": "Un monje que practica desde hace muchos años,",
+    "role": "WARRIOR",
+    "hp": 55,
+    "atk": 8,
+    "defense": 5,
+    "ability_desc": "Hombre de Acero, ataque +2, defensa +3, mayor índice de golpes críticos",
+    "recruit_item": "protection_ring",
+    "recruit_msg": "Wuchen juntó las manos y dijo: \"Donante, este pobre monje está dispuesto a ayudarlo\". 』",
+    "emoji": "🥋"
+  }
+]

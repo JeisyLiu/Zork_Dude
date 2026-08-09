@@ -35,6 +35,17 @@ flutter:
     - assets/images/fx/
     - assets/images/ui/
     - assets/ui/
+    - assets/l10n/messages/
+    - assets/data/l10n/zh_Hans/
+    - assets/data/l10n/zh_Hant/
+    - assets/data/l10n/en_US/
+    - assets/data/l10n/ja/
+    - assets/data/l10n/ko/
+    - assets/data/l10n/fr/
+    - assets/data/l10n/de/
+    - assets/data/l10n/it/
+    - assets/data/l10n/es_ES/
+    - assets/data/l10n/pt_BR/
     - assets/data/items.json
     - assets/data/monsters.json
     - assets/data/npcs.json

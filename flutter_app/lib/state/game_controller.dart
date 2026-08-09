@@ -16,6 +16,8 @@ import 'package:zork_dude/domain/game_session.dart';
 import 'package:zork_dude/domain/models/enums.dart';
 import 'package:zork_dude/domain/models/map_meta.dart';
 import 'package:zork_dude/domain/map_service.dart';
+import 'package:zork_dude/l10n/game_messages.dart';
+import 'package:zork_dude/l10n/locale_tag.dart';
 import 'package:zork_dude/services/play_games/achievement_outbox.dart';
 import 'package:zork_dude/services/play_games/play_games_service.dart';
 import 'package:zork_dude/state/ending_kind.dart';
@@ -59,6 +61,24 @@ class GameController extends ChangeNotifier {
   bool developerMode = false;
   bool _commandBusy = false;
   DateTime? _lastCommandAt;
+  String localeTag = LocaleTag.zhHans;
+
+  GameMessages? _testMessages;
+
+  /// Injects narrative strings for widget/unit tests (skips asset load).
+  @visibleForTesting
+  void useTestMessages(GameMessages messages) {
+    _testMessages = messages;
+  }
+
+  GameMessages? get messages => session?.messages;
+
+  void setLocaleTag(String tag) {
+    if (!LocaleTag.all.contains(tag)) return;
+    localeTag = tag;
+  }
+
+  WorldRepository _worldRepo() => WorldRepository(localeTag: localeTag);
 
   bool get commandBusy => _commandBusy;
 
@@ -141,7 +161,11 @@ class GameController extends ChangeNotifier {
       } else {
         developerMode = false;
       }
-      session = await GameSession.create(WorldRepository());
+      session = await GameSession.create(
+        _worldRepo(),
+        localeTag: localeTag,
+        messages: _testMessages,
+      );
       log.clear();
       _append(session!.roomDescription(session!.currentRoomId));
       loading = false;
@@ -167,7 +191,9 @@ class GameController extends ChangeNotifier {
       activeSlot = slot;
       await _saveRepo.setActiveSlot(slot);
       session = await GameSession.create(
-        WorldRepository(),
+        _worldRepo(),
+        localeTag: localeTag,
+        messages: _testMessages,
         starterItems: false,
       );
       session!.applySaveJson(data);
@@ -176,7 +202,7 @@ class GameController extends ChangeNotifier {
       battleNavigationPending = false;
       lastCombatReward = null;
       syncMapLayerToPlayer();
-      _append('═══ 继续旅程 ═══');
+      _append(session!.messages.continueJourneyBanner);
       _append(session!.roomDescription(session!.currentRoomId));
       loading = false;
       notifyListeners();
@@ -193,7 +219,11 @@ class GameController extends ChangeNotifier {
       loading = true;
       notifyListeners();
       activeSlot = slot;
-      session = await GameSession.create(WorldRepository());
+      session = await GameSession.create(
+        _worldRepo(),
+        localeTag: localeTag,
+        messages: _testMessages,
+      );
       log.clear();
       pendingEnding = EndingKind.none;
       battleNavigationPending = false;
@@ -362,12 +392,12 @@ class GameController extends ChangeNotifier {
       }
       if (lowered == 'map' || lowered == 'm') {
         mapVisible = !mapVisible;
-        _append(mapVisible ? '已显示迷雾残页。' : '已隐藏迷雾残页。');
+        _append(mapVisible ? session!.messages.mapShown : session!.messages.mapHidden);
         return;
       }
       if (kDebugMode && (lowered == 'dev' || lowered == 'developer')) {
         await toggleDeveloperMode();
-        _append('开发者模式：${developerMode ? '开' : '关'}');
+        _append(developerMode ? session!.messages.devModeOn : session!.messages.devModeOff);
         return;
       }
       final wasWon = s.won;
@@ -423,18 +453,18 @@ class GameController extends ChangeNotifier {
     }
     if (s.won && !s.flags.containsKey('main_win_announced')) {
       s.flags['main_win_announced'] = true;
-      _append('\n🎉 主线通关！你找回了所有记忆，打破了迷雾诅咒！');
-      _append('可继续探索基金会收容站点，或使用 ng+ 开启二周目。');
+      _append('\n${s.messages.mainClearAnnounced}');
+      _append(s.messages.mainClearContinueHint);
     }
     if (s.siteWon && !s.flags.containsKey('site_win_announced')) {
       s.flags['site_win_announced'] = true;
-      _append('\n☢️ 站点最终BOSS已击败！站点行动完成！');
-      _append('可继续自由探索，或使用 ng+ 开启二周目。');
+      _append('\n${s.messages.siteClearAnnounced}');
+      _append(s.messages.siteClearContinueHint);
     }
     if (s.playerHp <= 0) {
       s.reviveAfterDeath();
       pendingEnding = EndingKind.gameOver;
-      _append('\n💀 你死了……得分 -${GameSession.deathScorePenalty}（不低于 0）');
+      _append('\n${s.messages.deathPenalty(GameSession.deathScorePenalty)}');
       unawaited(_persist());
     } else {
       unawaited(_persist());
@@ -529,7 +559,7 @@ class GameController extends ChangeNotifier {
     final bonus = pendingCombatGoldBonus;
     pendingCombatGoldBonus = 0;
     s.gold += bonus;
-    _append('\n✨ 迷雾馈赠：额外获得 $bonus 金币。');
+    _append('\n${s.messages.combatGoldBonus(bonus)}');
     unawaited(_persist());
     notifyListeners();
   }
@@ -541,7 +571,7 @@ class GameController extends ChangeNotifier {
     if (s == null || rewardedReviveUsed) return;
     rewardedReviveUsed = true;
     s.score += GameSession.deathScorePenalty;
-    _append('\n🔥 微光挽回了本次死亡损失，返还 ${GameSession.deathScorePenalty} 分。');
+    _append('\n${s.messages.deathPenaltyRefund(GameSession.deathScorePenalty)}');
     unawaited(_persist());
     notifyListeners();
   }
@@ -605,11 +635,11 @@ class GameController extends ChangeNotifier {
       _notifyPlayGamesEnding(EndingKind.mainClear);
       if (!s.flags.containsKey('main_win_announced')) {
         s.flags['main_win_announced'] = true;
-        _append('\n🎉 宝石在塔顶共鸣，记忆涌回——迷雾诅咒随之消散！');
-        _append('可继续探索基金会收容站点，或使用 ng+ 开启二周目。');
+        _append('\n${s.messages.msg('main_clear_tower_top')}');
+        _append(s.messages.mainClearContinueHint);
       }
     } else {
-      _append('你回到了塔顶。宝石仍在手中，等待被嵌入书桌凹槽。');
+      _append(s.messages.msg('tower_top_waiting_gem'));
     }
     notifyListeners();
   }

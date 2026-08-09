@@ -1,0 +1,1565 @@
+[
+  {
+    "id": "forest_entrance",
+    "name": "Entrée de la forêt brumeuse",
+    "emoji": "🌲",
+    "map": {
+      "layer": "surface",
+      "x": 3,
+      "y": 3
+    },
+    "desc": "La lisière de la forêt enveloppée d'un épais brouillard. Les arbres centenaires dominent et la brume grise coule.\nLe chemin s'enfonce profondément dans la forêt (au nord), avec une cabane abandonnée à l'ouest (ouest) et les ruines d'une tour au sud (sud).\nUn vieil homme se tenait avec une pelle à côté de la pierre tombale, comme s'il attendait quelque chose.",
+    "exits": {
+      "north": "dark_forest",
+      "west": "abandoned_hut",
+      "south": "misty_path"
+    },
+    "npc_id": "gravedigger"
+  },
+  {
+    "id": "abandoned_hut",
+    "name": "cabane abandonnée",
+    "emoji": "🏠",
+    "map": {
+      "layer": "surface",
+      "x": 2,
+      "y": 3
+    },
+    "desc": "Une maison en bois délabrée dont la moitié du toit s’est effondrée. Il y a une boîte en fer dans le coin et une lanterne sur la table.\nIl semble y avoir quelque chose qui bouge dans le coin...",
+    "exits": {
+      "east": "forest_entrance"
+    },
+    "items": [
+      "rusty_key",
+      "lantern",
+      "old_coin"
+    ],
+    "monster_id": "giant_rat"
+  },
+  {
+    "id": "dark_forest",
+    "name": "forêt sombre",
+    "emoji": "🌳",
+    "map": {
+      "layer": "surface",
+      "x": 3,
+      "y": 2
+    },
+    "desc": "Devenant plus sombre. Les arbres centenaires sont tordus et il y a des ombres dans le brouillard. Il y a des loups qui hurlent au loin.\nIl semble y avoir un cimetière abandonné à l'ouest, menant à une grotte au nord et à un carrefour à l'est.",
+    "exits": {
+      "south": "forest_entrance",
+      "north": "cave_entrance",
+      "east": "crossroads",
+      "west": "wolf_den"
+    },
+    "items": [
+      "old_sword",
+      "bread"
+    ],
+    "monster_id": "wolf",
+    "npc_id": "old_hermit"
+  },
+  {
+    "id": "cave_entrance",
+    "name": "entrée de la grotte",
+    "emoji": "🕳️",
+    "map": {
+      "layer": "cave",
+      "x": 2,
+      "y": 0
+    },
+    "desc": "L’entrée sombre de la grotte était remplie d’un vent sombre. Il y a des encoches sur les parois de la grotte. Il y a un passage vers le bas.",
+    "exits": {
+      "south": "dark_forest",
+      "down": "cave_middle"
+    },
+    "dark": true,
+    "items": [
+      "torch",
+      "mushroom"
+    ]
+  },
+  {
+    "id": "cave_middle",
+    "name": "niveau intermédiaire de la grotte",
+    "emoji": "🦇",
+    "map": {
+      "layer": "cave",
+      "x": 2,
+      "y": 1
+    },
+    "desc": "Salle troglodyte naturelle avec des fissures au-dessus qui laissent passer la lumière. Les parois de la grotte brillent de mousse.\nPlusieurs passages mènent dans des directions différentes.",
+    "exits": {
+      "up": "cave_entrance",
+      "down": "spider_nest",
+      "east": "ancient_ruins",
+      "north": "goblin_cave",
+      "south": "underground_river"
+    },
+    "dark": true,
+    "items": [
+      "silver_key",
+      "lesser_potion"
+    ]
+  },
+  {
+    "id": "cave_depths",
+    "name": "Au fond de la grotte",
+    "emoji": "🕷️",
+    "map": {
+      "layer": "cave",
+      "x": 2,
+      "y": 3
+    },
+    "desc": "La partie la plus profonde de la grotte dégage une odeur âcre. Il y a des ossements au sol.\nUne araignée géante tisse une toile dans un coin...",
+    "exits": {
+      "up": "spider_nest"
+    },
+    "dark": true,
+    "items": [
+      "golden_cup",
+      "spider_silk"
+    ],
+    "monster_id": "giant_spider"
+  },
+  {
+    "id": "ancient_ruins",
+    "name": "ruines antiques",
+    "emoji": "🗿",
+    "map": {
+      "layer": "cave",
+      "x": 3,
+      "y": 1
+    },
+    "desc": "La chambre en pierre présente des sculptures en relief sur les murs. La plateforme centrale en pierre est dotée de coussins en velours.\nLa porte en pierre du mur nord est verrouillée et nécessite une clé rouillée.",
+    "exits": {
+      "west": "cave_middle",
+      "east": "echoing_hall"
+    },
+    "items": [
+      "magic_scroll",
+      "ancient_scroll"
+    ]
+  },
+  {
+    "id": "hidden_passage",
+    "name": "passage secret",
+    "emoji": "🚪",
+    "map": {
+      "layer": "cave",
+      "x": 3,
+      "y": 0
+    },
+    "desc": "Le passage étroit ne permet le passage qu’à une seule personne. Il y a des runes lumineuses sur les murs.\nIl y a un escalier montant au bout du passage.",
+    "exits": {
+      "south": "ancient_ruins",
+      "up": "tower_base"
+    },
+    "dark": true,
+    "monster_id": "ghost"
+  },
+  {
+    "id": "crossroads",
+    "name": "carrefour",
+    "emoji": "🛤️",
+    "map": {
+      "layer": "surface",
+      "x": 4,
+      "y": 2
+    },
+    "desc": "Une clairière forestière où se croisent cinq routes. Plaque de rue : ←Lac | Nord : Tour | Sud : Forêt | Est : ←",
+    "exits": {
+      "west": "dark_forest",
+      "north": "tower_base",
+      "east": "lake_shore",
+      "south": "old_mill"
+    },
+    "npc_id": "wandering_merchant"
+  },
+  {
+    "id": "tower_base",
+    "name": "bas de la tour",
+    "emoji": "🏰",
+    "map": {
+      "layers": {
+        "surface": {
+          "x": 4,
+          "y": 1
+        },
+        "tower": {
+          "x": 1,
+          "y": 2
+        }
+      }
+    },
+    "desc": "Une ancienne tour en pierre couverte de vignes. La porte de la tour est bien fermée et la forme du trou de la serrure correspond à celle de la clé en argent.",
+    "exits": {
+      "south": "crossroads"
+    },
+    "items": [
+      "journal",
+      "lesser_potion"
+    ]
+  },
+  {
+    "id": "tower_middle",
+    "name": "étage intermédiaire de la tour",
+    "emoji": "🌀",
+    "map": {
+      "layer": "tower",
+      "x": 1,
+      "y": 1
+    },
+    "desc": "La salle circulaire de la tour présente des tapisseries anciennes accrochées aux murs.\nL'escalier en colimaçon continue vers le haut.",
+    "exits": {
+      "down": "tower_foyer",
+      "up": "tower_observatory",
+      "east": "tower_chapel"
+    },
+    "npc_id": "tower_guardian",
+    "items": [
+      "crystal_key",
+      "magic_book"
+    ]
+  },
+  {
+    "id": "tower_top",
+    "name": "sommet de la tour",
+    "emoji": "🐉",
+    "map": {
+      "layer": "tower",
+      "x": 1,
+      "y": 0
+    },
+    "desc": "Chambre au sommet de la tour ! Rempli de livres et d'instruments magiques. Il y a un brouillard sans fin devant la fenêtre.\nIl y a un joyau magique étincelant sur le bureau central. Mais un bébé dragon est assis à côté de la gemme !",
+    "exits": {
+      "down": "tower_ritual"
+    },
+    "monster_id": "dragon_whelp"
+  },
+  {
+    "id": "lake_shore",
+    "name": "bord du lac",
+    "emoji": "🌊",
+    "map": {
+      "layer": "surface",
+      "x": 5,
+      "y": 2
+    },
+    "desc": "Lac calme avec eau claire. De petits bateaux en bois flottent sur le lac.\nIl y a un petit village au sud. Un vieil homme portant un arc pêchait au bord du lac.",
+    "exits": {
+      "west": "crossroads",
+      "south": "lake_village",
+      "east": "hunter_lodge"
+    },
+    "items": [
+      "compass",
+      "fishing_rod"
+    ]
+  },
+  {
+    "id": "lake_village",
+    "name": "village au bord du lac",
+    "emoji": "🏘️",
+    "map": {
+      "layer": "surface",
+      "x": 5,
+      "y": 3
+    },
+    "desc": "Petit village de pêcheurs tranquille. Il y a plusieurs maisons en bois avec de la fumée qui s'élève.\nUn avis est affiché sur le tableau d'affichage à l'entrée du village. Le village possède une taverne, une forge et un temple.",
+    "exits": {
+      "north": "lake_shore",
+      "south": "lake_village_inn",
+      "west": "lake_village_smithy",
+      "east": "ferry_dock"
+    },
+    "npc_id": "healer_lily",
+    "items": [
+      "dried_meat",
+      "bread"
+    ]
+  },
+  {
+    "id": "lake_island",
+    "name": "île au centre du lac",
+    "emoji": "🏝️",
+    "map": {
+      "layer": "surface",
+      "x": 7,
+      "y": 3
+    },
+    "desc": "Il y a des ruines de temples sur l'île. Les pierres précieuses sur l'autel sont protégées par une barrière magique.\nIl est accessible en ferry depuis l'embarcadère. Il y a des ombres qui nagent dans l'eau...",
+    "exits": {
+      "west": "ferry_dock"
+    },
+    "monster_id": "shadow_beast",
+    "items": [
+      "sacred_water",
+      "emerald"
+    ]
+  },
+  {
+    "id": "goblin_cave",
+    "name": "repaire des gobelins",
+    "emoji": "👺",
+    "map": {
+      "layer": "cave",
+      "x": 1,
+      "y": 1
+    },
+    "desc": "L'odeur des fesses et du nez me frappe le visage ! La grotte était remplie de débris et d’ossements volés.\nUn groupe de gobelins se partage le butin. Quand ils vous voient, ils crient et se précipitent !",
+    "exits": {
+      "south": "cave_middle",
+      "north": "goblin_warren"
+    },
+    "dark": true,
+    "items": [
+      "golden_cup",
+      "old_coin",
+      "lockpick",
+      "goblin_ear"
+    ],
+    "monster_ids": [
+      "goblin",
+      "goblin_shaman"
+    ]
+  },
+  {
+    "id": "goblin_throne",
+    "name": "Trône gobelin",
+    "emoji": "👑",
+    "map": {
+      "layer": "cave",
+      "x": 1,
+      "y": -1
+    },
+    "desc": "Un temple en pierre naturelle dans la partie la plus profonde de la grotte. Un gobelin géant est assis sur un tas d'os.\nIl porte une couronne en os sur la tête et le bâton géant dans sa main est encore taché de sang : c'est le Roi Gobelin !",
+    "exits": {
+      "south": "goblin_warren"
+    },
+    "dark": true,
+    "items": [
+      "ancient_crown",
+      "rune_sword"
+    ],
+    "monster_id": "goblin_king"
+  },
+  {
+    "id": "underground_river",
+    "name": "rivière souterraine",
+    "emoji": "💧",
+    "map": {
+      "layer": "cave",
+      "x": 2,
+      "y": 2
+    },
+    "desc": "La grotte s’est soudainement ouverte ici et une sombre rivière souterraine s’est lentement écoulée.\nIl y avait de la mousse brillante comme des lucioles sur la rive de la rivière, et quelque chose nageait dans l'eau...",
+    "exits": {
+      "north": "cave_middle",
+      "east": "frozen_cave",
+      "west": "hidden_grove",
+      "south": "drowned_shrine"
+    },
+    "dark": true,
+    "items": [
+      "fishing_rod",
+      "magic_herb",
+      "silver_ingot"
+    ],
+    "monster_id": "giant_snake"
+  },
+  {
+    "id": "frozen_cave",
+    "name": "grotte gelée",
+    "emoji": "❄️",
+    "map": {
+      "layer": "cave",
+      "x": 3,
+      "y": 2
+    },
+    "desc": "Les parois de la grotte étaient recouvertes d’une épaisse couche de givre et la température chuta.\nLe souffle qu'il expirait se condensa instantanément en brume blanche et le sol était gelé et très glissant.\nUne créature faite de cristaux de glace reste immobile dans un coin... jusqu'à ce qu'elle vous voie.",
+    "exits": {
+      "west": "underground_river",
+      "east": "crystal_gallery"
+    },
+    "dark": true,
+    "items": [
+      "ice_crystal",
+      "scale_armor",
+      "mana_potion"
+    ],
+    "monster_id": "basilisk"
+  },
+  {
+    "id": "hidden_grove",
+    "name": "arbres cachés",
+    "emoji": "🌿",
+    "map": {
+      "layer": "cave",
+      "x": 1,
+      "y": 2
+    },
+    "desc": "Une clairière isolée entourée d'arbres centenaires. Le soleil projette des ombres et des lumières tachetées à travers les feuilles.\nIl y a un autel de pierre au centre de la clairière, entouré d'herbes lumineuses.\nL'air est rempli de parfums de fleurs et de magie.",
+    "exits": {
+      "east": "underground_river",
+      "west": "alchemist_lab"
+    },
+    "npc_id": "wandering_rogue",
+    "items": [
+      "fairy_dust",
+      "magic_herb",
+      "mushroom",
+      "health_ring"
+    ],
+    "monster_id": "treant"
+  },
+  {
+    "id": "bandit_camp",
+    "name": "camp de bandits",
+    "emoji": "⛺",
+    "map": {
+      "layer": "surface",
+      "x": 2,
+      "y": 4
+    },
+    "desc": "Dans une clairière au fond de la forêt, il y avait plusieurs tentes simples. Le feu de joie brûle toujours.\nPlusieurs voleurs à l'air féroce se partagent le butin, et quand ils vous voient, ils dégainent tous leurs armes !",
+    "exits": {
+      "north": "bandit_hideout",
+      "east": "old_mill"
+    },
+    "items": [
+      "old_coin",
+      "dried_meat",
+      "leather_armor"
+    ],
+    "monster_id": "bandit_leader"
+  },
+  {
+    "id": "bandit_hideout",
+    "name": "Salle du trésor du voleur",
+    "emoji": "💎",
+    "map": {
+      "layer": "surface",
+      "x": 1,
+      "y": 4
+    },
+    "desc": "La salle au trésor secrète des voleurs ! Des tas remplis de biens pillés.\nIl y a un coffre au trésor géant dans le coin... est-ce qu'il respire ? !",
+    "exits": {
+      "south": "bandit_camp"
+    },
+    "items": [
+      "gold_ingot",
+      "silver_ingot",
+      "ruby",
+      "sapphire",
+      "diamond"
+    ],
+    "monster_id": "mimic"
+  },
+  {
+    "id": "lake_village_inn",
+    "name": "Taverne brumeuse",
+    "emoji": "🍺",
+    "map": {
+      "layer": "surface",
+      "x": 5,
+      "y": 4
+    },
+    "desc": "La taverne chaleureuse sentait la bière et le barbecue. Le feu brûlait vivement dans la cheminée.\nDiverses têtes de proies sont accrochées aux murs et quelques habitants boivent et discutent dans un coin.",
+    "exits": {
+      "north": "lake_village",
+      "east": "lake_village_temple"
+    },
+    "npc_id": "innkeeper",
+    "items": [
+      "fish",
+      "bread",
+      "honey"
+    ]
+  },
+  {
+    "id": "lake_village_smithy",
+    "name": "atelier de forgeron",
+    "emoji": "⚒️",
+    "map": {
+      "layer": "surface",
+      "x": 4,
+      "y": 3
+    },
+    "desc": "Le four chaud et le cliquetis des marteaux. Les murs sont recouverts de diverses armes et armures.\nLa température est beaucoup plus élevée qu'à l'extérieur.",
+    "exits": {
+      "east": "lake_village"
+    },
+    "npc_id": "blacksmith",
+    "items": [
+      "iron_sword",
+      "helmet",
+      "shield"
+    ]
+  },
+  {
+    "id": "lake_village_temple",
+    "name": "Temple de la Lumière",
+    "emoji": "⛪",
+    "map": {
+      "layer": "surface",
+      "x": 7,
+      "y": 4
+    },
+    "desc": "Un temple petit et solennel. Les vitraux laissent entrer une douce lueur.\nL'odeur de l'encens remplit l'air, ce qui est apaisant.",
+    "exits": {
+      "west": "lake_village_inn"
+    },
+    "npc_id": "village_elder",
+    "items": [
+      "lesser_potion",
+      "sacred_water"
+    ]
+  },
+  {
+    "id": "alchemist_lab",
+    "name": "laboratoire d'alchimiste",
+    "emoji": "🧪",
+    "map": {
+      "layer": "cave",
+      "x": 0,
+      "y": 2
+    },
+    "desc": "Un laboratoire troglodyte rempli d'étranges instruments et bouteilles.\nDes liquides colorés bouillaient dans les flacons, remplissant l’air d’une odeur âcre.",
+    "exits": {
+      "east": "hidden_grove",
+      "north": "mushroom_warren",
+      "south": "fungal_garden"
+    },
+    "npc_id": "mad_alchemist",
+    "items": [
+      "mana_potion",
+      "fairy_dust",
+      "mandrake_root"
+    ]
+  },
+  {
+    "id": "forest_tower_ruins",
+    "name": "ruines de la tour forestière",
+    "emoji": "🏚️",
+    "map": {
+      "layer": "surface",
+      "x": 3,
+      "y": 4
+    },
+    "desc": "Une ancienne tour de pierre, à moitié effondrée, couverte de vignes et de mousse.\nL'escalier en colimaçon à l'intérieur de la tour est cassé, mais il semble y avoir de l'espace sous terre.\nUn aigle géant a construit son nid au sommet de la tour.",
+    "exits": {
+      "north": "misty_path",
+      "west": "bandit_camp"
+    },
+    "items": [
+      "phoenix_feather",
+      "ancient_scroll",
+      "mystic_amulet"
+    ],
+    "monster_id": "forest_troll"
+  },
+  {
+    "id": "haunted_graveyard",
+    "name": "Cimetière maudit",
+    "emoji": "🪦",
+    "map": {
+      "layer": "surface",
+      "x": 3,
+      "y": 1
+    },
+    "desc": "Un cimetière désolé avec des pierres tombales enfoncées de travers dans le sol.\nLe vent froid gémissait à travers les arbres morts. Quelque chose bouge sous terre...\nAu fond du cimetière, se trouve une porte en pierre enchevêtrée de vignes. La forme de la rainure correspond à la gemme magique gardée par le jeune dragon au sommet de la tour.\nUn mercenaire en armure noire cherchait quelque chose dans le cimetière.",
+    "exits": {
+      "west": "ruined_chapel"
+    },
+    "npc_id": "bounty_hunter",
+    "items": [
+      "old_coin",
+      "silver_ring",
+      "mystic_amulet",
+      "scp_dossier",
+      "keycard_lvl2"
+    ],
+    "monster_ids": [
+      "ghost",
+      "wraith"
+    ]
+  },
+  {
+    "id": "scp_site_gate",
+    "name": "Contrôle d'accès au site de confinement",
+    "emoji": "🚧",
+    "map": {
+      "layer": "site",
+      "x": 1,
+      "y": 2
+    },
+    "desc": "Au bout du couloir en béton se trouve une lourde porte hermétique, avec un logo fané de la Fondation collé au mur.\nDes gemmes magiques résonnaient ici, ouvrant la voie vers les profondeurs du site de confinement.",
+    "exits": {
+      "south": "haunted_graveyard",
+      "north": "scp_security_hall"
+    },
+    "items": [
+      "site_ration"
+    ]
+  },
+  {
+    "id": "scp_security_hall",
+    "name": "Salle de commandement de sécurité",
+    "emoji": "🛡️",
+    "map": {
+      "layer": "site",
+      "x": 1,
+      "y": 1
+    },
+    "desc": "La salle de commandement regorge d'écrans de surveillance et la plupart des équipements ont été éteints. Des caisses d’armures abandonnées étaient entassées dans un coin.",
+    "exits": {
+      "south": "scp_site_gate",
+      "east": "scp_containment_hall"
+    },
+    "npc_id": "mtf_liaison"
+  },
+  {
+    "id": "scp_containment_hall",
+    "name": "couloir de confinement",
+    "emoji": "🚪",
+    "map": {
+      "layer": "site",
+      "x": 2,
+      "y": 1
+    },
+    "desc": "Il y a des unités de confinement vaguement numérotées des deux côtés, et la plupart des portes sont tordues et déformées.\nLe côté sud mène à la zone de l'unité, et le faible bruit des engrenages peut être entendu vers le bas - c'est le n° 914.",
+    "exits": {
+      "west": "scp_security_hall",
+      "north": "scp_archive",
+      "east": "scp_breach_chamber",
+      "south": "scp_cell_block",
+      "down": "scp_914_chamber"
+    },
+    "dark": true,
+    "items": [
+      "observation_log",
+      "lesser_potion"
+    ],
+    "monster_id": "scp_sentry_drone"
+  },
+  {
+    "id": "scp_archive",
+    "name": "Archives",
+    "emoji": "📚",
+    "map": {
+      "layer": "site",
+      "x": 2,
+      "y": 0
+    },
+    "desc": "Parmi les étagères effondrées, un terminal diffusait encore en boucle une vidéo d’avertissement. L'odeur de moisi du papier flottait dans l'air.",
+    "exits": {
+      "south": "scp_containment_hall"
+    },
+    "npc_id": "dr_ellis",
+    "monster_id": "scp_mimic_clerk"
+  },
+  {
+    "id": "scp_breach_chamber",
+    "name": "Salle de confinement hors de contrôle",
+    "emoji": "⚠️",
+    "map": {
+      "layer": "site",
+      "x": 3,
+      "y": 1
+    },
+    "desc": "Le pilier de confinement au centre de la pièce s'est brisé et un noyau anormal pulsé est suspendu dans les airs. Des voyants d’avertissement sur les murs clignotaient sauvagement.",
+    "exits": {
+      "west": "scp_containment_hall"
+    },
+    "dark": true,
+    "monster_id": "scp_breach_core"
+  },
+  {
+    "id": "scp_cell_block",
+    "name": "Zone de l'unité de confinement",
+    "emoji": "🏢",
+    "map": {
+      "layer": "site",
+      "x": 2,
+      "y": 2
+    },
+    "desc": "Des plaques signalétiques endommagées pendaient des deux côtés du couloir : 012, 096, 173, 049... les voyants d'avertissement clignotaient toujours.",
+    "exits": {
+      "north": "scp_containment_hall",
+      "east": "scp_012_cell",
+      "west": "scp_173_cell",
+      "south": "scp_096_cell",
+      "down": "scp_087_stair",
+      "up": "scp_294_lounge"
+    },
+    "items": [
+      "scp_701_script"
+    ]
+  },
+  {
+    "id": "scp_914_chamber",
+    "name": "Atelier d'équipement (SCP-ZH-914)",
+    "emoji": "⚙️",
+    "map": {
+      "layer": "site",
+      "x": 1,
+      "y": 3
+    },
+    "desc": "D’énormes machines mécaniques dominent la salle. La trémie d'alimentation et le plateau d'engrenage sont en bon état.\nPlaque signalétique : rugueux/1:1/fin/très fin.\nTapez utilisez 914 pour tenter d’affiner un objet hors quête dans votre sac à dos.",
+    "exits": {
+      "up": "scp_containment_hall"
+    },
+    "items": [
+      "scp_447_slime"
+    ]
+  },
+  {
+    "id": "scp_012_cell",
+    "name": "Unité 012",
+    "emoji": "🎼",
+    "map": {
+      "layer": "site",
+      "x": 3,
+      "y": 2
+    },
+    "desc": "Des partitions tachées de sang étaient clouées sur le pupitre derrière la vitre. Le murmure vous oblige à vous rapprocher.",
+    "exits": {
+      "west": "scp_cell_block"
+    },
+    "items": [
+      "scp_012_score"
+    ]
+  },
+  {
+    "id": "scp_096_cell",
+    "name": "Unité 096",
+    "emoji": "🫣",
+    "map": {
+      "layer": "site",
+      "x": 2,
+      "y": 3
+    },
+    "desc": "Chambre insonorisée épaissie. La surveillance a été rayée. Assis dans un coin se trouvait une silhouette pâle se couvrant le visage de ses mains.",
+    "exits": {
+      "north": "scp_cell_block"
+    },
+    "monster_id": "scp_096"
+  },
+  {
+    "id": "scp_173_cell",
+    "name": "Unité 173",
+    "emoji": "🗿",
+    "map": {
+      "layer": "site",
+      "x": 1,
+      "y": 2
+    },
+    "desc": "La cellule de détention vide présente des rayures et des taches sur le sol. La sculpture fait face à la porte – on jurerait qu’elle n’était pas là à l’instant.",
+    "exits": {
+      "east": "scp_cell_block"
+    },
+    "monster_id": "scp_173",
+    "items": [
+      "scp_513_bell"
+    ]
+  },
+  {
+    "id": "scp_087_stair",
+    "name": "Escaliers sans fin (SCP-ZH-087)",
+    "emoji": "🌀",
+    "map": {
+      "layer": "site",
+      "x": 2,
+      "y": 4
+    },
+    "desc": "Les escaliers en béton mènent sans fin. Il y eut un léger cri venant d'en bas.",
+    "exits": {
+      "up": "scp_cell_block",
+      "down": "scp_087_depth"
+    },
+    "dark": true
+  },
+  {
+    "id": "scp_087_depth",
+    "name": "Escaliers plus profonds",
+    "emoji": "🌑",
+    "map": {
+      "layer": "site",
+      "x": 2,
+      "y": 5
+    },
+    "desc": "Les lumières étaient presque éteintes. Le visage est collé au coin inférieur... ou peut-être que c'est juste une tache.",
+    "exits": {
+      "up": "scp_087_stair",
+      "east": "scp_106_corridor"
+    },
+    "dark": true,
+    "monster_id": "scp_372",
+    "items": [
+      "scp_055_object"
+    ]
+  },
+  {
+    "id": "scp_106_corridor",
+    "name": "couloir de corrosion",
+    "emoji": "🟤",
+    "map": {
+      "layer": "site",
+      "x": 3,
+      "y": 5
+    },
+    "desc": "Les murs suintaient d’un liquide noir corrosif et les empreintes de pas disparaissaient dans le mur solide.",
+    "exits": {
+      "west": "scp_087_depth",
+      "north": "scp_002_room"
+    },
+    "monster_id": "scp_106",
+    "dark": true
+  },
+  {
+    "id": "scp_002_room",
+    "name": "Salle de chair (SCP-ZH-002)",
+    "emoji": "🫀",
+    "map": {
+      "layer": "site",
+      "x": 3,
+      "y": 4
+    },
+    "desc": "La chambre sphérique est recouverte de veines et de tendons et les meubles sont constitués d'os.",
+    "exits": {
+      "south": "scp_106_corridor",
+      "east": "scp_049_ward"
+    },
+    "items": [
+      "scp_035_mask"
+    ]
+  },
+  {
+    "id": "scp_049_ward",
+    "name": "Unité d'isolement",
+    "emoji": "🏥",
+    "map": {
+      "layer": "site",
+      "x": 4,
+      "y": 4
+    },
+    "desc": "Zone médicale abandonnée, l’air sent le formol. Le médecin de la peste se tenait à côté du lit.",
+    "exits": {
+      "west": "scp_002_room",
+      "north": "scp_999_play",
+      "east": "scp_079_server"
+    },
+    "npc_id": "scp_049",
+    "items": [
+      "scp_008_vial",
+      "lesser_potion"
+    ]
+  },
+  {
+    "id": "scp_999_play",
+    "name": "Chambre d'isolement heureuse",
+    "emoji": "🧡",
+    "map": {
+      "layer": "site",
+      "x": 4,
+      "y": 3
+    },
+    "desc": "Dans la pièce capitonnée, des boules de gomme orange rebondissaient joyeusement.",
+    "exits": {
+      "south": "scp_049_ward",
+      "west": "scp_294_lounge"
+    },
+    "npc_id": "scp_999",
+    "items": [
+      "scp_1230_book"
+    ]
+  },
+  {
+    "id": "scp_079_server",
+    "name": "Salle des serveurs (SCP-ZH-079)",
+    "emoji": "💻",
+    "map": {
+      "layer": "site",
+      "x": 5,
+      "y": 4
+    },
+    "desc": "Le rack rugit. L’écran d’un ordinateur ancien s’allume : EN ATTENTE…",
+    "exits": {
+      "west": "scp_049_ward",
+      "north": "scp_343_room",
+      "east": "scp_682_pit"
+    },
+    "npc_id": "scp_079",
+    "items": [
+      "scp_1981_tape"
+    ]
+  },
+  {
+    "id": "scp_343_room",
+    "name": "salon",
+    "emoji": "☕",
+    "map": {
+      "layer": "site",
+      "x": 5,
+      "y": 3
+    },
+    "desc": "Une salle de réception cosy qui ne colle pas au style du site. Des cheminées, des canapés et des services à thé sont tous disponibles.",
+    "exits": {
+      "south": "scp_079_server"
+    },
+    "npc_id": "scp_343"
+  },
+  {
+    "id": "scp_294_lounge",
+    "name": "Salon de café (SCP-ZH-294)",
+    "emoji": "☕",
+    "map": {
+      "layer": "site",
+      "x": 3,
+      "y": 3
+    },
+    "desc": "Dans le coin se trouve une machine à café qui peut servir n'importe quelle boisson. Le panneau indique : Entrez l'utilisation 294.",
+    "exits": {
+      "east": "scp_999_play",
+      "west": "scp_261_canteen",
+      "down": "scp_cell_block"
+    },
+    "items": [
+      "site_ration"
+    ]
+  },
+  {
+    "id": "scp_261_canteen",
+    "name": "Arcade de distributeur automatique dimensionnel (SCP-ZH-261)",
+    "emoji": "🥤",
+    "map": {
+      "layer": "site",
+      "x": 0,
+      "y": 3
+    },
+    "desc": "D’étranges distributeurs automatiques crachent des snacks dont l’emballage est inconnu. La fente à pièces brille : utilisez le 261.",
+    "exits": {
+      "east": "scp_294_lounge",
+      "north": "scp_895_cctv"
+    },
+    "items": [
+      "old_coin",
+      "scp_140_chronicle",
+      "scp_261_snack"
+    ]
+  },
+  {
+    "id": "scp_895_cctv",
+    "name": "Salle de surveillance (SCP-ZH-895)",
+    "emoji": "📹",
+    "map": {
+      "layer": "site",
+      "x": 0,
+      "y": 2
+    },
+    "desc": "L'écran montre un gros plan d'un cercueil. Plus vous le regardez, plus vous avez l’impression que l’image vous regarde.",
+    "exits": {
+      "south": "scp_261_canteen",
+      "east": "scp_073_chamber"
+    },
+    "items": [
+      "scp_205_lamp"
+    ]
+  },
+  {
+    "id": "scp_073_chamber",
+    "name": "Salle de conférence 073",
+    "emoji": "👁️",
+    "map": {
+      "layer": "site",
+      "x": 0,
+      "y": 1
+    },
+    "desc": "Salle de réunion simple. L'homme avec la marque sur le front était assis tranquillement.",
+    "exits": {
+      "west": "scp_895_cctv",
+      "east": "scp_076_crypt"
+    },
+    "npc_id": "scp_073"
+  },
+  {
+    "id": "scp_076_crypt",
+    "name": "Chambre du sarcophage (SCP-ZH-076)",
+    "emoji": "⚰️",
+    "map": {
+      "layer": "site",
+      "x": 1,
+      "y": 1
+    },
+    "desc": "Le sarcophage noir était entrouvert et le sol était couvert de traces de couteaux.",
+    "exits": {
+      "west": "scp_073_chamber"
+    },
+    "monster_id": "scp_076",
+    "items": [
+      "scp_860_key"
+    ]
+  },
+  {
+    "id": "scp_682_pit",
+    "name": "Bassin acide n° 682",
+    "emoji": "☢️",
+    "map": {
+      "layer": "site",
+      "x": 6,
+      "y": 4
+    },
+    "desc": "Immense réservoir de confinement d’acide. Quelque chose bouge sous la surface – la haine éternelle est toujours là. Il y a une porte noire scellée du côté est, avec le numéro « 001 » écrit et réécrit.",
+    "exits": {
+      "west": "scp_079_server",
+      "north": "scp_3008_aisle"
+    },
+    "monster_id": "scp_682"
+  },
+  {
+    "id": "scp_001_vault",
+    "name": "N° 001 Coffre-fort de stockage final",
+    "emoji": "☠️",
+    "map": {
+      "layer": "site",
+      "x": 7,
+      "y": 4
+    },
+    "desc": "Il n’y a rien à l’intérieur de la porte noire, mais elle semble remplie d’yeux. La seule étiquette restante est \"001\". L'air était aussi épais que l'asphalte : la fin des opérations du site.",
+    "exits": {
+      "west": "scp_682_pit"
+    },
+    "dark": true,
+    "monster_id": "scp_001",
+    "items": [
+      "observation_log"
+    ]
+  },
+  {
+    "id": "scp_3008_aisle",
+    "name": "Chaîne de magasins sans fin (SCP-ZH-3008)",
+    "emoji": "🛒",
+    "map": {
+      "layer": "site",
+      "x": 6,
+      "y": 3
+    },
+    "desc": "Les étagères de style entrepôt s'étendent jusqu'à l'extrémité du champ de vision. Rappel de diffusion : La nuit est sur le point de commencer.",
+    "exits": {
+      "south": "scp_682_pit",
+      "west": "scp_939_den",
+      "north": "scp_egg_storage"
+    },
+    "items": [
+      "scp_1471_phone",
+      "site_ration"
+    ],
+    "monster_id": "scp_1048"
+  },
+  {
+    "id": "scp_egg_storage",
+    "name": "Salle de stockage des œufs (SCP-ZH-3199)",
+    "emoji": "🥚",
+    "map": {
+      "layer": "site",
+      "x": 6,
+      "y": 2
+    },
+    "desc": "Le congélateur s'est fissuré et de la bave et des coquilles vides ont été éparpillées sur le sol.",
+    "exits": {
+      "south": "scp_3008_aisle"
+    },
+    "monster_id": "scp_3199",
+    "items": [
+      "scp_409_crystal"
+    ]
+  },
+  {
+    "id": "scp_939_den",
+    "name": "repaire à gorges multiples",
+    "emoji": "🦷",
+    "map": {
+      "layer": "site",
+      "x": 5,
+      "y": 3
+    },
+    "desc": "Un appel à l’aide familier est venu de l’obscurité. La voix ne sonne pas bien.",
+    "exits": {
+      "east": "scp_3008_aisle",
+      "south": "scp_966_dark",
+      "west": "scp_131_bay"
+    },
+    "dark": true,
+    "monster_id": "scp_939"
+  },
+  {
+    "id": "scp_966_dark",
+    "name": "terrains de chasse sans lumière",
+    "emoji": "🌫️",
+    "map": {
+      "layer": "site",
+      "x": 5,
+      "y": 4
+    },
+    "desc": "Le voyant infrarouge est endommagé. Vous sentez quelque chose attendre dans le rythme de votre respiration.",
+    "exits": {
+      "north": "scp_939_den"
+    },
+    "dark": true,
+    "monster_id": "scp_966",
+    "items": [
+      "scp_178_glasses"
+    ]
+  },
+  {
+    "id": "scp_131_bay",
+    "name": "Entrepôt du détecteur",
+    "emoji": "👀",
+    "map": {
+      "layer": "site",
+      "x": 4,
+      "y": 3
+    },
+    "desc": "Sur le support de chargement, deux robots à globe oculaire roulaient avec enthousiasme.",
+    "exits": {
+      "east": "scp_939_den",
+      "south": "scp_017_vault"
+    },
+    "npc_id": "scp_131",
+    "items": [
+      "scp_113_rock"
+    ]
+  },
+  {
+    "id": "scp_017_vault",
+    "name": "Armoire bloquant la lumière",
+    "emoji": "🌑",
+    "map": {
+      "layer": "site",
+      "x": 4,
+      "y": 4
+    },
+    "desc": "Une voûte entourée de lumières vives. Les ombres se tordent entre les lampadaires.",
+    "exits": {
+      "north": "scp_131_bay"
+    },
+    "monster_id": "scp_017",
+    "items": [
+      "scp_093_disc",
+      "scp_5000_file"
+    ]
+  },
+  {
+    "id": "tower_foyer",
+    "name": "Foyer de la tour",
+    "emoji": "🏛️",
+    "map": {
+      "layer": "tower",
+      "x": 1,
+      "y": 2
+    },
+    "desc": "Derrière la porte de la tour ouverte par la clé en argent se trouve un grand hall en pierre.\nL'armurerie dans l'aile ouest, la bibliothèque dans l'aile est et l'escalier en colimaçon continuent vers le haut.",
+    "exits": {
+      "down": "tower_base",
+      "west": "tower_armory",
+      "east": "tower_library",
+      "up": "tower_middle"
+    }
+  },
+  {
+    "id": "tower_armory",
+    "name": "Armurerie de la tour",
+    "emoji": "⚔️",
+    "map": {
+      "layer": "tower",
+      "x": 0,
+      "y": 2
+    },
+    "desc": "Aux supports en fer étaient accrochés des armes et des boucliers rouillés.",
+    "exits": {
+      "east": "tower_foyer",
+      "down": "tower_prison"
+    },
+    "items": [
+      "iron_sword",
+      "shield",
+      "chain_armor",
+      "lesser_potion"
+    ]
+  },
+  {
+    "id": "tower_library",
+    "name": "bibliothèque de la tour",
+    "emoji": "📚",
+    "map": {
+      "layer": "tower",
+      "x": 2,
+      "y": 2
+    },
+    "desc": "Des étagères imposantes atteignent le plafond. Un vieil érudit lisait des livres anciens aux chandelles.",
+    "exits": {
+      "west": "tower_foyer"
+    },
+    "items": [
+      "magic_book",
+      "ancient_scroll"
+    ],
+    "npc_id": "tower_librarian"
+  },
+  {
+    "id": "tower_chapel",
+    "name": "chapelle-tour",
+    "emoji": "⛪",
+    "map": {
+      "layer": "tower",
+      "x": 2,
+      "y": 1
+    },
+    "desc": "La chapelle, longue et étroite, possède une lourde porte en pierre du côté nord menant à la salle de cérémonie.",
+    "exits": {
+      "west": "tower_middle",
+      "north": "tower_ritual"
+    },
+    "items": [
+      "sacred_water",
+      "lesser_potion"
+    ]
+  },
+  {
+    "id": "tower_observatory",
+    "name": "tour d'observatoire",
+    "emoji": "🔭",
+    "map": {
+      "layer": "tower",
+      "x": 1,
+      "y": 1
+    },
+    "desc": "Dans la salle d'observation des étoiles circulaire, le télescope en laiton pointe vers les fissures du dôme et il y a un brouillard gris sans fin à l'extérieur de la fenêtre.",
+    "exits": {
+      "down": "tower_middle"
+    },
+    "items": [
+      "compass",
+      "moonlight_elixir"
+    ]
+  },
+  {
+    "id": "tower_prison",
+    "name": "cellule tour",
+    "emoji": "⛓️",
+    "map": {
+      "layer": "tower",
+      "x": 0,
+      "y": 1
+    },
+    "desc": "Une cellule sombre et humide. Un vieil homme vêtu d'une robe de moine usée était assis les jambes croisées dans un coin.",
+    "exits": {
+      "up": "tower_armory",
+      "west": "tower_ritual"
+    },
+    "items": [
+      "rope",
+      "bread"
+    ],
+    "npc_id": "cave_hermit"
+  },
+  {
+    "id": "tower_ritual",
+    "name": "Salle de cérémonie de la tour",
+    "emoji": "🔮",
+    "map": {
+      "layer": "tower",
+      "x": 1,
+      "y": 0
+    },
+    "desc": "Le sol est gravé de cercles magiques, et les yeux de la statue centrale en pierre s'illuminent : la porte de cristal menant au sommet de la tour est verrouillée.",
+    "exits": {
+      "south": "tower_chapel",
+      "east": "tower_prison"
+    },
+    "monster_id": "stone_golem"
+  },
+  {
+    "id": "goblin_warren",
+    "name": "Grotte des gobelins",
+    "emoji": "👹",
+    "map": {
+      "layer": "cave",
+      "x": 1,
+      "y": 0
+    },
+    "desc": "Des cabanes de gobelins étaient creusées des deux côtés du couloir étroit et la puanteur était accablante.",
+    "exits": {
+      "south": "goblin_cave",
+      "north": "goblin_throne"
+    },
+    "items": [
+      "old_coin",
+      "goblin_ear"
+    ],
+    "monster_ids": [
+      "goblin",
+      "goblin"
+    ],
+    "dark": true
+  },
+  {
+    "id": "spider_nest",
+    "name": "repaire d'araignées",
+    "emoji": "🕸️",
+    "map": {
+      "layer": "cave",
+      "x": 2,
+      "y": 2
+    },
+    "desc": "Les parois et le sol de la grotte étaient recouverts de toiles d’araignées collantes, et des araignées géantes se précipitaient dans l’obscurité.",
+    "exits": {
+      "up": "cave_middle",
+      "down": "cave_depths"
+    },
+    "items": [
+      "spider_silk",
+      "lesser_potion"
+    ],
+    "monster_id": "giant_spider",
+    "dark": true
+  },
+  {
+    "id": "crystal_gallery",
+    "name": "Couloir de cristal",
+    "emoji": "💎",
+    "map": {
+      "layer": "cave",
+      "x": 4,
+      "y": 2
+    },
+    "desc": "Des cristaux bleu glacier sont suspendus au plafond, la lumière se réfractant en milliers de bandes colorées.",
+    "exits": {
+      "west": "frozen_cave"
+    },
+    "items": [
+      "ice_crystal",
+      "emerald",
+      "sapphire"
+    ],
+    "dark": true
+  },
+  {
+    "id": "drowned_shrine",
+    "name": "Temple inondé",
+    "emoji": "🌊",
+    "map": {
+      "layer": "cave",
+      "x": 3,
+      "y": 3
+    },
+    "desc": "La rivière souterraine se jette dans l'ancien temple et la statue du dieu de l'eau est à moitié immergée dans l'eau.",
+    "exits": {
+      "north": "underground_river"
+    },
+    "items": [
+      "sacred_water",
+      "golden_cup"
+    ],
+    "monster_id": "giant_snake",
+    "dark": true
+  },
+  {
+    "id": "mushroom_warren",
+    "name": "Grotte aux champignons",
+    "emoji": "🍄",
+    "map": {
+      "layer": "cave",
+      "x": 0,
+      "y": 3
+    },
+    "desc": "Des champignons géants bordent les rues et des champignons fluorescents illuminent les sentiers sinueux.",
+    "exits": {
+      "south": "alchemist_lab"
+    },
+    "items": [
+      "mushroom",
+      "fairy_dust"
+    ],
+    "dark": true
+  },
+  {
+    "id": "fungal_garden",
+    "name": "jardin de champignons",
+    "emoji": "🌿",
+    "map": {
+      "layer": "cave",
+      "x": 0,
+      "y": 1
+    },
+    "desc": "Les champignons lumineux vivent en symbiose avec des herbes magiques et l'air est rempli de parfum floral.",
+    "exits": {
+      "north": "alchemist_lab"
+    },
+    "items": [
+      "magic_herb",
+      "mandrake_root"
+    ]
+  },
+  {
+    "id": "echoing_hall",
+    "name": "Salle d'écho",
+    "emoji": "🔊",
+    "map": {
+      "layer": "cave",
+      "x": 4,
+      "y": 1
+    },
+    "desc": "Dans l’immense salle vide, le bruit des pas était amplifié en un écho tonitruant.",
+    "exits": {
+      "west": "ancient_ruins",
+      "north": "collapsed_tunnel"
+    },
+    "items": [
+      "ancient_scroll",
+      "old_coin"
+    ],
+    "monster_id": "ghost",
+    "dark": true
+  },
+  {
+    "id": "collapsed_tunnel",
+    "name": "tunnel effondré",
+    "emoji": "🪨",
+    "map": {
+      "layer": "cave",
+      "x": 4,
+      "y": 0
+    },
+    "desc": "Le tunnel a été bloqué par des chutes de pierres, ne laissant qu’un étroit espace à franchir.",
+    "exits": {
+      "south": "echoing_hall"
+    },
+    "items": [
+      "gold_ingot",
+      "ancient_key"
+    ],
+    "dark": true
+  },
+  {
+    "id": "misty_path",
+    "name": "sentier brumeux",
+    "emoji": "🌫️",
+    "map": {
+      "layer": "surface",
+      "x": 3,
+      "y": 4
+    },
+    "desc": "Un épais brouillard recouvrait le sentier et la visibilité était inférieure à dix pas.",
+    "exits": {
+      "north": "forest_entrance",
+      "south": "forest_tower_ruins"
+    },
+    "items": [
+      "mushroom",
+      "old_coin"
+    ]
+  },
+  {
+    "id": "wolf_den",
+    "name": "repaire du loup",
+    "emoji": "🐺",
+    "map": {
+      "layer": "surface",
+      "x": 2,
+      "y": 2
+    },
+    "desc": "Dans les grottes recouvertes par les rochers, plusieurs paires d'yeux verts vous fixent dans l'obscurité.",
+    "exits": {
+      "east": "dark_forest",
+      "south": "ruined_chapel"
+    },
+    "items": [
+      "wolf_tooth",
+      "dried_meat"
+    ],
+    "monster_ids": [
+      "wolf",
+      "wolf"
+    ]
+  },
+  {
+    "id": "old_mill",
+    "name": "vieux moulin",
+    "emoji": "🏚️",
+    "map": {
+      "layer": "surface",
+      "x": 4,
+      "y": 4
+    },
+    "desc": "Moulin en bois abandonné, roue hydraulique à moitié coulée dans un fossé sec.",
+    "exits": {
+      "north": "crossroads",
+      "west": "bandit_camp"
+    },
+    "items": [
+      "bread",
+      "rope",
+      "old_coin"
+    ],
+    "monster_id": "giant_rat"
+  },
+  {
+    "id": "ferry_dock",
+    "name": "terminal de ferry",
+    "emoji": "⛵",
+    "map": {
+      "layer": "surface",
+      "x": 6,
+      "y": 3
+    },
+    "desc": "Un quai en bois s'étend dans le lac et le ferry se balance doucement sur ses pilotis.",
+    "exits": {
+      "west": "lake_village",
+      "east": "lake_island"
+    },
+    "items": [
+      "fishing_rod",
+      "fish"
+    ]
+  },
+  {
+    "id": "hunter_lodge",
+    "name": "cabane de chasseur",
+    "emoji": "🏹",
+    "map": {
+      "layer": "surface",
+      "x": 6,
+      "y": 1
+    },
+    "desc": "Les murs sont recouverts de peaux d'animaux, d'arcs et de flèches, et le vieil homme nettoie son couteau de chasse.",
+    "exits": {
+      "west": "lake_shore"
+    },
+    "items": [
+      "dried_meat"
+    ],
+    "npc_id": "hunter"
+  },
+  {
+    "id": "ruined_chapel",
+    "name": "chapelle abandonnée",
+    "emoji": "⛪",
+    "map": {
+      "layer": "surface",
+      "x": 2,
+      "y": 1
+    },
+    "desc": "La majeure partie du toit de la chapelle en pierre s'est effondrée et la prêtresse en blanc a prié devant l'autel brisé.",
+    "exits": {
+      "north": "wolf_den",
+      "east": "haunted_graveyard"
+    },
+    "npc_id": "priestess",
+    "items": [
+      "sacred_water",
+      "lesser_potion"
+    ]
+  }
+]

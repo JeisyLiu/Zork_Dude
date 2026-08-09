@@ -16,22 +16,14 @@ import 'package:zork_dude/domain/models/entities.dart';
 import 'package:zork_dude/domain/models/enums.dart';
 import 'package:zork_dude/domain/models/map_meta.dart';
 import 'package:zork_dude/domain/world/special_behavior_registry.dart';
-
-const _helpText = '''╔══════════ 命令列表 ══════════╗
-
-🚶 移动：n/s/e/w/u/d
-👁️ 查看(look) 背包(inv) 帮助(help) 得分(score)
-🗺️ 地图(map) 显示/隐藏迷雾残页
-🎒 拿(take) 丢(drop) 用(use)
-💬 对话(talk) 购买(buy) 出售(sell) 治疗(heal)
-⚔️ 攻击(attack) 逃跑(flee)
-🤝 招募(recruit) 队伍(party)
-🔄 二周目(ng+/newgame+)：通关后保留装备重开
-
-💡 主线/站点通关后仍可继续玩；提示只出现一次''';
+import 'package:zork_dude/l10n/game_messages.dart';
+import 'package:zork_dude/l10n/locale_tag.dart';
 
 class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
-  GameSession._();
+  GameSession._(this.messages);
+
+  @override
+  final GameMessages messages;
 
   late Map<String, ItemDefinition> items;
   @override
@@ -82,13 +74,28 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
   final CombatEngine combatEngine = CombatEngine();
   String equippedBag = 'bag_starter';
 
-  static Future<GameSession> create(WorldRepository repo, {bool starterItems = true}) async {
+  static Future<GameSession> create(
+    WorldRepository repo, {
+    GameMessages? messages,
+    String? localeTag,
+    bool starterItems = true,
+  }) async {
+    final resolvedMessages =
+        messages ?? await GameMessages.load(localeTag ?? LocaleTag.zhHans);
     final def = await repo.loadFromAssets();
-    return GameSession._fromDefinition(def, starterItems: starterItems);
+    return GameSession._fromDefinition(
+      def,
+      messages: resolvedMessages,
+      starterItems: starterItems,
+    );
   }
 
-  factory GameSession._fromDefinition(WorldDefinition def, {bool starterItems = true}) {
-    final s = GameSession._();
+  factory GameSession._fromDefinition(
+    WorldDefinition def, {
+    required GameMessages messages,
+    bool starterItems = true,
+  }) {
+    final s = GameSession._(messages);
     s._worldDef = def;
     s.items = def.items.map((k, v) => MapEntry(k, _cloneItem(v)));
     s.monsters = def.monsters.map((k, v) => MapEntry(k, v.clone()));
@@ -139,6 +146,7 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
     }
     s.mapMeta = Map.from(def.mapMeta);
     s.combatEngine.statusRegistry = def.statusEffects;
+    s.combatEngine.messages = messages;
     s.combatEngine.monsters = s.monsters;
     s.combatEngine.items = s.items;
     SpecialBehaviorRegistry.apply(s);
@@ -203,7 +211,7 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
     return maxWeight;
   }
 
-  String equippedBagLabel() => items[equippedBag]?.label ?? '背包';
+  String equippedBagLabel() => items[equippedBag]?.label ?? messages.defaultBagLabel;
 
   bool hasLight() {
     if (currentRoomId == 'tower_top') return true;
@@ -229,7 +237,7 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
     if (rm == null) return '';
     rm.exits[Direction.east] = 'scp_site_gate';
     flags['grave_site_open'] = true;
-    return '\n魔法宝石与石门共鸣，藤蔓退散，通道打开了！';
+    return messages.graveGateOpened;
   }
 
   @override
@@ -301,17 +309,17 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
   }
 
   CommandResult processCommand(String raw) {
-    if (gameOver) return CommandResult.ok('游戏已结束。');
+    if (gameOver) return CommandResult.ok(messages.gameOver);
     turns += 1;
     final trimmed = raw.trim();
-    if (trimmed.isEmpty) return CommandResult.ok('输入 help。', incrementTurn: false);
+    if (trimmed.isEmpty) return CommandResult.ok(messages.emptyInputHint, incrementTurn: false);
 
     final parts = trimmed.split(RegExp(r'\s+'));
     final cmd = parts.first.toLowerCase();
     final args = parts.length > 1 ? parts.sublist(1) : <String>[];
 
     final handler = _resolveHandler(cmd);
-    if (handler == null) return CommandResult.ok("不懂 '$cmd'。输入 help。");
+    if (handler == null) return CommandResult.ok(messages.unknownCommand(cmd));
     return handler(args);
   }
 
@@ -363,10 +371,10 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
     'heal': (_) => CommandResult.ok(doHeal()),
     'recruit': (_) => CommandResult.ok(doRecruit()),
     'party': (_) => CommandResult.ok(doParty()),
-    'help': (_) => CommandResult.ok(_helpText),
+    'help': (_) => CommandResult.ok(messages.helpText),
     'score': (_) => CommandResult.ok(doScore()),
     'ng+': (_) => CommandResult.ok(doNewGamePlus()),
-    'map': (_) => CommandResult.ok('切换地图显示。', incrementTurn: false),
+    'map': (_) => CommandResult.ok(messages.mapToggleHint, incrementTurn: false),
     'quit': (_) => CommandResult.ok(
           '',
           events: const [GameEvent(type: GameEventType.returnToTitle)],
@@ -376,8 +384,8 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
 
   String roomDescription(String id) {
     final rm = rooms[id];
-    if (rm == null) return '未知地点。';
-    if (rm.dark && !hasLight()) return '🌑 一片漆黑！你需要光源。';
+    if (rm == null) return messages.roomUnknown;
+    if (rm.dark && !hasLight()) return messages.roomTooDarkNeedLight;
     final title = rm.emoji.isNotEmpty ? '${rm.emoji} ${rm.name}' : rm.name;
     final text = StringBuffer('[$title]\n');
     text.writeln(rm.visited ? rm.desc.split('\n').first : rm.desc);
@@ -386,20 +394,29 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
         final it = items[e.value];
         return '(${e.key + 1}) ${it?.label ?? e.value}';
       }).join(', ');
-      text.writeln('\n可见物品：$numbered');
+      text.writeln('\n${messages.roomItemsVisible(numbered)}');
     }
     if (rm.npcId != null) {
       final n = npcs[rm.npcId];
-      if (n != null) text.writeln('\n${n.emoji.isNotEmpty ? n.emoji : '👤'} ${n.name}（${n.title}）');
-    }
-    if (rm.monsterId != null) {
-      final m = monsters[rm.monsterId];
-      if (m != null && m.alive) {
-        final tag = m.rank != MonsterRank.normal ? '[${m.rank.displayName}]' : '';
-        text.writeln('\n⚠️ $tag ${m.label}（${m.hp}/${m.maxHp}）');
+      if (n != null) {
+        text.writeln('\n${messages.roomNpcPresent(
+          n.emoji.isNotEmpty ? n.emoji : '👤',
+          n.name,
+          n.title,
+        )}');
       }
     }
-    text.write('\n出口：${rm.exits.keys.map((d) => d.name).join(', ')}');
+    if (rm.monsterId != null) {
+      final mon = monsters[rm.monsterId];
+      if (mon != null && mon.alive) {
+        final tag = mon.rank != MonsterRank.normal
+            ? '[${mon.rank.displayName(messages)}]'
+            : '';
+        text.writeln('\n${messages.roomMonsterPresent(tag, mon.label, mon.hp, mon.maxHp)}');
+      }
+    }
+    final dirs = rm.exits.keys.map((d) => messages.mapDirName(d.value)).join(', ');
+    text.write('\n${messages.roomExits(dirs)}');
     return text.toString();
   }
 
@@ -407,11 +424,11 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
     switch (targetRoomId) {
       case 'scp_cell_block':
         if (!hasItem('keycard_lvl2')) {
-          return '收容单元区气密门需要二级钥匙卡（可在墓地找到）。';
+          return messages.moveBlockedCellBlock;
         }
       case 'scp_682_pit':
         if (!hasItem('keycard_lvl3') && !flags.containsKey('scp_079_unlocked')) {
-          return '酸池隔离区需要三级钥匙卡（完成档案室与079任务可获得）。';
+          return messages.moveBlocked682Pit;
         }
     }
     return null;
@@ -424,10 +441,10 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
   }
 
   CommandResult doGo(Direction d) {
-    if (inCombat) return CommandResult.ok('战斗中！(attack/flee)');
+    if (inCombat) return CommandResult.ok(messages.moveInCombat);
     final room = rooms[currentRoomId]!;
-    if (!room.exits.containsKey(d)) return CommandResult.ok('不能往 ${d.value}。');
-    if (room.dark && !hasLight()) return CommandResult.ok('🌑 太黑了不敢走。');
+    if (!room.exits.containsKey(d)) return CommandResult.ok(messages.moveCannotGo(messages.mapDirName(d.value)));
+    if (room.dark && !hasLight()) return CommandResult.ok(messages.moveTooDark);
     final nextId = room.exits[d]!;
     final blocked = _movementBlocked(nextId);
     if (blocked != null) return CommandResult.ok(blocked);
@@ -474,7 +491,7 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
     currentEnemy = living.first.id;
     activeEncounter = _buildEncounter(living);
     final names = living.map((m) => m.name).join('、');
-    return '⚔️ $names 出现了！';
+    return messages.combatEnemiesAppeared(names);
   }
 
   CombatEncounter _buildEncounter(List<MonsterState> enemyTemplates) {
@@ -492,6 +509,7 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
       playerSpeed: 6,
       party: party,
       enemyTemplates: enemyTemplates.map((m) => m.clone()).toList(),
+      messages: messages,
     );
   }
 
@@ -557,7 +575,7 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
       if (it.heal > 0) hints.add('HP+${it.heal}');
       for (final fx in it.combatEffects) {
         if (fx.cleanse != null) {
-          hints.add('净化');
+          hints.add(messages.itemEffectCleanse);
         } else {
           hints.add(fx.effectId);
         }
@@ -632,12 +650,12 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
       m.alive = false;
       m.hp = 0;
       defeatedNames.add(m.label);
-      lines.add('🎉 击败了 ${m.name}！');
+      lines.add(messages.combatDefeatedEnemy(m.name));
       for (final li in m.loot) {
         if (items.containsKey(li)) {
           invAdd(li);
           lootLabels.add(items[li]!.label);
-          lines.add('🏆 战利品：${items[li]!.name}');
+          lines.add(messages.combatLootItem(items[li]!.name));
         }
       }
       totalGold += m.gold;
@@ -647,7 +665,7 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
     gold += totalGold;
     score += totalExp;
     if (totalGold > 0 || totalExp > 0) {
-      lines.add('💰 +${totalGold}金币 +${totalExp}经验');
+      lines.add(messages.combatRewardGoldExp(totalGold, totalExp));
     }
 
     _applyBossVictoryFlags(lines, notes);
@@ -659,7 +677,7 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
     if (companionList.isNotEmpty) {
       final c = companions[companionList.first];
       if (c != null) {
-        banter = c.banter();
+        banter = c.banter(messages);
         lines.add('\n$banter');
       }
     }
@@ -674,7 +692,7 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
     );
 
     return CommandResult.ok(
-      lines.isEmpty ? '战斗胜利！' : lines.join('\n'),
+      lines.isEmpty ? messages.combatVictoryDefault : lines.join('\n'),
       events: const [GameEvent(type: GameEventType.battleEnded)],
     );
   }
@@ -683,19 +701,19 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
     for (final m in monsters.values) {
       if (!m.alive && m.id == 'scp_breach_core' && hasItem('containment_box')) {
         score += 50;
-        const msg = '📦 你用收容箱稳定了异常核心，获得额外 50 分！';
+        final msg = messages.combatContainmentBonus;
         lines.add('\n$msg');
         notes.add(msg);
       }
       if (!m.alive && m.id == 'scp_001') {
         siteWon = true;
         score += 100;
-        const msg = '☢️ 站点最终威胁已被压制！站点行动告一段落（+100 分）。';
+        final msg = messages.combatSiteBossSuppressed;
         lines.add('\n$msg');
         notes.add(msg);
       }
       if (!m.alive && m.rank == MonsterRank.boss) {
-        final msg = '💀 BOSS【${m.name}】被击败！';
+        final msg = messages.combatBossDefeated(m.name);
         lines.add('\n$msg');
         notes.add(msg);
       }
@@ -705,10 +723,15 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
   String doInventory() {
     final totalItems = inventory.values.fold<int>(0, (a, b) => a + b);
     final lines = <String>[
-      '🎒 ${equippedBagLabel()} (重量 ${totalWeight()}/${bagCapacity()} · 共 $totalItems 件)',
+      messages.inventoryHeader(
+        equippedBagLabel(),
+        totalWeight(),
+        bagCapacity(),
+        totalItems,
+      ),
     ];
     if (inventory.isEmpty) {
-      lines.add('  (空)');
+      lines.add(messages.inventoryEmpty);
     } else {
       var idx = 1;
       for (final e in inventory.entries) {
@@ -717,30 +740,37 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
         var label = '  ($idx) ${it.label}';
         if (it.stackable && e.value > 1) label += ' x${e.value}';
         final bonus = <String>[];
-        if (it.damageBonus > 0) bonus.add('攻+${it.damageBonus}');
-        if (it.defenseBonus > 0) bonus.add('防+${it.defenseBonus}');
+        if (it.damageBonus > 0) bonus.add(messages.inventoryItemAtkBonus(it.damageBonus));
+        if (it.defenseBonus > 0) bonus.add(messages.inventoryItemDefBonus(it.defenseBonus));
         if (bonus.isNotEmpty) label += ' [${bonus.join(' ')}]';
         label += ' (${it.type.jsonName})';
         lines.add(label);
         idx++;
       }
     }
-    lines.add('\n❤️ HP: $playerHp/$playerMaxHp');
-    lines.add('⚔️ 攻击: $totalAtk  |  🛡️ 防御: $totalDef');
-    lines.add('💰 金币: $gold | 🏆 得分: $score');
+    lines.add('\n${messages.inventoryHpLine(playerHp, playerMaxHp)}');
+    lines.add(messages.inventoryAtkDefLine(totalAtk, totalDef));
+    lines.add(messages.inventoryGoldScoreLine(gold, score));
     if (companionList.isNotEmpty) {
-      lines.add('👥 队友：');
+      lines.add(messages.inventoryCompanionsHeader);
       for (final cid in companionList) {
         final c = companions[cid];
-        if (c != null) lines.add('  · ${c.name} [${c.role.name}] HP:${c.hp}/${c.maxHp}');
+        if (c != null) {
+          lines.add(messages.inventoryCompanionLine(
+            c.name,
+            c.role.name,
+            c.hp,
+            c.maxHp,
+          ));
+        }
       }
     }
     return lines.join('\n');
   }
 
   CommandResult doTake(List<String> args) {
-    if (args.isEmpty) return CommandResult.ok('拿什么？ 用 take all 拿全部，或用序号 take 1');
-    if (inCombat) return CommandResult.ok('战斗中不能拾取！');
+    if (args.isEmpty) return CommandResult.ok(messages.takeWhat);
+    if (inCombat) return CommandResult.ok(messages.combatCannotTake);
     final t = args.join(' ');
     final rm = rooms[currentRoomId]!;
     if (t == 'all') {
@@ -754,36 +784,36 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
         score += 5;
         taken.add(it.name);
       }
-      if (taken.isEmpty) return CommandResult.ok('这里没有能拿的东西。');
-      return CommandResult.ok('拾取了：${taken.join('、')}。');
+      if (taken.isEmpty) return CommandResult.ok(messages.takeNothingHere);
+      return CommandResult.ok(messages.takeMultiple(taken.join('、')));
     }
     final found = resolveItemRef(t, rm.items);
-    if (found == null) return CommandResult.ok('没有 $t。');
+    if (found == null) return CommandResult.ok(messages.takeNotFound(t));
     final it = items[found]!;
-    if (!it.takeable) return CommandResult.ok('拿不起 ${it.name}。');
+    if (!it.takeable) return CommandResult.ok(messages.takeCannotPickUp(it.name));
     if (!inventory.containsKey(found) && totalWeight() + _itemEncumbrance(it) > bagCapacity()) {
-      return CommandResult.ok('负重满了（${bagCapacity()}）。装备（武器/护甲）过重。');
+      return CommandResult.ok(messages.takeOverweight(bagCapacity()));
     }
     rm.items.remove(found);
     invAdd(found);
     score += 5;
     final extra = _tryOpenGraveSiteGate();
-    return CommandResult.ok('拾起了 ${it.name}。$extra');
+    return CommandResult.ok(messages.takePickedUp(it.name, extra));
   }
 
   CommandResult doDrop(List<String> args) {
-    if (args.isEmpty) return CommandResult.ok('丢什么？ 用序号 drop 1');
-    if (inCombat) return CommandResult.ok('战斗中不能丢弃！');
+    if (args.isEmpty) return CommandResult.ok(messages.dropWhat);
+    if (inCombat) return CommandResult.ok(messages.combatCannotDrop);
     final found = resolveItemRef(args.join(' '), inventory.keys);
-    if (found == null) return CommandResult.ok('没有 ${args.join(' ')}。');
-    if (found == equippedBag) return CommandResult.ok('不能丢下正在使用的背包。');
+    if (found == null) return CommandResult.ok(messages.dropNotFound(args.join(' ')));
+    if (found == equippedBag) return CommandResult.ok(messages.dropCannotDropBag);
     invRemove(found);
     rooms[currentRoomId]!.items.add(found);
-    return CommandResult.ok('丢下了 ${items[found]!.name}。');
+    return CommandResult.ok(messages.dropDropped(items[found]!.name));
   }
 
   CommandResult doUse(List<String> args) {
-    if (args.isEmpty) return CommandResult.ok('用什么？ 用序号 use 1');
+    if (args.isEmpty) return CommandResult.ok(messages.useWhat);
     final t = args.join(' ').toLowerCase();
     if (['914', 'scp-914', 'scp_914', '齿轮', '转换器'].contains(t)) {
       return CommandResult.ok(doScp914());
@@ -796,7 +826,7 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
     }
 
     final parsed = _resolveUseTarget(args);
-    if (parsed == null) return CommandResult.ok('没有 $t。');
+    if (parsed == null) return CommandResult.ok(messages.useNotFound(t));
     final found = parsed.itemId;
     final destArgs = parsed.rest;
 
@@ -806,11 +836,11 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
 
     final it = items[found]!;
     if (it.type == ItemType.bag) return CommandResult.ok(equipBag(found));
-    if (!it.usable) return CommandResult.ok('${it.name} 不能用。');
+    if (!it.usable) return CommandResult.ok(messages.useCannotUse(it.name));
     final msg = it.onUse?.call(this) ?? (it.heal > 0 ? _defaultHeal(it) : it.useMsg);
     if (it.type == ItemType.potion || it.type == ItemType.food) invRemove(found);
     score += 2;
-    return CommandResult.ok(msg.isNotEmpty ? msg : '使用了 ${it.name}。');
+    return CommandResult.ok(msg.isNotEmpty ? msg : messages.useDefault(it.name));
   }
 
   /// Resolves inventory item from [args], allowing trailing destination tokens.
@@ -856,21 +886,21 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
 
   CommandResult _useTeleportScroll(List<String> destArgs) {
     if (inCombat) {
-      return CommandResult.ok('战斗中无法展开传送卷轴！');
+      return CommandResult.ok(messages.scrollCombatBlocked);
     }
     if (!hasItem('magic_scroll')) {
-      return CommandResult.ok('没有传送卷轴。');
+      return CommandResult.ok(messages.scrollNotOwned);
     }
     final visited = visitedRoomIds();
     if (destArgs.isEmpty) {
       final lines = <String>[
-        '传送卷轴闪烁着符文。选择已探索地点：',
-        '  use 传送卷轴 <地点名或id>',
+        messages.scrollPickDestination,
+        messages.scrollUsageHint,
       ];
       for (var i = 0; i < visited.length; i++) {
         final id = visited[i];
         final name = rooms[id]?.name ?? id;
-        final here = id == currentRoomId ? ' ← 当前位置' : '';
+        final here = id == currentRoomId ? messages.scrollDestinationCurrent : '';
         lines.add('  ${i + 1}. $name ($id)$here');
       }
       return CommandResult.ok(lines.join('\n'));
@@ -878,10 +908,10 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
 
     final dest = resolveRoomRef(destArgs.join(' '), visited);
     if (dest == null) {
-      return CommandResult.ok('无法传送到那里——只能前往已探索过的地点。');
+      return CommandResult.ok(messages.scrollDestinationInvalid);
     }
     if (dest == currentRoomId) {
-      return CommandResult.ok('你已经在 ${rooms[dest]!.name} 了。');
+      return CommandResult.ok(messages.scrollAlreadyHere(rooms[dest]!.name));
     }
 
     invRemove('magic_scroll');
@@ -911,7 +941,7 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
     }
     score += 5;
     return CommandResult.ok(
-      '卷轴化为光芒！你传送到了 ${nr.name}。\n${roomDescription(currentRoomId)}$extra',
+      '${messages.scrollTeleportSuccess(nr.name)}\n${roomDescription(currentRoomId)}$extra',
       events: events,
     );
   }
@@ -919,111 +949,121 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
   String _defaultHeal(ItemDefinition it) {
     if (it.heal > 0) {
       playerHp = min(playerMaxHp, playerHp + it.heal);
-      return it.useMsg.isNotEmpty ? it.useMsg : '恢复了 ${it.heal} 点 HP。';
+      return it.useMsg.isNotEmpty ? it.useMsg : messages.useHealDefault(it.heal);
     }
     return it.useMsg;
   }
 
   String equipBag(String iid) {
     final it = items[iid];
-    if (it == null || it.type != ItemType.bag) return '${it?.name ?? iid} 不是背包。';
-    if (iid == equippedBag) return '你已经装备着 ${it.name}。';
+    if (it == null || it.type != ItemType.bag) {
+      return messages.msg('equip_bag_not_bag', {'name': it?.name ?? iid});
+    }
+    if (iid == equippedBag) {
+      return messages.msg('equip_bag_already', {'name': it.name});
+    }
     final newCap = it.capacity > 0 ? it.capacity : maxWeight;
-    if (totalWeight() > newCap) return '当前负重 ${totalWeight()}，${it.name} 只能装 $newCap，请先丢掉一些装备。';
+    if (totalWeight() > newCap) {
+      return messages.msg('equip_bag_overweight', {
+        'weight': totalWeight(),
+        'name': it.name,
+        'capacity': newCap,
+      });
+    }
     final oldId = equippedBag;
     equippedBag = iid;
     if (inventory.containsKey(iid)) invRemove(iid);
     if (oldId.isNotEmpty && items.containsKey(oldId)) invAdd(oldId);
-    return '你换上了 ${it.name}（负重上限 $newCap）。';
+    return messages.msg('equip_bag_success', {'name': it.name, 'capacity': newCap});
   }
 
   String doScp914() {
-    if (currentRoomId != 'scp_914_chamber') return '这里没有齿轮工房。去 914 号单元再试。';
+    if (currentRoomId != 'scp_914_chamber') return messages.msg('scp_914_wrong_room');
     final candidates = inventory.keys.where((iid) {
       if (iid == equippedBag) return false;
       final it = items[iid];
       return it != null && it.type != ItemType.bag;
     }).toList();
-    if (candidates.isEmpty) return '进料斗空空如也——先准备一件可精炼的背包物品。';
+    if (candidates.isEmpty) return messages.msg('scp_914_empty');
     final iid = candidates[Random().nextInt(candidates.length)];
     final it = items[iid]!;
     invRemove(iid);
     final roll = Random().nextDouble();
-    if (roll < 0.25) return '【Rough】${it.name} 被绞成无法辨认的碎片……';
+    if (roll < 0.25) return messages.msg('scp_914_rough', {'name': it.name});
     if (roll < 0.5) {
       invAdd(iid);
-      return '【1:1】${it.name} 原样吐出，几乎没有变化。';
+      return messages.msg('scp_914_one_to_one', {'name': it.name});
     }
     if (roll < 0.8) {
       final out = items.containsKey('greater_potion') ? 'greater_potion' : 'lesser_potion';
       invAdd(out);
       score += 5;
-      return '【Fine】${it.name} 被精炼成 ${items[out]!.name}！';
+      return messages.msg('scp_914_fine', {'name': it.name, 'out': items[out]!.name});
     }
     var out = Random().nextDouble() < 0.35 && items.containsKey('scp_500_pill') ? 'scp_500_pill' : 'anomaly_core';
     if (!items.containsKey(out)) out = 'diamond';
     invAdd(out);
     score += 15;
-    return '【Very Fine】机械尖啸！你获得了 ${items[out]!.name}！';
+    return messages.msg('scp_914_very_fine', {'out': items[out]!.name});
   }
 
   String doScp294() {
-    if (currentRoomId != 'scp_294_lounge') return '这里没有异常咖啡机。';
+    if (currentRoomId != 'scp_294_lounge') return messages.msg('scp_294_wrong_room');
     const heal = 18;
     playerHp = min(playerMaxHp, playerHp + heal);
     score += 2;
-    return '咖啡机吐出一杯冒着蒸汽的液体。你喝下后恢复了 $heal 点 HP。';
+    return messages.msg('scp_294_heal', {'amount': heal});
   }
 
   String doScp261() {
-    if (currentRoomId != 'scp_261_canteen') return '这里没有次元贩卖机。';
+    if (currentRoomId != 'scp_261_canteen') return messages.msg('scp_261_wrong_room');
     const cost = 5;
-    if (gold < cost) return '需要投币 $cost 金，你只有 $gold。';
+    if (gold < cost) return messages.msg('scp_261_need_gold', {'cost': cost, 'gold': gold});
     gold -= cost;
     final pool = ['scp_261_snack', 'bread', 'lesser_potion', 'old_coin', 'scp_447_slime']
         .where(items.containsKey)
         .toList();
-    if (pool.isEmpty) return '贩卖机卡住了……你损失了 $cost 金。';
+    if (pool.isEmpty) return messages.msg('scp_261_jammed', {'cost': cost});
     final out = pool[Random().nextInt(pool.length)];
     invAdd(out);
-    return '贩卖机咔哒一声，吐出了 ${items[out]!.name}！（-$cost 金）';
+    return messages.msg('scp_261_success', {'item': items[out]!.name, 'cost': cost});
   }
 
   String doTalk() {
     final rm = rooms[currentRoomId]!;
-    if (rm.npcId == null || !npcs.containsKey(rm.npcId)) return '这里没有可对话的人。';
+    if (rm.npcId == null || !npcs.containsKey(rm.npcId)) return messages.talkNoNpc;
     final n = npcs[rm.npcId]!;
-    final lines = <String>['[${n.name} · ${n.title}]', n.desc];
+    final lines = <String>[messages.talkNpcHeader(n.name, n.title), n.desc];
     if (!n.metBefore) {
       n.metBefore = true;
-      lines.add('\n${n.name}：「${n.dialogs['greet'] ?? '你好。'}」');
+      lines.add('\n${n.name}：「${n.dialogs['greet'] ?? messages.talkGreetDefault}」');
       if (n.giveItem != null && items.containsKey(n.giveItem) && !inventory.containsKey(n.giveItem)) {
         invAdd(n.giveItem!);
-        lines.add('\n${n.name} 给了你 ${items[n.giveItem!]!.name}！');
+        lines.add('\n${messages.talkNpcGiveItem(n.name, items[n.giveItem!]!.name)}');
         score += 5;
       }
     } else {
-      lines.add('\n${n.name}：「${n.dialogs['extra'] ?? n.dialogs['farewell'] ?? '还有什么事？'}」');
+      lines.add('\n${n.name}：「${n.dialogs['extra'] ?? n.dialogs['farewell'] ?? messages.talkExtraDefault}」');
     }
     if (n.questItem != null && !n.questDone) {
       if (inventory.containsKey(n.questItem)) {
         invRemove(n.questItem!);
         if (n.questReward != null) {
           invAdd(n.questReward!);
-          lines.add('\n✨ 提交任务！获得 ${items[n.questReward!]!.name}！');
+          lines.add('\n${messages.talkQuestSubmitReward(items[n.questReward!]!.name)}');
         } else {
-          lines.add('\n✨ ${n.name} 感谢你！');
+          lines.add('\n${messages.talkQuestSubmitThanks(n.name)}');
         }
         score += n.questScore;
         n.questDone = true;
         if (n.id == 'scp_079') {
           flags['scp_079_unlocked'] = true;
-          lines.add('\n079：酸池隔离权限已写入你的钥匙卡。');
+          lines.add('\n${messages.talkScp079Unlock}');
         }
       } else {
         final qi = items[n.questItem];
         if (qi != null) {
-          lines.add('\n💬 ${n.name}：${n.dialogs['quest'] ?? '帮我找 ${qi.name} 好吗？'}');
+          lines.add('\n💬 ${n.name}：${n.dialogs['quest'] ?? messages.talkQuestAskDefault(qi.name)}');
         }
       }
     }
@@ -1033,33 +1073,33 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
         invAdd('keycard_lvl3');
         flags['ellis_keycard'] = true;
         flags['scp_079_unlocked'] = true;
-        lines.add('\n埃利斯博士塞给你三级钥匙卡：「酸池那扇门……小心。」');
+        lines.add('\n${messages.msg('talk_ellis_keycard_given')}');
         score += 15;
       } else {
-        lines.add('\n埃利斯博士：再带一份站点口粮来，我把三级卡给你。');
+        lines.add('\n${messages.msg('talk_ellis_keycard_need_ration')}');
       }
     }
     if (n.id == 'wandering_merchant' && !flags.containsKey('merchant_favor')) {
       if (hasItem('fish') || hasItem('magic_herb')) {
         flags['merchant_favor'] = true;
         score += 5;
-        lines.add('\n流浪商人笑道：「好货！银钥在洞穴中层，塔里藏着你的记忆。」');
+        lines.add('\n${messages.msg('talk_merchant_favor')}');
       }
     }
     if (n.id == 'village_elder' && flags.containsKey('bandit_cleared') && !flags.containsKey('elder_bandit_reward')) {
       flags['elder_bandit_reward'] = true;
       gold += 30;
       score += 20;
-      lines.add('\n村长：强盗除尽了！这是村里的谢礼（+30 金）。');
+      lines.add('\n${messages.msg('talk_elder_bandit_reward')}');
     }
     if (n.id == 'hunter' && n.questDone && !flags.containsKey('hunter_tip')) {
       flags['hunter_tip'] = true;
-      lines.add('\n猎人：哥布林王座在北边巢穴深处，小心。');
+      lines.add('\n${messages.msg('talk_hunter_tip')}');
     }
     if (n.type == NpcType.merchant || n.type == NpcType.blacksmith) {
-      lines.add('\n🛒 输入 trade / buy <物品> / sell <物品>');
+      lines.add('\n${messages.msg('talk_trade_hint')}');
     }
-    if (n.type == NpcType.healer) lines.add('\n💚 我可以为你治疗 (输入 heal)');
+    if (n.type == NpcType.healer) lines.add('\n${messages.msg('talk_heal_hint')}');
     return lines.join('\n');
   }
 
@@ -1069,37 +1109,37 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
 
   String doTrade() {
     final rm = rooms[currentRoomId]!;
-    if (rm.npcId == null) return '没有商人。';
+    if (rm.npcId == null) return messages.msg('trade_no_merchant');
     final n = npcs[rm.npcId]!;
-    if (!_npcCanTrade(n)) return '${n.name} 没有商品。';
-    final lines = <String>['\n🛒 ${n.name} 的商品：'];
+    if (!_npcCanTrade(n)) return messages.msg('trade_npc_no_goods', {'name': n.name});
+    final lines = <String>['\n${messages.msg('trade_header', {'name': n.name})}'];
     for (var i = 0; i < n.tradeItems.length; i++) {
       final (iid, price) = n.tradeItems[i];
       final it = items[iid];
-      if (it != null) lines.add('  (${i + 1}) ${it.name} —— $price 金币');
+      if (it != null) lines.add('  (${i + 1}) ${it.name} —— $price ${messages.msg('trade_gold_unit')}');
     }
-    lines.add('💰 你有 $gold 金币');
+    lines.add(messages.msg('trade_your_gold', {'gold': gold}));
     return lines.join('\n');
   }
 
   CommandResult doBuy(List<String> args) {
-    if (args.isEmpty) return CommandResult.ok('买什么？');
+    if (args.isEmpty) return CommandResult.ok(messages.msg('buy_what'));
     final rm = rooms[currentRoomId]!;
-    if (rm.npcId == null) return CommandResult.ok('没有商人。');
+    if (rm.npcId == null) return CommandResult.ok(messages.msg('trade_no_merchant'));
     final n = npcs[rm.npcId]!;
-    if (!_npcCanTrade(n)) return CommandResult.ok('${n.name} 不是商人。');
+    if (!_npcCanTrade(n)) return CommandResult.ok(messages.msg('buy_not_merchant', {'name': n.name}));
     final name = args.join(' ');
     final idx = int.tryParse(name);
     if (idx != null && idx >= 1 && idx <= n.tradeItems.length) {
       final (iid, price) = n.tradeItems[idx - 1];
       final it = items[iid];
-      if (it == null) return CommandResult.ok('没有商品。');
+      if (it == null) return CommandResult.ok(messages.msg('buy_no_goods'));
       if (gold >= price) {
         gold -= price;
         invAdd(iid);
-        return CommandResult.ok('购买了 ${it.name}！花费 $price 金币。');
+        return CommandResult.ok(messages.msg('buy_success', {'item': it.name, 'price': price}));
       }
-      return CommandResult.ok('需要 $price 金币，你只有 $gold。');
+      return CommandResult.ok(messages.msg('buy_need_gold', {'price': price, 'gold': gold}));
     }
     for (final (iid, price) in n.tradeItems) {
       final it = items[iid];
@@ -1107,20 +1147,20 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
         if (gold >= price) {
           gold -= price;
           invAdd(iid);
-          return CommandResult.ok('购买了 ${it.name}！花费 $price 金币。');
+          return CommandResult.ok(messages.msg('buy_success', {'item': it.name, 'price': price}));
         }
-        return CommandResult.ok('需要 $price 金币，你只有 $gold。');
+        return CommandResult.ok(messages.msg('buy_need_gold', {'price': price, 'gold': gold}));
       }
     }
-    return CommandResult.ok("没有 '$name'。");
+    return CommandResult.ok(messages.msg('buy_not_found', {'name': name}));
   }
 
   CommandResult doSell(List<String> args) {
-    if (args.isEmpty) return CommandResult.ok('卖什么？');
+    if (args.isEmpty) return CommandResult.ok(messages.msg('sell_what'));
     final rm = rooms[currentRoomId]!;
-    if (rm.npcId == null) return CommandResult.ok('没有商人。');
+    if (rm.npcId == null) return CommandResult.ok(messages.msg('trade_no_merchant'));
     final n = npcs[rm.npcId]!;
-    if (!_npcCanTrade(n)) return CommandResult.ok('${n.name} 不是商人。');
+    if (!_npcCanTrade(n)) return CommandResult.ok(messages.msg('sell_not_merchant', {'name': n.name}));
     final name = args.join(' ');
     final invList = inventory.keys.toList();
     final idx = int.tryParse(name);
@@ -1131,9 +1171,9 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
         final p = max(2, it.value ~/ 2);
         invRemove(iid);
         gold += p;
-        return CommandResult.ok('卖了 ${it.name}，获得 $p 金币。');
+        return CommandResult.ok(messages.msg('sell_success', {'item': it.name, 'price': p}));
       }
-      return CommandResult.ok('不收这种物品。');
+      return CommandResult.ok(messages.msg('sell_refused'));
     }
     for (final iid in invList) {
       final it = items[iid];
@@ -1142,34 +1182,34 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
           final p = max(2, it.value ~/ 2);
           invRemove(iid);
           gold += p;
-          return CommandResult.ok('卖了 ${it.name}，获得 $p 金币。');
+          return CommandResult.ok(messages.msg('sell_success', {'item': it.name, 'price': p}));
         }
-        return CommandResult.ok('不收这种物品。');
+        return CommandResult.ok(messages.msg('sell_refused'));
       }
     }
-    return CommandResult.ok("没有 '$name'。");
+    return CommandResult.ok(messages.msg('sell_not_found', {'name': name}));
   }
 
   String doHeal() {
     final rm = rooms[currentRoomId]!;
-    if (rm.npcId == null) return '没有治疗者。';
+    if (rm.npcId == null) return messages.msg('heal_no_healer');
     final n = npcs[rm.npcId]!;
-    if (n.type != NpcType.healer) return '${n.name} 不会治疗。';
+    if (n.type != NpcType.healer) return messages.msg('heal_cannot', {'name': n.name});
     const cost = 10;
-    if (gold < cost) return '治疗需要 $cost 金币。';
+    if (gold < cost) return messages.msg('heal_need_gold', {'cost': cost});
     gold -= cost;
     final h = rollDice(6, 3);
     playerHp = min(playerMaxHp, playerHp + h);
-    return '${n.name} 为你治疗，恢复了 $h 点HP！花费 $cost 金币。';
+    return messages.msg('heal_success', {'name': n.name, 'amount': h, 'cost': cost});
   }
 
   String doAttackText() {
-    if (!inCombat) return '没有敌人。进入战斗后使用回合指令攻击，或在此输入 attack。';
-    return '⚔️ 已进入回合战斗！在战斗界面选择指令，或输入 flee 逃跑。';
+    if (!inCombat) return messages.combatNoEnemy;
+    return messages.combatTurnModeHint;
   }
 
   CommandResult doFlee() {
-    if (!inCombat) return CommandResult.ok('没有战斗。');
+    if (!inCombat) return CommandResult.ok(messages.msg('flee_no_combat'));
     final enc = activeEncounter;
     if (enc != null) {
       final hero = enc.allies.firstWhere((a) => a.isHero, orElse: () => enc.allies.first);
@@ -1179,20 +1219,20 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
         if (result != null && result.fled) {
           return finishEncounter(CombatOutcome.fled);
         }
-        return CommandResult.ok('逃跑失败！');
+        return CommandResult.ok(messages.combatFleeFailed);
       }
-      return CommandResult.ok('已下达逃跑指令，请在战斗界面确认回合。');
+      return CommandResult.ok(messages.combatFleeCommandPending);
     }
     if (Random().nextDouble() < 0.5) {
       return resolveCombatFleeSuccess();
     }
     final m = monsters[currentEnemy];
-    return CommandResult.ok('逃跑失败！${m?.name ?? '敌人'} 挡住了路。');
+    return CommandResult.ok(messages.combatFleeFailedBlocked(m?.name ?? messages.msg('enemy_generic')));
   }
 
   String doRecruit() {
     final rm = rooms[currentRoomId]!;
-    if (rm.npcId == null) return '这里没有可招募的人。';
+    if (rm.npcId == null) return messages.msg('recruit_no_npc');
     const cm = {
       'old_hermit': 'companion_warrior',
       'wandering_rogue': 'companion_rogue',
@@ -1204,49 +1244,73 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
     };
     final cid = cm[rm.npcId];
     if (cid == null || !companions.containsKey(cid)) {
-      return '${npcs[rm.npcId]?.name ?? ''} 看起来不想加入你。';
+      return messages.msg('recruit_refused', {'name': npcs[rm.npcId]?.name ?? ''});
     }
     final c = companions[cid]!;
-    if (c.recruited) return '${c.name} 已经是你的队友了。';
+    if (c.recruited) return messages.msg('recruit_already', {'name': c.name});
     if (c.recruitItem != null && !inventory.containsKey(c.recruitItem)) {
       final needed = items[c.recruitItem];
-      return '招募 ${c.name} 需要 ${needed?.name ?? c.recruitItem}。';
+      return messages.msg('recruit_need_item', {
+        'name': c.name,
+        'item': needed?.name ?? c.recruitItem,
+      });
     }
     if (c.recruitItem != null) invRemove(c.recruitItem!);
     c.recruited = true;
     companionList.add(cid);
     rm.npcId = null;
     score += 20;
-    return '✨ ${c.name} ${c.recruitMsg}';
+    return messages.msg('recruit_success', {
+      'name': c.name,
+      'msg': c.recruitDisplay(messages),
+    });
   }
 
   String doParty() {
-    if (companionList.isEmpty) return '你目前没有队友。';
-    final lines = <String>['👥 你的队友：'];
+    if (companionList.isEmpty) return messages.msg('party_empty');
+    final lines = <String>[messages.msg('party_header')];
     for (final cid in companionList) {
       final c = companions[cid];
       if (c == null) continue;
       final b = c.getBonus();
-      lines.add('  ${c.name} [${c.role.name}] HP:${c.hp}/${c.maxHp}');
-      lines.add('  攻击+${b['dmg']} 防御+${b['def']}');
-      lines.add('  能力：${c.abilityDesc}');
+      lines.add(messages.msg('party_member_line', {
+        'name': c.name,
+        'role': c.role.name,
+        'hp': c.hp,
+        'max_hp': c.maxHp,
+      }));
+      lines.add(messages.msg('party_member_bonus', {
+        'atk': b['dmg'],
+        'def': b['def'],
+      }));
+      lines.add(messages.msg('party_member_ability', {'desc': c.abilityDesc}));
     }
     return lines.join('\n');
   }
 
   String doScore() {
-    final cycle = ngCycle > 0 ? ' | 🔄 二周目#$ngCycle' : '';
+    final cycle = ngCycle > 0 ? messages.msg('score_ng_cycle', {'cycle': ngCycle}) : '';
     final cleared = <String>[];
-    if (won) cleared.add('主线');
-    if (siteWon) cleared.add('站点');
-    final ct = cleared.isNotEmpty ? ' | ✅ ${cleared.join('+')}' : '';
-    return '🏆 得分: $score  |  📖 回合: $turns$cycle$ct\n'
-        '❤️ HP: $playerHp/$playerMaxHp  |  ⚔️ 攻击: $totalAtk  |  🛡️ 防御: $totalDef\n'
-        '💰 金币: $gold';
+    if (won) cleared.add(messages.msg('score_clear_main'));
+    if (siteWon) cleared.add(messages.msg('score_clear_site'));
+    final ct = cleared.isNotEmpty
+        ? messages.msg('score_cleared', {'list': cleared.join('+')})
+        : '';
+    return messages.msg('score_summary', {
+      'score': score,
+      'turns': turns,
+      'cycle': cycle,
+      'cleared': ct,
+      'hp': playerHp,
+      'max_hp': playerMaxHp,
+      'atk': totalAtk,
+      'def': totalDef,
+      'gold': gold,
+    });
   }
 
   String doNewGamePlus() {
-    if (!won && !siteWon) return '需先完成主线（塔顶使用魔法宝石）或击败站点最终BOSS（001），才能开启二周目。';
+    if (!won && !siteWon) return messages.msg('ng_plus_locked');
     final saved = {
       'inventory': Map<String, int>.from(inventory),
       'equipped_bag': equippedBag,
@@ -1294,7 +1358,7 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
       m.attack = max(1, (m.attack * atkMul).round());
       m.alive = true;
     }
-    return '🔄 二周目 #$ngCycle 开始！装备、道具、金币与队友已保留。\n敌人变得更强了。你回到了迷雾森林入口。';
+    return messages.msg('ng_plus_started', {'cycle': ngCycle});
   }
 
   void populateWorld({bool starterItems = false}) {
@@ -1557,7 +1621,7 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
   CommandResult resolveCombatDefeat() {
     reviveAfterDeath();
     return CommandResult.ok(
-      '\n💀 你被击败了……得分 -$deathScorePenalty（不低于 0）',
+      '\n${messages.combatDefeat(deathScorePenalty)}',
       events: const [GameEvent(type: GameEventType.gameOver), GameEvent(type: GameEventType.battleEnded)],
     );
   }
@@ -1566,7 +1630,7 @@ class GameSession implements GameSessionRef, GameSessionRefWithNpcs {
     inCombat = false;
     currentEnemy = '';
     activeEncounter = null;
-    return CommandResult.ok('你逃跑了！', events: [const GameEvent(type: GameEventType.battleEnded)]);
+    return CommandResult.ok(messages.combatFled, events: [const GameEvent(type: GameEventType.battleEnded)]);
   }
 
   int visitedCount() => rooms.values.where((r) => r.visited).length;

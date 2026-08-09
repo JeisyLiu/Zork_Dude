@@ -43,7 +43,7 @@ class _CreditsRollState extends State<CreditsRoll>
         CreditLine(l10n.creditSoundConcept, 'Jeisy Liu'),
         CreditLine(l10n.creditProducedBy, 'Jeisy Liu'),
         CreditLine(l10n.creditEngineering, 'Jeisy Liu'),
-        const CreditLine('QA / Quality Assurance', 'Jeisy Liu'),
+        CreditLine(l10n.creditQa, 'Jeisy Liu'),
         CreditLine(l10n.creditSpecialThanks, 'Jeisy Liu'),
         CreditLine(l10n.creditTechSupport, 'Anysphere, xAI'),
         const CreditLine('', 'Mist Tower'),

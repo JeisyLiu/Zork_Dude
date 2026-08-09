@@ -4,6 +4,9 @@ import 'package:zork_dude/domain/combat/combat_actor.dart';
 import 'package:zork_dude/domain/combat/combat_random.dart';
 import 'package:zork_dude/domain/combat/combat_types.dart';
 import 'package:zork_dude/domain/combat/status_effect.dart';
+import 'package:zork_dude/l10n/game_messages.dart';
+
+import 'test_game_messages.dart';
 
 CombatActor _actor({int hp = 30}) => CombatActor(
       instanceId: 'a#0',
@@ -60,7 +63,7 @@ void main() {
           healPerRound: 4,
         ),
       ]);
-      service = StatusEffectService(registry);
+      service = StatusEffectService(registry, testGameMessages());
     });
 
     test('poison stacks intensity', () {

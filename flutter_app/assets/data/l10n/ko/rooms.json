@@ -1,0 +1,1565 @@
+[
+  {
+    "id": "forest_entrance",
+    "name": "안개 낀 숲 입구",
+    "emoji": "🌲",
+    "map": {
+      "layer": "surface",
+      "x": 3,
+      "y": 3
+    },
+    "desc": "숲의 가장자리는 짙은 안개로 뒤덮였습니다. 고목이 우뚝 솟아 있고 회색 안개가 흐르고 있습니다.\n길은 깊은 숲(북쪽)으로 이어지며, 서쪽(서쪽)에는 버려진 오두막이, 남쪽(남쪽)에는 탑의 폐허가 있습니다.\n묘비 옆에는 한 노인이 뭔가를 기다리는 듯 삽을 들고 서 있었다.",
+    "exits": {
+      "north": "dark_forest",
+      "west": "abandoned_hut",
+      "south": "misty_path"
+    },
+    "npc_id": "gravedigger"
+  },
+  {
+    "id": "abandoned_hut",
+    "name": "버려진 오두막",
+    "emoji": "🏠",
+    "map": {
+      "layer": "surface",
+      "x": 2,
+      "y": 3
+    },
+    "desc": "지붕이 절반만 무너진 낡은 목조 주택이 무너졌습니다. 구석에는 철제 상자가 있고 테이블 위에는 랜턴이 있습니다.\n구석에서 뭔가 움직이는 것 같은데...",
+    "exits": {
+      "east": "forest_entrance"
+    },
+    "items": [
+      "rusty_key",
+      "lantern",
+      "old_coin"
+    ],
+    "monster_id": "giant_rat"
+  },
+  {
+    "id": "dark_forest",
+    "name": "어두운 숲",
+    "emoji": "🌳",
+    "map": {
+      "layer": "surface",
+      "x": 3,
+      "y": 2
+    },
+    "desc": "점점 어두워지고 있습니다. 고대 나무가 뒤틀리고 안개 속에 그림자가 있습니다. 멀리서 늑대가 울부짖고 있습니다.\n서쪽에는 버려진 묘지가 있는 것으로 보이며, 북쪽으로는 동굴로, 동쪽으로는 교차로로 이어집니다.",
+    "exits": {
+      "south": "forest_entrance",
+      "north": "cave_entrance",
+      "east": "crossroads",
+      "west": "wolf_den"
+    },
+    "items": [
+      "old_sword",
+      "bread"
+    ],
+    "monster_id": "wolf",
+    "npc_id": "old_hermit"
+  },
+  {
+    "id": "cave_entrance",
+    "name": "동굴 입구",
+    "emoji": "🕳️",
+    "map": {
+      "layer": "cave",
+      "x": 2,
+      "y": 0
+    },
+    "desc": "어두운 동굴 입구는 우울한 바람으로 가득 차 있었다. 동굴 벽에는 노치가 있습니다. 내려가는 통로가 있습니다.",
+    "exits": {
+      "south": "dark_forest",
+      "down": "cave_middle"
+    },
+    "dark": true,
+    "items": [
+      "torch",
+      "mushroom"
+    ]
+  },
+  {
+    "id": "cave_middle",
+    "name": "동굴의 중간층",
+    "emoji": "🦇",
+    "map": {
+      "layer": "cave",
+      "x": 2,
+      "y": 1
+    },
+    "desc": "빛이 통과할 수 있도록 위쪽에 균열이 있는 천연 동굴 홀입니다. 동굴 벽은 이끼로 빛납니다.\n여러 구절이 서로 다른 방향으로 이어집니다.",
+    "exits": {
+      "up": "cave_entrance",
+      "down": "spider_nest",
+      "east": "ancient_ruins",
+      "north": "goblin_cave",
+      "south": "underground_river"
+    },
+    "dark": true,
+    "items": [
+      "silver_key",
+      "lesser_potion"
+    ]
+  },
+  {
+    "id": "cave_depths",
+    "name": "동굴 깊은 곳",
+    "emoji": "🕷️",
+    "map": {
+      "layer": "cave",
+      "x": 2,
+      "y": 3
+    },
+    "desc": "동굴의 가장 깊은 곳에서는 매운 냄새가 납니다. 땅에 뼈가 있습니다.\n구석에 거대 거미가 거미줄을 치고 있는데...",
+    "exits": {
+      "up": "spider_nest"
+    },
+    "dark": true,
+    "items": [
+      "golden_cup",
+      "spider_silk"
+    ],
+    "monster_id": "giant_spider"
+  },
+  {
+    "id": "ancient_ruins",
+    "name": "고대 유적",
+    "emoji": "🗿",
+    "map": {
+      "layer": "cave",
+      "x": 3,
+      "y": 1
+    },
+    "desc": "석실의 벽에는 부조 조각이 있습니다. 중앙 석재 플랫폼에는 벨벳 쿠션이 있습니다.\n북쪽 벽에 있는 돌문은 잠겨 있어 녹슨 열쇠가 필요합니다.",
+    "exits": {
+      "west": "cave_middle",
+      "east": "echoing_hall"
+    },
+    "items": [
+      "magic_scroll",
+      "ancient_scroll"
+    ]
+  },
+  {
+    "id": "hidden_passage",
+    "name": "비밀통로",
+    "emoji": "🚪",
+    "map": {
+      "layer": "cave",
+      "x": 3,
+      "y": 0
+    },
+    "desc": "좁은 통로는 한 사람만 지나갈 수 있습니다. 벽에는 빛나는 룬이 있습니다.\n통로 끝에는 위로 올라가는 계단이 있습니다.",
+    "exits": {
+      "south": "ancient_ruins",
+      "up": "tower_base"
+    },
+    "dark": true,
+    "monster_id": "ghost"
+  },
+  {
+    "id": "crossroads",
+    "name": "교차로",
+    "emoji": "🛤️",
+    "map": {
+      "layer": "surface",
+      "x": 4,
+      "y": 2
+    },
+    "desc": "5개의 도로가 교차하는 산림 개간지입니다. 거리 표지판: ←호수 | 북쪽: 타워 | 남쪽: 숲 | 동쪽: ←",
+    "exits": {
+      "west": "dark_forest",
+      "north": "tower_base",
+      "east": "lake_shore",
+      "south": "old_mill"
+    },
+    "npc_id": "wandering_merchant"
+  },
+  {
+    "id": "tower_base",
+    "name": "탑의 바닥",
+    "emoji": "🏰",
+    "map": {
+      "layers": {
+        "surface": {
+          "x": 4,
+          "y": 1
+        },
+        "tower": {
+          "x": 1,
+          "y": 2
+        }
+      }
+    },
+    "desc": "덩굴로 뒤덮인 고대 석탑. 탑의 문은 단단히 닫혀 있고, 열쇠 구멍의 모양도 은색 열쇠와 일치합니다.",
+    "exits": {
+      "south": "crossroads"
+    },
+    "items": [
+      "journal",
+      "lesser_potion"
+    ]
+  },
+  {
+    "id": "tower_middle",
+    "name": "타워의 중간층",
+    "emoji": "🌀",
+    "map": {
+      "layer": "tower",
+      "x": 1,
+      "y": 1
+    },
+    "desc": "타워의 원형 홀에는 벽에 고대 태피스트리가 걸려 있습니다.\n나선형 계단이 위쪽으로 이어집니다.",
+    "exits": {
+      "down": "tower_foyer",
+      "up": "tower_observatory",
+      "east": "tower_chapel"
+    },
+    "npc_id": "tower_guardian",
+    "items": [
+      "crystal_key",
+      "magic_book"
+    ]
+  },
+  {
+    "id": "tower_top",
+    "name": "탑 꼭대기",
+    "emoji": "🐉",
+    "map": {
+      "layer": "tower",
+      "x": 1,
+      "y": 0
+    },
+    "desc": "타워탑룸! 책과 마법 도구가 가득합니다. 창밖에는 끝없이 안개가 자욱하다.\n중앙 책상에는 반짝이는 마법의 보석이 있습니다. 그런데 보석 옆에 아기 용이 앉아 있어요!",
+    "exits": {
+      "down": "tower_ritual"
+    },
+    "monster_id": "dragon_whelp"
+  },
+  {
+    "id": "lake_shore",
+    "name": "호숫가",
+    "emoji": "🌊",
+    "map": {
+      "layer": "surface",
+      "x": 5,
+      "y": 2
+    },
+    "desc": "물이 맑고 조용한 호수. 호수 위에는 작은 나무배들이 떠 있다.\n남쪽에는 작은 마을이 있다. 활을 들고 있는 노인이 호숫가에서 낚시를 하고 있었습니다.",
+    "exits": {
+      "west": "crossroads",
+      "south": "lake_village",
+      "east": "hunter_lodge"
+    },
+    "items": [
+      "compass",
+      "fishing_rod"
+    ]
+  },
+  {
+    "id": "lake_village",
+    "name": "호숫가 마을",
+    "emoji": "🏘️",
+    "map": {
+      "layer": "surface",
+      "x": 5,
+      "y": 3
+    },
+    "desc": "조용한 작은 어촌 마을. 연기가 자욱한 목조 주택이 여러 채 있습니다.\n마을 입구 게시판에 안내문이 붙어있습니다. 마을에는 선술집, 대장간, 사원이 있습니다.",
+    "exits": {
+      "north": "lake_shore",
+      "south": "lake_village_inn",
+      "west": "lake_village_smithy",
+      "east": "ferry_dock"
+    },
+    "npc_id": "healer_lily",
+    "items": [
+      "dried_meat",
+      "bread"
+    ]
+  },
+  {
+    "id": "lake_island",
+    "name": "호수 중앙에 있는 섬",
+    "emoji": "🏝️",
+    "map": {
+      "layer": "surface",
+      "x": 7,
+      "y": 3
+    },
+    "desc": "섬에는 사원 유적이 있습니다. 제단의 보석은 마법의 장벽으로 보호됩니다.\n부두에서 페리를 타고 갈 수 있습니다. 물속에 그림자가 헤엄치고 있어요...",
+    "exits": {
+      "west": "ferry_dock"
+    },
+    "monster_id": "shadow_beast",
+    "items": [
+      "sacred_water",
+      "emerald"
+    ]
+  },
+  {
+    "id": "goblin_cave",
+    "name": "고블린 은신처",
+    "emoji": "👺",
+    "map": {
+      "layer": "cave",
+      "x": 1,
+      "y": 1
+    },
+    "desc": "엉덩이와 코에서 나는 냄새가 얼굴에 와요! 동굴은 훔친 잔해와 뼈들로 가득 차 있었습니다.\n한 무리의 고블린들이 전리품을 나누고 있습니다. 그들이 당신을 보면 비명을 지르며 달려옵니다!",
+    "exits": {
+      "south": "cave_middle",
+      "north": "goblin_warren"
+    },
+    "dark": true,
+    "items": [
+      "golden_cup",
+      "old_coin",
+      "lockpick",
+      "goblin_ear"
+    ],
+    "monster_ids": [
+      "goblin",
+      "goblin_shaman"
+    ]
+  },
+  {
+    "id": "goblin_throne",
+    "name": "고블린 왕좌",
+    "emoji": "👑",
+    "map": {
+      "layer": "cave",
+      "x": 1,
+      "y": -1
+    },
+    "desc": "동굴의 가장 깊은 곳에 있는 자연석 사원. 거대한 고블린이 뼈 더미 위에 앉아 있습니다.\n머리에는 뼈관을 쓰고 있고, 손에 쥐고 있는 거대한 지팡이는 아직도 피로 물들어 있습니다. 이것이 바로 고블린 왕입니다!",
+    "exits": {
+      "south": "goblin_warren"
+    },
+    "dark": true,
+    "items": [
+      "ancient_crown",
+      "rune_sword"
+    ],
+    "monster_id": "goblin_king"
+  },
+  {
+    "id": "underground_river",
+    "name": "지하 강",
+    "emoji": "💧",
+    "map": {
+      "layer": "cave",
+      "x": 2,
+      "y": 2
+    },
+    "desc": "이곳에서 갑자기 동굴이 열렸고, 어두운 지하강이 천천히 흘러내렸습니다.\n강둑에는 반딧불처럼 빛나는 이끼가 있었고, 물속에는 무언가가 헤엄치고 있었습니다...",
+    "exits": {
+      "north": "cave_middle",
+      "east": "frozen_cave",
+      "west": "hidden_grove",
+      "south": "drowned_shrine"
+    },
+    "dark": true,
+    "items": [
+      "fishing_rod",
+      "magic_herb",
+      "silver_ingot"
+    ],
+    "monster_id": "giant_snake"
+  },
+  {
+    "id": "frozen_cave",
+    "name": "얼어붙은 동굴",
+    "emoji": "❄️",
+    "map": {
+      "layer": "cave",
+      "x": 3,
+      "y": 2
+    },
+    "desc": "동굴의 벽은 두꺼운 서리로 덮여 있었고 기온은 곤두박질쳤습니다.\n그가 내쉬는 숨은 순식간에 하얀 안개로 응축되었고, 땅은 얼어붙어 매우 미끄러웠다.\n얼음 결정으로 만들어진 생명체가 구석에 가만히 서있습니다... 그것이 당신을 볼 때까지요.",
+    "exits": {
+      "west": "underground_river",
+      "east": "crystal_gallery"
+    },
+    "dark": true,
+    "items": [
+      "ice_crystal",
+      "scale_armor",
+      "mana_potion"
+    ],
+    "monster_id": "basilisk"
+  },
+  {
+    "id": "hidden_grove",
+    "name": "숨겨진 나무",
+    "emoji": "🌿",
+    "map": {
+      "layer": "cave",
+      "x": 1,
+      "y": 2
+    },
+    "desc": "고대 나무들로 둘러싸인 한적한 공터입니다. 태양은 나뭇잎 사이로 얼룩덜룩한 빛과 그림자를 드리웁니다.\n공터 중앙에는 빛나는 허브로 둘러싸인 돌 제단이 있습니다.\n공기는 꽃과 마법의 향기로 가득 차 있습니다.",
+    "exits": {
+      "east": "underground_river",
+      "west": "alchemist_lab"
+    },
+    "npc_id": "wandering_rogue",
+    "items": [
+      "fairy_dust",
+      "magic_herb",
+      "mushroom",
+      "health_ring"
+    ],
+    "monster_id": "treant"
+  },
+  {
+    "id": "bandit_camp",
+    "name": "산적 캠프",
+    "emoji": "⛺",
+    "map": {
+      "layer": "surface",
+      "x": 2,
+      "y": 4
+    },
+    "desc": "깊은 숲 속 공터에는 간이 텐트 몇 채가 있었습니다. 모닥불은 아직도 타오르고 있습니다.\n흉포해 보이는 도둑 여러 명이 전리품을 나눠 가지고 있는데, 당신을 보면 모두 무기를 뽑습니다!",
+    "exits": {
+      "north": "bandit_hideout",
+      "east": "old_mill"
+    },
+    "items": [
+      "old_coin",
+      "dried_meat",
+      "leather_armor"
+    ],
+    "monster_id": "bandit_leader"
+  },
+  {
+    "id": "bandit_hideout",
+    "name": "강도의 보물방",
+    "emoji": "💎",
+    "map": {
+      "layer": "surface",
+      "x": 1,
+      "y": 4
+    },
+    "desc": "도둑들의 비밀 보물방! 약탈한 재산으로 가득 찬 더미.\n구석에 거대한 보물상자가 있는데... 숨쉬고 있나요? !",
+    "exits": {
+      "south": "bandit_camp"
+    },
+    "items": [
+      "gold_ingot",
+      "silver_ingot",
+      "ruby",
+      "sapphire",
+      "diamond"
+    ],
+    "monster_id": "mimic"
+  },
+  {
+    "id": "lake_village_inn",
+    "name": "미스티 선술집",
+    "emoji": "🍺",
+    "map": {
+      "layer": "surface",
+      "x": 5,
+      "y": 4
+    },
+    "desc": "따뜻한 선술집에서는 에일과 바비큐 냄새가 났다. 벽난로에는 불이 활활 타오르고 있었습니다.\n다양한 먹잇감의 머리가 벽에 걸려 있고, 몇몇 현지인들이 구석에서 술을 마시며 담소를 나누고 있습니다.",
+    "exits": {
+      "north": "lake_village",
+      "east": "lake_village_temple"
+    },
+    "npc_id": "innkeeper",
+    "items": [
+      "fish",
+      "bread",
+      "honey"
+    ]
+  },
+  {
+    "id": "lake_village_smithy",
+    "name": "대장간",
+    "emoji": "⚒️",
+    "map": {
+      "layer": "surface",
+      "x": 4,
+      "y": 3
+    },
+    "desc": "뜨거운 용광로와 망치 소리. 벽은 다양한 무기와 갑옷으로 덮여 있습니다.\n기온은 바깥보다 훨씬 높습니다.",
+    "exits": {
+      "east": "lake_village"
+    },
+    "npc_id": "blacksmith",
+    "items": [
+      "iron_sword",
+      "helmet",
+      "shield"
+    ]
+  },
+  {
+    "id": "lake_village_temple",
+    "name": "빛의 사원",
+    "emoji": "⛪",
+    "map": {
+      "layer": "surface",
+      "x": 7,
+      "y": 4
+    },
+    "desc": "작고 엄숙한 사찰. 스테인드글라스 창문이 은은한 빛을 발산합니다.\n향 냄새가 공기를 가득 채워서 진정됩니다.",
+    "exits": {
+      "west": "lake_village_inn"
+    },
+    "npc_id": "village_elder",
+    "items": [
+      "lesser_potion",
+      "sacred_water"
+    ]
+  },
+  {
+    "id": "alchemist_lab",
+    "name": "연금술사의 실험실",
+    "emoji": "🧪",
+    "map": {
+      "layer": "cave",
+      "x": 0,
+      "y": 2
+    },
+    "desc": "이상한 도구와 병으로 가득 찬 동굴 실험실.\n플라스크 안에는 형형색색의 액체가 끓어올랐고, 공기는 ​​톡 쏘는 냄새로 가득 차 있었습니다.",
+    "exits": {
+      "east": "hidden_grove",
+      "north": "mushroom_warren",
+      "south": "fungal_garden"
+    },
+    "npc_id": "mad_alchemist",
+    "items": [
+      "mana_potion",
+      "fairy_dust",
+      "mandrake_root"
+    ]
+  },
+  {
+    "id": "forest_tower_ruins",
+    "name": "숲의 탑 유적",
+    "emoji": "🏚️",
+    "map": {
+      "layer": "surface",
+      "x": 3,
+      "y": 4
+    },
+    "desc": "반쯤 무너진 고대 석탑은 덩굴과 이끼로 뒤덮였습니다.\n탑 내부의 나선형 계단은 파손되어 있으나 지하에는 공간이 있는 것으로 보인다.\n거대한 독수리가 탑 꼭대기에 둥지를 틀었습니다.",
+    "exits": {
+      "north": "misty_path",
+      "west": "bandit_camp"
+    },
+    "items": [
+      "phoenix_feather",
+      "ancient_scroll",
+      "mystic_amulet"
+    ],
+    "monster_id": "forest_troll"
+  },
+  {
+    "id": "haunted_graveyard",
+    "name": "저주받은 묘지",
+    "emoji": "🪦",
+    "map": {
+      "layer": "surface",
+      "x": 3,
+      "y": 1
+    },
+    "desc": "흙 속에 비뚤어진 묘비들이 박혀 있는 황량한 공동묘지.\n차가운 바람이 죽은 나무들 사이로 휘몰아쳤다. 땅속에서 뭔가가 움직이고 있어요...\n묘지 끝에는 덩굴이 얽힌 돌문이 있다. 홈 모양은 탑 꼭대기에 있는 어린 용이 지키는 마법 보석과 일치합니다.\n검은 갑옷을 입은 용병이 묘지에서 무언가를 찾고 있었습니다.",
+    "exits": {
+      "west": "ruined_chapel"
+    },
+    "npc_id": "bounty_hunter",
+    "items": [
+      "old_coin",
+      "silver_ring",
+      "mystic_amulet",
+      "scp_dossier",
+      "keycard_lvl2"
+    ],
+    "monster_ids": [
+      "ghost",
+      "wraith"
+    ]
+  },
+  {
+    "id": "scp_site_gate",
+    "name": "격리기지 접근통제",
+    "emoji": "🚧",
+    "map": {
+      "layer": "site",
+      "x": 1,
+      "y": 2
+    },
+    "desc": "콘크리트 복도 끝에는 빛바랜 재단 로고가 벽에 테이프로 붙어 있는 묵직하고 밀폐된 문이 있습니다.\n마법의 보석이 이곳에 공명하여 격리 기지 깊숙한 곳으로 가는 길을 열었습니다.",
+    "exits": {
+      "south": "haunted_graveyard",
+      "north": "scp_security_hall"
+    },
+    "items": [
+      "site_ration"
+    ]
+  },
+  {
+    "id": "scp_security_hall",
+    "name": "보안 지휘 홀",
+    "emoji": "🛡️",
+    "map": {
+      "layer": "site",
+      "x": 1,
+      "y": 1
+    },
+    "desc": "지휘실은 감시 화면으로 가득 차 있으며 대부분의 장비는 전원이 꺼져 있습니다. 구석에는 버려진 갑옷 상자들이 쌓여 있었다.",
+    "exits": {
+      "south": "scp_site_gate",
+      "east": "scp_containment_hall"
+    },
+    "npc_id": "mtf_liaison"
+  },
+  {
+    "id": "scp_containment_hall",
+    "name": "격리 복도",
+    "emoji": "🚪",
+    "map": {
+      "layer": "site",
+      "x": 2,
+      "y": 1
+    },
+    "desc": "양쪽에 모호하게 번호가 매겨진 격리 장치가 있고, 대부분의 문이 뒤틀리고 변형되어 있습니다.\n남쪽은 단위구역으로 통하고, 아래로 희미한 톱니바퀴 소리가 ​​들리는 914호입니다.",
+    "exits": {
+      "west": "scp_security_hall",
+      "north": "scp_archive",
+      "east": "scp_breach_chamber",
+      "south": "scp_cell_block",
+      "down": "scp_914_chamber"
+    },
+    "dark": true,
+    "items": [
+      "observation_log",
+      "lesser_potion"
+    ],
+    "monster_id": "scp_sentry_drone"
+  },
+  {
+    "id": "scp_archive",
+    "name": "아카이브",
+    "emoji": "📚",
+    "map": {
+      "layer": "site",
+      "x": 2,
+      "y": 0
+    },
+    "desc": "무너진 책장 사이에는 아직도 경고 영상이 반복 재생되고 있는 단말기가 있었다. 퀴퀴한 종이 냄새가 공중에 맴돌았다.",
+    "exits": {
+      "south": "scp_containment_hall"
+    },
+    "npc_id": "dr_ellis",
+    "monster_id": "scp_mimic_clerk"
+  },
+  {
+    "id": "scp_breach_chamber",
+    "name": "통제 불능 격리실",
+    "emoji": "⚠️",
+    "map": {
+      "layer": "site",
+      "x": 3,
+      "y": 1
+    },
+    "desc": "방 중앙의 격리 기둥이 부서지고, 맥동하는 비정상적인 코어가 공중에 떠 있습니다. 벽의 경고등이 격렬하게 번쩍였다.",
+    "exits": {
+      "west": "scp_containment_hall"
+    },
+    "dark": true,
+    "monster_id": "scp_breach_core"
+  },
+  {
+    "id": "scp_cell_block",
+    "name": "격리 단위 면적",
+    "emoji": "🏢",
+    "map": {
+      "layer": "site",
+      "x": 2,
+      "y": 2
+    },
+    "desc": "복도 양쪽에 손상된 명판이 걸려 있었습니다: 012, 096, 173, 049...경고등은 여전히 ​​깜박거리고 있었습니다.",
+    "exits": {
+      "north": "scp_containment_hall",
+      "east": "scp_012_cell",
+      "west": "scp_173_cell",
+      "south": "scp_096_cell",
+      "down": "scp_087_stair",
+      "up": "scp_294_lounge"
+    },
+    "items": [
+      "scp_701_script"
+    ]
+  },
+  {
+    "id": "scp_914_chamber",
+    "name": "장비 작업장 (SCP-ZH-914)",
+    "emoji": "⚙️",
+    "map": {
+      "layer": "site",
+      "x": 1,
+      "y": 3
+    },
+    "desc": "거대한 시계태엽 기계가 홀을 장악하고 있습니다. 피드 호퍼와 기어 플레이트의 상태가 양호합니다.\n명판: 거칠음 / 1:1 / 미세함 / 매우 미세함.\n배낭에 있는 퀘스트가 아닌 아이템을 정제하려면 use 914를 입력하세요.",
+    "exits": {
+      "up": "scp_containment_hall"
+    },
+    "items": [
+      "scp_447_slime"
+    ]
+  },
+  {
+    "id": "scp_012_cell",
+    "name": "012호",
+    "emoji": "🎼",
+    "map": {
+      "layer": "site",
+      "x": 3,
+      "y": 2
+    },
+    "desc": "피 묻은 악보가 유리 뒤에 있는 악보대에 못 박혀 있었습니다. 속삭임은 당신이 더 가까이 오도록 강요합니다.",
+    "exits": {
+      "west": "scp_cell_block"
+    },
+    "items": [
+      "scp_012_score"
+    ]
+  },
+  {
+    "id": "scp_096_cell",
+    "name": "096호",
+    "emoji": "🫣",
+    "map": {
+      "layer": "site",
+      "x": 2,
+      "y": 3
+    },
+    "desc": "두꺼운 방음실. 감시가 긁혔습니다. 구석에는 두 손으로 얼굴을 가리고 있는 창백한 인물이 앉아 있었다.",
+    "exits": {
+      "north": "scp_cell_block"
+    },
+    "monster_id": "scp_096"
+  },
+  {
+    "id": "scp_173_cell",
+    "name": "173호",
+    "emoji": "🗿",
+    "map": {
+      "layer": "site",
+      "x": 1,
+      "y": 2
+    },
+    "desc": "빈 수용소 바닥에는 긁힌 자국과 얼룩이 남아 있습니다. 조각품은 문을 향하고 있습니다. 지금은 그 조각품이 거기에 없었다고 확신할 것입니다.",
+    "exits": {
+      "east": "scp_cell_block"
+    },
+    "monster_id": "scp_173",
+    "items": [
+      "scp_513_bell"
+    ]
+  },
+  {
+    "id": "scp_087_stair",
+    "name": "끝없는 계단 (SCP-ZH-087)",
+    "emoji": "🌀",
+    "map": {
+      "layer": "site",
+      "x": 2,
+      "y": 4
+    },
+    "desc": "콘크리트 계단은 끝없이 아래로 이어집니다. 아래에서 희미한 비명이 들려왔다.",
+    "exits": {
+      "up": "scp_cell_block",
+      "down": "scp_087_depth"
+    },
+    "dark": true
+  },
+  {
+    "id": "scp_087_depth",
+    "name": "계단이 더 깊어짐",
+    "emoji": "🌑",
+    "map": {
+      "layer": "site",
+      "x": 2,
+      "y": 5
+    },
+    "desc": "불이 거의 꺼졌습니다. 얼굴이 아래쪽 모서리에 붙어 있습니다. 아니면 그냥 얼룩일 수도 있습니다.",
+    "exits": {
+      "up": "scp_087_stair",
+      "east": "scp_106_corridor"
+    },
+    "dark": true,
+    "monster_id": "scp_372",
+    "items": [
+      "scp_055_object"
+    ]
+  },
+  {
+    "id": "scp_106_corridor",
+    "name": "부식 복도",
+    "emoji": "🟤",
+    "map": {
+      "layer": "site",
+      "x": 3,
+      "y": 5
+    },
+    "desc": "벽에서는 검은 부식성 액체가 스며들었고, 발자국은 단단한 벽 속으로 사라졌습니다.",
+    "exits": {
+      "west": "scp_087_depth",
+      "north": "scp_002_room"
+    },
+    "monster_id": "scp_106",
+    "dark": true
+  },
+  {
+    "id": "scp_002_room",
+    "name": "살점실 (SCP-ZH-002)",
+    "emoji": "🫀",
+    "map": {
+      "layer": "site",
+      "x": 3,
+      "y": 4
+    },
+    "desc": "구형 방은 정맥과 힘줄로 덮여 있고 가구는 뼈로 만들어졌습니다.",
+    "exits": {
+      "south": "scp_106_corridor",
+      "east": "scp_049_ward"
+    },
+    "items": [
+      "scp_035_mask"
+    ]
+  },
+  {
+    "id": "scp_049_ward",
+    "name": "격리 병동",
+    "emoji": "🏥",
+    "map": {
+      "layer": "site",
+      "x": 4,
+      "y": 4
+    },
+    "desc": "버려진 의료 구역, 공기에서 포르말린 냄새가 납니다. 흑사병 의사는 침대 옆에 서 있었습니다.",
+    "exits": {
+      "west": "scp_002_room",
+      "north": "scp_999_play",
+      "east": "scp_079_server"
+    },
+    "npc_id": "scp_049",
+    "items": [
+      "scp_008_vial",
+      "lesser_potion"
+    ]
+  },
+  {
+    "id": "scp_999_play",
+    "name": "행복한 격리실",
+    "emoji": "🧡",
+    "map": {
+      "layer": "site",
+      "x": 4,
+      "y": 3
+    },
+    "desc": "푹신한 방에는 오렌지색 풍선껌이 즐겁게 튀고 있었습니다.",
+    "exits": {
+      "south": "scp_049_ward",
+      "west": "scp_294_lounge"
+    },
+    "npc_id": "scp_999",
+    "items": [
+      "scp_1230_book"
+    ]
+  },
+  {
+    "id": "scp_079_server",
+    "name": "서버실 (SCP-ZH-079)",
+    "emoji": "💻",
+    "map": {
+      "layer": "site",
+      "x": 5,
+      "y": 4
+    },
+    "desc": "랙이 으르렁거린다. 골동품 컴퓨터 화면이 켜집니다. 대기 중…",
+    "exits": {
+      "west": "scp_049_ward",
+      "north": "scp_343_room",
+      "east": "scp_682_pit"
+    },
+    "npc_id": "scp_079",
+    "items": [
+      "scp_1981_tape"
+    ]
+  },
+  {
+    "id": "scp_343_room",
+    "name": "거실",
+    "emoji": "☕",
+    "map": {
+      "layer": "site",
+      "x": 5,
+      "y": 3
+    },
+    "desc": "현장 스타일과 어울리지 않는 아늑한 응접실. 벽난로, 소파, 차 세트를 모두 이용하실 수 있습니다.",
+    "exits": {
+      "south": "scp_079_server"
+    },
+    "npc_id": "scp_343"
+  },
+  {
+    "id": "scp_294_lounge",
+    "name": "커피 라운지 (SCP-ZH-294)",
+    "emoji": "☕",
+    "map": {
+      "layer": "site",
+      "x": 3,
+      "y": 3
+    },
+    "desc": "구석에는 어떤 음료든 제공할 수 있는 커피 머신이 있습니다. 패널에 다음과 같이 표시됩니다. use 294를 입력하세요.",
+    "exits": {
+      "east": "scp_999_play",
+      "west": "scp_261_canteen",
+      "down": "scp_cell_block"
+    },
+    "items": [
+      "site_ration"
+    ]
+  },
+  {
+    "id": "scp_261_canteen",
+    "name": "차원 자판기 아케이드 (SCP-ZH-261)",
+    "emoji": "🥤",
+    "map": {
+      "layer": "site",
+      "x": 0,
+      "y": 3
+    },
+    "desc": "이상한 자판기에서는 포장을 알 수 없는 과자가 뿜어져 나옵니다. 동전 투입구가 빛납니다: 261을 사용하세요.",
+    "exits": {
+      "east": "scp_294_lounge",
+      "north": "scp_895_cctv"
+    },
+    "items": [
+      "old_coin",
+      "scp_140_chronicle",
+      "scp_261_snack"
+    ]
+  },
+  {
+    "id": "scp_895_cctv",
+    "name": "감시실 (SCP-ZH-895)",
+    "emoji": "📹",
+    "map": {
+      "layer": "site",
+      "x": 0,
+      "y": 2
+    },
+    "desc": "화면에는 관의 클로즈업이 표시됩니다. 보면 볼수록 그림이 자신을 바라보고 있는 듯한 느낌이 듭니다.",
+    "exits": {
+      "south": "scp_261_canteen",
+      "east": "scp_073_chamber"
+    },
+    "items": [
+      "scp_205_lamp"
+    ]
+  },
+  {
+    "id": "scp_073_chamber",
+    "name": "회의실 073",
+    "emoji": "👁️",
+    "map": {
+      "layer": "site",
+      "x": 0,
+      "y": 1
+    },
+    "desc": "심플한 회의실. 이마에 표가 있는 남자는 조용히 앉아 있었다.",
+    "exits": {
+      "west": "scp_895_cctv",
+      "east": "scp_076_crypt"
+    },
+    "npc_id": "scp_073"
+  },
+  {
+    "id": "scp_076_crypt",
+    "name": "석관실 (SCP-ZH-076)",
+    "emoji": "⚰️",
+    "map": {
+      "layer": "site",
+      "x": 1,
+      "y": 1
+    },
+    "desc": "검은 석관은 반쯤 열려 있었고, 땅은 칼자국으로 뒤덮였습니다.",
+    "exits": {
+      "west": "scp_073_chamber"
+    },
+    "monster_id": "scp_076",
+    "items": [
+      "scp_860_key"
+    ]
+  },
+  {
+    "id": "scp_682_pit",
+    "name": "산성 연못 682호",
+    "emoji": "☢️",
+    "map": {
+      "layer": "site",
+      "x": 6,
+      "y": 4
+    },
+    "desc": "거대한 산성 봉쇄 탱크. 표면 아래에서 무언가 움직이고 있습니다. 불멸의 증오가 여전히 존재합니다. 동쪽에는 \"001\"이라는 숫자를 적고 다시 쓴 봉인된 검은 문이 있습니다.",
+    "exits": {
+      "west": "scp_079_server",
+      "north": "scp_3008_aisle"
+    },
+    "monster_id": "scp_682"
+  },
+  {
+    "id": "scp_001_vault",
+    "name": "001호 최종보관금고",
+    "emoji": "☠️",
+    "map": {
+      "layer": "site",
+      "x": 7,
+      "y": 4
+    },
+    "desc": "검은 문 안에는 아무것도 없지만 눈빛이 붐비는 것 같다. 남은 라벨은 \"001\" 뿐입니다. 공기는 아스팔트처럼 두꺼워졌습니다. 현장 운영이 끝났습니다.",
+    "exits": {
+      "west": "scp_682_pit"
+    },
+    "dark": true,
+    "monster_id": "scp_001",
+    "items": [
+      "observation_log"
+    ]
+  },
+  {
+    "id": "scp_3008_aisle",
+    "name": "끝없는 상점 채널(SCP-ZH-3008)",
+    "emoji": "🛒",
+    "map": {
+      "layer": "site",
+      "x": 6,
+      "y": 3
+    },
+    "desc": "창고형 선반은 시야 끝까지 확장됩니다. 방송 알림: 밤이 곧 시작됩니다.",
+    "exits": {
+      "south": "scp_682_pit",
+      "west": "scp_939_den",
+      "north": "scp_egg_storage"
+    },
+    "items": [
+      "scp_1471_phone",
+      "site_ration"
+    ],
+    "monster_id": "scp_1048"
+  },
+  {
+    "id": "scp_egg_storage",
+    "name": "계란 보관실 (SCP-ZH-3199)",
+    "emoji": "🥚",
+    "map": {
+      "layer": "site",
+      "x": 6,
+      "y": 2
+    },
+    "desc": "냉동실이 깨졌고, 슬라임과 빈 껍질이 바닥에 여기저기 널려 있었습니다.",
+    "exits": {
+      "south": "scp_3008_aisle"
+    },
+    "monster_id": "scp_3199",
+    "items": [
+      "scp_409_crystal"
+    ]
+  },
+  {
+    "id": "scp_939_den",
+    "name": "목구멍이 많은 은신처",
+    "emoji": "🦷",
+    "map": {
+      "layer": "site",
+      "x": 5,
+      "y": 3
+    },
+    "desc": "도움을 청하는 익숙한 외침이 어둠 속에서 들려왔습니다. 목소리가 제대로 들리지 않습니다.",
+    "exits": {
+      "east": "scp_3008_aisle",
+      "south": "scp_966_dark",
+      "west": "scp_131_bay"
+    },
+    "dark": true,
+    "monster_id": "scp_939"
+  },
+  {
+    "id": "scp_966_dark",
+    "name": "빛이 없는 사냥터",
+    "emoji": "🌫️",
+    "map": {
+      "layer": "site",
+      "x": 5,
+      "y": 4
+    },
+    "desc": "적외선 표시등이 손상되었습니다. 당신은 호흡의 리듬 속에서 무언가 기다리고 있는 것을 느낍니다.",
+    "exits": {
+      "north": "scp_939_den"
+    },
+    "dark": true,
+    "monster_id": "scp_966",
+    "items": [
+      "scp_178_glasses"
+    ]
+  },
+  {
+    "id": "scp_131_bay",
+    "name": "탐지기의 창고",
+    "emoji": "👀",
+    "map": {
+      "layer": "site",
+      "x": 4,
+      "y": 3
+    },
+    "desc": "충전대 위에서는 안구 로봇 두 대가 신나게 굴러다녔다.",
+    "exits": {
+      "east": "scp_939_den",
+      "south": "scp_017_vault"
+    },
+    "npc_id": "scp_131",
+    "items": [
+      "scp_113_rock"
+    ]
+  },
+  {
+    "id": "scp_017_vault",
+    "name": "차광 캐비닛",
+    "emoji": "🌑",
+    "map": {
+      "layer": "site",
+      "x": 4,
+      "y": 4
+    },
+    "desc": "밝은 빛으로 둘러싸인 금고. 가로등 기둥 사이에 그림자가 몸부림친다.",
+    "exits": {
+      "north": "scp_131_bay"
+    },
+    "monster_id": "scp_017",
+    "items": [
+      "scp_093_disc",
+      "scp_5000_file"
+    ]
+  },
+  {
+    "id": "tower_foyer",
+    "name": "타워 로비",
+    "emoji": "🏛️",
+    "map": {
+      "layer": "tower",
+      "x": 1,
+      "y": 2
+    },
+    "desc": "은색 열쇠로 열리는 탑 문 뒤에는 높은 돌 현관이 있습니다.\n서쪽에는 무기고, 동쪽에는 도서관, 나선형 계단이 위로 이어져 있다.",
+    "exits": {
+      "down": "tower_base",
+      "west": "tower_armory",
+      "east": "tower_library",
+      "up": "tower_middle"
+    }
+  },
+  {
+    "id": "tower_armory",
+    "name": "타워 무기고",
+    "emoji": "⚔️",
+    "map": {
+      "layer": "tower",
+      "x": 0,
+      "y": 2
+    },
+    "desc": "철제 선반에는 녹슨 무기와 방패가 걸려 있었습니다.",
+    "exits": {
+      "east": "tower_foyer",
+      "down": "tower_prison"
+    },
+    "items": [
+      "iron_sword",
+      "shield",
+      "chain_armor",
+      "lesser_potion"
+    ]
+  },
+  {
+    "id": "tower_library",
+    "name": "타워 도서관",
+    "emoji": "📚",
+    "map": {
+      "layer": "tower",
+      "x": 2,
+      "y": 2
+    },
+    "desc": "높이 솟은 책장이 천장까지 닿는다. 한 노학자가 촛불 곁에서 고대 서적을 읽고 있었습니다.",
+    "exits": {
+      "west": "tower_foyer"
+    },
+    "items": [
+      "magic_book",
+      "ancient_scroll"
+    ],
+    "npc_id": "tower_librarian"
+  },
+  {
+    "id": "tower_chapel",
+    "name": "타워 채플",
+    "emoji": "⛪",
+    "map": {
+      "layer": "tower",
+      "x": 2,
+      "y": 1
+    },
+    "desc": "길고 좁은 예배당의 북쪽에는 예식장으로 이어지는 육중한 돌문이 있습니다.",
+    "exits": {
+      "west": "tower_middle",
+      "north": "tower_ritual"
+    },
+    "items": [
+      "sacred_water",
+      "lesser_potion"
+    ]
+  },
+  {
+    "id": "tower_observatory",
+    "name": "타워 전망대",
+    "emoji": "🔭",
+    "map": {
+      "layer": "tower",
+      "x": 1,
+      "y": 1
+    },
+    "desc": "원형 별 관측실에서는 황동 망원경이 돔의 균열을 가리키고 창 밖에는 회색 안개가 끝없이 펼쳐져 있습니다.",
+    "exits": {
+      "down": "tower_middle"
+    },
+    "items": [
+      "compass",
+      "moonlight_elixir"
+    ]
+  },
+  {
+    "id": "tower_prison",
+    "name": "타워 셀",
+    "emoji": "⛓️",
+    "map": {
+      "layer": "tower",
+      "x": 0,
+      "y": 1
+    },
+    "desc": "어둡고 축축한 감방. 낡은 승복을 입은 노인이 구석에 책상다리를 하고 앉아 있었다.",
+    "exits": {
+      "up": "tower_armory",
+      "west": "tower_ritual"
+    },
+    "items": [
+      "rope",
+      "bread"
+    ],
+    "npc_id": "cave_hermit"
+  },
+  {
+    "id": "tower_ritual",
+    "name": "타워 세레모니룸",
+    "emoji": "🔮",
+    "map": {
+      "layer": "tower",
+      "x": 1,
+      "y": 0
+    },
+    "desc": "땅에는 마법진이 새겨져 있고, 중앙 석상의 눈이 빛나고, 탑 꼭대기로 이어지는 수정문은 잠겨 있다.",
+    "exits": {
+      "south": "tower_chapel",
+      "east": "tower_prison"
+    },
+    "monster_id": "stone_golem"
+  },
+  {
+    "id": "goblin_warren",
+    "name": "고블린 동굴",
+    "emoji": "👹",
+    "map": {
+      "layer": "cave",
+      "x": 1,
+      "y": 0
+    },
+    "desc": "좁은 복도 양쪽에는 고블린의 판잣집들이 파져 있었고, 악취가 지독했다.",
+    "exits": {
+      "south": "goblin_cave",
+      "north": "goblin_throne"
+    },
+    "items": [
+      "old_coin",
+      "goblin_ear"
+    ],
+    "monster_ids": [
+      "goblin",
+      "goblin"
+    ],
+    "dark": true
+  },
+  {
+    "id": "spider_nest",
+    "name": "거미 은신처",
+    "emoji": "🕸️",
+    "map": {
+      "layer": "cave",
+      "x": 2,
+      "y": 2
+    },
+    "desc": "동굴 벽과 땅은 끈적끈적한 거미줄로 덮여 있었고, 거대한 거미들이 어둠 속에서 분주하게 돌아다녔습니다.",
+    "exits": {
+      "up": "cave_middle",
+      "down": "cave_depths"
+    },
+    "items": [
+      "spider_silk",
+      "lesser_potion"
+    ],
+    "monster_id": "giant_spider",
+    "dark": true
+  },
+  {
+    "id": "crystal_gallery",
+    "name": "크리스탈 복도",
+    "emoji": "💎",
+    "map": {
+      "layer": "cave",
+      "x": 4,
+      "y": 2
+    },
+    "desc": "얼음색 크리스탈이 천장에 매달려 있고, 빛은 수천 개의 색깔 띠로 굴절됩니다.",
+    "exits": {
+      "west": "frozen_cave"
+    },
+    "items": [
+      "ice_crystal",
+      "emerald",
+      "sapphire"
+    ],
+    "dark": true
+  },
+  {
+    "id": "drowned_shrine",
+    "name": "침수된 사원",
+    "emoji": "🌊",
+    "map": {
+      "layer": "cave",
+      "x": 3,
+      "y": 3
+    },
+    "desc": "지하 강이 고대 사원으로 흘러 들어가고 물의 신상이 물에 반쯤 잠겨 있습니다.",
+    "exits": {
+      "north": "underground_river"
+    },
+    "items": [
+      "sacred_water",
+      "golden_cup"
+    ],
+    "monster_id": "giant_snake",
+    "dark": true
+  },
+  {
+    "id": "mushroom_warren",
+    "name": "버섯동굴",
+    "emoji": "🍄",
+    "map": {
+      "layer": "cave",
+      "x": 0,
+      "y": 3
+    },
+    "desc": "거대한 버섯이 거리를 따라 늘어서 있고, 형광 곰팡이가 구불구불한 길을 비춥니다.",
+    "exits": {
+      "south": "alchemist_lab"
+    },
+    "items": [
+      "mushroom",
+      "fairy_dust"
+    ],
+    "dark": true
+  },
+  {
+    "id": "fungal_garden",
+    "name": "곰팡이 정원",
+    "emoji": "🌿",
+    "map": {
+      "layer": "cave",
+      "x": 0,
+      "y": 1
+    },
+    "desc": "빛나는 곰팡이는 마법의 허브와 공생하며 살고 있으며, 공기는 ​​꽃향기로 가득 차 있습니다.",
+    "exits": {
+      "north": "alchemist_lab"
+    },
+    "items": [
+      "magic_herb",
+      "mandrake_root"
+    ]
+  },
+  {
+    "id": "echoing_hall",
+    "name": "에코홀",
+    "emoji": "🔊",
+    "map": {
+      "layer": "cave",
+      "x": 4,
+      "y": 1
+    },
+    "desc": "텅 빈 넓은 홀에 발자국 소리가 우렁찬 울림으로 증폭됐다.",
+    "exits": {
+      "west": "ancient_ruins",
+      "north": "collapsed_tunnel"
+    },
+    "items": [
+      "ancient_scroll",
+      "old_coin"
+    ],
+    "monster_id": "ghost",
+    "dark": true
+  },
+  {
+    "id": "collapsed_tunnel",
+    "name": "무너진 터널",
+    "emoji": "🪨",
+    "map": {
+      "layer": "cave",
+      "x": 4,
+      "y": 0
+    },
+    "desc": "터널은 낙석으로 막혀 통과할 수 있는 좁은 틈만 남았습니다.",
+    "exits": {
+      "south": "echoing_hall"
+    },
+    "items": [
+      "gold_ingot",
+      "ancient_key"
+    ],
+    "dark": true
+  },
+  {
+    "id": "misty_path",
+    "name": "안개 낀 흔적",
+    "emoji": "🌫️",
+    "map": {
+      "layer": "surface",
+      "x": 3,
+      "y": 4
+    },
+    "desc": "산책로 위로 짙은 안개가 끼어 시야가 10보도 채 되지 않았습니다.",
+    "exits": {
+      "north": "forest_entrance",
+      "south": "forest_tower_ruins"
+    },
+    "items": [
+      "mushroom",
+      "old_coin"
+    ]
+  },
+  {
+    "id": "wolf_den",
+    "name": "늑대 은신처",
+    "emoji": "🐺",
+    "map": {
+      "layer": "surface",
+      "x": 2,
+      "y": 2
+    },
+    "desc": "바위로 뒤덮인 동굴에는 어둠 속에서 여러 쌍의 녹색 눈이 당신을 응시하고 있습니다.",
+    "exits": {
+      "east": "dark_forest",
+      "south": "ruined_chapel"
+    },
+    "items": [
+      "wolf_tooth",
+      "dried_meat"
+    ],
+    "monster_ids": [
+      "wolf",
+      "wolf"
+    ]
+  },
+  {
+    "id": "old_mill",
+    "name": "오래된 공장",
+    "emoji": "🏚️",
+    "map": {
+      "layer": "surface",
+      "x": 4,
+      "y": 4
+    },
+    "desc": "버려진 나무 방앗간, 물레방아가 마른 도랑에 반쯤 가라앉았습니다.",
+    "exits": {
+      "north": "crossroads",
+      "west": "bandit_camp"
+    },
+    "items": [
+      "bread",
+      "rope",
+      "old_coin"
+    ],
+    "monster_id": "giant_rat"
+  },
+  {
+    "id": "ferry_dock",
+    "name": "페리 터미널",
+    "emoji": "⛵",
+    "map": {
+      "layer": "surface",
+      "x": 6,
+      "y": 3
+    },
+    "desc": "나무 부두가 호수 쪽으로 뻗어 있고, 페리는 말뚝 위에서 부드럽게 흔들립니다.",
+    "exits": {
+      "west": "lake_village",
+      "east": "lake_island"
+    },
+    "items": [
+      "fishing_rod",
+      "fish"
+    ]
+  },
+  {
+    "id": "hunter_lodge",
+    "name": "사냥꾼 오두막",
+    "emoji": "🏹",
+    "map": {
+      "layer": "surface",
+      "x": 6,
+      "y": 1
+    },
+    "desc": "벽은 동물 가죽과 활과 화살로 덮여 있고, 노인은 사냥용 칼을 닦고 있습니다.",
+    "exits": {
+      "west": "lake_shore"
+    },
+    "items": [
+      "dried_meat"
+    ],
+    "npc_id": "hunter"
+  },
+  {
+    "id": "ruined_chapel",
+    "name": "버려진 예배당",
+    "emoji": "⛪",
+    "map": {
+      "layer": "surface",
+      "x": 2,
+      "y": 1
+    },
+    "desc": "석조 예배당의 지붕이 대부분 무너졌고, 부서진 제단 앞에서 흰옷을 입은 여사제가 기도를 하고 있었다.",
+    "exits": {
+      "north": "wolf_den",
+      "east": "haunted_graveyard"
+    },
+    "npc_id": "priestess",
+    "items": [
+      "sacred_water",
+      "lesser_potion"
+    ]
+  }
+]

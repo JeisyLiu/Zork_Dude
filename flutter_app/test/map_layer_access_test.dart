@@ -9,6 +9,7 @@ import 'package:zork_dude/ui/game_ui_theme.dart';
 import 'package:zork_dude/widgets/mist_map_panel.dart';
 
 import 'test_l10n.dart';
+import 'test_game_messages.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -18,6 +19,7 @@ void main() {
   setUp(() async {
     SharedPreferences.setMockInitialValues({});
     controller = GameController();
+    controller.useTestMessages(testGameMessages());
     await controller.init();
     await controller.startNewGame(slot: 0);
   });

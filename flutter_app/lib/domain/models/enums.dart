@@ -1,3 +1,5 @@
+import 'package:zork_dude/l10n/game_messages.dart';
+
 enum Direction {
   north,
   south,
@@ -94,16 +96,7 @@ enum MonsterRank {
     }
   }
 
-  String get displayName {
-    switch (this) {
-      case MonsterRank.normal:
-        return '普通';
-      case MonsterRank.elite:
-        return '精英';
-      case MonsterRank.boss:
-        return 'BOSS';
-    }
-  }
+  String displayName(GameMessages messages) => messages.monsterRankName(name);
 }
 
 enum MapLayer { surface, cave, tower, site }

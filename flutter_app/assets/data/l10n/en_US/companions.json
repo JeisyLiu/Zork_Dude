@@ -1,0 +1,93 @@
+[
+  {
+    "id": "companion_warrior",
+    "name": "hammer",
+    "desc": "burly warrior,",
+    "role": "WARRIOR",
+    "hp": 60,
+    "atk": 10,
+    "defense": 4,
+    "ability_desc": "Melee attack, attack +3, defense +2",
+    "recruit_item": "iron_sword",
+    "recruit_msg": "Iron Hammer patted your shoulder: \"What a sword!\" I'll go with you! 』",
+    "emoji": "⚔️"
+  },
+  {
+    "id": "companion_rogue",
+    "name": "nightingale",
+    "desc": "A clever female thief,",
+    "role": "ROGUE",
+    "hp": 40,
+    "atk": 8,
+    "defense": 1,
+    "ability_desc": "Sneak attack skills, attack +2, 40% probability of additional damage",
+    "recruit_item": "shadow_blade",
+    "recruit_msg": "The nightingale appeared in the shadow: \"You are interesting, take me with you.\" 』",
+    "emoji": "🗡️"
+  },
+  {
+    "id": "companion_mage",
+    "name": "Erin",
+    "desc": "young mage,",
+    "role": "MAGE",
+    "hp": 35,
+    "atk": 12,
+    "defense": 0,
+    "ability_desc": "Magic attack, attack +5, provides light source",
+    "recruit_item": "magic_book",
+    "recruit_msg": "Erin said excitedly: \"Finally someone understands magic!\" Let’s go together! 』",
+    "emoji": "🔮"
+  },
+  {
+    "id": "companion_healer",
+    "name": "Mu Guang",
+    "desc": "gentle monk,",
+    "role": "HEALER",
+    "hp": 50,
+    "atk": 5,
+    "defense": 3,
+    "ability_desc": "Healing support, recovery of HP every round, defense +1, maximum HP +15",
+    "recruit_item": "sacred_water",
+    "recruit_msg": "Mu Guang clasped his hands together: \"You need healing light on your journey, let me go with you.\" 』",
+    "emoji": "💚"
+  },
+  {
+    "id": "companion_scout",
+    "name": "Wind spirit",
+    "desc": "A vigorous half-elf scout,",
+    "role": "SCOUT",
+    "hp": 40,
+    "atk": 7,
+    "defense": 1,
+    "ability_desc": "Reconnaissance agility, attack +1, discover enemy weaknesses during battle",
+    "recruit_item": "fairy_dust",
+    "recruit_msg": "Wind Spirit jumps briskly in front of you: \"You look like you need a guide!\" 』",
+    "emoji": "🪶"
+  },
+  {
+    "id": "companion_archer",
+    "name": "Chasing the wind",
+    "desc": "Silent Elf Archer,",
+    "role": "SCOUT",
+    "hp": 45,
+    "atk": 9,
+    "defense": 1,
+    "ability_desc": "Long-range sniper, attack +2, has a chance to cause double damage during battle",
+    "recruit_item": "elven_bow",
+    "recruit_msg": "Zhui Feng nodded: \"Your archery skills are good...I approve of you.\" 』",
+    "emoji": "🏹"
+  },
+  {
+    "id": "companion_monk",
+    "name": "Dust-free",
+    "desc": "A monk who has been practicing for many years,",
+    "role": "WARRIOR",
+    "hp": 55,
+    "atk": 8,
+    "defense": 5,
+    "ability_desc": "Man of Steel, attack +2, defense +3, increased critical hit rate",
+    "recruit_item": "protection_ring",
+    "recruit_msg": "Wuchen put his hands together and said, \"Donor, this poor monk is willing to help you.\" 』",
+    "emoji": "🥋"
+  }
+]

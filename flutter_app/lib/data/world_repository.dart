@@ -5,6 +5,7 @@ import 'package:zork_dude/domain/combat/status_effect.dart';
 import 'package:zork_dude/domain/models/entities.dart';
 import 'package:zork_dude/domain/models/enums.dart';
 import 'package:zork_dude/domain/models/map_meta.dart';
+import 'package:zork_dude/l10n/locale_tag.dart';
 
 class WorldDefinition {
   final Map<String, ItemDefinition> items;
@@ -33,6 +34,10 @@ class WorldDefinition {
 }
 
 class WorldRepository {
+  WorldRepository({this.localeTag = LocaleTag.zhHans});
+
+  final String localeTag;
+
   static const _files = [
     'items.json',
     'monsters.json',
@@ -41,10 +46,22 @@ class WorldRepository {
     'rooms.json',
   ];
 
+  Future<String> _loadDataFile(String file) async {
+    final tags = [localeTag, if (localeTag != LocaleTag.zhHans) LocaleTag.zhHans];
+    for (final tag in tags) {
+      try {
+        return await rootBundle.loadString('assets/data/l10n/$tag/$file');
+      } catch (_) {
+        continue;
+      }
+    }
+    return rootBundle.loadString('assets/data/$file');
+  }
+
   Future<WorldDefinition> loadFromAssets() async {
     final maps = <String, List<dynamic>>{};
     for (final file in _files) {
-      final raw = await rootBundle.loadString('assets/data/$file');
+      final raw = await _loadDataFile(file);
       maps[file] = jsonDecode(raw) as List<dynamic>;
     }
 
@@ -112,7 +129,7 @@ class WorldRepository {
     }
 
     final mapMeta = buildMapMetaFromRooms(mapMetaList);
-    final statusEffects = await StatusEffectRegistry.loadFromAssets();
+    final statusEffects = await _loadStatusEffects();
     _validate(items, monsters, npcs, companions, rooms, statusEffects);
     return WorldDefinition(
       items: items,
@@ -123,6 +140,17 @@ class WorldRepository {
       mapMeta: mapMeta,
       statusEffects: statusEffects,
     );
+  }
+
+  Future<StatusEffectRegistry> _loadStatusEffects() async {
+    final raw = await _loadDataFile('status_effects.json');
+    final list = jsonDecode(raw) as List<dynamic>;
+    final specs = <String, StatusEffectSpec>{};
+    for (final entry in list) {
+      final spec = StatusEffectSpec.fromJson(entry as Map<String, dynamic>);
+      specs[spec.id] = spec;
+    }
+    return StatusEffectRegistry(specs);
   }
 
   void _validate(

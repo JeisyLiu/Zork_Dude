@@ -279,6 +279,41 @@
       "dir": { "type": "String" }
     }
   },
+  "mapDevFullMap": "DEV · Full map",
+  "mapNotAdjacentDetail": "{name} — not adjacent, cannot travel directly",
+  "@mapNotAdjacentDetail": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "inventoryRoomHere": "{name} (here)",
+  "@inventoryRoomHere": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "inventoryHeader": "{bag} · weight {weight}/{capacity} · {count} items · 💰{gold}",
+  "@inventoryHeader": {
+    "placeholders": {
+      "bag": { "type": "String" },
+      "weight": { "type": "int" },
+      "capacity": { "type": "int" },
+      "count": { "type": "int" },
+      "gold": { "type": "int" }
+    }
+  },
+  "combatUnitSemantics": "{name} HP {hp}/{maxHp} ATK {atk} DEF {def} SPD {spd}",
+  "@combatUnitSemantics": {
+    "placeholders": {
+      "name": { "type": "String" },
+      "hp": { "type": "int" },
+      "maxHp": { "type": "int" },
+      "atk": { "type": "int" },
+      "def": { "type": "int" },
+      "spd": { "type": "int" }
+    }
+  },
+  "creditQa": "QA / Quality Assurance",
 
   "creditPresentedBy": "Presented by",
   "creditDirectedBy": "Directed by",

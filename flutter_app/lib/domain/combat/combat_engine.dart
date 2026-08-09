@@ -8,6 +8,7 @@ import 'package:zork_dude/domain/combat/combat_types.dart';
 import 'package:zork_dude/domain/combat/status_effect.dart';
 import 'package:zork_dude/domain/models/entities.dart';
 import 'package:zork_dude/domain/models/enums.dart';
+import 'package:zork_dude/l10n/game_messages.dart';
 
 class TurnOrderEntry {
   const TurnOrderEntry({
@@ -32,17 +33,20 @@ class CombatEngine {
     CombatAi? ai,
     CombatRandom? random,
     StatusEffectRegistry? statusRegistry,
+    GameMessages? messages,
   })  : _ai = ai ?? CombatAi(),
         _random = random ?? DefaultCombatRandom(),
-        statusRegistry = statusRegistry ?? StatusEffectRegistry.fromSpecs(const []);
+        statusRegistry = statusRegistry ?? StatusEffectRegistry.fromSpecs(const []),
+        messages = messages ?? GameMessages(const {});
 
   final CombatAi _ai;
   final CombatRandom _random;
   StatusEffectRegistry statusRegistry;
+  GameMessages messages;
   Map<String, MonsterState> monsters = const {};
   Map<String, ItemDefinition> items = const {};
 
-  late final StatusEffectService _status = StatusEffectService(statusRegistry);
+  StatusEffectService get _status => StatusEffectService(statusRegistry, messages);
 
   static const fleeSuccessChance = 0.5;
   static const defendDamageMultiplier = 0.5;
@@ -117,7 +121,7 @@ class CombatEngine {
       steps.add(CombatActionStep(
         kind: CombatActionKind.fleeAttempt,
         actorInstanceId: hero.instanceId,
-        message: '队伍尝试逃跑……',
+        message: messages.combatFleeAttempt,
       ));
       if (_random.nextDouble() < fleeSuccessChance) {
         encounter.outcome = CombatOutcome.fled;
@@ -125,7 +129,7 @@ class CombatEngine {
         steps.add(CombatActionStep(
           kind: CombatActionKind.fleeSuccess,
           actorInstanceId: hero.instanceId,
-          message: '逃跑成功！',
+          message: messages.combatFleeSuccessRound,
         ));
         _clearStatuses(encounter);
         encounter.clearRoundCommands();
@@ -134,7 +138,7 @@ class CombatEngine {
       steps.add(CombatActionStep(
         kind: CombatActionKind.fleeFail,
         actorInstanceId: hero.instanceId,
-        message: '逃跑失败！',
+        message: messages.combatFleeFailed,
       ));
     }
 
@@ -150,7 +154,7 @@ class CombatEngine {
         steps.add(CombatActionStep(
           kind: CombatActionKind.actionSkipped,
           actorInstanceId: actor.instanceId,
-          message: '${actor.name} 因眩晕无法行动！',
+          message: messages.combatStunned(actor.name),
         ));
         continue;
       }
@@ -168,7 +172,7 @@ class CombatEngine {
           steps.add(CombatActionStep(
             kind: CombatActionKind.defend,
             actorInstanceId: actor.instanceId,
-            message: '${actor.name} 进入防御姿态。',
+            message: messages.combatDefend(actor.name),
           ));
         case CombatCommandType.flee:
           break;
@@ -261,7 +265,7 @@ class CombatEngine {
       actorInstanceId: actor.instanceId,
       targetInstanceId: target.instanceId,
       amount: mitigated,
-      message: '${actor.name} 攻击 ${target.name}，造成 $mitigated 点伤害！',
+      message: messages.combatAttack(actor.name, target.name, mitigated),
     ));
 
     _applyOnHitEffects(actor, target, steps);
@@ -286,7 +290,7 @@ class CombatEngine {
         actorInstanceId: actor.instanceId,
         targetInstanceId: target.instanceId,
         amount: actual,
-        message: '${actor.name} 治疗 ${target.name}，恢复 $actual 点 HP！',
+        message: messages.combatHeal(actor.name, target.name, actual),
       ));
       _status.applyEffect(
         target: target,
@@ -338,7 +342,7 @@ class CombatEngine {
       actorInstanceId: actor.instanceId,
       targetInstanceId: target.instanceId,
       amount: mitigated,
-      message: '${actor.name} 释放技能，对 ${target.name} 造成 $mitigated 点伤害！',
+      message: messages.combatSkill(actor.name, target.name, mitigated),
     ));
 
     _applyOnHitEffects(actor, target, steps);
@@ -369,7 +373,12 @@ class CombatEngine {
         targetInstanceId: target.instanceId,
         amount: actual,
         itemId: itemId,
-        message: '${actor.name} 使用 ${item?.name ?? '道具'}，${target.name} 恢复 $actual 点 HP！',
+        message: messages.combatItemUse(
+          actor.name,
+          item?.name ?? messages.msg('combat_item_generic'),
+          target.name,
+          actual,
+        ),
       ));
     }
 
@@ -436,7 +445,7 @@ class CombatEngine {
         steps.add(CombatActionStep(
           kind: CombatActionKind.death,
           actorInstanceId: actor.instanceId,
-          message: '${actor.name} 倒下了！',
+          message: messages.combatDeath(actor.name),
         ));
       }
     }

@@ -540,6 +540,45 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get mapDevFullMap => 'DEV · 全图';
+
+  @override
+  String mapNotAdjacentDetail(String name) {
+    return '$name — 不相邻，无法直达';
+  }
+
+  @override
+  String inventoryRoomHere(String name) {
+    return '$name（此处）';
+  }
+
+  @override
+  String inventoryHeader(
+    String bag,
+    int weight,
+    int capacity,
+    int count,
+    int gold,
+  ) {
+    return '$bag · 重量 $weight/$capacity · $count 件 · 💰$gold';
+  }
+
+  @override
+  String combatUnitSemantics(
+    String name,
+    int hp,
+    int maxHp,
+    int atk,
+    int def,
+    int spd,
+  ) {
+    return '$name HP $hp/$maxHp 攻击 $atk 防御 $def 速度 $spd';
+  }
+
+  @override
+  String get creditQa => '质检 / Quality Assurance';
+
+  @override
   String get creditPresentedBy => '出品 / Presented by';
 
   @override
@@ -1118,6 +1157,45 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   }
 
   @override
+  String get mapDevFullMap => 'DEV · 全图';
+
+  @override
+  String mapNotAdjacentDetail(String name) {
+    return '$name — 不相邻，无法直达';
+  }
+
+  @override
+  String inventoryRoomHere(String name) {
+    return '$name（此处）';
+  }
+
+  @override
+  String inventoryHeader(
+    String bag,
+    int weight,
+    int capacity,
+    int count,
+    int gold,
+  ) {
+    return '$bag · 重量 $weight/$capacity · $count 件 · 💰$gold';
+  }
+
+  @override
+  String combatUnitSemantics(
+    String name,
+    int hp,
+    int maxHp,
+    int atk,
+    int def,
+    int spd,
+  ) {
+    return '$name HP $hp/$maxHp 攻击 $atk 防御 $def 速度 $spd';
+  }
+
+  @override
+  String get creditQa => '质检 / Quality Assurance';
+
+  @override
   String get creditPresentedBy => '出品 / Presented by';
 
   @override
@@ -1171,10 +1249,10 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get appTitleEn => 'MIST TOWER';
 
   @override
-  String get taglineShort => '探索、收集、對話、戰鬥——找回失落的真相。';
+  String get taglineShort => '探索、收集、對話、戰鬥－找回失落的真相。';
 
   @override
-  String get taglineFull => '你從迷霧森林中醒來，失去記憶。\n探索、收集、對話、戰鬥——找回失落的真相。';
+  String get taglineFull => '你從迷霧森林中醒來，失去記憶。\n探索、收集、對話、戰鬥－找回失落的真相。';
 
   @override
   String get homeHint => '指令探索 · 迷霧地圖 · 遇敵進入回合戰鬥';
@@ -1219,7 +1297,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get startNewJourneyTitle => '開始新旅程？';
 
   @override
-  String get overwriteSaveMessage => '該槽位已有進度，開始新遊戲將覆蓋此存檔，是否繼續？';
+  String get overwriteSaveMessage => '該插槽已有進度，開始新遊戲將覆蓋此存檔，是否繼續？';
 
   @override
   String get overwriteAndStart => '覆蓋並開始';
@@ -1238,13 +1316,13 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get connectNow => '立即連接';
 
   @override
-  String get returnToTitleTitle => '返回標題？';
+  String get returnToTitleTitle => '回標題？';
 
   @override
-  String get returnToTitleMessage => '目前進度已自動儲存，可從標題頁「繼續旅程」恢復。';
+  String get returnToTitleMessage => '當前進度已自動儲存，可從標題頁「繼續旅程」恢復。';
 
   @override
-  String get returnToTitle => '返回標題';
+  String get returnToTitle => '回傳標題';
 
   @override
   String get quitAppTitle => '退出遊戲？';
@@ -1262,7 +1340,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get resumeCombat => '繼續戰鬥';
 
   @override
-  String get backToTitle => '回標題';
+  String get backToTitle => '回到標題';
 
   @override
   String get privacySettings => '隱私設定';
@@ -1271,7 +1349,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get privacySettingsHint => '隱私設定 · privacy';
 
   @override
-  String get rewardOfferTitle => '迷霧饋贈';
+  String get rewardOfferTitle => '霧饋贈';
 
   @override
   String rewardOfferGold(int base, int doubled) {
@@ -1308,7 +1386,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get glimmerNoResponse => '微光暫未回應，請稍後再試';
 
   @override
-  String get endingDragonTitle => '幼龍已隕落';
+  String get endingDragonTitle => '幼龍隕落';
 
   @override
   String get endingDragonSubtitle =>
@@ -1333,7 +1411,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get endingSiteTitle => '站點行動完成';
 
   @override
-  String get endingSiteSubtitle => '終焉原型已被壓制，收容庫歸於沉寂。\n一段漫長的旅途，即將迎來尾聲。';
+  String get endingSiteSubtitle => '终焉原型已被压制，收容库归于沉寂。\n一段漫長的旅途，即將迎來尾聲。';
 
   @override
   String get endingSitePrimary => '觀看職員表';
@@ -1361,7 +1439,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get teleportTitle => '傳送到 · Teleport';
 
   @override
-  String get notLoaded => '尚未載入';
+  String get notLoaded => '尚未加載';
 
   @override
   String get noUsableItems => '沒有可使用的道具。';
@@ -1514,7 +1592,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String combatTurnOrderSemantics(int index, String name, int speed) {
-    return '第 $index 位 $name 速度 $speed';
+    return '第 $index 位元 $name 速度 $speed';
   }
 
   @override
@@ -1546,7 +1624,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get combatPhaseAnimating => '回合進行中…';
 
   @override
-  String get combatQueueTitle => '指令佇列 Commands';
+  String get combatQueueTitle => '指令隊列 Commands';
 
   @override
   String get combatQueuePending => '待選…';
@@ -1600,7 +1678,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get cmdHelp => '幫助';
 
   @override
-  String get cmdNgPlus => '二周目';
+  String get cmdNgPlus => '二週目';
 
   @override
   String get cmdMore => '更多';
@@ -1621,7 +1699,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get cmdMoreTitle => '更多命令 · More';
 
   @override
-  String get cmdMoreSemantics => '更多命令';
+  String get cmdMoreSemantics => '更多指令';
 
   @override
   String get cmdTakeTitle => '拿起 take';
@@ -1654,7 +1732,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get cmdSend => '發送命令';
 
   @override
-  String get cmdHint => '命令 cmd: look / take 1 / n …';
+  String get cmdHint => '指令 cmd: look / take 1 / n …';
 
   @override
   String get dirNorth => '北 N';
@@ -1675,7 +1753,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get dirDown => '下 D';
 
   @override
-  String get mapHint => '拖曳平移 · 滾輪/雙指縮放 · 點擊相鄰節點移動';
+  String get mapHint => '拖曳平移 · 滾輪/雙指縮放 · 點選相鄰節點移動';
 
   @override
   String mapFullCount(int count) {
@@ -1684,7 +1762,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String mapExploredCount(int count) {
-    return '已探索 $count';
+    return '已探討 $count';
   }
 
   @override
@@ -1694,6 +1772,45 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String mapGoing(String dir) {
     return '前往 $dir…';
   }
+
+  @override
+  String get mapDevFullMap => 'DEV · 全圖';
+
+  @override
+  String mapNotAdjacentDetail(String name) {
+    return '$name — 不相鄰，無法直達';
+  }
+
+  @override
+  String inventoryRoomHere(String name) {
+    return '$name（此處）';
+  }
+
+  @override
+  String inventoryHeader(
+    String bag,
+    int weight,
+    int capacity,
+    int count,
+    int gold,
+  ) {
+    return '$bag · 重量 $weight/$capacity · $count 件 · 💰$gold';
+  }
+
+  @override
+  String combatUnitSemantics(
+    String name,
+    int hp,
+    int maxHp,
+    int atk,
+    int def,
+    int spd,
+  ) {
+    return '$name HP $hp/$maxHp 攻擊 $atk 防禦 $def 速度 $spd';
+  }
+
+  @override
+  String get creditQa => '質檢 / Quality Assurance';
 
   @override
   String get creditPresentedBy => '出品 / Presented by';
@@ -1729,7 +1846,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get creditProducedBy => '製作人 / Produced by';
 
   @override
-  String get creditEngineering => '程式 / Engineering';
+  String get creditEngineering => '程序 / Engineering';
 
   @override
   String get creditSpecialThanks => '特別鳴謝 / Special Thanks';

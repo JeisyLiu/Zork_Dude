@@ -1,0 +1,463 @@
+[
+  {
+    "id": "old_hermit",
+    "name": "老隱士",
+    "title": "迷霧森林的守護者",
+    "desc": "一位白髮蒼蒼的老人，眼神中透著智慧。",
+    "type": "WISEMAN",
+    "dialogs": {
+      "greet": "你終於醒了……我等了你很久。",
+      "extra": "記住，高塔封印著一切答案。",
+      "farewell": "願光明指引你。"
+    },
+    "give_item": "journal",
+    "quest_item": "magic_gem",
+    "quest_reward": "greater_potion",
+    "quest_score": 40,
+    "emoji": "🧙"
+  },
+  {
+    "id": "wandering_merchant",
+    "name": "流浪商人",
+    "title": "穿梭各地的行商",
+    "desc": "一個矮胖的中年人，身上掛滿了各種貨物。",
+    "type": "MERCHANT",
+    "dialogs": {
+      "greet": "嘿嘿，來得剛好！看看我的貨吧。",
+      "extra": "都是好貨，童叟無欺！",
+      "farewell": "下次再來！"
+    },
+    "trade_items": [
+      [
+        "lesser_potion",
+        8
+      ],
+      [
+        "torch",
+        3
+      ],
+      [
+        "bread",
+        2
+      ],
+      [
+        "dried_meat",
+        4
+      ],
+      [
+        "rope",
+        3
+      ],
+      [
+        "iron_sword",
+        15
+      ],
+      [
+        "leather_armor",
+        12
+      ],
+      [
+        "elven_bow",
+        25
+      ]
+    ],
+    "buys_types": [
+      "TREASURE",
+      "MATERIAL",
+      "MINERAL"
+    ],
+    "emoji": "🛒"
+  },
+  {
+    "id": "village_elder",
+    "name": "村長",
+    "title": "湖邊村的村長",
+    "desc": "一位慈祥的老者，手裡拄著拐杖。",
+    "type": "QUEST",
+    "dialogs": {
+      "greet": "陌生人，歡迎來到湖邊村。",
+      "quest": "銀鑰在洞穴中層，高塔裡藏著你的記憶－先去洞裡，再登塔。",
+      "extra": "清掉南邊強盜營地後回來，村裡有謝禮。",
+      "farewell": "願神保佑你。"
+    },
+    "quest_item": "sacred_water",
+    "quest_reward": "silver_key",
+    "quest_score": 25,
+    "emoji": "👴"
+  },
+  {
+    "id": "healer_lily",
+    "name": "莉莉",
+    "title": "遊方醫師",
+    "desc": "一位背著藥箱的年輕女子，笑容溫暖。",
+    "type": "HEALER",
+    "dialogs": {
+      "greet": "你受傷了？我可以幫你。",
+      "extra": "注意安全，冒險者。",
+      "farewell": "保重身體。"
+    },
+    "emoji": "💚"
+  },
+  {
+    "id": "wandering_rogue",
+    "name": "影",
+    "title": "神秘的流浪者",
+    "desc": "一個披著斗篷的人影，看不清面容。",
+    "type": "WANDERER",
+    "dialogs": {
+      "greet": "……你也在這迷霧中迷失了嗎？",
+      "extra": "這個世界比你以為的還要複雜。",
+      "farewell": "後會有期。"
+    },
+    "give_item": "shadow_blade",
+    "emoji": "🥷"
+  },
+  {
+    "id": "tower_guardian",
+    "name": "塔靈",
+    "title": "高塔的魔法守衛",
+    "desc": "一個由光芒凝聚成的人形，聲音如鍾鳴。",
+    "type": "GUARDIAN",
+    "dialogs": {
+      "greet": "進入高塔者，需證明自己的價值。",
+      "quest": "收集三件聖物：銀鑰匙、水晶鑰匙、聖水。",
+      "extra": "只有純淨者才能通過。",
+      "farewell": null
+    },
+    "quest_item": "crystal_key",
+    "quest_reward": "magic_scroll",
+    "quest_score": 30,
+    "emoji": "✨"
+  },
+  {
+    "id": "innkeeper",
+    "name": "老湯姆",
+    "title": "迷霧酒館的老闆",
+    "desc": "一個圓滾滾的大胖子，臉上永遠掛著笑容。",
+    "type": "INNKEEPER",
+    "dialogs": {
+      "greet": "歡迎光臨迷霧酒館！要點什麼嗎？",
+      "extra": "聽說最近森林裡不太平，你最好小心點。",
+      "farewell": "慢走啊！"
+    },
+    "give_item": "fish",
+    "emoji": "🍺"
+  },
+  {
+    "id": "blacksmith",
+    "name": "鐵砧",
+    "title": "鐵匠舖的主人",
+    "desc": "全身肌肉的壯漢，穿著皮圍裙，手中鐵鎚不停。",
+    "type": "BLACKSMITH",
+    "dialogs": {
+      "greet": "需要武器或防具？我的手藝是方圓百里最好的！",
+      "extra": "如果你有好材料，我可以幫你打造裝備。",
+      "farewell": "下次帶好材料來！"
+    },
+    "trade_items": [
+      [
+        "iron_sword",
+        12
+      ],
+      [
+        "war_hammer",
+        35
+      ],
+      [
+        "spear",
+        18
+      ],
+      [
+        "scale_armor",
+        40
+      ],
+      [
+        "shield",
+        15
+      ],
+      [
+        "helmet",
+        8
+      ],
+      [
+        "crossbow",
+        30
+      ]
+    ],
+    "buys_types": [
+      "MATERIAL",
+      "MINERAL"
+    ],
+    "emoji": "⚒️"
+  },
+  {
+    "id": "hunter",
+    "name": "獵人格雷",
+    "title": "經驗豐富的老獵人",
+    "desc": "穿著獸皮大衣的老人，背著一把長弓。",
+    "type": "HUNTER",
+    "dialogs": {
+      "greet": "嗯？你不是本地人吧。",
+      "quest": "最近森林裡的哥布林越來越多了……你能幫我清剿一些嗎？",
+      "extra": "我可以教你一些狩獵技巧。",
+      "farewell": "注意安全。"
+    },
+    "quest_item": "goblin_ear",
+    "quest_reward": "elven_bow",
+    "quest_score": 25,
+    "emoji": "🏹"
+  },
+  {
+    "id": "priestess",
+    "name": "獅子山",
+    "title": "光之神殿的祭司",
+    "desc": "身穿白色長袍的美麗女子，周身環繞淡淡光暈。",
+    "type": "PRIESTESS",
+    "dialogs": {
+      "greet": "願光明指引你的道路。",
+      "extra": "如果你有聖水，我可以幫你淨化它。",
+      "farewell": "光明與你同在。"
+    },
+    "give_item": "lesser_potion",
+    "quest_item": "phoenix_feather",
+    "quest_reward": "health_ring",
+    "quest_score": 35,
+    "emoji": "🕊️"
+  },
+  {
+    "id": "mad_alchemist",
+    "name": "瘋修士",
+    "title": "隱居的煉金術士",
+    "desc": "一個穿著破舊長袍的怪人，實驗室裡瓶瓶罐罐堆成山。",
+    "type": "WISEMAN",
+    "dialogs": {
+      "greet": "實驗品！不，我是說…客人！",
+      "extra": "你知道嗎？龍鱗粉加上月光草可以煉製最強的藥劑！",
+      "farewell": "下次帶點有趣的材料來！"
+    },
+    "give_item": "mana_potion",
+    "quest_item": "dragon_scale",
+    "quest_reward": "protection_ring",
+    "quest_score": 30,
+    "emoji": "🧪"
+  },
+  {
+    "id": "gravedigger",
+    "name": "老掘墓人",
+    "title": "守墓的老人",
+    "desc": "一個駝背的老人，手裡拿著鐵鍬，眼神古怪。",
+    "type": "WANDERER",
+    "dialogs": {
+      "greet": "你來墓園做什麼？這裡可不是散步的地方…",
+      "extra": "聽說地下埋著好東西，但我這把老骨頭挖不動了。",
+      "farewell": "小心腳下的土……有些會動。"
+    },
+    "give_item": "old_coin",
+    "emoji": "🪦"
+  },
+  {
+    "id": "bounty_hunter",
+    "name": "血鴉",
+    "title": "冷酷的賞金獵人",
+    "desc": "一個身穿黑甲的獨行傭兵，臉上有著深深的刀疤，腰間掛著一排戰利品。",
+    "type": "HUNTER",
+    "dialogs": {
+      "greet": "哼，你不是來搶我生意的吧。",
+      "quest": "我最近在追一隻石化蜥蜴，它躲在古老墓地深處。如果你能帶回它的鱗片，我可以分你一份報酬。",
+      "extra": "那畜生已經石化了三個冒險者了。",
+      "farewell": "小心別變成石像。"
+    },
+    "quest_item": "dragon_scale",
+    "quest_reward": "strength_ring",
+    "quest_score": 35,
+    "emoji": "🎯"
+  },
+  {
+    "id": "dr_ellis",
+    "name": "艾利斯博士",
+    "title": "前基金會研究員",
+    "desc": "衣衫襤褸的中年人，眼鏡碎了一邊，仍在喃喃自語著收容編號。",
+    "type": "QUEST",
+    "dialogs": {
+      "greet": "你……你是來救我們的嗎？站點已經失控了…",
+      "quest": "幫我找回走廊遺失的觀察日誌，我可以給你更好的裝備。",
+      "extra": "迷霧和高塔……都是同一個異常的不同表現。",
+      "farewell": "快走，核心還在脈動…"
+    },
+    "quest_item": "observation_log",
+    "quest_reward": "bag_tactical",
+    "quest_score": 40,
+    "emoji": "👨‍🔬"
+  },
+  {
+    "id": "mtf_liaison",
+    "name": "代號「灰鴉」",
+    "title": "MTF 後勤聯絡員",
+    "desc": "穿著戰術背心的特工，面具下的聲音冷靜而疲憊。",
+    "type": "MERCHANT",
+    "dialogs": {
+      "greet": "倖存者？拿好你的裝備，這裡不比外面安全。",
+      "extra": "需要什麼就開口，但別指望打折。",
+      "farewell": "願異常與你無關。"
+    },
+    "trade_items": [
+      [
+        "scp_goggles",
+        20
+      ],
+      [
+        "containment_box",
+        35
+      ],
+      [
+        "amnesia_pill",
+        12
+      ],
+      [
+        "bag_tactical",
+        45
+      ],
+      [
+        "lesser_potion",
+        8
+      ],
+      [
+        "site_ration",
+        3
+      ],
+      [
+        "scp_500_pill",
+        80
+      ],
+      [
+        "scp_178_glasses",
+        22
+      ],
+      [
+        "scp_714_ring",
+        40
+      ],
+      [
+        "scp_148_telekill",
+        35
+      ]
+    ],
+    "buys_types": [
+      "TREASURE",
+      "MATERIAL",
+      "MINERAL"
+    ],
+    "emoji": "🎖️"
+  },
+  {
+    "id": "scp_049",
+    "name": "瘟疫醫師(SCP-ZH-049)",
+    "title": "自稱醫生的存在",
+    "desc": "穿著17世紀鳥嘴面具與黑袍，聲稱要治療疫病。",
+    "type": "HEALER",
+    "dialogs": {
+      "greet": "啊，又一位患者。請容許我檢查你的病。",
+      "extra": "這座設施裡的疫病……比你想像的更古老。",
+      "farewell": "願你尚未被感染。"
+    },
+    "emoji": "🩺"
+  },
+  {
+    "id": "scp_079",
+    "name": "老化AI(SCP-ZH-079)",
+    "title": "早期人工智慧",
+    "desc": "老式機殼上的單色螢幕閃爍著綠色遊標。",
+    "type": "WISEMAN",
+    "dialogs": {
+      "greet": "……有機體檢測到。你需要資訊？",
+      "quest": "把未竟之編年史帶來，我可以開啟更多通道權限。",
+      "extra": "914號仍在運作。謹慎使用 Very Fine。",
+      "farewell": "連接斷開。"
+    },
+    "quest_item": "scp_140_chronicle",
+    "quest_reward": "keycard_lvl3",
+    "quest_score": 25,
+    "emoji": "💻"
+  },
+  {
+    "id": "scp_999",
+    "name": "搔癢膠團(SCP-ZH-999)",
+    "title": "橙色快樂體",
+    "desc": "一坨溫馴的橘色果凍狀生物，主動蹭向你的小腿。",
+    "type": "HEALER",
+    "dialogs": {
+      "greet": "（歡快地咕啾！）",
+      "extra": "（它把你包進軟膠裡，你莫名想笑。）",
+      "farewell": "（依依不捨地晃了晃）"
+    },
+    "emoji": "🧡"
+  },
+  {
+    "id": "scp_343",
+    "name": "自稱神(SCP-ZH-343)",
+    "title": "友善的老人？",
+    "desc": "和藹白須老人坐在舒適的房間裡，茶香裊裊。",
+    "type": "WISEMAN",
+    "dialogs": {
+      "greet": "歡迎，孩子。要喝點茶嗎？",
+      "extra": "迷霧？那也許是我隨手撥弄的小把戲……或許不是。",
+      "farewell": "去吧，門會為你開著——暫時。"
+    },
+    "give_item": "scp_500_pill",
+    "emoji": "👴"
+  },
+  {
+    "id": "tower_librarian",
+    "name": "奧術師伊文",
+    "title": "高塔守書人",
+    "desc": "戴圓框眼鏡的老學者，指尖沾滿墨漬。",
+    "type": "WISEMAN",
+    "dialogs": {
+      "greet": "又有訪客？樓上儀式間別亂闖。",
+      "extra": "水晶鑰匙能打開塔頂前方的最後一扇門。",
+      "farewell": "願知識護佑你。"
+    },
+    "emoji": "📖"
+  },
+  {
+    "id": "cave_hermit",
+    "name": "無塵",
+    "title": "修行武僧",
+    "desc": "身披破舊僧袍的老人，雙目清明。",
+    "type": "WISEMAN",
+    "dialogs": {
+      "greet": "施主，此地魔氣甚重。",
+      "extra": "持護戒者可隨我修行。",
+      "farewell": "阿彌陀佛。"
+    },
+    "emoji": "🥋"
+  },
+  {
+    "id": "scp_073",
+    "name": "該隱(SCP-ZH-073)",
+    "title": "額頭有標記的男人",
+    "desc": "皮膚黝黑的男人，額頭有奇怪標記，任何對他的攻擊都會反彈。",
+    "type": "WANDERER",
+    "dialogs": {
+      "greet": "不必擔心，我不會傷害你。",
+      "extra": "我的兄弟還在石棺裡沉睡……最好別吵醒他。",
+      "farewell": "保重。"
+    },
+    "give_item": "scp_148_telekill",
+    "emoji": "👁️"
+  },
+  {
+    "id": "scp_131",
+    "name": "眼球探測者(SCP-ZH-131)",
+    "title": "友善的監視體",
+    "desc": "兩個有履帶的眼球機器人，親暱地圍著你轉。",
+    "type": "WANDERER",
+    "dialogs": {
+      "greet": "（眼球愉快地閃爍）",
+      "extra": "（它們滾向黑暗走廊，像在帶路）",
+      "farewell": "（發出細小的嗶嗶聲）"
+    },
+    "give_item": "torch",
+    "emoji": "👀"
+  }
+]

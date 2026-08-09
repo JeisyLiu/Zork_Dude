@@ -1,0 +1,48 @@
+[
+  {
+    "id": "poison",
+    "name": "中毒",
+    "emoji": "☠️",
+    "debuff": true,
+    "duration": 3,
+    "stack": "stackIntensity",
+    "max_stacks": 3,
+    "damage_per_stack": 2
+  },
+  {
+    "id": "stun",
+    "name": "眩晕",
+    "emoji": "💫",
+    "debuff": true,
+    "duration": 1,
+    "stack": "replace",
+    "skip_action": true
+  },
+  {
+    "id": "attackUp",
+    "name": "攻击提升",
+    "emoji": "⚔️",
+    "debuff": false,
+    "duration": 2,
+    "stack": "refreshDuration",
+    "attack_delta": 3
+  },
+  {
+    "id": "defenseUp",
+    "name": "防御提升",
+    "emoji": "🛡️",
+    "debuff": false,
+    "duration": 2,
+    "stack": "refreshDuration",
+    "defense_delta": 2
+  },
+  {
+    "id": "regen",
+    "name": "恢复",
+    "emoji": "💚",
+    "debuff": false,
+    "duration": 2,
+    "stack": "replace",
+    "heal_per_round": 4
+  }
+]

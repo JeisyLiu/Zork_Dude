@@ -6,20 +6,25 @@ Mist Tower
 
 ## Short description (≤80 chars)
 
-Awaken in the mist. Explore four layers, turn-based combat, uncover the curse.
+Offline solo RPG. Four layers, turn combat—uncover the misty curse.
 
 ## Full description
+
+Mist Tower is a fully offline single-player text adventure RPG—no internet required, no account needed. Premium paid app with no in-app ads.
 
 You wake at the edge of a misty forest with fractured memories. A tower pierces the fog—explore, collect, talk, and fight to recover the truth.
 
 • Four layers: surface forest, caves, cursed tower, Foundation site
-• Command-based exploration with a mist map; tap adjacent nodes to move
-• Turn-based combat when enemies appear—attack, skills, items, or flee
-• Multiple endings, credits roll, and New Game+
-• Local multi-slot saves—no account required
-• Full UI and game content in 10 languages
+• Command-based exploration with a mist map; tap adjacent nodes; cross-layer exits
+• Movie-style opening crawl; tutorials for exploration and combat (replayable in Settings)
+• Turn-based combat: attack, skill charge strikes, critical hits with floating numbers, items, or flee; abort unresolved fights
+• Combat character portraits and animations; NPC dialogue portraits and narration
+• Item icons and varied gear; local multi-slot saves
+• Multiple endings, credits, and New Game+
+• Optional on-screen move pad toggle; full SFX and scene BGM
+• UI and world content in 11 languages (Simplified/Traditional Chinese, English, Japanese, Korean, French, German, Italian, Spanish, Portuguese, Russian)
 
-Android: optional Play Games achievements and leaderboards; ads support free play.
+Android: optional Play Games achievements and leaderboards—play the full game without connecting. Pure offline single-player.
 
 ## Links
 
@@ -27,4 +32,4 @@ Android: optional Play Games achievements and leaderboards; ads support free pla
 |-------|-------|
 | Privacy policy | https://jeisyliu.github.io/Zork_Dude/privacy.html |
 | App website | https://jeisyliu.github.io/Zork_Dude/ |
-| Contact email | beatinghousehunan@gmail.com |
+| Contact email | support@beatinghouse.com |

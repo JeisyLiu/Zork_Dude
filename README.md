@@ -7,13 +7,12 @@ A [Zork](https://en.wikipedia.org/wiki/Zork)-like text adventure. You wake in a 
 | Build | Link |
 |------|------|
 | Lore homepage | [https://jeisyliu.github.io/Zork_Dude/](https://jeisyliu.github.io/Zork_Dude/) |
-| Desktop Web | [https://jeisyliu.github.io/Zork_Dude/play.html](https://jeisyliu.github.io/Zork_Dude/play.html) |
-| Mobile Web | [https://jeisyliu.github.io/Zork_Dude/mobile](https://jeisyliu.github.io/Zork_Dude/mobile) |
+| Web (Flutter) | [https://jeisyliu.github.io/Zork_Dude/play/](https://jeisyliu.github.io/Zork_Dude/play/) |
 | Privacy policy | [https://jeisyliu.github.io/Zork_Dude/privacy.html](https://jeisyliu.github.io/Zork_Dude/privacy.html) |
 
-Open in a browser—no install required. On phones, prefer the mobile build.
+Open in a browser—no install required. The playable web client is served under `/play/` (Flutter Web).
 
-**Developer**: Hunan Beating House Information Technology Co Ltd（湖南跃动小屋信息技术有限公司）· [JeisyLiu](https://github.com/jeisyliu) · [beatinghousehunan@gmail.com](mailto:beatinghousehunan@gmail.com)
+**Developer**: Hunan Beating House Information Technology Co Ltd（湖南跃动小屋信息技术有限公司）· [JeisyLiu](https://github.com/jeisyliu) · [support@beatinghouse.com](mailto:support@beatinghouse.com) · [+86 173 0268 9025](tel:+8617302689025)
 
 ## Features
 
@@ -28,7 +27,7 @@ Open in a browser—no install required. On phones, prefer the mobile build.
 - Site devices: `use 914` refine, `use 294` drink, `use 261` vending
 - Combat, dialogue, trade, heal, quests, and scoring
 - Mist-fragment map with layer switching (including the site layer)
-- Data-driven: entities live in `data/*.json`—change data without touching core logic
+- Data-driven: entities live in `flutter_app/assets/data/*.json`—change data without touching core logic
 
 ## Run locally
 
@@ -40,8 +39,15 @@ Serve the repo root with any static server:
 # e.g. Python
 python -m http.server 8080
 # Lore home     http://localhost:8080/
-# Desktop play  http://localhost:8080/play.html
-# Mobile        http://localhost:8080/mobile/
+# Web play      http://localhost:8080/play/
+```
+
+Flutter Web (publish into `play/`):
+
+```bash
+cd flutter_app
+flutter build web --base-href "/Zork_Dude/play/"
+# copy build/web/* → ../play/
 ```
 
 ### CLI (Python)
@@ -49,16 +55,15 @@ python -m http.server 8080
 Requires Python 3.10+:
 
 ```bash
-python zork_game.py
+python cli/zork_game.py
 ```
 
 ### Flutter native (Zork exploration + turn combat)
 
-The native app lives in `flutter_app/` (separate from the `mobile/` Web build). The main loop is **Zork-style exploration + mist-fragment map**; encounters open **turn-based combat**:
+The native app lives in `flutter_app/`. The main loop is **Zork-style exploration + mist-fragment map**; encounters open **turn-based combat**:
 
 ```bash
 cd flutter_app
-dart run tool/sync_game_data.dart   # sync root data/*.json
 flutter pub get
 flutter run
 ```
@@ -93,19 +98,14 @@ The Web builds also support tap buttons plus a command input at the bottom.
 ```
 zork-dude/
 ├── index.html          # lore homepage
-├── play.html           # desktop Web adventure
 ├── privacy.html        # privacy policy
+├── play/               # Flutter Web deploy target (GitHub Pages /play/)
 ├── site/               # homepage styles, version notes, landing art
-├── mobile/
-│   └── index.html      # mobile Web
-├── flutter_app/        # Flutter native app
-├── zork_game.py        # full CLI
-└── data/
-    ├── rooms.json      # rooms
-    ├── items.json      # items
-    ├── monsters.json   # monsters
-    ├── npcs.json       # NPCs
-    └── companions.json # recruitable companions
+├── flutter_app/        # Flutter app (Android / Windows / Web)
+│   └── assets/data/    # game JSON (source of truth) + l10n/
+├── cli/
+│   └── zork_game.py    # CLI (reads flutter_app/assets/data/)
+└── version/            # release notes & store listings
 ```
 
 ## Victory goal
@@ -127,13 +127,12 @@ Wake in the mist. Recover what was lost.
 | 版本 | 链接 |
 |------|------|
 | 世界观主页 | [https://jeisyliu.github.io/Zork_Dude/](https://jeisyliu.github.io/Zork_Dude/) |
-| 桌面 Web 版 | [https://jeisyliu.github.io/Zork_Dude/play.html](https://jeisyliu.github.io/Zork_Dude/play.html) |
-| 移动 Web 版 | [https://jeisyliu.github.io/Zork_Dude/mobile](https://jeisyliu.github.io/Zork_Dude/mobile) |
+| 网页版（Flutter） | [https://jeisyliu.github.io/Zork_Dude/play/](https://jeisyliu.github.io/Zork_Dude/play/) |
 | 隐私政策 | [https://jeisyliu.github.io/Zork_Dude/privacy.html](https://jeisyliu.github.io/Zork_Dude/privacy.html) |
 
-浏览器打开即可玩，无需安装。手机建议使用移动版。
+浏览器打开即可玩，无需安装。游玩入口为 `/play/`（Flutter Web）。
 
-**开发者**：湖南跃动小屋信息技术有限公司（Hunan Beating House Information Technology Co Ltd）· [JeisyLiu](https://github.com/jeisyliu) · [beatinghousehunan@gmail.com](mailto:beatinghousehunan@gmail.com)
+**开发者**：湖南跃动小屋信息技术有限公司（Hunan Beating House Information Technology Co Ltd）· [JeisyLiu](https://github.com/jeisyliu) · [support@beatinghouse.com](mailto:support@beatinghouse.com) · [+86 173 0268 9025](tel:+8617302689025)
 
 ## 特色
 
@@ -148,7 +147,7 @@ Wake in the mist. Recover what was lost.
 - 站点装置：`use 914` 精炼、`use 294` 饮水、`use 261` 贩卖机
 - 战斗、对话、交易、治疗、任务与得分系统
 - 迷雾残页地图：图层切换（含「站点」层）
-- 数据驱动：实体定义在 `data/*.json`，改数据不必动核心逻辑
+- 数据驱动：实体定义在 `flutter_app/assets/data/*.json`，改数据不必动核心逻辑
 
 ## 本地运行
 
@@ -160,8 +159,15 @@ Wake in the mist. Recover what was lost.
 # 例如使用 Python
 python -m http.server 8080
 # 主页（世界观） http://localhost:8080/
-# 桌面游玩     http://localhost:8080/play.html
-# 移动版       http://localhost:8080/mobile/
+# 网页游玩       http://localhost:8080/play/
+```
+
+Flutter Web（发布到 `play/`）：
+
+```bash
+cd flutter_app
+flutter build web --base-href "/Zork_Dude/play/"
+# 将 build/web/* 复制到 ../play/
 ```
 
 ### 命令行版（Python）
@@ -169,16 +175,15 @@ python -m http.server 8080
 需要 Python 3.10+：
 
 ```bash
-python zork_game.py
+python cli/zork_game.py
 ```
 
-### Flutter 原生移动端（Zork 探索 + 回合战斗）
+### Flutter 原生端（Zork 探索 + 回合战斗）
 
-原生 App 在 `flutter_app/`（与 `mobile/` 移动 Web 版独立）。主界面为 **Zork 指令探索 + 迷雾残页地图**，遇敌时进入 **回合制战斗**：
+原生 App 在 `flutter_app/`。主界面为 **Zork 指令探索 + 迷雾残页地图**，遇敌时进入 **回合制战斗**：
 
 ```bash
 cd flutter_app
-dart run tool/sync_game_data.dart   # 同步根目录 data/*.json
 flutter pub get
 flutter run
 ```
@@ -213,19 +218,14 @@ Web 版也支持按钮点选与底部输入框输入命令。
 ```
 zork-dude/
 ├── index.html          # 世界观介绍主页
-├── play.html           # 桌面 Web 文字冒险
 ├── privacy.html        # 隐私政策
+├── play/               # Flutter Web 部署目录（Pages /play/）
 ├── site/               # 主页样式、版本说明、落地页图片
-├── mobile/
-│   └── index.html      # 移动 Web 版
-├── flutter_app/        # Flutter 原生移动端
-├── zork_game.py        # 命令行完整版
-└── data/
-    ├── rooms.json      # 场景
-    ├── items.json      # 道具
-    ├── monsters.json   # 怪物
-    ├── npcs.json       # NPC
-    └── companions.json # 可招募队友
+├── flutter_app/        # Flutter 客户端（Android / Windows / Web）
+│   └── assets/data/    # 游戏 JSON（权威源）+ l10n/
+├── cli/
+│   └── zork_game.py    # CLI（读取 flutter_app/assets/data/）
+└── version/            # 发版说明与商店文案
 ```
 
 ## 胜利目标

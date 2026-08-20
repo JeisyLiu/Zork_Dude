@@ -16,8 +16,29 @@
     <a class="site-nav__brand" href="index.html">迷雾之塔</a>
     <ul class="site-nav__links">
       <li><a href="index.html">主页 / Home</a></li>
-      <li><a href="play.html">立即游玩 / Play</a></li>
+      <li><a href="play/">立即游玩 / Play</a></li>
+      <li><a href="index.html#download">下载 / Download</a></li>
       <li><a href="privacy.html">隐私政策 / Privacy</a></li>
+      <li class="site-nav__more">
+        <button
+          type="button"
+          class="site-nav__more-btn"
+          id="more-trigger"
+          aria-expanded="false"
+          aria-haspopup="true"
+          aria-controls="more-menu"
+        >
+          更多内容
+        </button>
+        <ul id="more-menu" class="site-nav__dropdown" role="menu" hidden>
+          <li role="none">
+            <a role="menuitem" href="https://beatinghouse.com" target="_blank" rel="noopener noreferrer">公司官网</a>
+          </li>
+          <li role="none">
+            <a role="menuitem" href="https://nexaai.beatinghouse.com" target="_blank" rel="noopener noreferrer">Branchia</a>
+          </li>
+        </ul>
+      </li>
     </ul>
   </nav>
 
@@ -46,7 +67,9 @@
         <dt>开发者 / Developer</dt>
         <dd>JeisyLiu</dd>
         <dt>电子邮箱 / Email</dt>
-        <dd><a href="mailto:beatinghousehunan@gmail.com">beatinghousehunan@gmail.com</a></dd>
+        <dd><a href="mailto:support@beatinghouse.com">support@beatinghouse.com</a></dd>
+        <dt>电话 / Phone</dt>
+        <dd><a href="tel:+8617302689025">+86 173 0268 9025</a></dd>
         <dt>注册地址 / Registered address</dt>
         <dd>
           Room 204-781, Building 1, Yue Lu Yi Hao Jia Yuan, No. 369 Yuelu Avenue,
@@ -75,11 +98,6 @@
           <span lang="en">Saves and settings remain on your device (Web: browser local storage; Android: on-device storage).</span>
         </li>
         <li>
-          <strong>广告（Android）/ Advertising (Android)</strong> —
-          <span lang="zh-CN">通过 Google AdMob 展示广告；可能使用 Google UMP 征求个性化广告同意。AdMob 可能收集广告标识符等设备信息。</span>
-          <span lang="en">Ads are served via Google AdMob; Google UMP may be used for consent. AdMob may collect advertising identifiers and related device data.</span>
-        </li>
-        <li>
           <strong>Google Play Games（Android）</strong> —
           <span lang="zh-CN">若你连接 Play 游戏服务，Google 将处理成就、排行榜及平台认证相关数据。我们不自建后端存储你的 Play Games 身份。</span>
           <span lang="en">If you connect to Play Games Services, Google processes achievements, leaderboards, and platform authentication. We do not store your Play Games identity on our own servers.</span>
@@ -102,8 +120,6 @@
       <ul>
         <li lang="zh-CN">在本地保存并恢复游戏进度；</li>
         <li lang="en">Save and restore game progress locally;</li>
-        <li lang="zh-CN">在 Android 上，于取得必要同意后展示广告；</li>
-        <li lang="en">Show ads on Android after obtaining required consent where applicable;</li>
         <li lang="zh-CN">在 Android 上同步 Play Games 成就与排行榜（仅在成功连接时）；</li>
         <li lang="en">Sync Play Games achievements and leaderboards on Android when connected;</li>
         <li lang="zh-CN">回复你通过邮件或 Issues 提出的支持请求；</li>
@@ -119,7 +135,7 @@
       <p lang="en">We do not sell your personal information. The following third parties may process related data under their own policies:</p>
       <ul>
         <li>
-          Google（AdMob、Play Games、UMP）—
+          Google（Play Games）—
           <a href="https://policies.google.com/privacy" rel="noopener noreferrer" target="_blank">Google Privacy Policy</a>
         </li>
         <li>
@@ -144,15 +160,10 @@
           <a href="https://support.google.com/googleplay/answer/9130646" rel="noopener noreferrer" target="_blank">Google Help</a>.
         </li>
         <li>
-          <strong>广告偏好 / Ad preferences</strong> —
-          <span lang="zh-CN">可在应用内隐私设置（若显示）或系统广告设置中管理。</span>
-          <span lang="en">Manage via in-app privacy options (if shown) or system ad settings.</span>
-        </li>
-        <li>
           <strong>其他请求 / Other requests</strong> —
           <span lang="zh-CN">请发送邮件至</span>
           <span lang="en">Email</span>
-          <a href="mailto:beatinghousehunan@gmail.com">beatinghousehunan@gmail.com</a>
+          <a href="mailto:support@beatinghouse.com">support@beatinghouse.com</a>
           <span lang="zh-CN">，或通过</span>
           <span lang="en">, or open</span>
           <a href="https://github.com/jeisyliu/Zork_Dude/issues">GitHub Issues</a>.
@@ -170,11 +181,11 @@
       <h2>6. 儿童隐私 / Children’s Privacy</h2>
       <p lang="zh-CN">
         本服务并非专门面向 13 岁以下儿童设计。若你认为我们无意中处理了儿童信息，请联系
-        <a href="mailto:beatinghousehunan@gmail.com">beatinghousehunan@gmail.com</a>。
+        <a href="mailto:support@beatinghouse.com">support@beatinghouse.com</a>。
       </p>
       <p lang="en">
         This service is not directed to children under 13. If you believe we have inadvertently processed children’s information, contact
-        <a href="mailto:beatinghousehunan@gmail.com">beatinghousehunan@gmail.com</a>.
+        <a href="mailto:support@beatinghouse.com">support@beatinghouse.com</a>.
       </p>
     </section>
 
@@ -200,7 +211,8 @@
         <strong>湖南跃动小屋信息技术有限公司</strong><br>
         Hunan Beating House Information Technology Co Ltd<br>
         开发者 / Developer：JeisyLiu<br>
-        Email：<a href="mailto:beatinghousehunan@gmail.com">beatinghousehunan@gmail.com</a><br>
+        Email：<a href="mailto:support@beatinghouse.com">support@beatinghouse.com</a><br>
+        电话 / Phone：<a href="tel:+8617302689025">+86 173 0268 9025</a><br>
         GitHub：<a href="https://github.com/jeisyliu" rel="noopener noreferrer" target="_blank">github.com/jeisyliu</a><br>
         Support：<a href="https://github.com/jeisyliu/Zork_Dude/issues">GitHub Issues</a>
       </p>
@@ -213,8 +225,38 @@
   </main>
 
   <footer class="site-footer">
-    <p><a href="index.html">返回主页 / Home</a> · <a href="play.html">立即游玩 / Play</a></p>
+    <p><a href="index.html">返回主页 / Home</a> · <a href="play/">立即游玩 / Play</a> · <a href="index.html#download">下载 / Download</a></p>
     <p>© 湖南跃动小屋信息技术有限公司 / Hunan Beating House Information Technology Co Ltd</p>
   </footer>
+
+  <script>
+    (function () {
+      var trigger = document.getElementById("more-trigger");
+      var menu = document.getElementById("more-menu");
+      if (!trigger || !menu) return;
+
+      function setOpen(open) {
+        trigger.setAttribute("aria-expanded", open ? "true" : "false");
+        menu.hidden = !open;
+      }
+
+      trigger.addEventListener("click", function (e) {
+        e.stopPropagation();
+        setOpen(menu.hidden);
+      });
+
+      document.addEventListener("click", function () {
+        setOpen(false);
+      });
+
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") setOpen(false);
+      });
+
+      menu.addEventListener("click", function (e) {
+        e.stopPropagation();
+      });
+    })();
+  </script>
 </body>
 </html>

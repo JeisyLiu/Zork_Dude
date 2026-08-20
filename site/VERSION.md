@@ -1,22 +1,22 @@
 # 迷雾之塔 · 版本说明
 
-维护此文件后，同步更新根目录 `index.html` 中「版本动态」区块。详细多语言说明见 [version/0.9.1.md](../version/0.9.1.md)。
+维护此文件后，同步更新根目录 `index.html` 中「版本动态」区块。  
+详细多语言发版说明见 [version/0.9.14.md](../version/0.9.14.md)（当前）与 [version/README.md](../version/README.md)。
 
-## 当前版本 0.9.1
+## 当前版本 0.9.14
 
-- 首次 Google Play 内部测试候选包（`com.beatinghouse.mist`）
-- 完整 10 语种：界面、领域提示、世界内容
-- 迷雾世界观四层探索：地表、洞穴、高塔、基金会收容站点
-- Web 文字冒险：桌面 `play.html`、移动 `mobile/`
-- Flutter 原生客户端：指令探索 + 迷雾残页地图 + 回合制战斗
-- 59 场景、多结局与职员表、二周目 `ng+`
-- 本地多槽存档（Web / 移动端）
-- AdMob offpack 广告与 UMP 隐私同意
-- Google Play Games 成就与排行榜客户端（静默登录 + 本地 Outbox 补推）
-- 官方网站与隐私政策页已上线
+- 怪物战斗规则与数值调整，克制更清晰
+- 房间与 NPC 文案随状态动态变化
+- 迷雾地图跨层出口栏更易用
+- 新手引导指令说明更完整
+- 哥布林等敌人与同伴战斗立绘动画
+- 同伴角色设定与招募文案更新
+- 体验与稳定性改进
+- 官方网站、Windows 客户端下载与隐私政策页已上线
 
 ## 下一版本（规划中）
 
-- Play Console 成就与排行榜真机联调、商店正式上架
-- Data Safety 申报与商店素材优化
-- 扩展更多 Play Games 成就
+- Play Console：Publish PGS、回填成就/排行榜真 ID、真机联调
+- Internal / Open Testing 发版与 In-App Update 验收
+- Data Safety 申报与商店素材完善
+- 正式上架

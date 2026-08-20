@@ -2,94 +2,101 @@
 
 按推荐顺序推进。完成后把对应项改成 `[x]`。
 
+详细操作手册：[docs/PLAY_CONSOLE_RUNBOOK.md](./docs/PLAY_CONSOLE_RUNBOOK.md)
+
 ## 1. 应用主页 + 隐私协议网页
 
-- [x] 准备可公网访问的 HTTPS 站点（GitHub Pages / Cloudflare Pages / 自有域名均可）— **已发布** https://jeisyliu.github.io/Zork_Dude/
-- [x] 应用主页：游戏简介、截图/宣传图、商店链接占位、联系方式（`index.html` + `site/`）
-- [x] 隐私政策页（Play Console 必填 URL），至少写清：
-  - [x] 收集/使用的数据：广告（AdMob）、本地存档、Play Games 成就与排行榜
-  - [x] 无自有账号体系、无自建后端用户数据库
-  - [x] Play Games 相关数据由 Google 处理；用户可通过 Google / Play Games 设置删除
-  - [x] 广告相关：UMP 同意、AdMob 隐私说明链接
-  - [x] 联系：beatinghousehunan@gmail.com / GitHub Issues / github.com/jeisyliu
-- [x] （可选）支持 / 联系页 — 主页与隐私页链至邮件与 GitHub Issues
-- [x] 将隐私政策 URL、主页 URL 记到下方「上架信息」
-
-### 上架信息（填好后粘贴到 Play Console）
-
-| 用途 | URL |
-|------|-----|
-| 应用主页 | https://jeisyliu.github.io/Zork_Dude/ |
-| 隐私政策 | https://jeisyliu.github.io/Zork_Dude/privacy.html |
-| 支持 / 联系（可选） | mailto:beatinghousehunan@gmail.com 或 https://github.com/jeisyliu/Zork_Dude/issues |
+- [x] 站点与隐私页已发布：https://jeisyliu.github.io/Zork_Dude/ · https://jeisyliu.github.io/Zork_Dude/privacy.html
 
 ---
 
-## 2. Google Play Games Services 后台配置
+## 2. Google Play Games
 
-详细文案见：[PLAY_GAMES_ACHIEVEMENTS.md](./PLAY_GAMES_ACHIEVEMENTS.md)（**18 成就 + 1 排行榜**，可逐条复制到 Console）
+### 2.A / 2.B / 2.C
 
-操作手册：[docs/PLAY_CONSOLE_RUNBOOK.md](./docs/PLAY_CONSOLE_RUNBOOK.md) · 成就图标：`store/achievement_icons/` · ID 回填工具：`flutter_app/tool/apply_pgs_ids.dart`
+- [x] Setup / OAuth / Android Credential（App Signing SHA-1）
+- [x] Testers
+- [x] 18 成就（Import + Awakening 手建）
+- [x] 排行榜 **High Score** + `high_score.png`
 
-客户端钩子已接入（本地 Outbox + 静默登录补推）。Console 仍需配置并回填真 ID。
+### 2.D Publish PGS + 回填工程 ID ← **测更新前建议先做完**
 
-- [ ] Play Console 创建/选择应用「迷雾之塔」
-- [ ] Grow users → Play Games Services → 完成初始 Setup / Configuration
-- [ ] 配置 OAuth 同意屏幕（Google Cloud）
-- [ ] 添加 Credential：Android（包名 `com.beatinghouse.mist`）
-- [ ] 填入 **debug** 签名 SHA-1
-- [ ] 填入 **release / Play App Signing** 签名 SHA-1
-- [ ] 按 `PLAY_GAMES_ACHIEVEMENTS.md` 创建 **18** 个成就（含 2 个增量）
-- [ ] 按该文件创建 1 个排行榜
-- [ ] 上传成就图标（512×512）— 素材已生成于 `store/achievement_icons/`，待上传 Console
-- [ ] Play Games Services → Publishing → **Publish**（只发布 PGS 配置，不等于上架游戏）
-- [ ] Configuration → Credentials → **Get resources**，导出 XML
-- [ ] 用真实 ID 替换工程占位符（工具：`dart run tool/apply_pgs_ids.dart`）：
-  - [ ] [`flutter_app/android/app/src/main/res/values/games-ids.xml`](flutter_app/android/app/src/main/res/values/games-ids.xml)
-  - [ ] [`flutter_app/lib/services/play_games/play_games_ids.dart`](flutter_app/lib/services/play_games/play_games_ids.dart)
-- [ ] 添加 PGS 测试账号，真机验证：静默登录 / 成就解锁 / 排行榜提交 / 主页入口
+- [ ] PGS → **Publishing → Publish**
+- [ ] **Get resources** → 覆盖 `flutter_app/android/app/src/main/res/values/games-ids.xml`
+- [ ] `cd flutter_app` → `dart run tool/apply_pgs_ids.dart` → `dart run tool/check_pgs_ids.dart`
+- [ ] 填下方回填表；用含真 ID 的包发 Internal（与 §3 合并）
 
-### 回填 ID 记录（从 Console 粘贴）
+### 2.E 真机验收（Play 安装）
 
-| 本地 ID | Console 资源名 | Android ID（CgkI…） |
-|---------|----------------|---------------------|
+- [ ] 成就 / 排行榜 UI、登录、解锁、提交分数、Outbox
+
+### 回填 ID 记录
+
+| 本地 ID | Console 名 | Android ID（CgkI…） |
+|---------|------------|---------------------|
 | `app_id` | Play Games App ID | |
-| `awaken` | 雾中苏醒 | |
-| `first_victory` | 初战告捷 | |
-| `first_recruit` | 结伴而行 | |
-| `first_quest` | 受托之人 | |
-| `enter_cave` | 深入地下 | |
-| `enter_tower` | 塔影将至 | |
-| `site_gate` | 石门洞开 | |
-| `enter_site` | 收容之下 | |
-| `explore_20` | 迷雾残页 | |
-| `explore_40` | 雾图将满 | |
-| `battles_10` | 十战迷雾 | |
-| `battles_25` | 百战将启 | |
-| `ending_dragon` | 幼龙已陨落 | |
-| `ending_main` | 迷雾消散 | |
-| `ending_site` | 站点行动完成 | |
-| `full_party` | 全员集结 | |
-| `ng_plus` | 二周目旅人 | |
-| `score_1000` | 千分迷雾 | |
-| `high_score` | 最高得分（排行榜） | |
+| `awaken` … `score_1000` | 各成就 | |
+| `high_score` | High Score | |
 
 ---
 
-## 3. Play Console 商店与合规
+## 3. 版本更新提示（In-App Update）← **当前重点**
 
-商店文案与 Data Safety 答案见 [docs/STORE_LISTING.md](./docs/STORE_LISTING.md)。内测验收见 [docs/INTERNAL_TEST_CHECKLIST.md](./docs/INTERNAL_TEST_CHECKLIST.md)。
+代码已接好：回主页会检查 Play 更新。  
+**硬条件：** 包必须从 **Play 安装**；商店里必须有 **更高 versionCode**。侧载 / `flutter run` 不会出提示。
 
-- [ ] Data Safety：如实填写广告、Play Games、本地数据等
-- [ ] 商店列表：标题、短描述、完整描述、截图、图标、分级问卷
-- [ ] 填写隐私政策 URL
-- [ ] （可选）填写应用主页 / 支持网址
-- [ ] 内部测试轨道上传 AAB，用测试账号验证 PGS + 广告 — AAB 已构建：`flutter_app/build/app/outputs/bundle/release/app-release.aab`
+工程当前：`0.9.14+14`（versionCode=**14**）。文案：`version/0.9.14.md`。
+
+### 测软更（priority = 2）
+
+1. （建议）先做完 §2.D，再打「含真 ID」的包  
+2. **若 Internal 里还没有更低版本：**  
+   - 先发一版旧包（例如保持 `+3`）并装上  
+   - 再把 `pubspec` 改成更高 `+versionCode`，打新 AAB 再发一版  
+3. **若已有旧包：** 新包 versionCode 必须比机上旧包大  
+4. Console → Internal testing → 上传 AAB → What's new → **In-app update priority = 2** → 发布  
+5. 机上保留旧版，打开主页 → 软更下载 → 确认安装 → 设置里版本应变新  
+
+| Priority | 含义 | 本次 |
+|----------|------|------|
+| **2** | 软更，可取消 | **用这个测提示** |
+| 4–5 | 全屏必更 | 先别用 |
+
+### 3.A 清单
+
+- [ ] §2.D 回填真 ID（建议）
+- [ ] 抬高 `+versionCode`（相对机上旧包）
+- [ ] `flutter build appbundle --release`
+- [ ] Internal 上传，**priority=2**，发布
+- [ ] 旧版机验主页更新提示
+
+### 3.C 记录
+
+| 项 | 值 |
+|----|-----|
+| 工程 | `0.9.14+14` |
+| 实际上传新包 | |
+| 轨道 | Internal |
+| priority | 2 |
+
+---
+
+## 4. 商店与合规
+
+- [ ] Data Safety / 商店列表 / URL  
+见 `docs/STORE_LISTING.md`
+
+---
+
+## 你现在怎么走
+
+1. **Publish PGS** → Get resources → `apply_pgs_ids`  
+2. 打 AAB → Internal，**priority=2**（需要两版才能测更新时：先旧后新）  
+3. 旧版机开主页看更新提示；顺带验成就/排行榜  
+4. 再补商店合规  
 
 ---
 
 ## 本轮不做
 
-- 自有后端 / 云存档
-- 应用内「注销自有账号」（当前无自有账号）
-- iOS Game Center
+- 自有后端 / 云存档 / iOS Game Center

@@ -1,0 +1,37 @@
+[
+  {
+    "id": "companion_warrior",
+    "name": "蒼衡",
+    "recruit_msg": "老隱士撫鬚點頭：『我叫蒼衡。帶上這柄劍，我與你同行。』"
+  },
+  {
+    "id": "companion_rogue",
+    "name": "夜鶯",
+    "recruit_msg": "影掀開斗篷：『你可以叫我夜鶯。你有點意思，帶上我吧。』"
+  },
+  {
+    "id": "companion_mage",
+    "name": "伊文",
+    "recruit_msg": "守書人推了推眼鏡：『伊文。終於有人懂魔法了！一起走吧！』"
+  },
+  {
+    "id": "companion_healer",
+    "name": "塞拉",
+    "recruit_msg": "白袍祭司合十：『我是塞拉。你的旅途需要治癒之光，讓我同行吧。』"
+  },
+  {
+    "id": "companion_scout",
+    "name": "格雷",
+    "recruit_msg": "老獵人點頭：『叫我格雷。你看起來需要個嚮導。』"
+  },
+  {
+    "id": "companion_archer",
+    "name": "血鴉",
+    "recruit_msg": "賞金獵人摘下兜帽：『……血鴉。你的弓術不錯，我認可你了。』"
+  },
+  {
+    "id": "companion_monk",
+    "name": "無塵",
+    "recruit_msg": "囚室武僧雙手合十：『貧僧無塵。施主，願助你一臂之力。』"
+  }
+]

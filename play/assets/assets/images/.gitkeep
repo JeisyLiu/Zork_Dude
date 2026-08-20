@@ -1,0 +1,3 @@
+# Placeholder — put sprite sheets here:
+#   player/, enemies/, tiles/
+# Bonfire loads images from assets/images/ (see pubspec.yaml).

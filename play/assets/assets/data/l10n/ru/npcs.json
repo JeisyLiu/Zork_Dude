@@ -1,0 +1,486 @@
+[
+  {
+    "id": "old_hermit",
+    "name": "Old Hermit",
+    "title": "Guardian of the Misty Forest",
+    "desc": "A white-haired old man with wisdom in his eyes.",
+    "type": "WISEMAN",
+    "dialogs": {
+      "greet": "You finally woke… I have waited long.",
+      "extra": "Remember—the tower seals every answer, but the silver key lies in the cave middle. Enter the caves before you climb the tower.",
+      "farewell": "May light guide you."
+    },
+    "give_item": "journal",
+    "quest_item": "magic_gem",
+    "quest_reward": "greater_potion",
+    "quest_score": 40,
+    "emoji": "🧙",
+    "ability_desc": "Staff strike, attack +3, defense +2"
+  },
+  {
+    "id": "wandering_merchant",
+    "name": "wandering trader",
+    "title": "Traveling merchants",
+    "desc": "A short, fat middle-aged man with all kinds of goods hanging on his body.",
+    "type": "MERCHANT",
+    "dialogs": {
+      "greet": "Hehe, just in time! Take a look at my goods.",
+      "extra": "They are all good goods, no matter how good they are!",
+      "farewell": "Come again next time!"
+    },
+    "trade_items": [
+      [
+        "lesser_potion",
+        8
+      ],
+      [
+        "torch",
+        3
+      ],
+      [
+        "bread",
+        2
+      ],
+      [
+        "dried_meat",
+        4
+      ],
+      [
+        "rope",
+        3
+      ],
+      [
+        "iron_sword",
+        15
+      ],
+      [
+        "leather_armor",
+        12
+      ],
+      [
+        "elven_bow",
+        25
+      ],
+      [
+        "focus_draught",
+        18
+      ],
+      [
+        "battle_stim",
+        32
+      ]
+    ],
+    "buys_types": [
+      "TREASURE",
+      "MATERIAL",
+      "MINERAL"
+    ],
+    "emoji": "🛒"
+  },
+  {
+    "id": "village_elder",
+    "name": "village head",
+    "title": "The head of Lakeside Village",
+    "desc": "A kind old man holding a cane.",
+    "type": "QUEST",
+    "dialogs": {
+      "greet": "Stranger, welcome to the lakeside village.",
+      "quest": "The silver key is in the cave middle; your memory waits in the tower—explore the caves first, then climb. Bring sacred water and I will give you a greater potion.",
+      "extra": "Clear the bandit camp to the south and the village will thank you.",
+      "farewell": "May the gods bless you."
+    },
+    "quest_item": "sacred_water",
+    "quest_reward": "greater_potion",
+    "quest_score": 25,
+    "emoji": "👴"
+  },
+  {
+    "id": "healer_lily",
+    "name": "Lily",
+    "title": "Dr. You Fang",
+    "desc": "A young woman carrying a medicine box has a warm smile.",
+    "type": "HEALER",
+    "dialogs": {
+      "greet": "Are you injured? I can help you.",
+      "extra": "Stay safe, adventurers.",
+      "farewell": "Take care of yourself."
+    },
+    "emoji": "💚"
+  },
+  {
+    "id": "wandering_rogue",
+    "name": "Shadow",
+    "title": "mysterious wanderer",
+    "desc": "A cloaked figure whose face could not be seen clearly.",
+    "type": "WANDERER",
+    "dialogs": {
+      "greet": "...Are you also lost in this fog?",
+      "extra": "The world is more complex than you think.",
+      "farewell": "See you later."
+    },
+    "give_item": "shadow_blade",
+    "emoji": "🥷",
+    "ability_desc": "Sneak attack, attack +2, 40% chance of bonus damage"
+  },
+  {
+    "id": "tower_guardian",
+    "name": "Taling",
+    "title": "Magical Guard of the Tower",
+    "desc": "A human figure made of light, with a sound like a bell.",
+    "type": "GUARDIAN",
+    "dialogs": {
+      "greet": "Those who enter the tower must prove their worth.",
+      "quest": "Gather three relics: silver key, crystal key, and sacred water. The crystal key is in the observatory.",
+      "extra": "Only the pure may pass.",
+      "farewell": "…"
+    },
+    "quest_item": "crystal_key",
+    "quest_reward": "magic_scroll",
+    "quest_score": 30,
+    "emoji": "✨"
+  },
+  {
+    "id": "innkeeper",
+    "name": "old tom",
+    "title": "The owner of the Mist Tavern",
+    "desc": "A chubby fat man with a permanent smile on his face.",
+    "type": "INNKEEPER",
+    "dialogs": {
+      "greet": "Welcome to the Mist Tavern! Want something?",
+      "extra": "I heard that the forest is not peaceful recently, so you'd better be careful.",
+      "farewell": "Walk slowly!"
+    },
+    "give_item": "fish",
+    "emoji": "🍺"
+  },
+  {
+    "id": "blacksmith",
+    "name": "anvil",
+    "title": "blacksmith shop owner",
+    "desc": "A muscular man, wearing a leather apron and holding a hammer in his hand.",
+    "type": "BLACKSMITH",
+    "dialogs": {
+      "greet": "Need weapons or armor? My craftsmanship is the best within a hundred miles!",
+      "extra": "If you have good materials, I can help you build equipment.",
+      "farewell": "Bring the materials next time!"
+    },
+    "trade_items": [
+      [
+        "iron_sword",
+        12
+      ],
+      [
+        "war_hammer",
+        35
+      ],
+      [
+        "spear",
+        18
+      ],
+      [
+        "scale_armor",
+        40
+      ],
+      [
+        "shield",
+        15
+      ],
+      [
+        "helmet",
+        8
+      ],
+      [
+        "crossbow",
+        30
+      ]
+    ],
+    "buys_types": [
+      "MATERIAL",
+      "MINERAL"
+    ],
+    "emoji": "⚒️"
+  },
+  {
+    "id": "hunter",
+    "name": "Old Hunter",
+    "title": "experienced hunter",
+    "desc": "An old man wearing an animal skin coat and carrying a long bow.",
+    "type": "HUNTER",
+    "dialogs": {
+      "greet": "Um? You are not a local.",
+      "quest": "There have been more and more goblins in the forest recently... Can you help me clear some of them out?",
+      "extra": "I can teach you some hunting techniques.",
+      "farewell": "be safe."
+    },
+    "quest_item": "goblin_ear",
+    "quest_reward": "elven_bow",
+    "quest_score": 25,
+    "emoji": "🏹",
+    "ability_desc": "Scout agility, attack +1, reveals enemy weaknesses in combat"
+  },
+  {
+    "id": "priestess",
+    "name": "White-robed Priestess",
+    "title": "Priest of the Temple of Light",
+    "desc": "A beautiful woman wearing a white robe, surrounded by a faint halo.",
+    "type": "PRIESTESS",
+    "dialogs": {
+      "greet": "May light guide your path.",
+      "extra": "If you have holy water, I can help you purify it.",
+      "farewell": "The light is with you."
+    },
+    "give_item": "lesser_potion",
+    "quest_item": "phoenix_feather",
+    "quest_reward": "health_ring",
+    "quest_score": 35,
+    "emoji": "🕊️",
+    "ability_desc": "Healing support, restores HP each turn, defense +1, max HP +15"
+  },
+  {
+    "id": "mad_alchemist",
+    "name": "mad monk",
+    "title": "The reclusive alchemist",
+    "desc": "A strange man in a shabby robe, with a mountain of bottles and cans in the laboratory.",
+    "type": "WISEMAN",
+    "dialogs": {
+      "greet": "Experimental product! No, I mean...guests!",
+      "extra": "Did you know? Dragon scale powder and moonlight grass can be used to refine the most powerful potion!",
+      "farewell": "Bring some interesting materials next time!"
+    },
+    "give_item": "mana_potion",
+    "quest_item": "dragon_scale",
+    "quest_reward": "protection_ring",
+    "quest_score": 30,
+    "emoji": "🧪"
+  },
+  {
+    "id": "gravedigger",
+    "name": "old gravedigger",
+    "title": "old man guarding the tomb",
+    "desc": "An old man with a hunchback, a shovel in his hand, and a strange look in his eyes.",
+    "type": "WANDERER",
+    "dialogs": {
+      "greet": "What are you doing at the cemetery? This is not a place for walking...",
+      "extra": "I heard that there are good things buried underground, but I can’t dig it out with my old bones.",
+      "farewell": "Be careful with the dirt you step on...some of it will move."
+    },
+    "give_item": "old_coin",
+    "emoji": "🪦"
+  },
+  {
+    "id": "bounty_hunter",
+    "name": "Bounty Hunter",
+    "title": "ruthless bounty hunter",
+    "desc": "A lone mercenary in black armor with a deep scar on his face and a row of trophies hanging from his waist.",
+    "type": "HUNTER",
+    "dialogs": {
+      "greet": "Hmph. You are not here to steal my bounty, are you?",
+      "quest": "The stone gate at the graveyard end matches the magic gem guarded by the young dragon atop the tower. If you bring the gem, it may open. Bring basilisk scales too and I will share the pay.",
+      "extra": "Something deeper lies behind that gate…",
+      "farewell": "Do not become a statue."
+    },
+    "quest_item": "dragon_scale",
+    "quest_reward": "strength_ring",
+    "quest_score": 35,
+    "emoji": "🎯",
+    "ability_desc": "Ranged sniping, attack +2, chance of double damage in combat"
+  },
+  {
+    "id": "dr_ellis",
+    "name": "Dr. Ellis",
+    "title": "Former Foundation Researcher",
+    "desc": "The middle-aged man in ragged clothes, with one side of his glasses broken, was still mumbling the containment number.",
+    "type": "QUEST",
+    "dialogs": {
+      "greet": "You...are you here to save us? The site is out of control...",
+      "quest": "Help me find the observation log lost in the corridor, and I can give you better equipment.",
+      "extra": "Туман и башня… разные лица одной аномалии. Многогорлые охотники имитируют крики—очки Фонда или покрытие телекилл помогут; Неуничтожимому ползуну нужна камера содержания против регенерации.",
+      "farewell": "Walk quickly, your core is still pulsing..."
+    },
+    "quest_item": "observation_log",
+    "quest_reward": "bag_tactical",
+    "quest_score": 40,
+    "emoji": "👨‍🔬"
+  },
+  {
+    "id": "mtf_liaison",
+    "name": "Codename \"Gray Crow\"",
+    "title": "MTF Logistics Liaison",
+    "desc": "The agent wearing a tactical vest, the voice behind the mask was calm and tired.",
+    "type": "MERCHANT",
+    "dialogs": {
+      "greet": "survivor? Grab your gear, it's no safer here than outside.",
+      "extra": "Проси что нужно, но скидок не жди. Очки против звуковых приманок и когнитивных угроз; камера содержания глушит регенерирующие аномалии—не иди с пустыми руками в западное логово и южную кислотную яму.",
+      "farewell": "May the abnormality have nothing to do with you."
+    },
+    "trade_items": [
+      [
+        "scp_goggles",
+        20
+      ],
+      [
+        "containment_box",
+        35
+      ],
+      [
+        "amnesia_pill",
+        12
+      ],
+      [
+        "bag_tactical",
+        45
+      ],
+      [
+        "lesser_potion",
+        8
+      ],
+      [
+        "site_ration",
+        3
+      ],
+      [
+        "scp_500_pill",
+        80
+      ],
+      [
+        "scp_178_glasses",
+        22
+      ],
+      [
+        "scp_714_ring",
+        40
+      ],
+      [
+        "scp_148_telekill",
+        35
+      ],
+      [
+        "focus_draught",
+        18
+      ],
+      [
+        "battle_stim",
+        32
+      ]
+    ],
+    "buys_types": [
+      "TREASURE",
+      "MATERIAL",
+      "MINERAL"
+    ],
+    "emoji": "🎖️"
+  },
+  {
+    "id": "scp_049",
+    "name": "Plague Doctor (SCP-ZH-049)",
+    "title": "The existence of a self-proclaimed doctor",
+    "desc": "Wearing a 17th century beak mask and a black robe, he claimed to be curing the disease.",
+    "type": "HEALER",
+    "dialogs": {
+      "greet": "Ah, another patient. Please allow me to examine your illness.",
+      "extra": "The blight in this facility...is older than you think.",
+      "farewell": "Hope you haven't been infected yet."
+    },
+    "emoji": "🩺"
+  },
+  {
+    "id": "scp_079",
+    "name": "Aging AI (SCP-ZH-079)",
+    "title": "early artificial intelligence",
+    "desc": "The monochrome screen on the vintage chassis glowed with a green cursor.",
+    "type": "WISEMAN",
+    "dialogs": {
+      "greet": "...organism detected. Do you need information?",
+      "quest": "By bringing the Unfinished Chronicles, I can open up more channel permissions.",
+      "extra": "914 всё ещё работает. Very Fine осторожно. Журналы твердят: 939 нужны очки или телекилл; 682 — камера содержания; Прототипу нужны оба.",
+      "farewell": "The connection is lost."
+    },
+    "quest_item": "scp_140_chronicle",
+    "quest_reward": "keycard_lvl3",
+    "quest_score": 25,
+    "emoji": "💻"
+  },
+  {
+    "id": "scp_999",
+    "name": "Itching jelly (SCP-ZH-999)",
+    "title": "orange happy body",
+    "desc": "A docile orange jelly-like creature actively rubs against your calf.",
+    "type": "HEALER",
+    "dialogs": {
+      "greet": "(Chirping happily!)",
+      "extra": "(It wraps you in soft glue and makes you want to laugh for no reason.)",
+      "farewell": "(Shaking reluctantly)"
+    },
+    "emoji": "🧡"
+  },
+  {
+    "id": "scp_343",
+    "name": "Claiming to be God (SCP-ZH-343)",
+    "title": "Friendly old man?",
+    "desc": "The amiable white-bearded old man is sitting in a comfortable room, with the fragrance of tea lingering.",
+    "type": "WISEMAN",
+    "dialogs": {
+      "greet": "Welcome, kid. Want some tea?",
+      "extra": "Mist? Maybe it was a little trick I was playing around with... maybe not.",
+      "farewell": "Go ahead and the door will be open for you - for now."
+    },
+    "give_item": "scp_500_pill",
+    "emoji": "👴"
+  },
+  {
+    "id": "tower_librarian",
+    "name": "Bookkeeper",
+    "title": "Tower Keeper",
+    "desc": "The old scholar wearing round glasses has ink stains on his fingertips.",
+    "type": "WISEMAN",
+    "dialogs": {
+      "greet": "Another visitor? Do not wander into the ritual chamber upstairs.",
+      "extra": "The crystal key is in the observatory. The mist below the tower… does not feel natural.",
+      "farewell": "May knowledge protect you."
+    },
+    "emoji": "📖",
+    "ability_desc": "Magic attack, attack +5, provides light"
+  },
+  {
+    "id": "cave_hermit",
+    "name": "Cell Monk",
+    "title": "Monk of the Tower Prison",
+    "desc": "An old man in a worn monk's robe, eyes clear, imprisoned in the tower depths.",
+    "type": "WISEMAN",
+    "dialogs": {
+      "greet": "Traveler, demonic energy runs heavy here.",
+      "extra": "Those who bear the protection ring may train with me—this is the tower prison, not a cave.",
+      "farewell": "Farewell."
+    },
+    "emoji": "🥋",
+    "ability_desc": "Iron body, attack +2, defense +3, higher crit rate"
+  },
+  {
+    "id": "scp_073",
+    "name": "Cain (SCP-ZH-073)",
+    "title": "man with mark on forehead",
+    "desc": "A dark-skinned man with a strange mark on his forehead, any attack on him will rebound.",
+    "type": "WANDERER",
+    "dialogs": {
+      "greet": "Don't worry, I won't hurt you.",
+      "extra": "My brother is still asleep in his sarcophagus... it would be best not to wake him.",
+      "farewell": "Take care of yourself."
+    },
+    "give_item": "scp_148_telekill",
+    "emoji": "👁️"
+  },
+  {
+    "id": "scp_131",
+    "name": "Eye Detector (SCP-ZH-131)",
+    "title": "friendly surveillance body",
+    "desc": "Two tracked eyeball robots circle around you affectionately.",
+    "type": "WANDERER",
+    "dialogs": {
+      "greet": "(eyeballs flashing happily)",
+      "extra": "(They roll towards the dark corridor, as if leading the way)",
+      "farewell": "(makes a small beep sound)"
+    },
+    "give_item": "torch",
+    "emoji": "👀"
+  }
+]

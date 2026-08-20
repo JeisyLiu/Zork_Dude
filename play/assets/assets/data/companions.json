@@ -1,0 +1,72 @@
+[
+  {
+    "id": "companion_warrior",
+    "name": "苍衡",
+    "role": "WARRIOR",
+    "hp": 60,
+    "atk": 10,
+    "defense": 4,
+    "recruit_msg": "老隐士抚须点头：『我叫苍衡。带上这柄剑，我与你同行。』",
+    "npc_id": "old_hermit"
+  },
+  {
+    "id": "companion_rogue",
+    "name": "夜莺",
+    "role": "ROGUE",
+    "hp": 40,
+    "atk": 8,
+    "defense": 1,
+    "recruit_msg": "影掀开斗篷：『你可以叫我夜莺。你有点意思，带上我吧。』",
+    "npc_id": "wandering_rogue"
+  },
+  {
+    "id": "companion_mage",
+    "name": "伊文",
+    "role": "MAGE",
+    "hp": 35,
+    "atk": 12,
+    "defense": 0,
+    "recruit_msg": "守书人推了推眼镜：『伊文。终于有人懂魔法了！一起走吧！』",
+    "npc_id": "tower_librarian"
+  },
+  {
+    "id": "companion_healer",
+    "name": "塞拉",
+    "role": "HEALER",
+    "hp": 50,
+    "atk": 5,
+    "defense": 3,
+    "recruit_msg": "白袍祭司合十：『我是塞拉。你的旅途需要治愈之光，让我同行吧。』",
+    "npc_id": "priestess"
+  },
+  {
+    "id": "companion_scout",
+    "name": "格雷",
+    "role": "SCOUT",
+    "hp": 40,
+    "atk": 7,
+    "defense": 1,
+    "recruit_msg": "老猎人点头：『叫我格雷。你看起来需要个向导。』",
+    "npc_id": "hunter"
+  },
+  {
+    "id": "companion_archer",
+    "name": "血鸦",
+    "role": "SCOUT",
+    "hp": 45,
+    "atk": 9,
+    "defense": 1,
+    "recruit_msg": "赏金猎人摘下兜帽：『……血鸦。你的弓术不错，我认可你了。』",
+    "npc_id": "bounty_hunter"
+  },
+  {
+    "id": "companion_monk",
+    "name": "无尘",
+    "role": "WARRIOR",
+    "hp": 55,
+    "atk": 8,
+    "defense": 5,
+    "recruit_msg": "囚室武僧双手合十：『贫僧无尘。施主，愿助你一臂之力。』",
+    "npc_id": "cave_hermit"
+  }
+]

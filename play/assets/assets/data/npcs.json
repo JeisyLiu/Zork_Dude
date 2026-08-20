@@ -1,0 +1,523 @@
+[
+  {
+    "id": "old_hermit",
+    "name": "老隐士",
+    "title": "迷雾森林的守护者",
+    "desc": "一位白发苍苍的老人，眼神中透着智慧。",
+    "type": "WISEMAN",
+    "dialogs": {
+      "greet": "你终于醒了……我等了你很久。",
+      "extra": "记住，高塔封印着一切答案——但银钥在洞穴中层，先入洞，再登塔。",
+      "farewell": "愿光明指引你。"
+    },
+    "give_item": "journal",
+    "quest_item": "magic_gem",
+    "quest_reward": "greater_potion",
+    "quest_score": 40,
+    "portrait": "assets/images/portraits/old_hermit.png",
+    "emoji": "🧙",
+    "companion_id": "companion_warrior",
+    "recruit_item": "iron_sword",
+    "ability_desc": "木杖重击，攻击+3 防御+2"
+  },
+  {
+    "id": "wandering_merchant",
+    "name": "流浪商人",
+    "title": "穿梭各地的行商",
+    "desc": "一个矮胖的中年人，身上挂满了各种货物。",
+    "type": "MERCHANT",
+    "dialogs": {
+      "greet": "嘿嘿，来得正好！看看我的货吧。",
+      "extra": "都是好货，童叟无欺！",
+      "farewell": "下次再来啊！"
+    },
+    "trade_items": [
+      [
+        "lesser_potion",
+        8
+      ],
+      [
+        "torch",
+        3
+      ],
+      [
+        "bread",
+        2
+      ],
+      [
+        "dried_meat",
+        4
+      ],
+      [
+        "rope",
+        3
+      ],
+      [
+        "iron_sword",
+        15
+      ],
+      [
+        "leather_armor",
+        12
+      ],
+      [
+        "elven_bow",
+        25
+      ],
+      [
+        "focus_draught",
+        18
+      ],
+      [
+        "battle_stim",
+        32
+      ]
+    ],
+    "buys_types": [
+      "TREASURE",
+      "MATERIAL",
+      "MINERAL"
+    ],
+    "portrait": "assets/images/portraits/wandering_merchant.png",
+    "emoji": "🛒"
+  },
+  {
+    "id": "village_elder",
+    "name": "村长",
+    "title": "湖边村的村长",
+    "desc": "一位慈祥的老者，手里拄着拐杖。",
+    "type": "QUEST",
+    "dialogs": {
+      "greet": "陌生人，欢迎来到湖边村。",
+      "quest": "银钥在洞穴中层，高塔里藏着你的记忆——先去洞里，再登塔。若你带来圣水，我可以给你一瓶大治疗药水。",
+      "extra": "清掉南边强盗营地后回来，村里有谢礼。",
+      "farewell": "愿神保佑你。"
+    },
+    "quest_item": "sacred_water",
+    "quest_reward": "greater_potion",
+    "quest_score": 25,
+    "portrait": "assets/images/portraits/village_elder.png",
+    "emoji": "👴"
+  },
+  {
+    "id": "healer_lily",
+    "name": "莉莉",
+    "title": "游方医师",
+    "desc": "一位背着药箱的年轻女子，笑容温暖。",
+    "type": "HEALER",
+    "dialogs": {
+      "greet": "你受伤了？我可以帮你。",
+      "extra": "注意安全，冒险者。",
+      "farewell": "保重身体。"
+    },
+    "portrait": "assets/images/portraits/healer_lily.png",
+    "emoji": "💚"
+  },
+  {
+    "id": "wandering_rogue",
+    "name": "影",
+    "title": "神秘的流浪者",
+    "desc": "一个披着斗篷的人影，看不清面容。",
+    "type": "WANDERER",
+    "dialogs": {
+      "greet": "……你也在这迷雾中迷失了吗？",
+      "extra": "这个世界比你以为的要复杂。",
+      "farewell": "后会有期。"
+    },
+    "give_item": "shadow_blade",
+    "portrait": "assets/images/portraits/wandering_rogue.png",
+    "emoji": "🥷",
+    "companion_id": "companion_rogue",
+    "recruit_item": "shadow_blade",
+    "ability_desc": "偷袭技巧，攻击+2，40%概率额外伤害"
+  },
+  {
+    "id": "tower_guardian",
+    "name": "塔灵",
+    "title": "高塔的魔法守卫",
+    "desc": "一个由光芒凝聚成的人形，声音如钟鸣。",
+    "type": "GUARDIAN",
+    "dialogs": {
+      "greet": "进入高塔者，需证明自己的价值。",
+      "quest": "收集三件圣物：银钥匙、水晶钥匙、圣水。水晶钥匙在观星台。",
+      "extra": "只有纯净者才能通过。",
+      "farewell": "……"
+    },
+    "quest_item": "crystal_key",
+    "quest_reward": "magic_scroll",
+    "quest_score": 30,
+    "portrait": "assets/images/portraits/tower_guardian.png",
+    "emoji": "✨"
+  },
+  {
+    "id": "innkeeper",
+    "name": "老汤姆",
+    "title": "迷雾酒馆的老板",
+    "desc": "一个圆滚滚的大胖子，脸上永远挂着笑容。",
+    "type": "INNKEEPER",
+    "dialogs": {
+      "greet": "欢迎光临迷雾酒馆！要点什么吗？",
+      "extra": "听说最近森林里不太平，你最好小心点。",
+      "farewell": "慢走啊！"
+    },
+    "give_item": "fish",
+    "portrait": "assets/images/portraits/innkeeper.png",
+    "emoji": "🍺"
+  },
+  {
+    "id": "blacksmith",
+    "name": "铁砧",
+    "title": "铁匠铺的主人",
+    "desc": "浑身肌肉的壮汉，穿着皮围裙，手中铁锤不停。",
+    "type": "BLACKSMITH",
+    "dialogs": {
+      "greet": "需要武器或防具？我的手艺是方圆百里最好的！",
+      "extra": "如果你有好材料，我可以帮你打造装备。",
+      "farewell": "下次带好材料来！"
+    },
+    "trade_items": [
+      [
+        "iron_sword",
+        12
+      ],
+      [
+        "war_hammer",
+        35
+      ],
+      [
+        "spear",
+        18
+      ],
+      [
+        "scale_armor",
+        40
+      ],
+      [
+        "shield",
+        15
+      ],
+      [
+        "helmet",
+        8
+      ],
+      [
+        "crossbow",
+        30
+      ]
+    ],
+    "buys_types": [
+      "MATERIAL",
+      "MINERAL"
+    ],
+    "portrait": "assets/images/portraits/blacksmith.png",
+    "emoji": "⚒️"
+  },
+  {
+    "id": "hunter",
+    "name": "老猎人",
+    "title": "经验丰富的老猎人",
+    "desc": "穿着兽皮大衣的老人，背着一把长弓。",
+    "type": "HUNTER",
+    "dialogs": {
+      "greet": "嗯？你不是本地人吧。",
+      "quest": "最近森林里的哥布林越来越多了……你能帮我清剿一些吗？",
+      "extra": "我可以教你一些狩猎技巧。",
+      "farewell": "注意安全。"
+    },
+    "quest_item": "goblin_ear",
+    "quest_reward": "elven_bow",
+    "quest_score": 25,
+    "portrait": "assets/images/portraits/hunter.png",
+    "emoji": "🏹",
+    "companion_id": "companion_scout",
+    "recruit_item": "fairy_dust",
+    "ability_desc": "侦察敏捷，攻击+1，战斗中发现敌人弱点"
+  },
+  {
+    "id": "priestess",
+    "name": "白袍祭司",
+    "title": "光之神殿的祭司",
+    "desc": "身穿白色长袍的美丽女子，周身环绕淡淡光晕。",
+    "type": "PRIESTESS",
+    "dialogs": {
+      "greet": "愿光明指引你的道路。",
+      "extra": "如果你有圣水，我可以帮你净化它。",
+      "farewell": "光明与你同在。"
+    },
+    "give_item": "lesser_potion",
+    "quest_item": "phoenix_feather",
+    "quest_reward": "health_ring",
+    "quest_score": 35,
+    "portrait": "assets/images/portraits/priestess.png",
+    "emoji": "🕊️",
+    "companion_id": "companion_healer",
+    "recruit_item": "sacred_water",
+    "ability_desc": "治疗支援，每回合恢复HP，防御+1，最大HP+15"
+  },
+  {
+    "id": "mad_alchemist",
+    "name": "疯修士",
+    "title": "隐居的炼金术士",
+    "desc": "一个穿着破旧长袍的怪人，实验室里瓶瓶罐罐堆成山。",
+    "type": "WISEMAN",
+    "dialogs": {
+      "greet": "实验品！不，我是说……客人！",
+      "extra": "你知道吗？龙鳞粉加上月光草可以炼制最强的药剂！",
+      "farewell": "下次带点有趣的材料来！"
+    },
+    "give_item": "mana_potion",
+    "quest_item": "dragon_scale",
+    "quest_reward": "protection_ring",
+    "quest_score": 30,
+    "portrait": "assets/images/portraits/mad_alchemist.png",
+    "emoji": "🧪"
+  },
+  {
+    "id": "gravedigger",
+    "name": "老掘墓人",
+    "title": "守墓的老人",
+    "desc": "一个驼背的老人，手里拿着铁锹，眼神古怪。",
+    "type": "WANDERER",
+    "dialogs": {
+      "greet": "你来墓地做什么？这里可不是散步的地方……",
+      "extra": "听说地下埋着好东西，但我这把老骨头挖不动了。",
+      "farewell": "小心脚下的土……有些会动。"
+    },
+    "give_item": "old_coin",
+    "portrait": "assets/images/portraits/gravedigger.png",
+    "emoji": "🪦"
+  },
+  {
+    "id": "bounty_hunter",
+    "name": "赏金猎人",
+    "title": "冷酷的赏金猎人",
+    "desc": "一个身穿黑甲的独行佣兵，脸上有条深深的刀疤，腰间挂着一排战利品。",
+    "type": "HUNTER",
+    "dialogs": {
+      "greet": "哼，你不是来抢我生意的吧。",
+      "quest": "墓尽头的石门凹槽与塔顶幼龙守护的魔法宝石吻合——你若从塔顶带回宝石，或许能打开它。若顺便带回石化蜥蜴的鳞片，我可以分你一份报酬。",
+      "extra": "那石门后似乎还有更深的秘密……",
+      "farewell": "小心别变成石像。"
+    },
+    "quest_item": "dragon_scale",
+    "quest_reward": "strength_ring",
+    "quest_score": 35,
+    "portrait": "assets/images/portraits/bounty_hunter.png",
+    "emoji": "🎯",
+    "companion_id": "companion_archer",
+    "recruit_item": "elven_bow",
+    "ability_desc": "远程狙击，攻击+2，战斗中有概率造成双倍伤害"
+  },
+  {
+    "id": "dr_ellis",
+    "name": "埃利斯博士",
+    "title": "前基金会研究员",
+    "desc": "衣衫褴褛的中年人，眼镜碎了一边，仍在喃喃自语着收容编号。",
+    "type": "QUEST",
+    "dialogs": {
+      "greet": "你……你是来救我们的吗？站点已经失控了……",
+      "quest": "帮我找回走廊里遗失的观察日志，我可以给你更好的装备。",
+      "extra": "迷雾和高塔……都是同一个异常的不同表现。多喉猎手会模仿呼救声——基金会护目镜或逆模因涂层能帮你识破；不灭爬行者则需要收容箱压制再生。",
+      "farewell": "快走，核心还在脉动……"
+    },
+    "quest_item": "observation_log",
+    "quest_reward": "bag_tactical",
+    "quest_score": 40,
+    "portrait": "assets/images/portraits/dr_ellis.png",
+    "emoji": "👨‍🔬"
+  },
+  {
+    "id": "mtf_liaison",
+    "name": "代号「灰鸦」",
+    "title": "MTF 后勤联络员",
+    "desc": "穿着战术背心的特工，面具下的声音冷静而疲惫。",
+    "type": "MERCHANT",
+    "dialogs": {
+      "greet": "幸存者？拿好你的装备，这里不比外面安全。",
+      "extra": "需要什么就开口，但别指望打折。护目镜能抗声诱与认知危害；收容箱能压住再生型异常的恢复——西边多喉巢穴、南边酸池都别空手去。",
+      "farewell": "愿异常与你无关。"
+    },
+    "trade_items": [
+      [
+        "scp_goggles",
+        20
+      ],
+      [
+        "containment_box",
+        35
+      ],
+      [
+        "amnesia_pill",
+        12
+      ],
+      [
+        "bag_tactical",
+        45
+      ],
+      [
+        "lesser_potion",
+        8
+      ],
+      [
+        "site_ration",
+        3
+      ],
+      [
+        "scp_500_pill",
+        80
+      ],
+      [
+        "scp_178_glasses",
+        22
+      ],
+      [
+        "scp_714_ring",
+        40
+      ],
+      [
+        "scp_148_telekill",
+        35
+      ],
+      [
+        "focus_draught",
+        18
+      ],
+      [
+        "battle_stim",
+        32
+      ]
+    ],
+    "buys_types": [
+      "TREASURE",
+      "MATERIAL",
+      "MINERAL"
+    ],
+    "portrait": "assets/images/portraits/mtf_liaison.png",
+    "emoji": "🎖️"
+  },
+  {
+    "id": "scp_049",
+    "name": "瘟疫医生(SCP-ZH-049)",
+    "title": "自称医生的存在",
+    "desc": "穿着17世纪鸟嘴面具与黑袍，声称要治疗疫病。",
+    "type": "HEALER",
+    "dialogs": {
+      "greet": "啊，又一位患者。请允许我检查你的病。",
+      "extra": "这座设施里的疫病……比你想象的更古老。",
+      "farewell": "愿你尚未被感染。"
+    },
+    "portrait": "assets/images/portraits/scp_049.png",
+    "emoji": "🩺"
+  },
+  {
+    "id": "scp_079",
+    "name": "老化AI(SCP-ZH-079)",
+    "title": "早期人工智能",
+    "desc": "老式机箱上的单色屏幕闪烁着绿色光标。",
+    "type": "WISEMAN",
+    "dialogs": {
+      "greet": "……有机体检测到。你需要信息？",
+      "quest": "把未竟编年史带来，我可以打开更多通道权限。",
+      "extra": "914号仍在运转。谨慎使用 Very Fine。日志里反复提到：939 号需护目镜或逆模因涂层；682 号需收容箱；终焉原型两者缺一不可。",
+      "farewell": "连接断开。"
+    },
+    "quest_item": "scp_140_chronicle",
+    "quest_reward": "keycard_lvl3",
+    "quest_score": 25,
+    "portrait": "assets/images/portraits/scp_079.png",
+    "emoji": "💻"
+  },
+  {
+    "id": "scp_999",
+    "name": "搔痒胶团(SCP-ZH-999)",
+    "title": "橙色快乐体",
+    "desc": "一坨温顺的橙色果冻状生物，主动蹭向你的小腿。",
+    "type": "HEALER",
+    "dialogs": {
+      "greet": "（欢快地咕啾咕啾！）",
+      "extra": "（它把你裹进软胶里，你莫名想笑。）",
+      "farewell": "（依依不舍地晃了晃）"
+    },
+    "portrait": "assets/images/portraits/scp_999.png",
+    "emoji": "🧡"
+  },
+  {
+    "id": "scp_343",
+    "name": "自称神(SCP-ZH-343)",
+    "title": "友善的老人？",
+    "desc": "和蔼白须老人坐在舒适的房间里，茶香袅袅。",
+    "type": "WISEMAN",
+    "dialogs": {
+      "greet": "欢迎，孩子。要喝点茶吗？",
+      "extra": "迷雾？那也许是我随手拨弄的小把戏……或许不是。",
+      "farewell": "去吧，门会为你开着——暂时。"
+    },
+    "give_item": "scp_500_pill",
+    "portrait": "assets/images/portraits/scp_343.png",
+    "emoji": "👴"
+  },
+  {
+    "id": "tower_librarian",
+    "name": "守书人",
+    "title": "高塔守书人",
+    "desc": "戴圆框眼镜的老学者，指尖沾满墨渍。",
+    "type": "WISEMAN",
+    "dialogs": {
+      "greet": "又有访客？楼上仪式间别乱闯。",
+      "extra": "水晶钥匙在观星台。塔下的雾……不像自然之物。",
+      "farewell": "愿知识护佑你。"
+    },
+    "portrait": "assets/images/portraits/tower_librarian.png",
+    "emoji": "📖",
+    "companion_id": "companion_mage",
+    "recruit_item": "magic_book",
+    "ability_desc": "魔法攻击，攻击+5，提供光源"
+  },
+  {
+    "id": "cave_hermit",
+    "name": "囚室武僧",
+    "title": "高塔囚室的武僧",
+    "desc": "身披破旧僧袍的老人，双目清明，被囚于高塔地下。",
+    "type": "WISEMAN",
+    "dialogs": {
+      "greet": "施主，此地魔气甚重。",
+      "extra": "持护戒者可随我修行——此处是塔底囚室，不是洞穴。",
+      "farewell": "阿弥陀佛。"
+    },
+    "portrait": "assets/images/portraits/cave_hermit.png",
+    "emoji": "🥋",
+    "companion_id": "companion_monk",
+    "recruit_item": "protection_ring",
+    "ability_desc": "钢铁之躯，攻击+2 防御+3，暴击率提升"
+  },
+  {
+    "id": "scp_073",
+    "name": "该隐(SCP-ZH-073)",
+    "title": "额头有标记的男人",
+    "desc": "皮肤黝黑的男人，额头有奇怪标记，任何对他的攻击都会反弹。",
+    "type": "WANDERER",
+    "dialogs": {
+      "greet": "不必担心，我不会伤害你。",
+      "extra": "我的兄弟还在石棺里沉睡……最好别吵醒他。",
+      "farewell": "保重。"
+    },
+    "give_item": "scp_148_telekill",
+    "portrait": "assets/images/portraits/scp_073.png",
+    "emoji": "👁️"
+  },
+  {
+    "id": "scp_131",
+    "name": "眼球探测者(SCP-ZH-131)",
+    "title": "友善的监视体",
+    "desc": "两个有履带的眼球机器人，亲昵地围着你转。",
+    "type": "WANDERER",
+    "dialogs": {
+      "greet": "（眼球愉快地闪烁）",
+      "extra": "（它们滚向黑暗走廊，像在带路）",
+      "farewell": "（发出细小的哔哔声）"
+    },
+    "give_item": "torch",
+    "portrait": "assets/images/portraits/scp_131.png",
+    "emoji": "👀"
+  }
+]

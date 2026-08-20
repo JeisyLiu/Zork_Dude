@@ -1,0 +1,37 @@
+[
+  {
+    "id": "companion_warrior",
+    "name": "Cangheng",
+    "recruit_msg": "The old hermit strokes his beard: \"I am Cangheng. Take this blade—I walk with you.\""
+  },
+  {
+    "id": "companion_rogue",
+    "name": "Nightingale",
+    "recruit_msg": "Shadow lifts the cloak: \"Call me Nightingale. You're interesting—bring me along.\""
+  },
+  {
+    "id": "companion_mage",
+    "name": "Ivan",
+    "recruit_msg": "The bookkeeper adjusts his glasses: \"Ivan. Finally someone who gets magic! Let's go!\""
+  },
+  {
+    "id": "companion_healer",
+    "name": "Serra",
+    "recruit_msg": "The white-robed priestess joins her hands: \"I am Serra. Your journey needs healing light—let me come.\""
+  },
+  {
+    "id": "companion_scout",
+    "name": "Grey",
+    "recruit_msg": "The old hunter nods: \"Call me Grey. Looks like you need a guide.\""
+  },
+  {
+    "id": "companion_archer",
+    "name": "Bloodraven",
+    "recruit_msg": "The bounty hunter lowers the hood: \"...Bloodraven. Your archery's solid. I approve.\""
+  },
+  {
+    "id": "companion_monk",
+    "name": "Wuchen",
+    "recruit_msg": "The cell monk presses palms together: \"This humble monk is Wuchen. Donor, allow me to aid you.\""
+  }
+]

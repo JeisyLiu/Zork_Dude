@@ -1,0 +1,61 @@
+Game audio credits (CC0 / local AI)
+
+SFX from Kenney packs (CC0 1.0 — public domain)
+Credit (optional): Kenney Vleugels (www.kenney.nl)
+
+  UI Audio           https://kenney.nl/assets/ui-audio
+  RPG Audio          https://kenney.nl/assets/rpg-audio
+  Impact Sounds      https://kenney.nl/assets/impact-sounds
+  Interface Sounds   https://kenney.nl/assets/interface-sounds
+  Digital Audio      https://kenney.nl/assets/digital-audio
+
+Original full packs were discarded after picking; mapping below is the
+attribution record. See also tool/prompts/sound_prompt.md
+
+--- UI (assets/audio/sfx/ui/) ---
+  click.ogg        <- kenney_ui-audio / click1.ogg
+  open_panel.ogg   <- kenney_ui-audio / switch26.ogg
+  close_panel.ogg  <- kenney_ui-audio / switch28.ogg
+
+--- Explore (assets/audio/sfx/explore/) ---
+  footstep.ogg     <- kenney_rpg-audio / footstep04.ogg
+  pickup.ogg       <- kenney_rpg-audio / handleCoins.ogg
+  drop.ogg         <- kenney_rpg-audio / dropLeather.ogg
+  use_item.ogg     <- kenney_digital-audio / powerUp7.ogg
+  talk.ogg         <- kenney_interface-sounds / select_003.ogg
+  map_open.ogg     <- kenney_rpg-audio / bookOpen.ogg
+  room_enter.ogg   <- kenney_rpg-audio / doorOpen_1.ogg
+
+--- Combat (assets/audio/sfx/combat/) ---
+  attack.ogg       <- kenney_rpg-audio / drawKnife2.ogg
+  hit.ogg          <- kenney_impact-sounds / impactPunch_medium_000.ogg
+  miss.ogg         <- kenney_digital-audio / phaserDown1.ogg
+  heal.ogg         <- kenney_digital-audio / powerUp1.ogg
+  skill.ogg        <- kenney_digital-audio / phaseJump3.ogg
+  battle_start.ogg <- kenney_digital-audio / threeTone1.ogg
+  victory.ogg      <- kenney_digital-audio / powerUp12.ogg
+  defeat.ogg       <- kenney_digital-audio / lowThreeTone.ogg
+  flee.ogg         <- kenney_rpg-audio / footstep08.ogg
+  status.ogg       <- kenney_digital-audio / tone1.ogg
+
+--- BGM (assets/audio/bgm/) ---
+Shipped files are 8-bit chiptune rearrangements via audio8bit
+(transcribe + chords preferred — denser harmony than pitch/lead).
+Source recordings are public-domain / CC0 classical; trimmed masters live in
+tool/audio_sources/bgm_classical_trimmed/. Raw downloads + full credits:
+tool/audio_sources/bgm_classical_raw/SOURCES.json.
+Re-run: python tool/convert_bgm_8bit.py (needs tool/venv311 + ffmpeg/ffprobe).
+
+Note: audio8bit defaults to PolyForm Noncommercial — review before commercial
+distribution of the derived chip tracks.
+
+  home.ogg       <- Satie Gymnopédie No.1 — Commons CC0
+  prologue.ogg   <- Holst Venus — U.S. Air Force Band (PD-USGov)
+  surface.ogg    <- Grieg Morning Mood — Musopen Symphony (PD)
+  cave.ogg       <- Holst Neptune — 1923 Holst/LSO (PD)
+  tower.ogg      <- Mussorgsky Night on Bald Mountain — Musopen (PD)
+  site.ogg       <- Holst Mars — Musopen (PD)
+  combat.ogg     <- Beethoven Symphony No.5 I — Musopen (PD)
+  ending.ogg     <- Beethoven Moonlight Sonata I — Paul Pitman / Musopen (PD)
+
+Windows: PCM .wav (mono 22.05 kHz) under windows/audio/ (not shipped in Android AAB).

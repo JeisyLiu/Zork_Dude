@@ -1,0 +1,556 @@
+[
+  {
+    "id": "giant_rat",
+    "name": "大鼠",
+    "desc": "體型如狗的大老鼠，紅著眼睛。",
+    "hp": 8,
+    "atk": 2,
+    "exp": 5,
+    "gold": 3,
+    "loot": [
+      "mushroom"
+    ],
+    "emoji": "🐀"
+  },
+  {
+    "id": "wolf",
+    "name": "大狼",
+    "desc": "皮毛灰黑的巨狼，眼中閃著綠光。",
+    "hp": 14,
+    "atk": 4,
+    "defense": 1,
+    "exp": 12,
+    "gold": 8,
+    "loot": [
+      "wolf_tooth",
+      "dried_meat"
+    ],
+    "emoji": "🐺"
+  },
+  {
+    "id": "giant_spider",
+    "name": "大蜘蛛",
+    "desc": "毛茸茸的洞穴蜘蛛，八隻眼睛盯著你。",
+    "hp": 18,
+    "atk": 5,
+    "defense": 1,
+    "exp": 15,
+    "gold": 10,
+    "loot": [
+      "spider_silk"
+    ],
+    "on_hit_effects": [
+      {
+        "effect": "poison",
+        "duration": 3,
+        "potency": 1,
+        "chance": 0.35
+      }
+    ],
+    "emoji": "🕷️"
+  },
+  {
+    "id": "stone_golem",
+    "name": "石像鬼",
+    "desc": "由岩石構成的石像鬼，眼中紅光閃爍。",
+    "hp": 30,
+    "atk": 7,
+    "defense": 3,
+    "rank": "ELITE",
+    "exp": 30,
+    "gold": 20,
+    "loot": [
+      "emerald",
+      "chain_armor"
+    ],
+    "emoji": "🗿"
+  },
+  {
+    "id": "ghost",
+    "name": "幽靈",
+    "desc": "半透明的靈體，散發著寒氣。",
+    "hp": 12,
+    "atk": 6,
+    "defense": 0,
+    "exp": 15,
+    "gold": 5,
+    "loot": [
+      "old_coin"
+    ],
+    "hostile": true,
+    "emoji": "👻"
+  },
+  {
+    "id": "shadow_beast",
+    "name": "影獸",
+    "desc": "由黑暗凝聚而成的野獸，只有一雙紅眼清晰可見。",
+    "hp": 22,
+    "atk": 6,
+    "defense": 1,
+    "exp": 20,
+    "gold": 12,
+    "loot": [
+      "shadow_blade"
+    ],
+    "emoji": "🌑"
+  },
+  {
+    "id": "forest_troll",
+    "name": "森林巨魔",
+    "desc": "三米高的巨魔，皮膚如樹皮般粗糙。",
+    "hp": 35,
+    "atk": 8,
+    "defense": 2,
+    "rank": "ELITE",
+    "exp": 35,
+    "gold": 25,
+    "loot": [
+      "iron_sword",
+      "dried_meat"
+    ],
+    "emoji": "👹"
+  },
+  {
+    "id": "dragon_whelp",
+    "name": "幼龍",
+    "desc": "沉睡多年的幼龍，鱗片如黑曜石般閃光。",
+    "hp": 60,
+    "atk": 12,
+    "defense": 5,
+    "rank": "BOSS",
+    "exp": 100,
+    "gold": 100,
+    "loot": [
+      "diamond",
+      "magic_gem",
+      "magic_staff",
+      "charge_charm"
+    ],
+    "dialog": {
+      "taunt": "凡人，你不該來這裡！"
+    },
+    "emoji": "🐉"
+  },
+  {
+    "id": "goblin",
+    "name": "哥布林",
+    "desc": "綠皮膚的小個子，握著破刀，吱哇亂叫。",
+    "hp": 10,
+    "atk": 3,
+    "defense": 0,
+    "speed": 5,
+    "exp": 8,
+    "gold": 5,
+    "loot": [
+      "goblin_ear",
+      "old_coin"
+    ],
+    "emoji": "👺"
+  },
+  {
+    "id": "goblin_shaman",
+    "name": "哥布林薩滿",
+    "desc": "戴著骨製面具的哥布林，渾身散發著邪氣。",
+    "hp": 18,
+    "atk": 5,
+    "defense": 1,
+    "exp": 18,
+    "gold": 15,
+    "loot": [
+      "goblin_ear",
+      "mana_potion",
+      "mandrake_root"
+    ],
+    "emoji": "🧙"
+  },
+  {
+    "id": "giant_snake",
+    "name": "巨蟒",
+    "desc": "水桶粗的巨蟒，鱗片在黑暗中閃閃發光。",
+    "hp": 25,
+    "atk": 6,
+    "defense": 1,
+    "exp": 20,
+    "gold": 12,
+    "loot": [
+      "snake_skin"
+    ],
+    "emoji": "🐍"
+  },
+  {
+    "id": "bandit_leader",
+    "name": "強盜頭目",
+    "desc": "滿臉橫肉的獨眼大漢，握著一把染血的長劍。",
+    "hp": 28,
+    "atk": 7,
+    "defense": 2,
+    "rank": "ELITE",
+    "exp": 25,
+    "gold": 30,
+    "loot": [
+      "bandit_badge",
+      "iron_sword",
+      "old_coin"
+    ],
+    "emoji": "🏴‍☠️"
+  },
+  {
+    "id": "ice_elemental",
+    "name": "冰元素",
+    "desc": "由冰晶構成的人形生物，散發刺骨寒氣。",
+    "hp": 20,
+    "atk": 7,
+    "defense": 3,
+    "exp": 22,
+    "gold": 15,
+    "loot": [
+      "ice_crystal",
+      "mana_potion"
+    ],
+    "emoji": "❄️"
+  },
+  {
+    "id": "mimic",
+    "name": "寶箱怪",
+    "desc": "看起來是個華麗寶箱……但它有牙齒！",
+    "hp": 25,
+    "atk": 6,
+    "defense": 2,
+    "exp": 20,
+    "gold": 25,
+    "loot": [
+      "golden_cup",
+      "ruby",
+      "lockpick"
+    ],
+    "emoji": "📦"
+  },
+  {
+    "id": "treant",
+    "name": "樹精",
+    "desc": "古老的樹木活了過來，揮舞著藤蔓般的樹枝。",
+    "hp": 35,
+    "atk": 6,
+    "defense": 4,
+    "rank": "ELITE",
+    "exp": 30,
+    "gold": 20,
+    "loot": [
+      "magic_herb",
+      "mandrake_root"
+    ],
+    "emoji": "🌳"
+  },
+  {
+    "id": "giant_eagle",
+    "name": "大鷹",
+    "desc": "翼展五米的巨鷹，喙如鐵鉤，目光如炬。",
+    "hp": 22,
+    "atk": 8,
+    "defense": 1,
+    "exp": 20,
+    "gold": 10,
+    "loot": [
+      "phoenix_feather"
+    ],
+    "emoji": "🦅"
+  },
+  {
+    "id": "goblin_king",
+    "name": "哥布林王",
+    "desc": "體型是普通哥布林的三倍，頭戴骨冠，手持巨棒！",
+    "hp": 50,
+    "atk": 10,
+    "defense": 3,
+    "rank": "BOSS",
+    "speed": 7,
+    "ai": "boss",
+    "exp": 80,
+    "gold": 80,
+    "loot": [
+      "ancient_crown",
+      "war_hammer",
+      "rune_sword",
+      "strength_ring",
+      "charge_charm"
+    ],
+    "emoji": "👑"
+  },
+  {
+    "id": "wraith",
+    "name": "怨靈",
+    "desc": "半透明的人形怨靈，發出低沉的哭泣聲，所過之處結滿寒霜。",
+    "hp": 28,
+    "atk": 9,
+    "defense": 1,
+    "rank": "ELITE",
+    "exp": 35,
+    "gold": 18,
+    "loot": [
+      "moonlight_elixir",
+      "ancient_scroll"
+    ],
+    "dialog": {
+      "taunt": "你……也留下來陪我吧…"
+    },
+    "emoji": "😈"
+  },
+  {
+    "id": "basilisk",
+    "name": "石化蜥蜴",
+    "desc": "巨大的蜥蜴，背上長著紅色的冠，目光所及之處東西都會石化！",
+    "hp": 40,
+    "atk": 10,
+    "defense": 4,
+    "rank": "ELITE",
+    "exp": 50,
+    "gold": 40,
+    "loot": [
+      "thunder_hammer",
+      "dragon_scale",
+      "gold_ingot"
+    ],
+    "emoji": "🦎"
+  },
+  {
+    "id": "scp_sentry_drone",
+    "name": "保安無人機",
+    "desc": "基金會遺留的自動巡邏無人機，紅色掃描燈鎖定了你。",
+    "hp": 16,
+    "atk": 5,
+    "defense": 2,
+    "exp": 18,
+    "gold": 12,
+    "loot": [
+      "old_coin"
+    ],
+    "emoji": "🤖"
+  },
+  {
+    "id": "scp_mimic_clerk",
+    "name": "擬態職員",
+    "desc": "穿著基金會制服的……某種東西，臉部是一團模糊的肉塊。",
+    "hp": 24,
+    "atk": 7,
+    "defense": 1,
+    "rank": "ELITE",
+    "exp": 30,
+    "gold": 20,
+    "loot": [
+      "keycard_lvl3",
+      "amnesia_pill"
+    ],
+    "emoji": "👔"
+  },
+  {
+    "id": "scp_breach_core",
+    "name": "失控異常核心",
+    "desc": "收容柱碎裂後洩漏的異常實體，形狀不斷變化，空氣因它而扭曲。",
+    "hp": 55,
+    "atk": 12,
+    "defense": 3,
+    "rank": "BOSS",
+    "exp": 80,
+    "gold": 50,
+    "loot": [
+      "anomaly_core",
+      "bag_anomalous"
+    ],
+    "dialog": {
+      "taunt": "■■■……你……不該……在這裡……"
+    },
+    "emoji": "🌀"
+  },
+  {
+    "id": "scp_173",
+    "name": "混凝土雕塑(SCP-ZH-173)",
+    "desc": "沾滿紅漆與污物的人形雕塑。你眨眼時，它已經挪近了。",
+    "hp": 35,
+    "atk": 14,
+    "defense": 2,
+    "rank": "ELITE",
+    "exp": 45,
+    "gold": 25,
+    "loot": [
+      "old_coin",
+      "scp_447_slime"
+    ],
+    "emoji": "🗿"
+  },
+  {
+    "id": "scp_096",
+    "name": "害羞者(SCP-ZH-096)",
+    "desc": "蒼白瘦高的人形，雙手遮面。任何看見其臉的人都會被追殺。",
+    "hp": 70,
+    "atk": 16,
+    "defense": 1,
+    "rank": "BOSS",
+    "exp": 90,
+    "gold": 40,
+    "loot": [
+      "scp_148_telekill",
+      "greater_potion"
+    ],
+    "emoji": "🫣"
+  },
+  {
+    "id": "scp_106",
+    "name": "腐老人(SCP-ZH-106)",
+    "desc": "腐蝕性老人，能從牆壁滲出。所過之處金屬鏽蝕。",
+    "hp": 42,
+    "atk": 11,
+    "defense": 3,
+    "rank": "ELITE",
+    "exp": 55,
+    "gold": 30,
+    "loot": [
+      "scp_409_crystal",
+      "amnesia_pill"
+    ],
+    "emoji": "🧓"
+  },
+  {
+    "id": "scp_682",
+    "name": "不滅爬行者(SCP-ZH-682)",
+    "desc": "巨大的憎惡爬行生物，適應性極強。擊敗它後，通往001號終焉收容庫的門才會打開。",
+    "hp": 120,
+    "atk": 18,
+    "defense": 6,
+    "rank": "BOSS",
+    "exp": 150,
+    "gold": 100,
+    "loot": [
+      "anomaly_core",
+      "scp_500_pill",
+      "dragon_scale"
+    ],
+    "emoji": "🦎"
+  },
+  {
+    "id": "scp_001",
+    "name": "終焉原型(SCP-ZH-001)",
+    "desc": "站點最深處的收容失敗產物——所有異常的「原型」。這是基金會站點行動的最終威脅。",
+    "hp": 180,
+    "atk": 22,
+    "defense": 8,
+    "rank": "BOSS",
+    "exp": 250,
+    "gold": 200,
+    "loot": [
+      "site_clearance",
+      "anomaly_core",
+      "bag_anomalous",
+      "scp_500_pill"
+    ],
+    "dialog": {
+      "taunt": "……你看見的，只是開端。"
+    },
+    "emoji": "👁️‍🗨️"
+  },
+  {
+    "id": "scp_939",
+    "name": "多喉獵手(SCP-ZH-939)",
+    "desc": "無目紅色獵食者，能模仿人類呼救聲。",
+    "hp": 28,
+    "atk": 9,
+    "defense": 2,
+    "rank": "ELITE",
+    "exp": 35,
+    "gold": 18,
+    "loot": [
+      "dried_meat",
+      "scp_008_vial"
+    ],
+    "emoji": "🦷"
+  },
+  {
+    "id": "scp_966",
+    "name": "獵食潛影(SCP-ZH-966)",
+    "desc": "近乎隱形的人形，專在獵物疲憊時出手。",
+    "hp": 22,
+    "atk": 8,
+    "defense": 0,
+    "exp": 28,
+    "gold": 15,
+    "loot": [
+      "scp_178_glasses"
+    ],
+    "emoji": "👻"
+  },
+  {
+    "id": "scp_076",
+    "name": "亞伯(SCP-ZH-076)",
+    "desc": "黑髮戰士從石棺中醒來，手持骨刃，只想戰鬥。",
+    "hp": 50,
+    "atk": 13,
+    "defense": 3,
+    "rank": "ELITE",
+    "exp": 60,
+    "gold": 35,
+    "loot": [
+      "rune_sword",
+      "scp_714_ring"
+    ],
+    "emoji": "⚔️"
+  },
+  {
+    "id": "scp_017",
+    "name": "影人(SCP-ZH-017)",
+    "desc": "絕對黑暗的人形剪影，吞噬一切照到它的光。",
+    "hp": 20,
+    "atk": 7,
+    "defense": 1,
+    "exp": 22,
+    "gold": 12,
+    "loot": [
+      "scp_205_lamp"
+    ],
+    "emoji": "🌑"
+  },
+  {
+    "id": "scp_1048",
+    "name": "建築熊(SCP-ZH-1048)",
+    "desc": "看似無害的棕色泰迪熊，關節處滲出不明物質。",
+    "hp": 26,
+    "atk": 8,
+    "defense": 2,
+    "rank": "ELITE",
+    "exp": 32,
+    "gold": 20,
+    "loot": [
+      "scp_1230_book",
+      "old_coin"
+    ],
+    "emoji": "🧸"
+  },
+  {
+    "id": "scp_372",
+    "name": "余光人(SCP-ZH-372)",
+    "desc": "永遠停在視野邊緣的生物，你一轉頭它就消失。",
+    "hp": 18,
+    "atk": 6,
+    "defense": 0,
+    "exp": 20,
+    "gold": 10,
+    "loot": [
+      "scp_055_object"
+    ],
+    "emoji": "👁️"
+  },
+  {
+    "id": "scp_3199",
+    "name": "人類否(SCP-ZH-3199)",
+    "desc": "類人卵生掠食者，尖嘯刺耳。",
+    "hp": 32,
+    "atk": 10,
+    "defense": 2,
+    "rank": "ELITE",
+    "exp": 40,
+    "gold": 22,
+    "loot": [
+      "scp_008_vial",
+      "lesser_potion"
+    ],
+    "emoji": "🥚"
+  }
+]

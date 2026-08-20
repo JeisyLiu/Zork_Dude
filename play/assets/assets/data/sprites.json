@@ -1,0 +1,953 @@
+{
+  "player": {
+    "sheet": "assets/images/sprites/player.png",
+    "frame_size": 64,
+    "columns": 8,
+    "rows": 4,
+    "step_ms": 120,
+    "clips": {
+      "idle": {
+        "row": 0,
+        "frames": 8,
+        "loop": true
+      },
+      "attack": {
+        "row": 1,
+        "frames": 8,
+        "loop": false
+      },
+      "damaged": {
+        "row": 2,
+        "frames": 8,
+        "loop": false
+      },
+      "victory": {
+        "row": 3,
+        "frames": 8,
+        "loop": false
+      }
+    }
+  },
+  "giant_rat": {
+    "sheet": "assets/images/sprites/giant_rat.png",
+    "frame_size": 64,
+    "columns": 8,
+    "rows": 2,
+    "step_ms": 120,
+    "clips": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "loop": false
+      },
+      "attack": {
+        "row": 0,
+        "frames": 8,
+        "loop": false
+      },
+      "damaged": {
+        "row": 1,
+        "frames": 8,
+        "loop": false
+      }
+    }
+  },
+  "wolf": {
+    "sheet": "assets/images/sprites/wolf.png",
+    "frame_size": 64,
+    "columns": 8,
+    "rows": 2,
+    "step_ms": 120,
+    "clips": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "loop": false
+      },
+      "attack": {
+        "row": 0,
+        "frames": 8,
+        "loop": false
+      },
+      "damaged": {
+        "row": 1,
+        "frames": 8,
+        "loop": false
+      }
+    }
+  },
+  "giant_spider": {
+    "sheet": "assets/images/sprites/giant_spider.png",
+    "frame_size": 64,
+    "columns": 8,
+    "rows": 2,
+    "step_ms": 120,
+    "clips": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "loop": false
+      },
+      "attack": {
+        "row": 0,
+        "frames": 8,
+        "loop": false
+      },
+      "damaged": {
+        "row": 1,
+        "frames": 8,
+        "loop": false
+      }
+    }
+  },
+  "ghost": {
+    "sheet": "assets/images/sprites/ghost.png",
+    "frame_size": 64,
+    "columns": 8,
+    "rows": 2,
+    "step_ms": 120,
+    "clips": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "loop": false
+      },
+      "attack": {
+        "row": 0,
+        "frames": 8,
+        "loop": false
+      },
+      "damaged": {
+        "row": 1,
+        "frames": 8,
+        "loop": false
+      }
+    }
+  },
+  "shadow_beast": {
+    "sheet": "assets/images/sprites/shadow_beast.png",
+    "frame_size": 64,
+    "columns": 8,
+    "rows": 2,
+    "step_ms": 120,
+    "clips": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "loop": false
+      },
+      "attack": {
+        "row": 0,
+        "frames": 8,
+        "loop": false
+      },
+      "damaged": {
+        "row": 1,
+        "frames": 8,
+        "loop": false
+      }
+    }
+  },
+  "goblin": {
+    "sheet": "assets/images/sprites/goblin.png",
+    "frame_size": 64,
+    "columns": 8,
+    "rows": 2,
+    "step_ms": 120,
+    "clips": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "loop": false
+      },
+      "attack": {
+        "row": 0,
+        "frames": 8,
+        "loop": false
+      },
+      "damaged": {
+        "row": 1,
+        "frames": 8,
+        "loop": false
+      }
+    }
+  },
+  "goblin_shaman": {
+    "sheet": "assets/images/sprites/goblin_shaman.png",
+    "frame_size": 64,
+    "columns": 8,
+    "rows": 2,
+    "step_ms": 120,
+    "clips": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "loop": false
+      },
+      "attack": {
+        "row": 0,
+        "frames": 8,
+        "loop": false
+      },
+      "damaged": {
+        "row": 1,
+        "frames": 8,
+        "loop": false
+      }
+    }
+  },
+  "companion_warrior": {
+    "sheet": "assets/images/sprites/companion_warrior.png",
+    "frame_size": 64,
+    "columns": 8,
+    "rows": 3,
+    "step_ms": 120,
+    "clips": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "loop": false
+      },
+      "attack": {
+        "row": 0,
+        "frames": 8,
+        "loop": false
+      },
+      "damaged": {
+        "row": 1,
+        "frames": 8,
+        "loop": false
+      },
+      "victory": {
+        "row": 2,
+        "frames": 8,
+        "loop": false
+      }
+    }
+  },
+  "companion_rogue": {
+    "sheet": "assets/images/sprites/companion_rogue.png",
+    "frame_size": 64,
+    "columns": 8,
+    "rows": 3,
+    "step_ms": 120,
+    "clips": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "loop": false
+      },
+      "attack": {
+        "row": 0,
+        "frames": 8,
+        "loop": false
+      },
+      "damaged": {
+        "row": 1,
+        "frames": 8,
+        "loop": false
+      },
+      "victory": {
+        "row": 2,
+        "frames": 8,
+        "loop": false
+      }
+    }
+  },
+  "companion_mage": {
+    "sheet": "assets/images/sprites/companion_mage.png",
+    "frame_size": 64,
+    "columns": 8,
+    "rows": 3,
+    "step_ms": 120,
+    "clips": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "loop": false
+      },
+      "attack": {
+        "row": 0,
+        "frames": 8,
+        "loop": false
+      },
+      "damaged": {
+        "row": 1,
+        "frames": 8,
+        "loop": false
+      },
+      "victory": {
+        "row": 2,
+        "frames": 8,
+        "loop": false
+      }
+    }
+  },
+  "companion_healer": {
+    "sheet": "assets/images/sprites/companion_healer.png",
+    "frame_size": 64,
+    "columns": 8,
+    "rows": 3,
+    "step_ms": 120,
+    "clips": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "loop": false
+      },
+      "attack": {
+        "row": 0,
+        "frames": 8,
+        "loop": false
+      },
+      "damaged": {
+        "row": 1,
+        "frames": 8,
+        "loop": false
+      },
+      "victory": {
+        "row": 2,
+        "frames": 8,
+        "loop": false
+      }
+    }
+  },
+  "companion_scout": {
+    "sheet": "assets/images/sprites/companion_scout.png",
+    "frame_size": 64,
+    "columns": 8,
+    "rows": 3,
+    "step_ms": 120,
+    "clips": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "loop": false
+      },
+      "attack": {
+        "row": 0,
+        "frames": 8,
+        "loop": false
+      },
+      "damaged": {
+        "row": 1,
+        "frames": 8,
+        "loop": false
+      },
+      "victory": {
+        "row": 2,
+        "frames": 8,
+        "loop": false
+      }
+    }
+  },
+  "companion_archer": {
+    "sheet": "assets/images/sprites/companion_archer.png",
+    "frame_size": 64,
+    "columns": 8,
+    "rows": 3,
+    "step_ms": 120,
+    "clips": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "loop": false
+      },
+      "attack": {
+        "row": 0,
+        "frames": 8,
+        "loop": false
+      },
+      "damaged": {
+        "row": 1,
+        "frames": 8,
+        "loop": false
+      },
+      "victory": {
+        "row": 2,
+        "frames": 8,
+        "loop": false
+      }
+    }
+  },
+  "companion_monk": {
+    "sheet": "assets/images/sprites/companion_monk.png",
+    "frame_size": 64,
+    "columns": 8,
+    "rows": 3,
+    "step_ms": 120,
+    "clips": {
+      "idle": {
+        "row": 0,
+        "frames": 1,
+        "loop": false
+      },
+      "attack": {
+        "row": 0,
+        "frames": 8,
+        "loop": false
+      },
+      "damaged": {
+        "row": 1,
+        "frames": 8,
+        "loop": false
+      },
+      "victory": {
+        "row": 2,
+        "frames": 8,
+        "loop": false
+      }
+    }
+  },
+  "dragon_whelp": {
+    "sheet": "assets/images/sprites/dragon_whelp.png",
+    "frame_size": 64,
+    "columns": 8,
+    "rows": 4,
+    "step_ms": 120,
+    "clips": {
+      "idle": {
+        "row": 0,
+        "frames": 8,
+        "loop": true
+      },
+      "attack": {
+        "row": 1,
+        "frames": 8,
+        "loop": false
+      },
+      "damaged": {
+        "row": 2,
+        "frames": 8,
+        "loop": false
+      },
+      "victory": {
+        "row": 3,
+        "frames": 8,
+        "loop": false
+      }
+    }
+  },
+  "goblin_king": {
+    "sheet": "assets/images/sprites/goblin_king.png",
+    "frame_size": 64,
+    "columns": 8,
+    "rows": 4,
+    "step_ms": 120,
+    "clips": {
+      "idle": {
+        "row": 0,
+        "frames": 8,
+        "loop": true
+      },
+      "attack": {
+        "row": 1,
+        "frames": 8,
+        "loop": false
+      },
+      "damaged": {
+        "row": 2,
+        "frames": 8,
+        "loop": false
+      },
+      "victory": {
+        "row": 3,
+        "frames": 8,
+        "loop": false
+      }
+    }
+  },
+  "scp_breach_core": {
+    "sheet": "assets/images/sprites/scp_breach_core.png",
+    "frame_size": 64,
+    "columns": 8,
+    "rows": 4,
+    "step_ms": 120,
+    "clips": {
+      "idle": {
+        "row": 0,
+        "frames": 8,
+        "loop": true
+      },
+      "attack": {
+        "row": 1,
+        "frames": 8,
+        "loop": false
+      },
+      "damaged": {
+        "row": 2,
+        "frames": 8,
+        "loop": false
+      },
+      "victory": {
+        "row": 3,
+        "frames": 8,
+        "loop": false
+      }
+    }
+  },
+  "scp_096": {
+    "sheet": "assets/images/sprites/scp_096.png",
+    "frame_size": 64,
+    "columns": 8,
+    "rows": 4,
+    "step_ms": 120,
+    "clips": {
+      "idle": {
+        "row": 0,
+        "frames": 8,
+        "loop": true
+      },
+      "attack": {
+        "row": 1,
+        "frames": 8,
+        "loop": false
+      },
+      "damaged": {
+        "row": 2,
+        "frames": 8,
+        "loop": false
+      },
+      "victory": {
+        "row": 3,
+        "frames": 8,
+        "loop": false
+      }
+    }
+  },
+  "scp_682": {
+    "sheet": "assets/images/sprites/scp_682.png",
+    "frame_size": 64,
+    "columns": 8,
+    "rows": 4,
+    "step_ms": 120,
+    "clips": {
+      "idle": {
+        "row": 0,
+        "frames": 8,
+        "loop": true
+      },
+      "attack": {
+        "row": 1,
+        "frames": 8,
+        "loop": false
+      },
+      "damaged": {
+        "row": 2,
+        "frames": 8,
+        "loop": false
+      },
+      "victory": {
+        "row": 3,
+        "frames": 8,
+        "loop": false
+      }
+    }
+  },
+  "scp_001": {
+    "sheet": "assets/images/sprites/scp_001.png",
+    "frame_size": 64,
+    "columns": 8,
+    "rows": 4,
+    "step_ms": 120,
+    "clips": {
+      "idle": {
+        "row": 0,
+        "frames": 8,
+        "loop": true
+      },
+      "attack": {
+        "row": 1,
+        "frames": 8,
+        "loop": false
+      },
+      "damaged": {
+        "row": 2,
+        "frames": 8,
+        "loop": false
+      },
+      "victory": {
+        "row": 3,
+        "frames": 8,
+        "loop": false
+      }
+    }
+  },
+  "stone_golem": {
+    "sheet": "assets/images/sprites/stone_golem.png",
+    "frame_size": 64,
+    "columns": 8,
+    "rows": 4,
+    "step_ms": 120,
+    "clips": {
+      "idle": {
+        "row": 0,
+        "frames": 8,
+        "loop": true
+      },
+      "attack": {
+        "row": 1,
+        "frames": 8,
+        "loop": false
+      },
+      "damaged": {
+        "row": 2,
+        "frames": 8,
+        "loop": false
+      },
+      "victory": {
+        "row": 3,
+        "frames": 8,
+        "loop": false
+      }
+    }
+  },
+  "forest_troll": {
+    "sheet": "assets/images/sprites/forest_troll.png",
+    "frame_size": 64,
+    "columns": 8,
+    "rows": 4,
+    "step_ms": 120,
+    "clips": {
+      "idle": {
+        "row": 0,
+        "frames": 8,
+        "loop": true
+      },
+      "attack": {
+        "row": 1,
+        "frames": 8,
+        "loop": false
+      },
+      "damaged": {
+        "row": 2,
+        "frames": 8,
+        "loop": false
+      },
+      "victory": {
+        "row": 3,
+        "frames": 8,
+        "loop": false
+      }
+    }
+  },
+  "bandit_leader": {
+    "sheet": "assets/images/sprites/bandit_leader.png",
+    "frame_size": 64,
+    "columns": 8,
+    "rows": 4,
+    "step_ms": 120,
+    "clips": {
+      "idle": {
+        "row": 0,
+        "frames": 8,
+        "loop": true
+      },
+      "attack": {
+        "row": 1,
+        "frames": 8,
+        "loop": false
+      },
+      "damaged": {
+        "row": 2,
+        "frames": 8,
+        "loop": false
+      },
+      "victory": {
+        "row": 3,
+        "frames": 8,
+        "loop": false
+      }
+    }
+  },
+  "treant": {
+    "sheet": "assets/images/sprites/treant.png",
+    "frame_size": 64,
+    "columns": 8,
+    "rows": 4,
+    "step_ms": 120,
+    "clips": {
+      "idle": {
+        "row": 0,
+        "frames": 8,
+        "loop": true
+      },
+      "attack": {
+        "row": 1,
+        "frames": 8,
+        "loop": false
+      },
+      "damaged": {
+        "row": 2,
+        "frames": 8,
+        "loop": false
+      },
+      "victory": {
+        "row": 3,
+        "frames": 8,
+        "loop": false
+      }
+    }
+  },
+  "wraith": {
+    "sheet": "assets/images/sprites/wraith.png",
+    "frame_size": 64,
+    "columns": 8,
+    "rows": 4,
+    "step_ms": 120,
+    "clips": {
+      "idle": {
+        "row": 0,
+        "frames": 8,
+        "loop": true
+      },
+      "attack": {
+        "row": 1,
+        "frames": 8,
+        "loop": false
+      },
+      "damaged": {
+        "row": 2,
+        "frames": 8,
+        "loop": false
+      },
+      "victory": {
+        "row": 3,
+        "frames": 8,
+        "loop": false
+      }
+    }
+  },
+  "basilisk": {
+    "sheet": "assets/images/sprites/basilisk.png",
+    "frame_size": 64,
+    "columns": 8,
+    "rows": 4,
+    "step_ms": 120,
+    "clips": {
+      "idle": {
+        "row": 0,
+        "frames": 8,
+        "loop": true
+      },
+      "attack": {
+        "row": 1,
+        "frames": 8,
+        "loop": false
+      },
+      "damaged": {
+        "row": 2,
+        "frames": 8,
+        "loop": false
+      },
+      "victory": {
+        "row": 3,
+        "frames": 8,
+        "loop": false
+      }
+    }
+  },
+  "scp_mimic_clerk": {
+    "sheet": "assets/images/sprites/scp_mimic_clerk.png",
+    "frame_size": 64,
+    "columns": 8,
+    "rows": 4,
+    "step_ms": 120,
+    "clips": {
+      "idle": {
+        "row": 0,
+        "frames": 8,
+        "loop": true
+      },
+      "attack": {
+        "row": 1,
+        "frames": 8,
+        "loop": false
+      },
+      "damaged": {
+        "row": 2,
+        "frames": 8,
+        "loop": false
+      },
+      "victory": {
+        "row": 3,
+        "frames": 8,
+        "loop": false
+      }
+    }
+  },
+  "scp_173": {
+    "sheet": "assets/images/sprites/scp_173.png",
+    "frame_size": 64,
+    "columns": 8,
+    "rows": 4,
+    "step_ms": 120,
+    "clips": {
+      "idle": {
+        "row": 0,
+        "frames": 8,
+        "loop": true
+      },
+      "attack": {
+        "row": 1,
+        "frames": 8,
+        "loop": false
+      },
+      "damaged": {
+        "row": 2,
+        "frames": 8,
+        "loop": false
+      },
+      "victory": {
+        "row": 3,
+        "frames": 8,
+        "loop": false
+      }
+    }
+  },
+  "scp_106": {
+    "sheet": "assets/images/sprites/scp_106.png",
+    "frame_size": 64,
+    "columns": 8,
+    "rows": 4,
+    "step_ms": 120,
+    "clips": {
+      "idle": {
+        "row": 0,
+        "frames": 8,
+        "loop": true
+      },
+      "attack": {
+        "row": 1,
+        "frames": 8,
+        "loop": false
+      },
+      "damaged": {
+        "row": 2,
+        "frames": 8,
+        "loop": false
+      },
+      "victory": {
+        "row": 3,
+        "frames": 8,
+        "loop": false
+      }
+    }
+  },
+  "scp_939": {
+    "sheet": "assets/images/sprites/scp_939.png",
+    "frame_size": 64,
+    "columns": 8,
+    "rows": 4,
+    "step_ms": 120,
+    "clips": {
+      "idle": {
+        "row": 0,
+        "frames": 8,
+        "loop": true
+      },
+      "attack": {
+        "row": 1,
+        "frames": 8,
+        "loop": false
+      },
+      "damaged": {
+        "row": 2,
+        "frames": 8,
+        "loop": false
+      },
+      "victory": {
+        "row": 3,
+        "frames": 8,
+        "loop": false
+      }
+    }
+  },
+  "scp_076": {
+    "sheet": "assets/images/sprites/scp_076.png",
+    "frame_size": 64,
+    "columns": 8,
+    "rows": 4,
+    "step_ms": 120,
+    "clips": {
+      "idle": {
+        "row": 0,
+        "frames": 8,
+        "loop": true
+      },
+      "attack": {
+        "row": 1,
+        "frames": 8,
+        "loop": false
+      },
+      "damaged": {
+        "row": 2,
+        "frames": 8,
+        "loop": false
+      },
+      "victory": {
+        "row": 3,
+        "frames": 8,
+        "loop": false
+      }
+    }
+  },
+  "scp_1048": {
+    "sheet": "assets/images/sprites/scp_1048.png",
+    "frame_size": 64,
+    "columns": 8,
+    "rows": 4,
+    "step_ms": 120,
+    "clips": {
+      "idle": {
+        "row": 0,
+        "frames": 8,
+        "loop": true
+      },
+      "attack": {
+        "row": 1,
+        "frames": 8,
+        "loop": false
+      },
+      "damaged": {
+        "row": 2,
+        "frames": 8,
+        "loop": false
+      },
+      "victory": {
+        "row": 3,
+        "frames": 8,
+        "loop": false
+      }
+    }
+  },
+  "scp_3199": {
+    "sheet": "assets/images/sprites/scp_3199.png",
+    "frame_size": 64,
+    "columns": 8,
+    "rows": 4,
+    "step_ms": 120,
+    "clips": {
+      "idle": {
+        "row": 0,
+        "frames": 8,
+        "loop": true
+      },
+      "attack": {
+        "row": 1,
+        "frames": 8,
+        "loop": false
+      },
+      "damaged": {
+        "row": 2,
+        "frames": 8,
+        "loop": false
+      },
+      "victory": {
+        "row": 3,
+        "frames": 8,
+        "loop": false
+      }
+    }
+  }
+}

@@ -1,0 +1,486 @@
+[
+  {
+    "id": "old_hermit",
+    "name": "Old Hermit",
+    "title": "Guardiano della Foresta Nebbiosa",
+    "desc": "Un vecchio dai capelli bianchi con la saggezza negli occhi.",
+    "type": "WISEMAN",
+    "dialogs": {
+      "greet": "Finalmente ti sei svegliato... ti aspettavo da molto tempo.",
+      "extra": "Ricorda, la torre contiene tutte le risposte.",
+      "farewell": "Possa la luce guidarti."
+    },
+    "give_item": "journal",
+    "quest_item": "magic_gem",
+    "quest_reward": "greater_potion",
+    "quest_score": 40,
+    "emoji": "🧙",
+    "ability_desc": "Staff strike, attack +3, defense +2"
+  },
+  {
+    "id": "wandering_merchant",
+    "name": "commerciante errante",
+    "title": "Mercanti itineranti",
+    "desc": "Un uomo basso e grasso di mezza età con ogni genere di merce appesa sul corpo.",
+    "type": "MERCHANT",
+    "dialogs": {
+      "greet": "Eheh, giusto in tempo! Dai un'occhiata alla mia merce.",
+      "extra": "Sono tutti beni buoni, non importa quanto siano buoni!",
+      "farewell": "Vieni di nuovo la prossima volta!"
+    },
+    "trade_items": [
+      [
+        "lesser_potion",
+        8
+      ],
+      [
+        "torch",
+        3
+      ],
+      [
+        "bread",
+        2
+      ],
+      [
+        "dried_meat",
+        4
+      ],
+      [
+        "rope",
+        3
+      ],
+      [
+        "iron_sword",
+        15
+      ],
+      [
+        "leather_armor",
+        12
+      ],
+      [
+        "elven_bow",
+        25
+      ],
+      [
+        "focus_draught",
+        18
+      ],
+      [
+        "battle_stim",
+        32
+      ]
+    ],
+    "buys_types": [
+      "TREASURE",
+      "MATERIAL",
+      "MINERAL"
+    ],
+    "emoji": "🛒"
+  },
+  {
+    "id": "village_elder",
+    "name": "capo villaggio",
+    "title": "Il capo del Lakeside Village",
+    "desc": "Un vecchio gentile con in mano un bastone.",
+    "type": "QUEST",
+    "dialogs": {
+      "greet": "Straniero, benvenuto al Lakeside Village.",
+      "quest": "La chiave d'argento è al centro della grotta e la tua memoria è nascosta nella torre: vai prima alla grotta, poi sali sulla torre.",
+      "extra": "Dopo aver ripulito l'accampamento dei banditi a sud, torna e ci sarà un regalo di ringraziamento nel villaggio.",
+      "farewell": "Che Dio ti benedica."
+    },
+    "quest_item": "sacred_water",
+    "quest_reward": "greater_potion",
+    "quest_score": 25,
+    "emoji": "👴"
+  },
+  {
+    "id": "healer_lily",
+    "name": "Giglio",
+    "title": "Dottor You Fang",
+    "desc": "Una giovane donna che porta una scatola di medicinali ha un sorriso caloroso.",
+    "type": "HEALER",
+    "dialogs": {
+      "greet": "Sei ferito? Vi posso aiutare.",
+      "extra": "State al sicuro, avventurieri.",
+      "farewell": "Prendersi cura di se stessi."
+    },
+    "emoji": "💚"
+  },
+  {
+    "id": "wandering_rogue",
+    "name": "Shadow",
+    "title": "misterioso vagabondo",
+    "desc": "Una figura ammantata il cui volto non poteva essere visto chiaramente.",
+    "type": "WANDERER",
+    "dialogs": {
+      "greet": "...Anche tu ti sei perso in questa nebbia?",
+      "extra": "Il mondo è più complesso di quanto pensi.",
+      "farewell": "Arrivederci."
+    },
+    "give_item": "shadow_blade",
+    "emoji": "🥷",
+    "ability_desc": "Sneak attack, attack +2, 40% chance of bonus damage"
+  },
+  {
+    "id": "tower_guardian",
+    "name": "Raccontare",
+    "title": "Guardia Magica della Torre",
+    "desc": "Una figura umana fatta di luce, con un suono simile a quello di una campana.",
+    "type": "GUARDIAN",
+    "dialogs": {
+      "greet": "Chi entra nella torre deve dimostrare il proprio valore.",
+      "quest": "Raccogli tre oggetti sacri: chiave d'argento, chiave di cristallo e acqua santa.",
+      "extra": "Solo i puri possono passare.",
+      "farewell": "…"
+    },
+    "quest_item": "crystal_key",
+    "quest_reward": "magic_scroll",
+    "quest_score": 30,
+    "emoji": "✨"
+  },
+  {
+    "id": "innkeeper",
+    "name": "vecchio Tom",
+    "title": "Il proprietario della Taverna della Nebbia",
+    "desc": "Un uomo grasso e paffuto con un sorriso permanente sul viso.",
+    "type": "INNKEEPER",
+    "dialogs": {
+      "greet": "Benvenuti alla Taverna della Nebbia! Vuoi qualcosa?",
+      "extra": "Ho sentito che ultimamente la foresta non è tranquilla, quindi faresti meglio a stare attento.",
+      "farewell": "Cammina lentamente!"
+    },
+    "give_item": "fish",
+    "emoji": "🍺"
+  },
+  {
+    "id": "blacksmith",
+    "name": "incudine",
+    "title": "proprietario di una bottega di fabbro",
+    "desc": "Un uomo muscoloso, che indossa un grembiule di pelle e tiene in mano un martello.",
+    "type": "BLACKSMITH",
+    "dialogs": {
+      "greet": "Hai bisogno di armi o armature? Il mio artigianato è il migliore nel raggio di cento miglia!",
+      "extra": "Se hai buoni materiali, posso aiutarti a costruire l'attrezzatura.",
+      "farewell": "Porta i materiali la prossima volta!"
+    },
+    "trade_items": [
+      [
+        "iron_sword",
+        12
+      ],
+      [
+        "war_hammer",
+        35
+      ],
+      [
+        "spear",
+        18
+      ],
+      [
+        "scale_armor",
+        40
+      ],
+      [
+        "shield",
+        15
+      ],
+      [
+        "helmet",
+        8
+      ],
+      [
+        "crossbow",
+        30
+      ]
+    ],
+    "buys_types": [
+      "MATERIAL",
+      "MINERAL"
+    ],
+    "emoji": "⚒️"
+  },
+  {
+    "id": "hunter",
+    "name": "Old Hunter",
+    "title": "cacciatore esperto",
+    "desc": "Un vecchio che indossa un mantello di pelle di animale e porta un lungo arco.",
+    "type": "HUNTER",
+    "dialogs": {
+      "greet": "Ehm? Non sei del posto.",
+      "quest": "Recentemente ci sono stati sempre più goblin nella foresta... puoi aiutarmi a eliminarne alcuni?",
+      "extra": "Posso insegnarti alcune tecniche di caccia.",
+      "farewell": "essere al sicuro."
+    },
+    "quest_item": "goblin_ear",
+    "quest_reward": "elven_bow",
+    "quest_score": 25,
+    "emoji": "🏹",
+    "ability_desc": "Scout agility, attack +1, reveals enemy weaknesses in combat"
+  },
+  {
+    "id": "priestess",
+    "name": "White-robed Priestess",
+    "title": "Sacerdote del Tempio della Luce",
+    "desc": "Una bellissima donna che indossa una veste bianca, circondata da una debole aureola.",
+    "type": "PRIESTESS",
+    "dialogs": {
+      "greet": "Possa la luce guidare il tuo cammino.",
+      "extra": "Se hai l'acqua santa, posso aiutarti a purificarla.",
+      "farewell": "La luce è con te."
+    },
+    "give_item": "lesser_potion",
+    "quest_item": "phoenix_feather",
+    "quest_reward": "health_ring",
+    "quest_score": 35,
+    "emoji": "🕊️",
+    "ability_desc": "Healing support, restores HP each turn, defense +1, max HP +15"
+  },
+  {
+    "id": "mad_alchemist",
+    "name": "monaco pazzo",
+    "title": "L'alchimista solitario",
+    "desc": "Uno strano uomo con una veste trasandata, con una montagna di bottiglie e lattine nel laboratorio.",
+    "type": "WISEMAN",
+    "dialogs": {
+      "greet": "Prodotto sperimentale! No, intendo... ospiti!",
+      "extra": "Lo sapevate? La polvere di scaglie di drago e l'erba al chiaro di luna possono essere utilizzate per affinare la pozione più potente!",
+      "farewell": "La prossima volta porta con te del materiale interessante!"
+    },
+    "give_item": "mana_potion",
+    "quest_item": "dragon_scale",
+    "quest_reward": "protection_ring",
+    "quest_score": 30,
+    "emoji": "🧪"
+  },
+  {
+    "id": "gravedigger",
+    "name": "vecchio becchino",
+    "title": "vecchio a guardia della tomba",
+    "desc": "Un vecchio con la gobba, una pala in mano e uno strano sguardo negli occhi.",
+    "type": "WANDERER",
+    "dialogs": {
+      "greet": "Cosa fai al cimitero? Questo non è un posto dove passeggiare...",
+      "extra": "Ho sentito che ci sono cose buone sepolte sottoterra, ma non posso tirarle fuori con le mie vecchie ossa.",
+      "farewell": "Fai attenzione allo sporco su cui calpesti... parte si sposterà."
+    },
+    "give_item": "old_coin",
+    "emoji": "🪦"
+  },
+  {
+    "id": "bounty_hunter",
+    "name": "Bounty Hunter",
+    "title": "spietato cacciatore di taglie",
+    "desc": "Un mercenario solitario in armatura nera con una profonda cicatrice sul viso e una fila di trofei appesi alla vita.",
+    "type": "HUNTER",
+    "dialogs": {
+      "greet": "Hum, non sei qui per rubarmi gli affari, vero?",
+      "quest": "Recentemente stavo inseguendo un basilisco che si nascondeva nelle profondità di un antico cimitero. Se riesci a riportarne la bilancia, posso darti una parte della ricompensa.",
+      "extra": "Quella bestia ha pietrificato tre avventurieri.",
+      "farewell": "Fai attenzione a non trasformarti in una statua di pietra."
+    },
+    "quest_item": "dragon_scale",
+    "quest_reward": "strength_ring",
+    "quest_score": 35,
+    "emoji": "🎯",
+    "ability_desc": "Ranged sniping, attack +2, chance of double damage in combat"
+  },
+  {
+    "id": "dr_ellis",
+    "name": "Dottor Ellis",
+    "title": "Ex ricercatore della Fondazione",
+    "desc": "L'uomo di mezza età vestito di stracci, con un lato degli occhiali rotto, stava ancora borbottando il numero del contenimento.",
+    "type": "QUEST",
+    "dialogs": {
+      "greet": "Tu... sei qui per salvarci? Il sito è fuori controllo...",
+      "quest": "Aiutami a trovare il registro di osservazione perduto nel corridoio e potrò darti un equipaggiamento migliore.",
+      "extra": "Nebbia e torre… forme diverse della stessa anomalia. I cacciatori multi-gola imitano le grida—occhiali della Fondazione o rivestimento telekill aiutano; lo Strisciante indistruttibile richiede una scatola di contenimento contro la regenerazione.",
+      "farewell": "Cammina velocemente, il tuo core pulsa ancora..."
+    },
+    "quest_item": "observation_log",
+    "quest_reward": "bag_tactical",
+    "quest_score": 40,
+    "emoji": "👨‍🔬"
+  },
+  {
+    "id": "mtf_liaison",
+    "name": "Nome in codice \"Corvo grigio\"",
+    "title": "Collegamento logistico MTF",
+    "desc": "L'agente indossava un giubbotto tattico, la voce dietro la maschera era calma e stanca.",
+    "type": "MERCHANT",
+    "dialogs": {
+      "greet": "sopravvissuto? Prendi la tua attrezzatura, non è più sicuro qui che fuori.",
+      "extra": "Chiedi ciò che ti serve, ma non aspettarti sconti. Gli occhiali resistono a richiami sonori e pericoli cognitivi; la scatola di contenimento frena anomalie rigeneranti—non entrare a mani nude nella tana a ovest né nella fossa di acido a sud.",
+      "farewell": "Possa l'anomalia non avere nulla a che fare con te."
+    },
+    "trade_items": [
+      [
+        "scp_goggles",
+        20
+      ],
+      [
+        "containment_box",
+        35
+      ],
+      [
+        "amnesia_pill",
+        12
+      ],
+      [
+        "bag_tactical",
+        45
+      ],
+      [
+        "lesser_potion",
+        8
+      ],
+      [
+        "site_ration",
+        3
+      ],
+      [
+        "scp_500_pill",
+        80
+      ],
+      [
+        "scp_178_glasses",
+        22
+      ],
+      [
+        "scp_714_ring",
+        40
+      ],
+      [
+        "scp_148_telekill",
+        35
+      ],
+      [
+        "focus_draught",
+        18
+      ],
+      [
+        "battle_stim",
+        32
+      ]
+    ],
+    "buys_types": [
+      "TREASURE",
+      "MATERIAL",
+      "MINERAL"
+    ],
+    "emoji": "🎖️"
+  },
+  {
+    "id": "scp_049",
+    "name": "Dottore della Peste (SCP-ZH-049)",
+    "title": "L'esistenza di un autoproclamato medico",
+    "desc": "Indossando una maschera a becco del XVII secolo e una veste nera, affermava di curare la malattia.",
+    "type": "HEALER",
+    "dialogs": {
+      "greet": "Ah, un altro paziente. Per favore, permettimi di esaminare la tua malattia.",
+      "extra": "La rovina in questa struttura... è più vecchia di quanto pensi.",
+      "farewell": "Spero che tu non sia stato ancora infettato."
+    },
+    "emoji": "🩺"
+  },
+  {
+    "id": "scp_079",
+    "name": "Invecchiamento dell'IA (SCP-ZH-079)",
+    "title": "prima intelligenza artificiale",
+    "desc": "Lo schermo monocromatico sul telaio vintage brillava con un cursore verde.",
+    "type": "WISEMAN",
+    "dialogs": {
+      "greet": "...organismo rilevato. Hai bisogno di informazioni?",
+      "quest": "Portando le Cronache Incompiute, posso ottenere più permessi per il canale.",
+      "extra": "Il 914 è ancora attivo. Very Fine con cautela. I log ripetono: 939 serve occhiali o telekill; 682 una scatola di contenimento; il Prototipo richiede entrambi.",
+      "farewell": "La connessione è persa."
+    },
+    "quest_item": "scp_140_chronicle",
+    "quest_reward": "keycard_lvl3",
+    "quest_score": 25,
+    "emoji": "💻"
+  },
+  {
+    "id": "scp_999",
+    "name": "Gelatina pruriginosa (SCP-ZH-999)",
+    "title": "corpo felice arancione",
+    "desc": "Una docile creatura simile a una gelatina arancione si strofina attivamente contro il tuo polpaccio.",
+    "type": "HEALER",
+    "dialogs": {
+      "greet": "(Cingire allegramente!)",
+      "extra": "(Ti avvolge in una morbida colla e ti fa venire voglia di ridere senza motivo.)",
+      "farewell": "(tremando con riluttanza)"
+    },
+    "emoji": "🧡"
+  },
+  {
+    "id": "scp_343",
+    "name": "Dichiarare di essere Dio (SCP-ZH-343)",
+    "title": "Vecchio amichevole?",
+    "desc": "L'amabile vecchio dalla barba bianca è seduto in una stanza confortevole, dove aleggia il profumo del tè.",
+    "type": "WISEMAN",
+    "dialogs": {
+      "greet": "Benvenuto, ragazzo. Vuoi del tè?",
+      "extra": "Nebbia? Forse era un trucchetto con cui stavo giocando... forse no.",
+      "farewell": "Vai avanti e la porta sarà aperta per te, per ora."
+    },
+    "give_item": "scp_500_pill",
+    "emoji": "👴"
+  },
+  {
+    "id": "tower_librarian",
+    "name": "Bookkeeper",
+    "title": "Custode della torre",
+    "desc": "Il vecchio studioso con gli occhiali rotondi ha macchie di inchiostro sui polpastrelli.",
+    "type": "WISEMAN",
+    "dialogs": {
+      "greet": "Un altro visitatore? Non irrompere nella sala delle cerimonie al piano di sopra.",
+      "extra": "La chiave di cristallo può aprire l'ultima porta prima della cima della torre.",
+      "farewell": "Possa la conoscenza proteggerti."
+    },
+    "emoji": "📖",
+    "ability_desc": "Magic attack, attack +5, provides light"
+  },
+  {
+    "id": "cave_hermit",
+    "name": "Cell Monk",
+    "title": "monaco praticante",
+    "desc": "Il vecchio che indossa una logora veste da monaco ha gli occhi chiari.",
+    "type": "WISEMAN",
+    "dialogs": {
+      "greet": "Donatore, questo posto è molto malvagio.",
+      "extra": "Coloro che osservano i precetti possono praticare con me.",
+      "farewell": "Amitabha."
+    },
+    "emoji": "🥋",
+    "ability_desc": "Iron body, attack +2, defense +3, higher crit rate"
+  },
+  {
+    "id": "scp_073",
+    "name": "Caino (SCP-ZH-073)",
+    "title": "uomo con segno sulla fronte",
+    "desc": "Un uomo dalla pelle scura con uno strano segno sulla fronte, qualsiasi attacco contro di lui si ripercuoterà.",
+    "type": "WANDERER",
+    "dialogs": {
+      "greet": "Non preoccuparti, non ti farò del male.",
+      "extra": "Mio fratello dorme ancora nel suo sarcofago... sarebbe meglio non svegliarlo.",
+      "farewell": "Prendersi cura di se stessi."
+    },
+    "give_item": "scp_148_telekill",
+    "emoji": "👁️"
+  },
+  {
+    "id": "scp_131",
+    "name": "Rilevatore oculare (SCP-ZH-131)",
+    "title": "organismo di sorveglianza amico",
+    "desc": "Due robot cingolati girano intorno a te affettuosamente.",
+    "type": "WANDERER",
+    "dialogs": {
+      "greet": "(gli occhi lampeggiano felici)",
+      "extra": "(Rotolano verso il corridoio buio, come se indicassero la strada)",
+      "farewell": "(emette un piccolo segnale acustico)"
+    },
+    "give_item": "torch",
+    "emoji": "👀"
+  }
+]

@@ -1,0 +1,1072 @@
+[
+  {
+    "id": "rusty_key",
+    "name": "chave enferrujada",
+    "desc": "A antiga chave de ferro ainda funciona.",
+    "type": "KEY",
+    "usable": true,
+    "use_msg": "Houve um clique e algo pareceu abrir.",
+    "value": 5,
+    "emoji": "🗝️"
+  },
+  {
+    "id": "silver_key",
+    "name": "chave de prata",
+    "desc": "Uma delicada chave prateada com um brilho mágico.",
+    "type": "KEY",
+    "usable": true,
+    "use_msg": "A chave prateada brilha...",
+    "value": 10,
+    "emoji": "🔑"
+  },
+  {
+    "id": "crystal_key",
+    "name": "chave de cristal",
+    "desc": "Chave de cristal totalmente transparente, praticamente invisível.",
+    "type": "KEY",
+    "usable": true,
+    "use_msg": "A chave de cristal derrete no ar...",
+    "value": 15,
+    "emoji": "💎"
+  },
+  {
+    "id": "traveler_knife",
+    "name": "Faca de viajante",
+    "desc": "Uma lamina curta levada antes da floresta. Melhor do que nada.",
+    "type": "WEAPON",
+    "value": 2,
+    "weight": 1,
+    "emoji": "🗡️",
+    "dmg_bonus": 1
+  },
+  {
+    "id": "patched_cloak",
+    "name": "Capa remendada",
+    "desc": "Uma capa velha com remendos. Pouco contra o vento, algo contra o fio.",
+    "type": "ARMOR",
+    "value": 2,
+    "weight": 1,
+    "emoji": "🧥",
+    "def_bonus": 1
+  },
+  {
+    "id": "old_sword",
+    "name": "espada de ferro enferrujada",
+    "desc": "Coberto de ferrugem, mas pouco utilizável.",
+    "type": "WEAPON",
+    "dmg_bonus": 1,
+    "value": 5,
+    "emoji": "🗡️"
+  },
+  {
+    "id": "iron_sword",
+    "name": "espada de ferro",
+    "desc": "Uma espada de ferro comum, mas confiável.",
+    "type": "WEAPON",
+    "dmg_bonus": 2,
+    "value": 15,
+    "emoji": "⚔️"
+  },
+  {
+    "id": "elven_bow",
+    "name": "Arco curto de elfo",
+    "desc": "Um arco curto feito por elfos, leve e preciso.",
+    "type": "WEAPON",
+    "dmg_bonus": 3,
+    "value": 25,
+    "emoji": "🏹"
+  },
+  {
+    "id": "magic_staff",
+    "name": "varinha mágica",
+    "desc": "A cabeça do cajado é incrustada com pedras azuis, que contêm poder mágico.",
+    "type": "WEAPON",
+    "dmg_bonus": 4,
+    "value": 35,
+    "emoji": "🪄"
+  },
+  {
+    "id": "shadow_blade",
+    "name": "Lâmina Sombria",
+    "desc": "A adaga preta mal reflete a luz.",
+    "type": "WEAPON",
+    "dmg_bonus": 3,
+    "value": 30,
+    "emoji": "🔪"
+  },
+  {
+    "id": "war_hammer",
+    "name": "Martelo de Guerra",
+    "desc": "Um pesado martelo de guerra de duas mãos que pode quebrar pedras com um só golpe.",
+    "type": "WEAPON",
+    "dmg_bonus": 5,
+    "weight": 3,
+    "value": 40,
+    "emoji": "🔨"
+  },
+  {
+    "id": "spear",
+    "name": "lança",
+    "desc": "A ponta da lança brilhava com luz fria e podia perfurar armaduras.",
+    "type": "WEAPON",
+    "dmg_bonus": 3,
+    "value": 22,
+    "emoji": "🗡️"
+  },
+  {
+    "id": "rune_sword",
+    "name": "Espada Rúnica",
+    "desc": "A lâmina da espada é gravada com runas luminosas, que causam dano extra às criaturas das trevas.",
+    "type": "WEAPON",
+    "dmg_bonus": 4,
+    "value": 45,
+    "emoji": "⚔️"
+  },
+  {
+    "id": "crossbow",
+    "name": "besta",
+    "desc": "A besta mecânica carregada é incrivelmente poderosa.",
+    "type": "WEAPON",
+    "dmg_bonus": 4,
+    "weight": 2,
+    "value": 35,
+    "emoji": "🏹"
+  },
+  {
+    "id": "assassin_dagger",
+    "name": "Adaga do Assassino",
+    "desc": "A adaga coberta com sangue altamente venenoso sela a garganta.",
+    "type": "WEAPON",
+    "dmg_bonus": 3,
+    "value": 28,
+    "emoji": "🗡️"
+  },
+  {
+    "id": "thunder_hammer",
+    "name": "Martelo de Thor",
+    "desc": "O corpo do martelo está envolto em arcos de eletricidade e ouve-se um leve som de trovão quando ele é balançado.",
+    "type": "WEAPON",
+    "dmg_bonus": 6,
+    "weight": 4,
+    "value": 60,
+    "emoji": "⚡"
+  },
+  {
+    "id": "leather_armor",
+    "name": "armadura de couro",
+    "desc": "Armadura de couro duro curtido.",
+    "type": "ARMOR",
+    "def_bonus": 2,
+    "value": 12,
+    "emoji": "🥋"
+  },
+  {
+    "id": "chain_armor",
+    "name": "Cota de malha",
+    "desc": "Cota de malha tecida com anéis de ferro.",
+    "type": "ARMOR",
+    "def_bonus": 4,
+    "value": 30,
+    "emoji": "🛡️"
+  },
+  {
+    "id": "scale_armor",
+    "name": "armadura de escala",
+    "desc": "Armadura feita de escamas de dragão e chapas de ferro.",
+    "type": "ARMOR",
+    "def_bonus": 5,
+    "weight": 3,
+    "value": 45,
+    "emoji": "🛡️"
+  },
+  {
+    "id": "mage_robe",
+    "name": "Robes de Mago",
+    "desc": "Robe encantado, leve e à prova de frio.",
+    "type": "ARMOR",
+    "def_bonus": 2,
+    "value": 20,
+    "emoji": "🧥"
+  },
+  {
+    "id": "shield",
+    "name": "escudo de ferro",
+    "desc": "Um escudo redondo de ferro, uma poderosa arma de bloqueio.",
+    "type": "ARMOR",
+    "def_bonus": 3,
+    "weight": 2,
+    "value": 18,
+    "emoji": "🛡️"
+  },
+  {
+    "id": "helmet",
+    "name": "capacete de ferro",
+    "desc": "Um capacete de ferro para proteger a cabeça.",
+    "type": "ARMOR",
+    "def_bonus": 1,
+    "value": 10,
+    "emoji": "⛑️"
+  },
+  {
+    "id": "lesser_potion",
+    "name": "pequena poção de cura",
+    "desc": "Restaura 15 HP.",
+    "type": "POTION",
+    "usable": true,
+    "heal": 15,
+    "value": 8,
+    "emoji": "🧪"
+  },
+  {
+    "id": "greater_potion",
+    "name": "Grande Poção de Cura",
+    "desc": "Restaura 35 HP.",
+    "type": "POTION",
+    "usable": true,
+    "heal": 35,
+    "value": 20,
+    "emoji": "🧪"
+  },
+  {
+    "id": "mana_potion",
+    "name": "poção mágica",
+    "desc": "Restaura 20 HP.",
+    "type": "POTION",
+    "usable": true,
+    "heal": 20,
+    "value": 12,
+    "emoji": "🧴"
+  },
+  {
+    "id": "fire_potion",
+    "name": "Elixir de Fogo",
+    "desc": "O líquido na garrafa caiu como lava.",
+    "type": "POTION",
+    "usable": true,
+    "heal": 10,
+    "use_msg": "Você bebe a poção de fogo e seu corpo fica quente! Causa dano extra aos inimigos de gelo!",
+    "combat_effects": [
+      {
+        "effect": "attackUp",
+        "duration": 2,
+        "potency": 1,
+        "chance": 1.0
+      }
+    ],
+    "value": 16,
+    "emoji": "🔥"
+  },
+  {
+    "id": "invis_potion",
+    "name": "Poção de Invisibilidade",
+    "desc": "Torna-se transparente depois de beber.",
+    "type": "POTION",
+    "usable": true,
+    "heal": 5,
+    "use_msg": "Você bebe a poção da invisibilidade e seu corpo gradualmente se torna transparente... parece não ter outro efeito.",
+    "value": 25,
+    "emoji": "👻"
+  },
+  {
+    "id": "stamina_potion",
+    "name": "poção de resistência",
+    "desc": "Restaura 25 HP.",
+    "type": "POTION",
+    "usable": true,
+    "heal": 25,
+    "value": 15,
+    "emoji": "💪"
+  },
+  {
+    "id": "focus_draught",
+    "name": "Pocao de foco",
+    "desc": "Pocao dourada clara. Restaura 1 carga de habilidade.",
+    "use_msg": "O foco inunda seus nervos—pronto para atacar de novo.",
+    "emoji": "✨"
+  },
+  {
+    "id": "battle_stim",
+    "name": "Estimulante de batalha",
+    "desc": "Tonico vermelho picante. Restaura 2 cargas de habilidade.",
+    "use_msg": "O fervor de batalha sobe—cargas restauradas!",
+    "emoji": "🩸"
+  },
+  {
+    "id": "charge_charm",
+    "name": "Amuleto de golpe",
+    "desc": "Pequeno talisma gravado. Aumenta permanentemente o limite de habilidade do heroi em 1 (max. 99).",
+    "use_msg": "O amuleto dissolve-se em luz dourada—voce pode golpear com forca total com mais frequencia.",
+    "emoji": "🔖"
+  },
+  {
+    "id": "moonlight_elixir",
+    "name": "Essência do Luar",
+    "desc": "O líquido na garrafa prateada flui como o luar, emitindo um brilho suave.",
+    "type": "POTION",
+    "usable": true,
+    "heal": 50,
+    "use_msg": "Você bebe a essência do luar e todo o seu corpo é cercado por uma luz quente! Restaurou 50 pontos de saúde!",
+    "value": 40,
+    "emoji": "🌙"
+  },
+  {
+    "id": "lantern",
+    "name": "lanterna",
+    "desc": "Uma lanterna velha ainda com óleo.",
+    "type": "LIGHT",
+    "usable": true,
+    "use_msg": "Lanternas iluminavam os arredores.",
+    "weight": 2,
+    "value": 8,
+    "emoji": "🏮"
+  },
+  {
+    "id": "torch",
+    "name": "tocha",
+    "desc": "Tocha de terebintina.",
+    "type": "LIGHT",
+    "usable": true,
+    "use_msg": "As tochas acenderam com chamas brilhantes.",
+    "value": 3,
+    "emoji": "🔦"
+  },
+  {
+    "id": "bread",
+    "name": "pão duro",
+    "desc": "Pão integral seco.",
+    "type": "FOOD",
+    "usable": true,
+    "heal": 5,
+    "value": 2,
+    "emoji": "🍞"
+  },
+  {
+    "id": "dried_meat",
+    "name": "Carne seca",
+    "desc": "Salgadinho de bacon salgado.",
+    "type": "FOOD",
+    "usable": true,
+    "heal": 8,
+    "value": 4,
+    "emoji": "🥩"
+  },
+  {
+    "id": "mushroom",
+    "name": "cogumelos fluorescentes",
+    "desc": "Os cogumelos cintilantes, me pergunto se são comestíveis.",
+    "type": "FOOD",
+    "usable": true,
+    "heal": 3,
+    "value": 1,
+    "emoji": "🍄"
+  },
+  {
+    "id": "fish",
+    "name": "peixe grelhado",
+    "desc": "Delicioso peixe grelhado.",
+    "type": "FOOD",
+    "usable": true,
+    "heal": 7,
+    "value": 3,
+    "emoji": "🐟"
+  },
+  {
+    "id": "magic_herb",
+    "name": "ervas mágicas",
+    "desc": "Ervas que emitem luz colorida.",
+    "type": "FOOD",
+    "usable": true,
+    "heal": 12,
+    "value": 6,
+    "emoji": "🌿"
+  },
+  {
+    "id": "honey",
+    "name": "Mel",
+    "desc": "Mel selvagem dourado, muito doce.",
+    "type": "FOOD",
+    "usable": true,
+    "heal": 6,
+    "value": 4,
+    "emoji": "🍯"
+  },
+  {
+    "id": "golden_cup",
+    "name": "taça de ouro",
+    "desc": "Cálice feito de ouro puro.",
+    "type": "TREASURE",
+    "value": 40,
+    "weight": 2,
+    "emoji": "🏆"
+  },
+  {
+    "id": "silver_ring",
+    "name": "anel de prata",
+    "desc": "Anel de prata gravado com padrões antigos.",
+    "type": "TREASURE",
+    "value": 20,
+    "emoji": "💍"
+  },
+  {
+    "id": "emerald",
+    "name": "pedra preciosa esmeralda",
+    "desc": "Uma joia verde do tamanho de um polegar.",
+    "type": "TREASURE",
+    "value": 50,
+    "emoji": "💚"
+  },
+  {
+    "id": "diamond",
+    "name": "diamante",
+    "desc": "Um diamante perfeitamente lapidado.",
+    "type": "TREASURE",
+    "value": 80,
+    "emoji": "💠"
+  },
+  {
+    "id": "ruby",
+    "name": "rubi",
+    "desc": "Um rubi claro, vermelho-sangue.",
+    "type": "TREASURE",
+    "value": 60,
+    "emoji": "❤️"
+  },
+  {
+    "id": "sapphire",
+    "name": "safira",
+    "desc": "Uma joia de um azul profundo, como o oceano.",
+    "type": "TREASURE",
+    "value": 55,
+    "emoji": "💙"
+  },
+  {
+    "id": "ancient_crown",
+    "name": "coroa antiga",
+    "desc": "Uma relíquia de um certo rei, cravejada de pedras preciosas.",
+    "type": "TREASURE",
+    "value": 120,
+    "weight": 2,
+    "emoji": "👑"
+  },
+  {
+    "id": "old_coin",
+    "name": "moedas de ouro antigas",
+    "desc": "Uma antiga moeda de ouro com um padrão vago gravado.",
+    "type": "TREASURE",
+    "value": 15,
+    "emoji": "🪙"
+  },
+  {
+    "id": "gold_ingot",
+    "name": "lingote de ouro",
+    "desc": "Um lingote de ouro feito de ouro puro.",
+    "type": "MINERAL",
+    "value": 35,
+    "weight": 2,
+    "emoji": "🟨"
+  },
+  {
+    "id": "silver_ingot",
+    "name": "lingote de prata",
+    "desc": "Lingotes de prata feitos de prata esterlina.",
+    "type": "MINERAL",
+    "value": 18,
+    "weight": 2,
+    "emoji": "⬜"
+  },
+  {
+    "id": "wolf_tooth",
+    "name": "Presa do Lobo",
+    "desc": "As presas de um lobo gigante servem como prova de força.",
+    "type": "MATERIAL",
+    "value": 5,
+    "emoji": "🦷"
+  },
+  {
+    "id": "spider_silk",
+    "name": "seda de aranha",
+    "desc": "Seda de aranha cristalina.",
+    "type": "MATERIAL",
+    "value": 8,
+    "emoji": "🕸️"
+  },
+  {
+    "id": "dragon_scale",
+    "name": "escama de dragão",
+    "desc": "As escamas que caem do corpo do jovem dragão são extremamente duras.",
+    "type": "MATERIAL",
+    "value": 50,
+    "emoji": "🐉"
+  },
+  {
+    "id": "fairy_dust",
+    "name": "pó de fada",
+    "desc": "Pó brilhante.",
+    "type": "MATERIAL",
+    "value": 20,
+    "emoji": "✨"
+  },
+  {
+    "id": "mandrake_root",
+    "name": "raiz de mandrágora",
+    "desc": "Diz-se que raízes em forma de humanos têm poderes mágicos.",
+    "type": "MATERIAL",
+    "value": 15,
+    "emoji": "🪴"
+  },
+  {
+    "id": "goblin_ear",
+    "name": "orelhas de duende",
+    "desc": "As orelhas decepadas do goblin tinham um forte cheiro de sangue.",
+    "type": "MATERIAL",
+    "value": 3,
+    "emoji": "👂"
+  },
+  {
+    "id": "snake_skin",
+    "name": "pele de cobra",
+    "desc": "A pele trocada pela píton gigante é muito resistente.",
+    "type": "MATERIAL",
+    "value": 12,
+    "emoji": "🐍"
+  },
+  {
+    "id": "bandit_badge",
+    "name": "Distintivo de bandido",
+    "desc": "O crachá de identificação do líder bandido.",
+    "type": "MATERIAL",
+    "value": 10,
+    "emoji": "🎖️"
+  },
+  {
+    "id": "ancient_scroll",
+    "name": "pergaminho antigo",
+    "desc": "Personagens antigos incompreensíveis.",
+    "type": "SCROLL",
+    "usable": true,
+    "use_msg": "O pergaminho brilha... mas não pode ser lido.",
+    "value": 5,
+    "emoji": "📜"
+  },
+  {
+    "id": "magic_scroll",
+    "name": "pergaminho de teletransporte",
+    "desc": "Grave o feitiço de teletransporte. Pode se teletransportar para qualquer local explorado (use rolagem de teletransporte <local>).",
+    "type": "SCROLL",
+    "usable": true,
+    "use_msg": "O pergaminho de teletransporte pisca. Selecione um local explorado: use rolagem de teletransporte <nome ou id do local>",
+    "value": 15,
+    "emoji": "📜"
+  },
+  {
+    "id": "rope",
+    "name": "corda de cânhamo",
+    "desc": "10 metros de barbante forte.",
+    "type": "TOOL",
+    "usable": true,
+    "use_msg": "Talvez seja mais útil em outro lugar.",
+    "value": 3,
+    "emoji": "🪢"
+  },
+  {
+    "id": "compass",
+    "name": "bússola antiga",
+    "desc": "O ponteiro aponta numa direção especial.",
+    "type": "TOOL",
+    "usable": true,
+    "use_msg": "A bússola aponta para sudeste...",
+    "value": 8,
+    "emoji": "🧭"
+  },
+  {
+    "id": "lockpick",
+    "name": "fechadura",
+    "desc": "Um conjunto requintado de ferramentas para abrir fechaduras.",
+    "type": "TOOL",
+    "usable": true,
+    "use_msg": "Você mexeu na fechadura... pareceu abrir alguma coisa.",
+    "value": 12,
+    "emoji": "🔓"
+  },
+  {
+    "id": "fishing_rod",
+    "name": "vara de pescar",
+    "desc": "Uma vara de pescar fina. Você pode pescar à beira do lago, na ilha no meio do lago ou no rio subterrâneo.",
+    "type": "TOOL",
+    "usable": true,
+    "use_msg": "Não há água aqui, então não há como pescar.",
+    "value": 5,
+    "emoji": "🎣"
+  },
+  {
+    "id": "magnifying_glass",
+    "name": "lupa",
+    "desc": "Pode observar pequenas coisas.",
+    "type": "TOOL",
+    "usable": true,
+    "use_msg": "Através de uma lupa, você vê detalhes que as pessoas comuns não conseguem ver.",
+    "value": 8,
+    "emoji": "🔍"
+  },
+  {
+    "id": "journal",
+    "name": "Diário do Aventureiro",
+    "desc": "Um diário deixado por um aventureiro.",
+    "type": "BOOK",
+    "usable": true,
+    "use_msg": "O diário registra: “A gema no topo da torre é a chave do selo...”",
+    "value": 5,
+    "emoji": "📓"
+  },
+  {
+    "id": "magic_book",
+    "name": "Introdução à magia",
+    "desc": "Teoria mágica básica.",
+    "type": "BOOK",
+    "usable": true,
+    "use_msg": "Você aprendeu algo sobre magia.",
+    "value": 10,
+    "emoji": "📖"
+  },
+  {
+    "id": "magic_gem",
+    "name": "jóia mágica",
+    "desc": "Uma joia que emite luz roxa e contém magia poderosa.",
+    "type": "QUEST",
+    "usable": true,
+    "use_msg": "A gema explode com uma luz deslumbrante!",
+    "value": 0,
+    "weight": 1,
+    "emoji": "💎"
+  },
+  {
+    "id": "sacred_water",
+    "name": "água benta",
+    "desc": "Água benta abençoada em uma garrafa de vidro.",
+    "type": "QUEST",
+    "usable": true,
+    "use_msg": "A água benta emite uma suave luz branca.",
+    "value": 0,
+    "emoji": "💧"
+  },
+  {
+    "id": "phoenix_feather",
+    "name": "Pena de Fênix",
+    "desc": "As penas vermelhas da cauda da fênix ainda estão quentes.",
+    "type": "QUEST",
+    "usable": true,
+    "use_msg": "As penas se transformam em chamas, deixando uma marca de fogo na palma da mão!",
+    "value": 0,
+    "emoji": "🪶"
+  },
+  {
+    "id": "ice_crystal",
+    "name": "cristais de gelo",
+    "desc": "Cristais de gelo eternos condensaram-se em locais extremamente frios.",
+    "type": "QUEST",
+    "value": 0,
+    "weight": 1,
+    "emoji": "❄️"
+  },
+  {
+    "id": "ancient_key",
+    "name": "chave antiga",
+    "desc": "Uma enorme chave de pedra, muito pesada.",
+    "type": "KEY",
+    "usable": true,
+    "use_msg": "A chave é tão pesada que você mal consegue levantá-la.",
+    "weight": 5,
+    "value": 0,
+    "emoji": "🗝️"
+  },
+  {
+    "id": "health_ring",
+    "name": "anel de vida",
+    "desc": "Sinta-se energizado ao usá-lo.",
+    "type": "RING",
+    "usable": true,
+    "use_msg": "O Anel da Vida emite uma suave luz verde! HP máximo +10!",
+    "heal": 10,
+    "value": 30,
+    "emoji": "💚"
+  },
+  {
+    "id": "protection_ring",
+    "name": "Anel de Proteção",
+    "desc": "O usuário ganha um escudo invisível.",
+    "type": "RING",
+    "def_bonus": 2,
+    "value": 35,
+    "emoji": "🛡️"
+  },
+  {
+    "id": "strength_ring",
+    "name": "anel de poder",
+    "desc": "Aumenta a força do usuário.",
+    "type": "RING",
+    "dmg_bonus": 2,
+    "value": 32,
+    "emoji": "💪"
+  },
+  {
+    "id": "mystic_amulet",
+    "name": "talismã místico",
+    "desc": "Amuleto gravado com runas antigas, sua origem é desconhecida.",
+    "type": "AMULET",
+    "usable": true,
+    "use_msg": "O amuleto brilha e você sente uma força misteriosa protegendo você.",
+    "def_bonus": 1,
+    "value": 25,
+    "emoji": "🔮"
+  },
+  {
+    "id": "bag_starter",
+    "name": "Bolsa de lona surrada",
+    "desc": "A mochila muito gasta mal conseguia conter o essencial.",
+    "type": "BAG",
+    "usable": true,
+    "capacity": 15,
+    "weight": 1,
+    "value": 0,
+    "takeable": false,
+    "emoji": "🎒"
+  },
+  {
+    "id": "bag_tactical",
+    "name": "mochila tática",
+    "desc": "Mochila tática padrão básica com compartimentos multicamadas e excelentes capacidades de suporte de carga.",
+    "type": "BAG",
+    "usable": true,
+    "capacity": 22,
+    "weight": 2,
+    "value": 40,
+    "emoji": "🎒"
+  },
+  {
+    "id": "bag_anomalous",
+    "name": "Saco de armazenamento anormal",
+    "desc": "O interior parece ser maior do que o exterior, com uma etiqueta \"somente pessoal da classe D\" afixada.",
+    "type": "BAG",
+    "usable": true,
+    "capacity": 28,
+    "weight": 3,
+    "value": 80,
+    "emoji": "🎒"
+  },
+  {
+    "id": "keycard_lvl2",
+    "name": "Cartão-chave secundário",
+    "desc": "Cartão de acesso à fundação, nível de autoridade: 2.",
+    "type": "KEY",
+    "usable": false,
+    "value": 20,
+    "emoji": "💳"
+  },
+  {
+    "id": "keycard_lvl3",
+    "name": "Cartão-chave de nível 3",
+    "desc": "O cartão de acesso avançado da Fundação permite a entrada em áreas de contenção profunda.",
+    "type": "KEY",
+    "usable": false,
+    "value": 35,
+    "emoji": "💳"
+  },
+  {
+    "id": "scp_dossier",
+    "name": "Fragmentos de arquivo anormais",
+    "desc": "Um documento danificado com o número \"SCP-ZH-██\" menciona a conexão entre a neblina e a torre.",
+    "type": "BOOK",
+    "usable": true,
+    "use_msg": "Você lê: \"A neblina não é um fenômeno natural, mas um vazamento de anomalias não registradas... A torre pode ter sido uma das primeiras instalações de contenção.\" 』",
+    "value": 10,
+    "emoji": "📄"
+  },
+  {
+    "id": "observation_log",
+    "name": "Registro de observação",
+    "desc": "Registro de observação manuscrito do pesquisador, com caligrafia rabiscada.",
+    "type": "QUEST",
+    "value": 15,
+    "emoji": "📋"
+  },
+  {
+    "id": "scp_goggles",
+    "name": "óculos de proteção cognitiva",
+    "desc": "Óculos de proteção fornecidos pela Fundação para proteção contra riscos cognitivos leves.",
+    "type": "ARMOR",
+    "def_bonus": 1,
+    "value": 25,
+    "emoji": "🥽"
+  },
+  {
+    "id": "containment_box",
+    "name": "Caixa de armazenamento portátil",
+    "desc": "Um pequeno dispositivo de contenção de anomalias que estabiliza núcleos instáveis.",
+    "type": "TOOL",
+    "usable": false,
+    "value": 50,
+    "weight": 2,
+    "emoji": "📦"
+  },
+  {
+    "id": "amnesia_pill",
+    "name": "pílulas para limpar a memória",
+    "desc": "O inibidor de memória de nível A padrão da fundação pode ser usado para escapar rapidamente durante o combate.",
+    "type": "TOOL",
+    "usable": true,
+    "use_msg": "Você engole a pílula e seus inimigos parecem esquecer brevemente que você existe!",
+    "value": 18,
+    "emoji": "💊"
+  },
+  {
+    "id": "anomaly_core",
+    "name": "Núcleo anormal estável",
+    "desc": "O núcleo anormal derrotado ainda emite um pulso fraco.",
+    "type": "TREASURE",
+    "value": 100,
+    "weight": 2,
+    "emoji": "🔮"
+  },
+  {
+    "id": "site_clearance",
+    "name": "Medalha de Limpeza de Local",
+    "desc": "Prove que você suprimiu a ameaça final nº 001. Você pode continuar explorando ou iniciar o segundo jogo.",
+    "type": "TREASURE",
+    "value": 500,
+    "weight": 0,
+    "emoji": "🏅"
+  },
+  {
+    "id": "site_ration",
+    "name": "Rações de fundação",
+    "desc": "Rações militares embaladas a vácuo com gosto de papelão.",
+    "type": "FOOD",
+    "usable": true,
+    "heal": 6,
+    "value": 3,
+    "emoji": "🍱"
+  },
+  {
+    "id": "scp_012_score",
+    "name": "Pontuação restante do movimento inacabado (SCP-ZH-012)",
+    "desc": "Na maldita página da equipe, as notas pareciam se estender por conta própria.",
+    "type": "SCROLL",
+    "usable": true,
+    "use_msg": "Você não pode deixar de querer continuar escrevendo... seus dedos sangram.",
+    "value": 30,
+    "emoji": "🎼"
+  },
+  {
+    "id": "scp_035_mask",
+    "name": "Máscara de Porcelana Branca (SCP-ZH-035)",
+    "desc": "Máscara sorridente de porcelana branca com líquido preto seco no interior.",
+    "type": "ARMOR",
+    "usable": true,
+    "use_msg": "A máscara grudou em seu rosto e um sussurro soou em seus ouvidos.",
+    "dmg_bonus": 5,
+    "def_bonus": -1,
+    "value": 60,
+    "emoji": "🎭"
+  },
+  {
+    "id": "scp_500_pill",
+    "name": "Panacéia (SCP-ZH-500)",
+    "desc": "Diz-se que a cápsula vermelha cura todos os ferimentos e doenças.",
+    "type": "POTION",
+    "usable": true,
+    "heal": 999,
+    "use_msg": "Você sente que toda a dor do seu corpo desaparece!",
+    "value": 200,
+    "emoji": "🔴"
+  },
+  {
+    "id": "scp_055_object",
+    "name": "[REMOVIDO](SCP-ZH-055)",
+    "desc": "Você se lembra de pegar algo... mas não consegue dizer o que é.",
+    "type": "QUEST",
+    "usable": true,
+    "use_msg": "Você olha para ele, mas não consegue se lembrar do que está olhando.",
+    "value": 55,
+    "emoji": "⬛"
+  },
+  {
+    "id": "scp_093_disc",
+    "name": "Disco do Mar Vermelho (SCP-ZH-093)",
+    "desc": "A placa de pedra vermelho-sangue emite um som de maré quando tocada.",
+    "type": "KEY",
+    "usable": true,
+    "use_msg": "O disco zumbiu, como se procurasse uma determinada porta.",
+    "value": 40,
+    "emoji": "🔴"
+  },
+  {
+    "id": "scp_178_glasses",
+    "name": "Óculos 3D (SCP-ZH-178)",
+    "desc": "Óculos 3D vermelhos e azuis antiquados, há algo se movendo na borda do campo de visão depois de usá-los.",
+    "type": "TOOL",
+    "usable": true,
+    "use_msg": "Você coloca os óculos - uma figura humana embaçada aparece em sua visão periférica.",
+    "value": 25,
+    "emoji": "👓"
+  },
+  {
+    "id": "scp_860_key",
+    "name": "Chave Azul (SCP-ZH-860)",
+    "desc": "Uma chave azul com um padrão de árvore gravado no cabo.",
+    "type": "KEY",
+    "usable": true,
+    "use_msg": "A chave estava ligeiramente quente e apontava para uma entrada para outro mundo.",
+    "value": 35,
+    "emoji": "🔑"
+  },
+  {
+    "id": "scp_701_script",
+    "name": "Roteiro do Banquete do Dia da Morte (SCP-ZH-701)",
+    "desc": "A cópia fragmentária de uma tragédia proibida tem marcas de audiência dilacerada nas margens.",
+    "type": "BOOK",
+    "usable": true,
+    "use_msg": "Depois de ler a última linha, você ouviu aplausos vindos da direção do palco.",
+    "value": 45,
+    "emoji": "📜"
+  },
+  {
+    "id": "scp_513_bell",
+    "name": "Sino Enferrujado (SCP-ZH-513)",
+    "desc": "O sino enferrujado tocará e você ouvirá passos que não deveriam estar ali.",
+    "type": "TOOL",
+    "usable": true,
+    "use_msg": "A campainha tocou suavemente... Parecia haver uma sombra atrás de mim.",
+    "value": 28,
+    "emoji": "🔔"
+  },
+  {
+    "id": "scp_714_ring",
+    "name": "Anel de Jade (SCP-ZH-714)",
+    "desc": "O anel de jade frio, depois de usá-lo, seu pensamento fica mais lento, mas você fica mais claro.",
+    "type": "RING",
+    "usable": true,
+    "use_msg": "Usando um anel de jade, você se sente lento, mas seguro.",
+    "def_bonus": 3,
+    "dmg_bonus": -1,
+    "value": 50,
+    "emoji": "💍"
+  },
+  {
+    "id": "scp_447_slime",
+    "name": "Amostra de limo verde (SCP-ZH-447)",
+    "desc": "Lodo verde inofensivo com um rótulo que diz: Não toque em cadáveres.",
+    "type": "MATERIAL",
+    "value": 20,
+    "emoji": "🟢"
+  },
+  {
+    "id": "scp_1981_tape",
+    "name": "Fita de vídeo incompleta (SCP-ZH-1981)",
+    "desc": "VHS com rótulos borrados, a imagem muda dependendo do número de visualizações.",
+    "type": "TOOL",
+    "usable": true,
+    "use_msg": "Na tela do floco de neve, o rosto do locutor foi gradualmente distorcido. Você ganhou um vislumbre de informação.",
+    "value": 22,
+    "emoji": "📼"
+  },
+  {
+    "id": "scp_1230_book",
+    "name": "Livro Dimensional de Bolso (SCP-ZH-1230)",
+    "desc": "Um livro grosso de contos de fadas, você pode abri-lo e entrar em uma terra de sonhos segura por um momento.",
+    "type": "BOOK",
+    "usable": true,
+    "heal": 15,
+    "use_msg": "Você caiu em um sonho caloroso, seus ferimentos foram aliviados.",
+    "value": 40,
+    "emoji": "📖"
+  },
+  {
+    "id": "scp_1471_phone",
+    "name": "Celular Anormal (SCP-ZH-1471)",
+    "desc": "Ele vem pré-instalado com software social e sempre traz a silhueta de um cachorro na tela de bloqueio.",
+    "type": "TOOL",
+    "usable": true,
+    "use_msg": "A notificação aparece: diz que está sempre observando você.",
+    "value": 33,
+    "emoji": "📱"
+  },
+  {
+    "id": "scp_409_crystal",
+    "name": "Fragmento Cristalizado (SCP-ZH-409)",
+    "desc": "Cristais afiados, a pele fica ligeiramente dura após o contato.",
+    "type": "MATERIAL",
+    "usable": true,
+    "use_msg": "Sentiu uma dor formigante em seus dedos e você rapidamente guardou os pedaços.",
+    "value": 18,
+    "emoji": "💎"
+  },
+  {
+    "id": "scp_008_vial",
+    "name": "Tubo de amostra de peste (SCP-ZH-008)",
+    "desc": "Frasco selado, rotulado com rótulo de risco biológico.",
+    "type": "QUEST",
+    "usable": true,
+    "use_msg": "Você não abriu - sua sanidade permaneceu.",
+    "value": 5,
+    "emoji": "🧪"
+  },
+  {
+    "id": "scp_205_lamp",
+    "name": "Luz Sombria (SCP-ZH-205)",
+    "desc": "Uma das luminárias de mesa emparelhadas, quando acesa, a sombra na parede se moverá sozinha.",
+    "type": "LIGHT",
+    "usable": true,
+    "use_msg": "As luzes se acenderam e as sombras na parede começaram a se mover lentamente.",
+    "value": 30,
+    "emoji": "💡"
+  },
+  {
+    "id": "scp_140_chronicle",
+    "name": "Crônicas Inacabadas (SCP-ZH-140)",
+    "desc": "Nos livros que registram uma civilização perdida, a escrita aumentará por si só.",
+    "type": "BOOK",
+    "usable": true,
+    "use_msg": "Uma nova linha de palavras surge por si só... Você fecha o livro.",
+    "value": 48,
+    "emoji": "📕"
+  },
+  {
+    "id": "scp_113_rock",
+    "name": "Pedra de Conversão Genética (SCP-ZH-113)",
+    "desc": "Uma pedra lisa vermelha e verde que altera as características fisiológicas ao entrar em contato.",
+    "type": "TOOL",
+    "usable": true,
+    "use_msg": "Depois de um momento de tontura, você se sente mais forte.",
+    "value": 55,
+    "emoji": "🪨"
+  },
+  {
+    "id": "scp_148_telekill",
+    "name": "Folha de liga de alma (SCP-ZH-148)",
+    "desc": "Diz-se que a peça de metal cinza é capaz de isolar interferências mentais.",
+    "type": "ARMOR",
+    "def_bonus": 2,
+    "value": 45,
+    "emoji": "🛡️"
+  },
+  {
+    "id": "scp_5000_file",
+    "name": "Por que arquivo de ação (SCP-ZH-5000)",
+    "desc": "O arquivo de capa preta registra certa operação descontrolada da Fundação.",
+    "type": "BOOK",
+    "usable": true,
+    "use_msg": "Você leu a conclusão preocupante de que a neblina pode estar ligada a falhas no site.",
+    "value": 60,
+    "emoji": "📁"
+  },
+  {
+    "id": "scp_261_snack",
+    "name": "Saco de lanche dimensional (SCP-ZH-261)",
+    "desc": "Alimentos tufados com embalagem desconhecida são surpreendentemente deliciosos.",
+    "type": "FOOD",
+    "usable": true,
+    "heal": 10,
+    "value": 8,
+    "emoji": "🍿"
+  }
+]

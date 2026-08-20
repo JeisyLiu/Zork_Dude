@@ -1,0 +1,1072 @@
+[
+  {
+    "id": "rusty_key",
+    "name": "녹슨 열쇠",
+    "desc": "고대 철제 열쇠는 여전히 작동합니다.",
+    "type": "KEY",
+    "usable": true,
+    "use_msg": "딸깍 소리가 나더니 뭔가 열리는 것 같았습니다.",
+    "value": 5,
+    "emoji": "🗝️"
+  },
+  {
+    "id": "silver_key",
+    "name": "은색 열쇠",
+    "desc": "마법 같은 반짝임을 지닌 섬세한 은색 열쇠입니다.",
+    "type": "KEY",
+    "usable": true,
+    "use_msg": "은색 열쇠가 빛난다...",
+    "value": 10,
+    "emoji": "🔑"
+  },
+  {
+    "id": "crystal_key",
+    "name": "크리스탈 키",
+    "desc": "완전히 투명한 크리스탈 키, 거의 보이지 않습니다.",
+    "type": "KEY",
+    "usable": true,
+    "use_msg": "크리스탈 열쇠가 공중으로 녹아내리는데...",
+    "value": 15,
+    "emoji": "💎"
+  },
+  {
+    "id": "traveler_knife",
+    "name": "여행용 단검",
+    "desc": "숲에 들어가기 전 챙긴 짧은 칼. 없는 것보다는 낫다.",
+    "type": "WEAPON",
+    "value": 2,
+    "weight": 1,
+    "emoji": "🗡️",
+    "dmg_bonus": 1
+  },
+  {
+    "id": "patched_cloak",
+    "name": "기운 망토",
+    "desc": "헝겊을 기운 낡은 망토. 바람은 못 막아도 칼은 조금 막아 준다.",
+    "type": "ARMOR",
+    "value": 2,
+    "weight": 1,
+    "emoji": "🧥",
+    "def_bonus": 1
+  },
+  {
+    "id": "old_sword",
+    "name": "녹슨 철검",
+    "desc": "녹이 슬어 있지만 거의 사용할 수 없습니다.",
+    "type": "WEAPON",
+    "dmg_bonus": 1,
+    "value": 5,
+    "emoji": "🗡️"
+  },
+  {
+    "id": "iron_sword",
+    "name": "철검",
+    "desc": "흔하지만 믿음직한 철검.",
+    "type": "WEAPON",
+    "dmg_bonus": 2,
+    "value": 15,
+    "emoji": "⚔️"
+  },
+  {
+    "id": "elven_bow",
+    "name": "엘프 단궁",
+    "desc": "엘프가 만든 짧은 활로 가볍고 정확합니다.",
+    "type": "WEAPON",
+    "dmg_bonus": 3,
+    "value": 25,
+    "emoji": "🏹"
+  },
+  {
+    "id": "magic_staff",
+    "name": "마술 지팡이",
+    "desc": "지팡이의 머리 부분에는 마력이 담긴 푸른 보석이 박혀있습니다.",
+    "type": "WEAPON",
+    "dmg_bonus": 4,
+    "value": 35,
+    "emoji": "🪄"
+  },
+  {
+    "id": "shadow_blade",
+    "name": "섀도우 블레이드",
+    "desc": "칠흑의 단검은 빛을 거의 반사하지 않습니다.",
+    "type": "WEAPON",
+    "dmg_bonus": 3,
+    "value": 30,
+    "emoji": "🔪"
+  },
+  {
+    "id": "war_hammer",
+    "name": "워해머",
+    "desc": "한 번의 타격으로 돌을 부술 수 있는 무거운 양손 전쟁 망치입니다.",
+    "type": "WEAPON",
+    "dmg_bonus": 5,
+    "weight": 3,
+    "value": 40,
+    "emoji": "🔨"
+  },
+  {
+    "id": "spear",
+    "name": "창",
+    "desc": "창끝은 차가운 빛으로 빛나며 갑옷을 꿰뚫을 수 있었다.",
+    "type": "WEAPON",
+    "dmg_bonus": 3,
+    "value": 22,
+    "emoji": "🗡️"
+  },
+  {
+    "id": "rune_sword",
+    "name": "룬소드",
+    "desc": "검의 칼날에는 빛나는 룬이 새겨져 있으며, 어둠의 생물에게 추가 피해를 줍니다.",
+    "type": "WEAPON",
+    "dmg_bonus": 4,
+    "value": 45,
+    "emoji": "⚔️"
+  },
+  {
+    "id": "crossbow",
+    "name": "석궁",
+    "desc": "장전된 기계식 석궁은 믿을 수 없을 만큼 강력합니다.",
+    "type": "WEAPON",
+    "dmg_bonus": 4,
+    "weight": 2,
+    "value": 35,
+    "emoji": "🏹"
+  },
+  {
+    "id": "assassin_dagger",
+    "name": "암살자의 단검",
+    "desc": "맹독의 피로 코팅된 단검이 목을 봉쇄합니다.",
+    "type": "WEAPON",
+    "dmg_bonus": 3,
+    "value": 28,
+    "emoji": "🗡️"
+  },
+  {
+    "id": "thunder_hammer",
+    "name": "토르의 망치",
+    "desc": "망치 몸체는 고동치는 전기의 호로 둘러싸여 있으며, 휘두를 때 희미한 천둥소리가 난다.",
+    "type": "WEAPON",
+    "dmg_bonus": 6,
+    "weight": 4,
+    "value": 60,
+    "emoji": "⚡"
+  },
+  {
+    "id": "leather_armor",
+    "name": "가죽 갑옷",
+    "desc": "검게 그을린 단단한 가죽 갑옷.",
+    "type": "ARMOR",
+    "def_bonus": 2,
+    "value": 12,
+    "emoji": "🥋"
+  },
+  {
+    "id": "chain_armor",
+    "name": "체인 메일",
+    "desc": "철제 고리로 엮은 사슬 갑옷.",
+    "type": "ARMOR",
+    "def_bonus": 4,
+    "value": 30,
+    "emoji": "🛡️"
+  },
+  {
+    "id": "scale_armor",
+    "name": "비늘 갑옷",
+    "desc": "용의 비늘과 철판으로 만든 갑옷.",
+    "type": "ARMOR",
+    "def_bonus": 5,
+    "weight": 3,
+    "value": 45,
+    "emoji": "🛡️"
+  },
+  {
+    "id": "mage_robe",
+    "name": "마법사 로브",
+    "desc": "가볍고 방한성이 있는 마법의 로브입니다.",
+    "type": "ARMOR",
+    "def_bonus": 2,
+    "value": 20,
+    "emoji": "🧥"
+  },
+  {
+    "id": "shield",
+    "name": "철 방패",
+    "desc": "강력한 방어 무기인 둥근 철제 방패입니다.",
+    "type": "ARMOR",
+    "def_bonus": 3,
+    "weight": 2,
+    "value": 18,
+    "emoji": "🛡️"
+  },
+  {
+    "id": "helmet",
+    "name": "철제 헬멧",
+    "desc": "머리를 보호하는 철제 투구.",
+    "type": "ARMOR",
+    "def_bonus": 1,
+    "value": 10,
+    "emoji": "⛑️"
+  },
+  {
+    "id": "lesser_potion",
+    "name": "작은 치유 물약",
+    "desc": "HP를 15 회복합니다.",
+    "type": "POTION",
+    "usable": true,
+    "heal": 15,
+    "value": 8,
+    "emoji": "🧪"
+  },
+  {
+    "id": "greater_potion",
+    "name": "위대한 치유 물약",
+    "desc": "HP를 35 회복합니다.",
+    "type": "POTION",
+    "usable": true,
+    "heal": 35,
+    "value": 20,
+    "emoji": "🧪"
+  },
+  {
+    "id": "mana_potion",
+    "name": "마법의 물약",
+    "desc": "HP를 20 회복합니다.",
+    "type": "POTION",
+    "usable": true,
+    "heal": 20,
+    "value": 12,
+    "emoji": "🧴"
+  },
+  {
+    "id": "fire_potion",
+    "name": "불의 비약",
+    "desc": "병 안의 액체가 용암처럼 쏟아졌습니다.",
+    "type": "POTION",
+    "usable": true,
+    "heal": 10,
+    "use_msg": "불약을 마시면 몸이 뜨거워집니다! 얼음형 적에게 추가 데미지를 줍니다!",
+    "combat_effects": [
+      {
+        "effect": "attackUp",
+        "duration": 2,
+        "potency": 1,
+        "chance": 1.0
+      }
+    ],
+    "value": 16,
+    "emoji": "🔥"
+  },
+  {
+    "id": "invis_potion",
+    "name": "투명 물약",
+    "desc": "마시고 나면 투명해집니다.",
+    "type": "POTION",
+    "usable": true,
+    "heal": 5,
+    "use_msg": "투명화 물약을 마시면 몸이 점차 투명해지며... 별 다른 효과는 없는 것 같습니다.",
+    "value": 25,
+    "emoji": "👻"
+  },
+  {
+    "id": "stamina_potion",
+    "name": "체력 물약",
+    "desc": "HP를 25 회복합니다.",
+    "type": "POTION",
+    "usable": true,
+    "heal": 25,
+    "value": 15,
+    "emoji": "💪"
+  },
+  {
+    "id": "focus_draught",
+    "name": "집중 물약",
+    "desc": "맑은 금빛 물약. 전투 집중력을 높인다. 스킬 횟수 1 회복.",
+    "use_msg": "집중이 경락으로 흘러들어 출격의 기운이 다시 모인다.",
+    "emoji": "✨"
+  },
+  {
+    "id": "battle_stim",
+    "name": "전의 자극제",
+    "desc": "매운 붉은 약제. 스킬 횟수 2 회복.",
+    "use_msg": "전의가 끓어올라 스킬 횟수가 크게 회복됐다!",
+    "emoji": "🩸"
+  },
+  {
+    "id": "charge_charm",
+    "name": "출격 부적",
+    "desc": "베기 문양이 새겨진 작은 부적. 주인공 스킬 상한을 영구 +1 (최대 99).",
+    "use_msg": "부적이 금빛으로 녹아 가슴으로 스며든다—전력을 더 자주 쏟아낼 수 있다.",
+    "emoji": "🔖"
+  },
+  {
+    "id": "moonlight_elixir",
+    "name": "달빛 정수",
+    "desc": "은병에 담긴 액체는 달빛처럼 흐르며 은은한 빛을 발산한다.",
+    "type": "POTION",
+    "usable": true,
+    "heal": 50,
+    "use_msg": "달빛 에센스를 마시면 온몸이 따뜻한 빛으로 감싸집니다! 체력 50 회복!",
+    "value": 40,
+    "emoji": "🌙"
+  },
+  {
+    "id": "lantern",
+    "name": "칸델라",
+    "desc": "기름이 아직 남아 있는 오래된 등불.",
+    "type": "LIGHT",
+    "usable": true,
+    "use_msg": "등불이 주변을 밝혔습니다.",
+    "weight": 2,
+    "value": 8,
+    "emoji": "🏮"
+  },
+  {
+    "id": "torch",
+    "name": "토치",
+    "desc": "테레빈유 토치.",
+    "type": "LIGHT",
+    "usable": true,
+    "use_msg": "횃불은 밝은 불꽃으로 빛났습니다.",
+    "value": 3,
+    "emoji": "🔦"
+  },
+  {
+    "id": "bread",
+    "name": "딱딱한 빵",
+    "desc": "마른 갈색 빵.",
+    "type": "FOOD",
+    "usable": true,
+    "heal": 5,
+    "value": 2,
+    "emoji": "🍞"
+  },
+  {
+    "id": "dried_meat",
+    "name": "말린 고기",
+    "desc": "고소한 베이컨 육포.",
+    "type": "FOOD",
+    "usable": true,
+    "heal": 8,
+    "value": 4,
+    "emoji": "🥩"
+  },
+  {
+    "id": "mushroom",
+    "name": "형광버섯",
+    "desc": "반짝이는 버섯, 먹을 수 있을지 궁금해요.",
+    "type": "FOOD",
+    "usable": true,
+    "heal": 3,
+    "value": 1,
+    "emoji": "🍄"
+  },
+  {
+    "id": "fish",
+    "name": "생선 구이",
+    "desc": "맛있는 생선 구이.",
+    "type": "FOOD",
+    "usable": true,
+    "heal": 7,
+    "value": 3,
+    "emoji": "🐟"
+  },
+  {
+    "id": "magic_herb",
+    "name": "마법의 허브",
+    "desc": "다채로운 빛을 발산하는 허브.",
+    "type": "FOOD",
+    "usable": true,
+    "heal": 12,
+    "value": 6,
+    "emoji": "🌿"
+  },
+  {
+    "id": "honey",
+    "name": "꿀",
+    "desc": "황금빛 야생꿀, 아주 달콤해요.",
+    "type": "FOOD",
+    "usable": true,
+    "heal": 6,
+    "value": 4,
+    "emoji": "🍯"
+  },
+  {
+    "id": "golden_cup",
+    "name": "황금 컵",
+    "desc": "순금으로 만든 잔.",
+    "type": "TREASURE",
+    "value": 40,
+    "weight": 2,
+    "emoji": "🏆"
+  },
+  {
+    "id": "silver_ring",
+    "name": "실버 반지",
+    "desc": "고대 문양이 새겨진 은반지.",
+    "type": "TREASURE",
+    "value": 20,
+    "emoji": "💍"
+  },
+  {
+    "id": "emerald",
+    "name": "에메랄드 원석",
+    "desc": "엄지손가락만한 녹색 보석.",
+    "type": "TREASURE",
+    "value": 50,
+    "emoji": "💚"
+  },
+  {
+    "id": "diamond",
+    "name": "다이아몬드",
+    "desc": "완벽하게 커팅된 다이아몬드입니다.",
+    "type": "TREASURE",
+    "value": 80,
+    "emoji": "💠"
+  },
+  {
+    "id": "ruby",
+    "name": "루비",
+    "desc": "피처럼 붉은색의 투명한 루비.",
+    "type": "TREASURE",
+    "value": 60,
+    "emoji": "❤️"
+  },
+  {
+    "id": "sapphire",
+    "name": "사파이어",
+    "desc": "바다와 같은 짙푸른 보석.",
+    "type": "TREASURE",
+    "value": 55,
+    "emoji": "💙"
+  },
+  {
+    "id": "ancient_crown",
+    "name": "고대 왕관",
+    "desc": "보석이 박힌 어떤 왕의 유물입니다.",
+    "type": "TREASURE",
+    "value": 120,
+    "weight": 2,
+    "emoji": "👑"
+  },
+  {
+    "id": "old_coin",
+    "name": "고대 금화",
+    "desc": "희미한 문양이 새겨진 고대 금화.",
+    "type": "TREASURE",
+    "value": 15,
+    "emoji": "🪙"
+  },
+  {
+    "id": "gold_ingot",
+    "name": "금괴",
+    "desc": "순금으로 만든 금괴.",
+    "type": "MINERAL",
+    "value": 35,
+    "weight": 2,
+    "emoji": "🟨"
+  },
+  {
+    "id": "silver_ingot",
+    "name": "은괴",
+    "desc": "스털링 실버로 만든 은괴입니다.",
+    "type": "MINERAL",
+    "value": 18,
+    "weight": 2,
+    "emoji": "⬜"
+  },
+  {
+    "id": "wolf_tooth",
+    "name": "울프팽",
+    "desc": "거대한 늑대의 송곳니는 강함의 증거입니다.",
+    "type": "MATERIAL",
+    "value": 5,
+    "emoji": "🦷"
+  },
+  {
+    "id": "spider_silk",
+    "name": "거미줄",
+    "desc": "수정처럼 투명한 거미줄.",
+    "type": "MATERIAL",
+    "value": 8,
+    "emoji": "🕸️"
+  },
+  {
+    "id": "dragon_scale",
+    "name": "드래곤 스케일",
+    "desc": "어린 용의 몸에서 떨어지는 비늘은 매우 단단합니다.",
+    "type": "MATERIAL",
+    "value": 50,
+    "emoji": "🐉"
+  },
+  {
+    "id": "fairy_dust",
+    "name": "요정 먼지",
+    "desc": "윤기 나는 가루.",
+    "type": "MATERIAL",
+    "value": 20,
+    "emoji": "✨"
+  },
+  {
+    "id": "mandrake_root",
+    "name": "맨드레이크 뿌리",
+    "desc": "인간 모양의 풀뿌리에는 마법의 힘이 있다고 합니다.",
+    "type": "MATERIAL",
+    "value": 15,
+    "emoji": "🪴"
+  },
+  {
+    "id": "goblin_ear",
+    "name": "고블린 귀",
+    "desc": "잘린 고블린의 귀에서는 강한 피 냄새가 났다.",
+    "type": "MATERIAL",
+    "value": 3,
+    "emoji": "👂"
+  },
+  {
+    "id": "snake_skin",
+    "name": "뱀가죽",
+    "desc": "거대 비단뱀이 벗겨낸 피부는 매우 질깁니다.",
+    "type": "MATERIAL",
+    "value": 12,
+    "emoji": "🐍"
+  },
+  {
+    "id": "bandit_badge",
+    "name": "산적 배지",
+    "desc": "도적 리더의 신분증입니다.",
+    "type": "MATERIAL",
+    "value": 10,
+    "emoji": "🎖️"
+  },
+  {
+    "id": "ancient_scroll",
+    "name": "고대 두루마리",
+    "desc": "이해할 수 없는 고대 문자.",
+    "type": "SCROLL",
+    "usable": true,
+    "use_msg": "두루마리가 빛나지만... 읽을 수 없습니다.",
+    "value": 5,
+    "emoji": "📜"
+  },
+  {
+    "id": "magic_scroll",
+    "name": "순간이동 스크롤",
+    "desc": "순간이동 주문을 기록하세요. 탐색한 모든 위치로 순간이동할 수 있습니다(텔레포트 스크롤 <위치> 사용).",
+    "type": "SCROLL",
+    "usable": true,
+    "use_msg": "순간이동 스크롤이 깜박입니다. 탐색한 위치 선택: 텔레포트 스크롤 <위치 이름 또는 ID> 사용",
+    "value": 15,
+    "emoji": "📜"
+  },
+  {
+    "id": "rope",
+    "name": "대마 밧줄",
+    "desc": "10미터 길이의 튼튼한 끈.",
+    "type": "TOOL",
+    "usable": true,
+    "use_msg": "어쩌면 다른 곳에서 더 유용할 수도 있습니다.",
+    "value": 3,
+    "emoji": "🪢"
+  },
+  {
+    "id": "compass",
+    "name": "고대 나침반",
+    "desc": "포인터는 특별한 방향을 가리킵니다.",
+    "type": "TOOL",
+    "usable": true,
+    "use_msg": "나침반은 남동쪽을 가리킨다..",
+    "value": 8,
+    "emoji": "🧭"
+  },
+  {
+    "id": "lockpick",
+    "name": "자물쇠 선택",
+    "desc": "자물쇠 따기 도구의 절묘한 세트입니다.",
+    "type": "TOOL",
+    "usable": true,
+    "use_msg": "자물쇠 따개를 만지작거리셨는데... 뭔가 열리는 것 같았어요.",
+    "value": 12,
+    "emoji": "🔓"
+  },
+  {
+    "id": "fishing_rod",
+    "name": "낚싯대",
+    "desc": "가느다란 낚시대. 호수 옆이나 호수 중앙에 있는 섬, 지하 강에서 낚시를 할 수 있습니다.",
+    "type": "TOOL",
+    "usable": true,
+    "use_msg": "여기는 물이 없어서 낚시를 할 수가 없습니다.",
+    "value": 5,
+    "emoji": "🎣"
+  },
+  {
+    "id": "magnifying_glass",
+    "name": "돋보기",
+    "desc": "작은 것들을 관찰할 수 있습니다.",
+    "type": "TOOL",
+    "usable": true,
+    "use_msg": "돋보기를 통해 일반 사람들이 볼 수 없는 세세한 부분까지 볼 수 있습니다.",
+    "value": 8,
+    "emoji": "🔍"
+  },
+  {
+    "id": "journal",
+    "name": "모험가의 일기",
+    "desc": "모험가가 남긴 일기장.",
+    "type": "BOOK",
+    "usable": true,
+    "use_msg": "일기장에는 \"탑 꼭대기에 있는 보석이 봉인의 열쇠다...\"라고 기록되어 있습니다.",
+    "value": 5,
+    "emoji": "📓"
+  },
+  {
+    "id": "magic_book",
+    "name": "마술 소개",
+    "desc": "기본 마법 이론.",
+    "type": "BOOK",
+    "usable": true,
+    "use_msg": "당신은 마법에 대해 뭔가를 배웠습니다.",
+    "value": 10,
+    "emoji": "📖"
+  },
+  {
+    "id": "magic_gem",
+    "name": "마법의 보석",
+    "desc": "보라색 빛을 발산하며 강력한 마력이 담긴 보석.",
+    "type": "QUEST",
+    "usable": true,
+    "use_msg": "눈부신 빛으로 보석이 폭발합니다!",
+    "value": 0,
+    "weight": 1,
+    "emoji": "💎"
+  },
+  {
+    "id": "sacred_water",
+    "name": "성수",
+    "desc": "유리병에 담긴 축복받은 성수.",
+    "type": "QUEST",
+    "usable": true,
+    "use_msg": "성수는 은은한 흰색 빛을 발산합니다.",
+    "value": 0,
+    "emoji": "💧"
+  },
+  {
+    "id": "phoenix_feather",
+    "name": "불사조 깃털",
+    "desc": "불타는 붉은 봉황의 꼬리 깃털은 여전히 ​​따뜻합니다.",
+    "type": "QUEST",
+    "usable": true,
+    "use_msg": "깃털이 불꽃으로 변해 손바닥에 불꽃 자국이 남습니다!",
+    "value": 0,
+    "emoji": "🪶"
+  },
+  {
+    "id": "ice_crystal",
+    "name": "얼음 결정",
+    "desc": "극도로 추운 곳에서 응축된 영원한 얼음 결정체.",
+    "type": "QUEST",
+    "value": 0,
+    "weight": 1,
+    "emoji": "❄️"
+  },
+  {
+    "id": "ancient_key",
+    "name": "고대의 열쇠",
+    "desc": "매우 무거운 거대한 돌 열쇠입니다.",
+    "type": "KEY",
+    "usable": true,
+    "use_msg": "열쇠는 너무 무거워서 거의 들어 올릴 수 없습니다.",
+    "weight": 5,
+    "value": 0,
+    "emoji": "🗝️"
+  },
+  {
+    "id": "health_ring",
+    "name": "생명의 고리",
+    "desc": "착용하는 동안 활력을 느껴보세요.",
+    "type": "RING",
+    "usable": true,
+    "use_msg": "생명의 고리가 은은한 녹색 빛을 발산합니다! 최대 HP +10!",
+    "heal": 10,
+    "value": 30,
+    "emoji": "💚"
+  },
+  {
+    "id": "protection_ring",
+    "name": "보호의 반지",
+    "desc": "착용자는 투명 보호막을 얻습니다.",
+    "type": "RING",
+    "def_bonus": 2,
+    "value": 35,
+    "emoji": "🛡️"
+  },
+  {
+    "id": "strength_ring",
+    "name": "파워링",
+    "desc": "착용자의 힘을 증가시킵니다.",
+    "type": "RING",
+    "dmg_bonus": 2,
+    "value": 32,
+    "emoji": "💪"
+  },
+  {
+    "id": "mystic_amulet",
+    "name": "신비로운 부적",
+    "desc": "고대 룬 문자가 새겨진 부적, 그 기원은 알려져 있지 않습니다.",
+    "type": "AMULET",
+    "usable": true,
+    "use_msg": "부적이 반짝거리며 당신을 보호하는 신비한 힘을 느낍니다.",
+    "def_bonus": 1,
+    "value": 25,
+    "emoji": "🔮"
+  },
+  {
+    "id": "bag_starter",
+    "name": "초라한 캔버스 가방",
+    "desc": "무겁게 낡은 배낭에는 필수품을 거의 담을 수 없었습니다.",
+    "type": "BAG",
+    "usable": true,
+    "capacity": 15,
+    "weight": 1,
+    "value": 0,
+    "takeable": false,
+    "emoji": "🎒"
+  },
+  {
+    "id": "bag_tactical",
+    "name": "전술 배낭",
+    "desc": "다층 수납공간과 탁월한 하중 지지 기능을 갖춘 기본 표준 전술 배낭입니다.",
+    "type": "BAG",
+    "usable": true,
+    "capacity": 22,
+    "weight": 2,
+    "value": 40,
+    "emoji": "🎒"
+  },
+  {
+    "id": "bag_anomalous",
+    "name": "비정상적인 보관 가방",
+    "desc": "내부는 \"D계급 인원 전용\" 라벨이 붙어 있어 외관보다 더 넓은 것 같다.",
+    "type": "BAG",
+    "usable": true,
+    "capacity": 28,
+    "weight": 3,
+    "value": 80,
+    "emoji": "🎒"
+  },
+  {
+    "id": "keycard_lvl2",
+    "name": "보조 키 카드",
+    "desc": "재단 출입 카드, 권한 등급: 2.",
+    "type": "KEY",
+    "usable": false,
+    "value": 20,
+    "emoji": "💳"
+  },
+  {
+    "id": "keycard_lvl3",
+    "name": "레벨 3 키 카드",
+    "desc": "재단의 고급 접근 카드를 사용하면 깊은 격리 구역에 들어갈 수 있습니다.",
+    "type": "KEY",
+    "usable": false,
+    "value": 35,
+    "emoji": "💳"
+  },
+  {
+    "id": "scp_dossier",
+    "name": "비정상적인 파일 조각",
+    "desc": "\"SCP-ZH-██\"라는 숫자가 적힌 손상된 문서에는 안개와 탑 사이의 연관성이 언급되어 있습니다.",
+    "type": "BOOK",
+    "usable": true,
+    "use_msg": "\"안개는 자연 현상이 아니라 등록되지 않은 변칙 개체의 유출입니다...탑은 초기 격리 시설이었을 수 있습니다.\" 』",
+    "value": 10,
+    "emoji": "📄"
+  },
+  {
+    "id": "observation_log",
+    "name": "관찰 기록",
+    "desc": "연구자가 손으로 휘갈겨 쓴 관찰 기록.",
+    "type": "QUEST",
+    "value": 15,
+    "emoji": "📋"
+  },
+  {
+    "id": "scp_goggles",
+    "name": "인지 보호 고글",
+    "desc": "가벼운 인지적 위험으로부터 보호하기 위해 재단에서 지급한 고글.",
+    "type": "ARMOR",
+    "def_bonus": 1,
+    "value": 25,
+    "emoji": "🥽"
+  },
+  {
+    "id": "containment_box",
+    "name": "휴대용 보관함",
+    "desc": "불안정한 코어를 안정시키는 소형 변칙개체 격리 장치입니다.",
+    "type": "TOOL",
+    "usable": false,
+    "value": 50,
+    "weight": 2,
+    "emoji": "📦"
+  },
+  {
+    "id": "amnesia_pill",
+    "name": "기억을 지우는 약",
+    "desc": "재단의 표준 A급 기억 억제제를 사용하면 전투 중에 빠르게 탈출할 수 있습니다.",
+    "type": "TOOL",
+    "usable": true,
+    "use_msg": "당신이 약을 삼키면 적들은 당신의 존재를 잠시 잊어버린 것 같습니다!",
+    "value": 18,
+    "emoji": "💊"
+  },
+  {
+    "id": "anomaly_core",
+    "name": "안정적인 비정상 코어",
+    "desc": "패배한 비정상적인 코어는 여전히 약한 펄스를 방출합니다.",
+    "type": "TREASURE",
+    "value": 100,
+    "weight": 2,
+    "emoji": "🔮"
+  },
+  {
+    "id": "site_clearance",
+    "name": "현장 청소 메달",
+    "desc": "궁극적인 위협 번호 001을 제압했다는 것을 증명하세요. 계속 탐색하거나 두 번째 게임을 시작할 수 있습니다.",
+    "type": "TREASURE",
+    "value": 500,
+    "weight": 0,
+    "emoji": "🏅"
+  },
+  {
+    "id": "site_ration",
+    "name": "재단 배급",
+    "desc": "판지 맛이 나는 진공 포장된 군용 식량.",
+    "type": "FOOD",
+    "usable": true,
+    "heal": 6,
+    "value": 3,
+    "emoji": "🍱"
+  },
+  {
+    "id": "scp_012_score",
+    "name": "미완성 동작(SCP-ZH-012)의 남은 점수",
+    "desc": "피 묻은 직원 페이지에서 메모가 저절로 확장되는 것처럼 보였습니다.",
+    "type": "SCROLL",
+    "usable": true,
+    "use_msg": "당신은 계속 글을 쓰고 싶지 않을 수 없습니다. 손가락에서 피가 납니다.",
+    "value": 30,
+    "emoji": "🎼"
+  },
+  {
+    "id": "scp_035_mask",
+    "name": "백자 가면 (SCP-ZH-035)",
+    "desc": "안쪽에 건조된 검은색 액체가 들어 있는 웃는 백자 마스크입니다.",
+    "type": "ARMOR",
+    "usable": true,
+    "use_msg": "마스크가 얼굴에 달라붙었고 귀에는 속삭임이 들렸다.",
+    "dmg_bonus": 5,
+    "def_bonus": -1,
+    "value": 60,
+    "emoji": "🎭"
+  },
+  {
+    "id": "scp_500_pill",
+    "name": "만병통치약 (SCP-ZH-500)",
+    "desc": "빨간 캡슐은 모든 부상과 질병을 치료한다고 합니다.",
+    "type": "POTION",
+    "usable": true,
+    "heal": 999,
+    "use_msg": "몸의 모든 통증이 사라지는 듯한 느낌!",
+    "value": 200,
+    "emoji": "🔴"
+  },
+  {
+    "id": "scp_055_object",
+    "name": "[편집됨](SCP-ZH-055)",
+    "desc": "당신은 뭔가를 집은 것을 기억하지만... 그것이 무엇인지는 알 수 없습니다.",
+    "type": "QUEST",
+    "usable": true,
+    "use_msg": "당신은 그것을 쳐다보지만, 당신이 무엇을 보고 있는지 기억할 수 없습니다.",
+    "value": 55,
+    "emoji": "⬛"
+  },
+  {
+    "id": "scp_093_disc",
+    "name": "홍해 원반 (SCP-ZH-093)",
+    "desc": "핏빛 붉은 돌판을 만지면 조수석 소리가 납니다.",
+    "type": "KEY",
+    "usable": true,
+    "use_msg": "마치 어떤 문을 찾는 듯 디스크가 윙윙거렸다.",
+    "value": 40,
+    "emoji": "🔴"
+  },
+  {
+    "id": "scp_178_glasses",
+    "name": "3D 안경 (SCP-ZH-178)",
+    "desc": "옛날 방식의 빨간색과 파란색 3D 안경을 착용한 후 시야 가장자리에 무언가가 움직이는 것이 있습니다.",
+    "type": "TOOL",
+    "usable": true,
+    "use_msg": "안경을 착용하면 주변 시야에 흐릿한 사람의 모습이 나타납니다.",
+    "value": 25,
+    "emoji": "👓"
+  },
+  {
+    "id": "scp_860_key",
+    "name": "파란색 열쇠 (SCP-ZH-860)",
+    "desc": "손잡이에 나무 문양이 새겨진 파란색 열쇠입니다.",
+    "type": "KEY",
+    "usable": true,
+    "use_msg": "열쇠는 살짝 따뜻했고, 다른 세계로 가는 입구를 가리켰다.",
+    "value": 35,
+    "emoji": "🔑"
+  },
+  {
+    "id": "scp_701_script",
+    "name": "죽음의 날 연회 스크립트(SCP-ZH-701)",
+    "desc": "금지된 비극의 단편적 복제물에는 관객이 찢어지는 흔적이 여백에 남아 있다.",
+    "type": "BOOK",
+    "usable": true,
+    "use_msg": "마지막 줄을 읽자 무대 쪽에서 박수소리가 들려왔다.",
+    "value": 45,
+    "emoji": "📜"
+  },
+  {
+    "id": "scp_513_bell",
+    "name": "러스티 벨 (SCP-ZH-513)",
+    "desc": "녹슨 카우벨이 울리고, 있어서는 안 될 발소리가 들립니다.",
+    "type": "TOOL",
+    "usable": true,
+    "use_msg": "벨이 부드럽게 울렸다... 내 뒤에 그림자가 있는 것 같았다.",
+    "value": 28,
+    "emoji": "🔔"
+  },
+  {
+    "id": "scp_714_ring",
+    "name": "옥 반지 (SCP-ZH-714)",
+    "desc": "차가운 옥반지, 끼고 나면 생각이 느려지지만 마음은 더욱 맑아진다.",
+    "type": "RING",
+    "usable": true,
+    "use_msg": "옥반지를 끼고 있으면 느리지만 안전한 느낌이 듭니다.",
+    "def_bonus": 3,
+    "dmg_bonus": -1,
+    "value": 50,
+    "emoji": "💍"
+  },
+  {
+    "id": "scp_447_slime",
+    "name": "녹색 점액 샘플 (SCP-ZH-447)",
+    "desc": "'시체를 만지지 마세요'라는 라벨이 붙은 무해한 녹색 슬라임.",
+    "type": "MATERIAL",
+    "value": 20,
+    "emoji": "🟢"
+  },
+  {
+    "id": "scp_1981_tape",
+    "name": "불완전한 비디오테이프 (SCP-ZH-1981)",
+    "desc": "라벨이 흐릿한 VHS, 조회수에 따라 그림이 변경됩니다.",
+    "type": "TOOL",
+    "usable": true,
+    "use_msg": "눈꽃 화면에서는 화자의 얼굴이 점차 왜곡됐다. 당신은 희미한 정보를 얻었습니다.",
+    "value": 22,
+    "emoji": "📼"
+  },
+  {
+    "id": "scp_1230_book",
+    "name": "주머니 차원의 책 (SCP-ZH-1230)",
+    "desc": "두꺼운 동화책을 펼치면 잠시나마 안전한 꿈나라로 들어갈 수 있습니다.",
+    "type": "BOOK",
+    "usable": true,
+    "heal": 15,
+    "use_msg": "당신은 따뜻한 꿈에 빠졌고, 부상도 완화되었습니다.",
+    "value": 40,
+    "emoji": "📖"
+  },
+  {
+    "id": "scp_1471_phone",
+    "name": "비정상적인 휴대폰 (SCP-ZH-1471)",
+    "desc": "소셜 소프트웨어가 사전 설치되어 있으며 잠금 화면에는 항상 개 실루엣이 표시됩니다.",
+    "type": "TOOL",
+    "usable": true,
+    "use_msg": "알림 팝업: 항상 당신을 지켜보고 있다고 합니다.",
+    "value": 33,
+    "emoji": "📱"
+  },
+  {
+    "id": "scp_409_crystal",
+    "name": "결정화된 파편 (SCP-ZH-409)",
+    "desc": "날카로운 결정체로, 접촉 후 피부가 약간 딱딱한 느낌을 받습니다.",
+    "type": "MATERIAL",
+    "usable": true,
+    "use_msg": "손가락에 따끔거리는 통증이 느껴졌고, 당신은 재빨리 조각들을 치웠습니다.",
+    "value": 18,
+    "emoji": "💎"
+  },
+  {
+    "id": "scp_008_vial",
+    "name": "역병 샘플 튜브 (SCP-ZH-008)",
+    "desc": "생물학적 위험 라벨이 붙은 밀봉된 유리병.",
+    "type": "QUEST",
+    "usable": true,
+    "use_msg": "당신은 그것을 열지 않았습니다. 당신의 정신은 남아있었습니다.",
+    "value": 5,
+    "emoji": "🧪"
+  },
+  {
+    "id": "scp_205_lamp",
+    "name": "그림자 빛 (SCP-ZH-205)",
+    "desc": "짝을 이루는 책상 램프 중 하나에 불이 들어오면 벽의 그림자가 저절로 움직입니다.",
+    "type": "LIGHT",
+    "usable": true,
+    "use_msg": "조명이 켜지고 벽에 비친 그림자가 천천히 움직이기 시작했습니다.",
+    "value": 30,
+    "emoji": "💡"
+  },
+  {
+    "id": "scp_140_chronicle",
+    "name": "미완성 연대기 (SCP-ZH-140)",
+    "desc": "잃어버린 문명을 기록한 책에서는 저절로 글이 늘어납니다.",
+    "type": "BOOK",
+    "usable": true,
+    "use_msg": "새로운 단어가 저절로 나옵니다. 책을 닫습니다.",
+    "value": 48,
+    "emoji": "📕"
+  },
+  {
+    "id": "scp_113_rock",
+    "name": "유전자 전환석 (SCP-ZH-113)",
+    "desc": "접촉 시 생리적 특성이 변화하는 매끄러운 빨간색과 녹색 돌입니다.",
+    "type": "TOOL",
+    "usable": true,
+    "use_msg": "현기증이 나면 더 강해지는 느낌이 듭니다.",
+    "value": 55,
+    "emoji": "🪨"
+  },
+  {
+    "id": "scp_148_telekill",
+    "name": "소울 합금 시트 (SCP-ZH-148)",
+    "desc": "회색 금속 조각은 정신 간섭을 차단할 수 있다고 합니다.",
+    "type": "ARMOR",
+    "def_bonus": 2,
+    "value": 45,
+    "emoji": "🛡️"
+  },
+  {
+    "id": "scp_5000_file",
+    "name": "액션 파일이 필요한 이유(SCP-ZH-5000)",
+    "desc": "검은색 표지 파일에는 재단의 통제 불가능한 활동이 기록되어 있습니다.",
+    "type": "BOOK",
+    "usable": true,
+    "use_msg": "안개가 사이트 충돌과 연관될 수 있다는 문제 있는 결론을 읽었습니다.",
+    "value": 60,
+    "emoji": "📁"
+  },
+  {
+    "id": "scp_261_snack",
+    "name": "차원 스낵백 (SCP-ZH-261)",
+    "desc": "포장 언어를 알 수 없는 퍼프 음식은 의외로 맛있습니다.",
+    "type": "FOOD",
+    "usable": true,
+    "heal": 10,
+    "value": 8,
+    "emoji": "🍿"
+  }
+]

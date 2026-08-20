@@ -1,0 +1,556 @@
+[
+  {
+    "id": "giant_rat",
+    "name": "giant rat",
+    "desc": "A big rat the size of a dog with red eyes.",
+    "hp": 8,
+    "atk": 2,
+    "exp": 5,
+    "gold": 3,
+    "loot": [
+      "mushroom"
+    ],
+    "emoji": "🐀"
+  },
+  {
+    "id": "wolf",
+    "name": "giant wolf",
+    "desc": "A giant wolf with gray-black fur and green eyes.",
+    "hp": 14,
+    "atk": 4,
+    "defense": 1,
+    "exp": 12,
+    "gold": 8,
+    "loot": [
+      "wolf_tooth",
+      "dried_meat"
+    ],
+    "emoji": "🐺"
+  },
+  {
+    "id": "giant_spider",
+    "name": "giant spider",
+    "desc": "Furry cave spider with eight eyes staring at you.",
+    "hp": 18,
+    "atk": 5,
+    "defense": 1,
+    "exp": 15,
+    "gold": 10,
+    "loot": [
+      "spider_silk"
+    ],
+    "on_hit_effects": [
+      {
+        "effect": "poison",
+        "duration": 3,
+        "potency": 1,
+        "chance": 0.35
+      }
+    ],
+    "emoji": "🕷️"
+  },
+  {
+    "id": "stone_golem",
+    "name": "gargoyle",
+    "desc": "A gargoyle made of rock with red eyes flashing.",
+    "hp": 30,
+    "atk": 7,
+    "defense": 3,
+    "rank": "ELITE",
+    "exp": 30,
+    "gold": 20,
+    "loot": [
+      "emerald",
+      "chain_armor"
+    ],
+    "emoji": "🗿"
+  },
+  {
+    "id": "ghost",
+    "name": "ghost",
+    "desc": "The translucent spirit body exudes cold air.",
+    "hp": 12,
+    "atk": 6,
+    "defense": 0,
+    "exp": 15,
+    "gold": 5,
+    "loot": [
+      "old_coin"
+    ],
+    "hostile": true,
+    "emoji": "👻"
+  },
+  {
+    "id": "shadow_beast",
+    "name": "shadow beast",
+    "desc": "A beast formed from darkness, with only a pair of red eyes clearly visible.",
+    "hp": 22,
+    "atk": 6,
+    "defense": 1,
+    "exp": 20,
+    "gold": 12,
+    "loot": [
+      "shadow_blade"
+    ],
+    "emoji": "🌑"
+  },
+  {
+    "id": "forest_troll",
+    "name": "forest troll",
+    "desc": "A three-meter-tall troll with skin as rough as tree bark.",
+    "hp": 35,
+    "atk": 8,
+    "defense": 2,
+    "rank": "ELITE",
+    "exp": 35,
+    "gold": 25,
+    "loot": [
+      "iron_sword",
+      "dried_meat"
+    ],
+    "emoji": "👹"
+  },
+  {
+    "id": "dragon_whelp",
+    "name": "young dragon",
+    "desc": "The young dragon has been sleeping for many years, its scales shine like obsidian.",
+    "hp": 60,
+    "atk": 12,
+    "defense": 5,
+    "rank": "BOSS",
+    "exp": 100,
+    "gold": 100,
+    "loot": [
+      "diamond",
+      "magic_gem",
+      "magic_staff",
+      "charge_charm"
+    ],
+    "dialog": {
+      "taunt": "Mortal, you shouldn't be here!"
+    },
+    "emoji": "🐉"
+  },
+  {
+    "id": "goblin",
+    "name": "Goblin",
+    "desc": "The little green-skinned man was holding a broken knife and screaming.",
+    "hp": 10,
+    "atk": 3,
+    "defense": 0,
+    "speed": 5,
+    "exp": 8,
+    "gold": 5,
+    "loot": [
+      "goblin_ear",
+      "old_coin"
+    ],
+    "emoji": "👺"
+  },
+  {
+    "id": "goblin_shaman",
+    "name": "goblin shaman",
+    "desc": "The goblin wearing a bone mask exudes evil energy.",
+    "hp": 18,
+    "atk": 5,
+    "defense": 1,
+    "exp": 18,
+    "gold": 15,
+    "loot": [
+      "goblin_ear",
+      "mana_potion",
+      "mandrake_root"
+    ],
+    "emoji": "🧙"
+  },
+  {
+    "id": "giant_snake",
+    "name": "giant python",
+    "desc": "A giant python as thick as a bucket, its scales gleaming in the dark.",
+    "hp": 25,
+    "atk": 6,
+    "defense": 1,
+    "exp": 20,
+    "gold": 12,
+    "loot": [
+      "snake_skin"
+    ],
+    "emoji": "🐍"
+  },
+  {
+    "id": "bandit_leader",
+    "name": "bandit leader",
+    "desc": "The one-eyed man with a sinewy face was holding a long sword stained with blood.",
+    "hp": 28,
+    "atk": 7,
+    "defense": 2,
+    "rank": "ELITE",
+    "exp": 25,
+    "gold": 30,
+    "loot": [
+      "bandit_badge",
+      "iron_sword",
+      "old_coin"
+    ],
+    "emoji": "🏴‍☠️"
+  },
+  {
+    "id": "ice_elemental",
+    "name": "ice element",
+    "desc": "A humanoid creature made of ice crystals, exuding a biting cold air.",
+    "hp": 20,
+    "atk": 7,
+    "defense": 3,
+    "exp": 22,
+    "gold": 15,
+    "loot": [
+      "ice_crystal",
+      "mana_potion"
+    ],
+    "emoji": "❄️"
+  },
+  {
+    "id": "mimic",
+    "name": "Mimic",
+    "desc": "It looks like a gorgeous treasure chest...but it has teeth!",
+    "hp": 25,
+    "atk": 6,
+    "defense": 2,
+    "exp": 20,
+    "gold": 25,
+    "loot": [
+      "golden_cup",
+      "ruby",
+      "lockpick"
+    ],
+    "emoji": "📦"
+  },
+  {
+    "id": "treant",
+    "name": "Dryad",
+    "desc": "Ancient trees come to life, waving their vine-like branches.",
+    "hp": 35,
+    "atk": 6,
+    "defense": 4,
+    "rank": "ELITE",
+    "exp": 30,
+    "gold": 20,
+    "loot": [
+      "magic_herb",
+      "mandrake_root"
+    ],
+    "emoji": "🌳"
+  },
+  {
+    "id": "giant_eagle",
+    "name": "giant eagle",
+    "desc": "A giant eagle with a wingspan of five meters, its beak is like an iron hook, and its eyes are like torches.",
+    "hp": 22,
+    "atk": 8,
+    "defense": 1,
+    "exp": 20,
+    "gold": 10,
+    "loot": [
+      "phoenix_feather"
+    ],
+    "emoji": "🦅"
+  },
+  {
+    "id": "goblin_king",
+    "name": "Goblin King",
+    "desc": "Three times the size of an ordinary goblin, he wears a bone crown on his head and holds a giant stick!",
+    "hp": 50,
+    "atk": 10,
+    "defense": 3,
+    "rank": "BOSS",
+    "speed": 7,
+    "ai": "boss",
+    "exp": 80,
+    "gold": 80,
+    "loot": [
+      "ancient_crown",
+      "war_hammer",
+      "rune_sword",
+      "strength_ring",
+      "charge_charm"
+    ],
+    "emoji": "👑"
+  },
+  {
+    "id": "wraith",
+    "name": "Wraith",
+    "desc": "The translucent humanoid resentful spirit made a low cry, and everything it passed was covered with frost.",
+    "hp": 28,
+    "atk": 9,
+    "defense": 1,
+    "rank": "ELITE",
+    "exp": 35,
+    "gold": 18,
+    "loot": [
+      "moonlight_elixir",
+      "ancient_scroll"
+    ],
+    "dialog": {
+      "taunt": "You... please stay with me..."
+    },
+    "emoji": "😈"
+  },
+  {
+    "id": "basilisk",
+    "name": "Basilisk",
+    "desc": "A huge lizard with a red crown on its back that turns everything it looks at to stone!",
+    "hp": 40,
+    "atk": 10,
+    "defense": 4,
+    "rank": "ELITE",
+    "exp": 50,
+    "gold": 40,
+    "loot": [
+      "thunder_hammer",
+      "dragon_scale",
+      "gold_ingot"
+    ],
+    "emoji": "🦎"
+  },
+  {
+    "id": "scp_sentry_drone",
+    "name": "security drone",
+    "desc": "The autonomous patrol drone left behind by the Foundation has its red scanning light locked on you.",
+    "hp": 16,
+    "atk": 5,
+    "defense": 2,
+    "exp": 18,
+    "gold": 12,
+    "loot": [
+      "old_coin"
+    ],
+    "emoji": "🤖"
+  },
+  {
+    "id": "scp_mimic_clerk",
+    "name": "mimetic staff",
+    "desc": "Something in a Foundation uniform, its face a blur of flesh.",
+    "hp": 24,
+    "atk": 7,
+    "defense": 1,
+    "rank": "ELITE",
+    "exp": 30,
+    "gold": 20,
+    "loot": [
+      "keycard_lvl3",
+      "amnesia_pill"
+    ],
+    "emoji": "👔"
+  },
+  {
+    "id": "scp_breach_core",
+    "name": "Out of control abnormal core",
+    "desc": "The anomalous entity leaked after the containment column shattered. Its shape is constantly changing, and the air is distorted by it.",
+    "hp": 55,
+    "atk": 12,
+    "defense": 3,
+    "rank": "BOSS",
+    "exp": 80,
+    "gold": 50,
+    "loot": [
+      "anomaly_core",
+      "bag_anomalous"
+    ],
+    "dialog": {
+      "taunt": "■■■...You...shouldn't...be...here..."
+    },
+    "emoji": "🌀"
+  },
+  {
+    "id": "scp_173",
+    "name": "Concrete Sculpture (SCP-ZH-173)",
+    "desc": "A human sculpture covered in red paint and dirt. When you blink, it has moved closer.",
+    "hp": 35,
+    "atk": 14,
+    "defense": 2,
+    "rank": "ELITE",
+    "exp": 45,
+    "gold": 25,
+    "loot": [
+      "old_coin",
+      "scp_447_slime"
+    ],
+    "emoji": "🗿"
+  },
+  {
+    "id": "scp_096",
+    "name": "The Shy One (SCP-ZH-096)",
+    "desc": "A pale and tall human figure, covering his face with his hands. Anyone who sees his face will be hunted.",
+    "hp": 70,
+    "atk": 16,
+    "defense": 1,
+    "rank": "BOSS",
+    "exp": 90,
+    "gold": 40,
+    "loot": [
+      "scp_148_telekill",
+      "greater_potion"
+    ],
+    "emoji": "🫣"
+  },
+  {
+    "id": "scp_106",
+    "name": "Rotten Old Man (SCP-ZH-106)",
+    "desc": "Corrosive old man, able to seep out of walls. Metal rusts wherever it passes.",
+    "hp": 42,
+    "atk": 11,
+    "defense": 3,
+    "rank": "ELITE",
+    "exp": 55,
+    "gold": 30,
+    "loot": [
+      "scp_409_crystal",
+      "amnesia_pill"
+    ],
+    "emoji": "🧓"
+  },
+  {
+    "id": "scp_682",
+    "name": "Immortal Creeper (SCP-ZH-682)",
+    "desc": "Huge, abominable reptilian creatures, extremely adaptable. After defeating it, the door to the Terminal 001 Storage Vault will open.",
+    "hp": 120,
+    "atk": 18,
+    "defense": 6,
+    "rank": "BOSS",
+    "exp": 150,
+    "gold": 100,
+    "loot": [
+      "anomaly_core",
+      "scp_500_pill",
+      "dragon_scale"
+    ],
+    "emoji": "🦎"
+  },
+  {
+    "id": "scp_001",
+    "name": "Final Prototype (SCP-ZH-001)",
+    "desc": "The product of failed containment in the deepest part of the site - the \"prototype\" of all anomalies. This is the ultimate threat to Foundation site operations.",
+    "hp": 180,
+    "atk": 22,
+    "defense": 8,
+    "rank": "BOSS",
+    "exp": 250,
+    "gold": 200,
+    "loot": [
+      "site_clearance",
+      "anomaly_core",
+      "bag_anomalous",
+      "scp_500_pill"
+    ],
+    "dialog": {
+      "taunt": "...What you see is just the beginning."
+    },
+    "emoji": "👁️‍🗨️"
+  },
+  {
+    "id": "scp_939",
+    "name": "Multithroated Hunter (SCP-ZH-939)",
+    "desc": "The eyeless red predator can imitate human cries for help.",
+    "hp": 28,
+    "atk": 9,
+    "defense": 2,
+    "rank": "ELITE",
+    "exp": 35,
+    "gold": 18,
+    "loot": [
+      "dried_meat",
+      "scp_008_vial"
+    ],
+    "emoji": "🦷"
+  },
+  {
+    "id": "scp_966",
+    "name": "Prey Latent Image (SCP-ZH-966)",
+    "desc": "A nearly invisible humanoid that attacks its prey when it is tired.",
+    "hp": 22,
+    "atk": 8,
+    "defense": 0,
+    "exp": 28,
+    "gold": 15,
+    "loot": [
+      "scp_178_glasses"
+    ],
+    "emoji": "👻"
+  },
+  {
+    "id": "scp_076",
+    "name": "Abel (SCP-ZH-076)",
+    "desc": "The black-haired warrior woke up from his sarcophagus, bone blade in hand, wanting nothing more than to fight.",
+    "hp": 50,
+    "atk": 13,
+    "defense": 3,
+    "rank": "ELITE",
+    "exp": 60,
+    "gold": 35,
+    "loot": [
+      "rune_sword",
+      "scp_714_ring"
+    ],
+    "emoji": "⚔️"
+  },
+  {
+    "id": "scp_017",
+    "name": "Shadow Man (SCP-ZH-017)",
+    "desc": "A human silhouette in absolute darkness, swallowing up all the light that shines on it.",
+    "hp": 20,
+    "atk": 7,
+    "defense": 1,
+    "exp": 22,
+    "gold": 12,
+    "loot": [
+      "scp_205_lamp"
+    ],
+    "emoji": "🌑"
+  },
+  {
+    "id": "scp_1048",
+    "name": "Construction Bear (SCP-ZH-1048)",
+    "desc": "A seemingly harmless brown teddy bear with an unknown substance oozing from its joints.",
+    "hp": 26,
+    "atk": 8,
+    "defense": 2,
+    "rank": "ELITE",
+    "exp": 32,
+    "gold": 20,
+    "loot": [
+      "scp_1230_book",
+      "old_coin"
+    ],
+    "emoji": "🧸"
+  },
+  {
+    "id": "scp_372",
+    "name": "Yu Guangren (SCP-ZH-372)",
+    "desc": "A creature that always stays at the edge of your field of vision and disappears as soon as you turn your head.",
+    "hp": 18,
+    "atk": 6,
+    "defense": 0,
+    "exp": 20,
+    "gold": 10,
+    "loot": [
+      "scp_055_object"
+    ],
+    "emoji": "👁️"
+  },
+  {
+    "id": "scp_3199",
+    "name": "Human (SCP-ZH-3199)",
+    "desc": "A humanoid egg-laying predator with a shrill scream.",
+    "hp": 32,
+    "atk": 10,
+    "defense": 2,
+    "rank": "ELITE",
+    "exp": 40,
+    "gold": 22,
+    "loot": [
+      "scp_008_vial",
+      "lesser_potion"
+    ],
+    "emoji": "🥚"
+  }
+]

@@ -1,55 +1,46 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="迷雾之塔网页版 — Flutter Web 入口">
-  <meta name="theme-color" content="#12100c">
-  <title>游玩 · 迷雾之塔</title>
   <!--
-    Deploy Flutter Web here:
-      cd flutter_app
-      flutter build web --base-href "/Zork_Dude/play/"
-    Then copy build/web/* into this play/ directory (replacing this placeholder).
+    If you are serving your web app in a path other than the root, change the
+    href value below to reflect the base path you are serving from.
+
+    The path provided below has to start and end with a slash "/" in order for
+    it to work correctly.
+
+    For more details:
+    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+
+    This is a placeholder for base href that will be replaced by the value of
+    the `--base-href` argument provided to `flutter build`.
   -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Noto+Serif+SC:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../site/styles.css">
+  <base href="/">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="Mist Tower RPG - Flutter mobile client for Zork Dude">
+
+  <!-- iOS meta tags & icons -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="zork_dude">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <title>zork_dude</title>
+  <link rel="manifest" href="manifest.json">
 </head>
 <body>
-  <nav class="site-nav" aria-label="主导航">
-    <a class="site-nav__brand" href="../index.html">迷雾之塔</a>
-    <ul class="site-nav__links">
-      <li><a href="../index.html">主页</a></li>
-      <li><a href="../index.html#download">下载</a></li>
-      <li><a href="../privacy.html">隐私政策</a></li>
-    </ul>
-  </nav>
+  <!--
+    You can customize the "flutter_bootstrap.js" script.
+    This is useful to provide a custom configuration to the Flutter loader
+    or to give the user feedback during the initialization process.
 
-  <header class="page-header">
-    <h1>网页版</h1>
-    <p class="meta">
-      Flutter Web 客户端部署路径：<code>/play/</code><br>
-      Publish with <code>flutter build web --base-href "/Zork_Dude/play/"</code>
-    </p>
-  </header>
-
-  <main class="privacy-content">
-    <section class="privacy-block">
-      <p lang="zh-CN">
-        正式网页版由 Flutter 打包发布到本目录。产物就绪前，请先使用 Windows 客户端或本地
-        <code>flutter run -d chrome</code> 体验。
-      </p>
-      <p style="margin-top:1rem" class="hero__cta">
-        <a class="btn btn--primary" href="../index.html#download">下载 Windows 版</a>
-        <a class="btn btn--ghost" href="../index.html">返回主页</a>
-      </p>
-    </section>
-  </main>
-
-  <footer class="site-footer">
-    <p>© 湖南跃动小屋信息技术有限公司 · JeisyLiu</p>
-  </footer>
+    For more details:
+    * https://docs.flutter.dev/platform-integration/web/initialization
+  -->
+  <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>
